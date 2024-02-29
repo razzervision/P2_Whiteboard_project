@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+          <link rel="stylesheet" href="/public/stylesheets/style.css">
+          <script src="/public/javascript/dropdown.js"></script>
+          <script src="/public/javascript/users.js"></script>
+          <script src="/public/javascript/calculator.js"></script>
+          <script src="/public/javascript/codeeditor.js"></script>
+          <script defer src="/public/javascript/paint.js"></script>
+          <script src="/public/javascript/pausefish.js"></script>
+          <script src="/public/javascript/timer.js"></script>
+          <script src="/public/javascript/savepdf.js"></script>
+          <script defer src="/public/javascript/quiz.js"></script>
+          <script src="/public/javascript/server.js"></script>
+          <script src="/public/javascript/phone.js"></script>
+        </head>
+
+<body>
+
+  <div class="quiz_container">
+
+    <div class="quiz_div">
+      <label for="question_txt_field">Question:</label>
+      <input type="text" id="question_txt_field"><br>
+
+      <label for="correct_answer">Correct Answer:</label>
+      <input type="text" id="correct_answer"><br>
+
+      <label for="answer0">Answer 0:</label>
+      <input type="text" class="answer_text_class" id="answer0">
+
+      <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br>
+      <button id="create_QAs">Create question & answer</button><br>
+      <button onclick="clearQAs()">Clear Q & A's</button><br>
+      <button id="start_quiz">Start quiz</button><br>
+      <button onclick="end_quiz()">End quiz</button><br>
+
+    </div>
+
+
+  </div>
+
+  <div class="test_container">
+    <div class="test_div">
+
+      <p id="quiz_time_p">QUIZ TIME:</p>
+
+      <div id="radioChoices"></div>
+
+    </div>
+  </div>
+
+  <div class="paint">
+    <canvas id="canvas"></canvas>
+    <div class="colors">
+      <button class="color" style="background-color: black;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: red;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: green;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: yellow;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: purple;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: brown;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: wheat;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: indianred;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: orchid;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: paleturquoise;" onclick="changeColor(this)"></button>
+    </div>
+    <div class="options">
+      <button onclick="clearCanvas()" id="clearCanvas" class="color">Clear canvas</button>
+      <input oninput="draw_color = this.value" type="color" class="colorpick">
+      <input oninput="draw_withd = this.value" type="range" min="1" max="100" class="pen">
+    </div>
+  </div>
+
+</body>
+
+</html>
