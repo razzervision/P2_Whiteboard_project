@@ -12,7 +12,9 @@ Bliver sendt til cloud når i pusher til Github master branch.
 På hjemmesiden: https://online-writeboard-v2.azurewebsites.net/
 
 ## Anbefalinger
-brug extension **EJS language support**
+Brug extension **EJS language support**
+For nemmere at se errors brug extension **error lens**
+Også en god ide at bruge extension **eslint**
 
 ## File structure
 **app.js:** Opsætning  
