@@ -1,11 +1,11 @@
 let quiz_questions = [];
 let quiz_answers = [];
-let user_answer = [];
+const user_answer = [];
 let answer_fields_generated = 0;
-const question_txt_field = document.getElementById('question_txt_field');
-const answer_txt_field = document.getElementById('correct_answer');
-const quiz_txt_area = document.getElementById('quiz_txt_area');
-const answer0_txt_field = document.getElementById('answer0');
+const question_txt_field = document.getElementById("question_txt_field");
+const answer_txt_field = document.getElementById("correct_answer");
+const quiz_txt_area = document.getElementById("quiz_txt_area");
+const answer0_txt_field = document.getElementById("answer0");
 
 let answer1_txt_field;
 let answer2_txt_field;
@@ -15,9 +15,8 @@ let answer5_txt_field;
 
 let question_number_createQA = 0;
 
-const create_QAs_button = document.getElementById('create_QAs');
-const start_quiz_button = document.getElementById('start_quiz');
-
+const create_QAs_button = document.getElementById("create_QAs");
+const start_quiz_button = document.getElementById("start_quiz");
 
 
 function create_new_answer_box(){
@@ -25,9 +24,9 @@ function create_new_answer_box(){
     id = id.previousElementSibling.id;
     id = parseInt(id[6]);
     if(id < 5){
-        let str = "answer" + id;
-        let answer_label = document.createElement("label");
-        let answer_text = document.createElement("input");
+        const str = "answer" + id;
+        const answer_label = document.createElement("label");
+        const answer_text = document.createElement("input");
         
         id++;
     
@@ -40,7 +39,7 @@ function create_new_answer_box(){
         answer_text.id = "answer"+id;
         answer_text.classList.add("answer_text_class");
     
-        let button = document.getElementById("create_new_answer");
+        const button = document.getElementById("create_new_answer");
         
         button.parentNode.insertBefore(answer_label, button);
         button.parentNode.insertBefore(answer_text, button);
@@ -50,20 +49,20 @@ function create_new_answer_box(){
         console.log("FAIL");
     }
 
-    answer1_txt_field = document.getElementById('answer1');
-    answer2_txt_field = document.getElementById('answer2');
-    answer3_txt_field = document.getElementById('answer3');
-    answer4_txt_field = document.getElementById('answer4');
-    answer5_txt_field = document.getElementById('answer5');
+    answer1_txt_field = document.getElementById("answer1");
+    answer2_txt_field = document.getElementById("answer2");
+    answer3_txt_field = document.getElementById("answer3");
+    answer4_txt_field = document.getElementById("answer4");
+    answer5_txt_field = document.getElementById("answer5");
     answer_fields_generated = id;
     console.log(answer_fields_generated);
 }
 
-create_QAs_button.addEventListener('click', () => {
+create_QAs_button.addEventListener("click", () => {
     if (question_txt_field.value && answer_txt_field.value) {
         create_quiz_q_a();
     } else {
-        console.log('Please enter both a question and answer.');
+        console.log("Please enter both a question and answer.");
     }
 
     question_txt_field.value = "";
@@ -97,7 +96,7 @@ create_QAs_button.addEventListener('click', () => {
 
 });
 
-start_quiz_button.addEventListener('click', () => {
+start_quiz_button.addEventListener("click", () => {
     let i = 0;
     quiz_answers.forEach(question => {
         add_radio(i);
@@ -173,21 +172,21 @@ function create_quiz_q_a() {
 
 function add_radio(question) {
 
-    const container = document.getElementById('radioChoices');
+    const container = document.getElementById("radioChoices");
 
     quiz_answers[question].forEach(choice => {    
-        const radio = document.createElement('input');
-        radio.type = 'radio';
-        radio.name = 'choice';
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "choice";
         radio.value = choice;
         
-        const label = document.createElement('label');
+        const label = document.createElement("label");
         label.textContent = choice;
 
         container.appendChild(radio);
         container.appendChild(label);
 
-        container.appendChild(document.createElement('br'));
+        container.appendChild(document.createElement("br"));
     });
 }
 

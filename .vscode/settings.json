@@ -1,4 +1,9 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/d8ba2c80-5858-4c21-b4f8-c7ed3f3b6d20/resourceGroups/online_whiteboard/providers/Microsoft.Web/sites/online-whiteboard",
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": ".",
+    "typescript.validate.enable": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always"
+    },
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
 }
