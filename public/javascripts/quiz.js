@@ -79,15 +79,36 @@ function create_new_answer_box(){
 const create_QAs_button = document.getElementById("create_QAs");
 
 create_QAs_button.addEventListener("click", () => {
-    let question = document.getElementById("question_txt_field");
+    let question = document.getElementById("question_txt_field").value;
     let answers_list = [];
     let correct_answers_list = [];
     
-    let current_answer;
-
     for(let i = 0; i < current_answers_number; i++){
-        current_answer = document.getElementById("answer"+i).value;
-        console.log(current_answer);
+        current_answer_text = document.getElementById("answer"+i).value;
+        current_answer_checkbox = document.getElementById("checkbox"+i).checked;
+        answers_list.push(current_answer_text);
+        correct_answers_list.push(current_answer_checkbox);
     }
+    // Create an object with the data
+    const data = {
+        question: question,
+        answers: answers_list,
+        correct_answers: correct_answers_list
+    };
 
+    // Send the data to the server-side script
+    fetch('/upload_quiz_data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Data has been successfully saved:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 });
