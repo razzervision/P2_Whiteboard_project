@@ -3,12 +3,14 @@
         {
             "question": "Hvad er PI",
             "answer": [3.14,43,"kagemand"],
-            "correct_answers": [0,3]
+            "correct_answers": [1,0,1]
         },
         {
             "question": "Hvad er software",
-            "answer": [""],
-            "correct_answers": [0,3]  
+            "answer": ["En pind","En uddannelse","en måde at blive rig","AI"],
+            "correct_answers": [0,1,1,1]  
         }
     ]
 }
+
+

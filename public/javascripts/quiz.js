@@ -1,6 +1,3 @@
-const fs = require("fs");
-
-
 //Maximum answer the user can insert. 
 const max_answers = 5;
 
@@ -87,35 +84,6 @@ create_QAs_button.addEventListener("click", () => {
     let correct_answers_list = [];
     
     let current_answer;
-
-
-    // Read the contents of the JSON file
-    const data = fs.readFileSync("../database/quiz.json");
-    // Parse the JSON data into a JavaScript object
-    const jsonData = JSON.parse(data);
-    
-    console.log("Before Adding data",JSON.stringify(jsonData, null, 4));
-    
-    // Modify the JavaScript object by adding new data
-    jsonData.users.push({
-        name: "James Den",
-        email: "james.den@example.com"
-    });
-    
-    
-    // Convert the JavaScript object back into a JSON string
-    const jsonString = JSON.stringify(jsonData);
-    
-    fs.writeFileSync("data.json", jsonString, "utf-8", (err) => {
-      if (err) throw err;
-      console.log("Data added to file");
-    });
-    
-    const update_data = fs.readFileSync("data.json");
-    const updated_jsonData = JSON.parse(update_data);
-    console.log("After Adding data",JSON.stringify(updated_jsonData, null, 4));
-
-
 
     for(let i = 0; i < current_answers_number; i++){
         current_answer = document.getElementById("answer"+i).value;
