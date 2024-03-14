@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const togetherPaintRouter = require("./routes/togetherPaint");
-const fs = require('fs');
+const fs = require("fs");
 const app = express();
 
 
@@ -23,32 +23,29 @@ app.use("/", indexRouter);
 app.use("/togetherPaint", togetherPaintRouter);
 
 
-// Define route handler for POST requests to "/upload_quiz_data"
+//Upload quiz data into the database
 app.post("/upload_quiz_data", (req, res) => {
-    // Access the data sent from the client
+    // Access the data sent from the client /the new question
     const newQuestion = req.body;
-    console.log(newQuestion);
 
-    // Append quiz data to a JSON file
+    // Append quiz data to the current JSON file
     fs.readFile("public/database/quiz.json", "utf8", (err, data) => {
         let questionsData = [];
-        //Insert the current/old questions
+        //Get the current data
         questionsData = JSON.parse(data);
-        console.log(questionsData);
-
+        //Insert the current/old questions
         questionsData.quiz.push(newQuestion);
 
         // Convert the updated data back to JSON format
         const updatedJSON = JSON.stringify(questionsData, null, 4); // 2 is for indentation for readability
 
-        // Write the updated JSON back to the file (assuming you're working with Node.js filesystem)
-        // Write the updated JSON back to the file (assuming you're working with Node.js filesystem)
+        // Write the updated JSON back to the file
         fs.writeFile("public/database/quiz.json", updatedJSON, (err) => {
             if (err) {
-                console.error('Error writing to file:', err);
+                console.error("Error writing to file:", err);
                 return;
             }
-            console.log('Question appended successfully.');
+            console.log("Question appended successfully.");
         });
     });
 });
