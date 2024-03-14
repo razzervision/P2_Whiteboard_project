@@ -1,34 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="stylesheets/header.css" rel="stylesheet">
-    <title>collaborative whiteboard</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+  <title>
+    <%= title %>
+  </title>
+          <link rel="stylesheet" href="/stylesheets/style.css">
+          <link rel="stylesheet" href="/stylesheets/quiz.css">
+          <script src="/javascripts/dropdown.js"></script>
+          <script src="/javascripts/users.js"></script>
+          <script src="/javascripts/calculator.js"></script>
+          <script src="/javascripts/codeeditor.js"></script>
+          <script defer src="/javascripts/paint.js"></script>
+          <script src="/javascripts/pausefish.js"></script>
+          <script src="/javascripts/timer.js"></script>
+          <script src="/javascripts/savepdf.js"></script>
+          <script defer src="/javascripts/quiz.js"></script>
+          <script src="/javascripts/server.js"></script>
+          <script src="/javascripts/phone.js"></script>
+        </head>
+
 <body>
-    <header class="header">
-        <nav class="nav_bar">
-            <ul class="nav_list">
-                <li><a href="#" id="homepage"><h1>Collab <span>Whiteboard</span></h1></a></li>
-                <li><a href="#" id="aboutpage">About</a></li>
-                <li><a href="#" id="contactpage">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    <div>
-        <h1>Collaborative Whiteboard</h1>
-        <div>
-            <button id="create-room">Create Room</button>
-        </div>
-        <div>
-            <button id="join-room">Join Room</button>
-        </div>
+
+  <div class="quiz_container">
+
+    <div class="quiz_div">
+        <label for="question_txt_field">Question:</label>
+        <input type="text" id="question_txt_field"><br>
+
+        <label for="answer0" class="answer_label_class">Answer 0:</label>
+        <input type="text" class="answer_text_class" id="answer0">
+        <input type="checkbox" class="answer_checkbox_class" id="checkbox0">
+
+        <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br>
+        <button id="create_QAs">Create question & answer</button><br>
+        <button onclick="clearQAs()">Clear Q & A's</button><br>
+        <button id="start_quiz">Start quiz</button><br>
+        <button onclick="end_quiz()">End quiz</button><br>
+
     </div>
 
 
+  </div>
 
-    <script src="/javascripts/homepage.js"></script>
-    
+  <div class="test_container">
+    <div class="test_div">
+
+      <p id="quiz_time_p">QUIZ TIME:</p>
+
+      <div id="radioChoices"></div>
+
+    </div>
+  </div>
+
+  <div class="paint">
+    <canvas id="canvas"></canvas>
+    <div class="colors">
+      <button class="color" style="background-color: black;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: red;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: green;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: yellow;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: purple;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: brown;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: wheat;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: indianred;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: orchid;" onclick="changeColor(this)"></button>
+      <button class="color" style="background-color: paleturquoise;" onclick="changeColor(this)"></button>
+    </div>
+    <div class="options">
+      <button onclick="clearCanvas()" id="clearCanvas" class="color">Clear canvas</button>
+      <input oninput="draw_color = this.value" type="color" class="colorpick">
+      <input oninput="draw_width = this.value" type="range" min="1" max="100" class="pen">
+    </div>
+  </div>
+
 </body>
+
 </html>
