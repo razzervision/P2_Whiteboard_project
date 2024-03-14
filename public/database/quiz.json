@@ -1,0 +1,14 @@
+{
+    "quiz": [
+        {
+            "question": "Hvad er PI",
+            "answer": [3.14,43,"kagemand"],
+            "correct_answers": [0,3]
+        },
+        {
+            "question": "Hvad er software",
+            "answer": [""],
+            "correct_answers": [0,3]  
+        }
+    ]
+}

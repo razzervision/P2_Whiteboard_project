@@ -1,22 +1,5 @@
+//Maximum answer the user can insert. 
 const max_answers = 5;
-
-let quiz_questions = [];
-let quiz_answers = [];
-let user_answer = [];
-let answer_fields_generated = 0;
-const question_txt_field = document.getElementById('question_txt_field');
-const answer_txt_field = document.getElementById('correct_answer');
-const quiz_txt_area = document.getElementById('quiz_txt_area');
-const answer0_txt_field = document.getElementById('answer0');
-
-var new_divider = document.createElement('div');
-
-
-let question_number_createQA = 0;
-
-const create_QAs_button = document.getElementById('create_QAs');
-const start_quiz_button = document.getElementById('start_quiz');
-
 
 //Generate a new answers input when typing on the first answer text input. 
 let last_answer_input = document.getElementById("answer0");
@@ -78,7 +61,21 @@ function create_new_answer_box(){
 }
 
 
+let quiz_questions = [];
+let quiz_answers = [];
+let user_answer = [];
+let answer_fields_generated = 0;
+const question_txt_field = document.getElementById('question_txt_field');
+const answer_txt_field = document.getElementById('correct_answer');
+const quiz_txt_area = document.getElementById('quiz_txt_area');
+const answer0_txt_field = document.getElementById('answer0');
 
+var new_divider = document.createElement('div');
+
+let question_number_createQA = 0;
+
+const create_QAs_button = document.getElementById('create_QAs');
+const start_quiz_button = document.getElementById('start_quiz');
 
 create_QAs_button.addEventListener('click', () => {
     if (question_txt_field.value && answer_txt_field.value) {
