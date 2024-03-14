@@ -11,11 +11,6 @@ const answer0_txt_field = document.getElementById('answer0');
 
 var new_divider = document.createElement('div');
 
-let answer1_txt_field;
-let answer2_txt_field;
-let answer3_txt_field; 
-let answer4_txt_field;
-let answer5_txt_field;
 
 let question_number_createQA = 0;
 
@@ -23,51 +18,67 @@ const create_QAs_button = document.getElementById('create_QAs');
 const start_quiz_button = document.getElementById('start_quiz');
 
 
+//Generate a new answers input when typing on the first answer text input. 
+let last_answer_input = document.getElementById("answer0");
+last_answer_input.addEventListener('input', create_new_answer_box);
 
+//This function create a new answer box to let the user dynamically add more answers.
 function create_new_answer_box(){
+    //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
     let id = document.getElementById("create_new_answer");
     id = id.previousElementSibling.id;
+    //Takes the last part of the ID. e.g "checkbox0" where the 8 element is the last which is the ID.
     id = parseInt(id[8]);
+
+    //Ensure there is a limit of answers. 
     if(id < max_answers){
+        //Create all the elements needed for an extra answers
         let answer_label = document.createElement("label");
         let answer_text = document.createElement("input");
         let answer_checkbox = document.createElement("input");
 
-        
+        //Increase the ID with one to make the ID unique.
         id++;
-    
+
+        //Label for answers
         answer_label.textContent = "Answer "+ id + ":";
         answer_label.id = "answer"+ id + "_label";
         answer_label.class="answer_label_class";
         answer_label.setAttribute("for", "answer"+ id);
-        
+
+        //Answer input
         answer_text.type="text";
         answer_text.id = "answer"+id;
         answer_text.classList.add("answer_text_class");
 
+        //Correct answer checkbox
         answer_checkbox.type="checkbox";
         answer_checkbox.id = "checkbox"+id;
         answer_checkbox.classList.add("answer_checkbox_class");
     
-
+        //Identify 
         let button = document.getElementById("create_new_answer");
         
         button.parentNode.insertBefore(answer_label, button);
         button.parentNode.insertBefore(answer_text, button);
         button.parentNode.insertBefore(answer_checkbox, button);
 
+        last_answer_input.removeEventListener('input', create_new_answer_box);
+
+        last_answer_input = document.getElementById("create_new_answer").previousElementSibling.previousElementSibling;
+
+        last_answer_input.addEventListener('input', create_new_answer_box);
+
     } else {
-        alert("Max 5 answers");
+        // alert("Max 5 answers");
         console.log("FAIL");
     }
 
-    answer1_txt_field = document.getElementById('answer1');
-    answer2_txt_field = document.getElementById('answer2');
-    answer3_txt_field = document.getElementById('answer3');
-    answer4_txt_field = document.getElementById('answer4');
-    answer5_txt_field = document.getElementById('answer5');
     answer_fields_generated = id;
 }
+
+
+
 
 create_QAs_button.addEventListener('click', () => {
     if (question_txt_field.value && answer_txt_field.value) {
