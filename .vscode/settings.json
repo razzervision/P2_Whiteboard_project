@@ -6,4 +6,8 @@
         "source.fixAll.eslint": "always"
     },
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "css.styleSheets": [
+        "./public/stylesheets/"
+    ],
+    "liveServer.settings.multiRootWorkspaceName": "P2_Whiteboard_project",
 }
