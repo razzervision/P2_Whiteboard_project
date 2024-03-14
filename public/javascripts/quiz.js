@@ -1,11 +1,12 @@
 let quiz_questions = [];
 let quiz_answers = [];
-const user_answer = [];
+let user_answer = [];
 let answer_fields_generated = 0;
-const question_txt_field = document.getElementById("question_txt_field");
-const answer_txt_field = document.getElementById("correct_answer");
-const quiz_txt_area = document.getElementById("quiz_txt_area");
-const answer0_txt_field = document.getElementById("answer0");
+const question_txt_field = document.getElementById('question_txt_field');
+const answer_txt_field = document.getElementById('correct_answer');
+const quiz_txt_area = document.getElementById('quiz_txt_area');
+const answer0_txt_field = document.getElementById('answer0');
+
 
 let answer1_txt_field;
 let answer2_txt_field;
@@ -15,8 +16,9 @@ let answer5_txt_field;
 
 let question_number_createQA = 0;
 
-const create_QAs_button = document.getElementById("create_QAs");
-const start_quiz_button = document.getElementById("start_quiz");
+const create_QAs_button = document.getElementById('create_QAs');
+const start_quiz_button = document.getElementById('start_quiz');
+
 
 
 function create_new_answer_box(){
@@ -24,9 +26,9 @@ function create_new_answer_box(){
     id = id.previousElementSibling.id;
     id = parseInt(id[6]);
     if(id < 5){
-        const str = "answer" + id;
-        const answer_label = document.createElement("label");
-        const answer_text = document.createElement("input");
+        let str = "answer" + id;
+        let answer_label = document.createElement("label");
+        let answer_text = document.createElement("input");
         
         id++;
     
@@ -39,7 +41,7 @@ function create_new_answer_box(){
         answer_text.id = "answer"+id;
         answer_text.classList.add("answer_text_class");
     
-        const button = document.getElementById("create_new_answer");
+        let button = document.getElementById("create_new_answer");
         
         button.parentNode.insertBefore(answer_label, button);
         button.parentNode.insertBefore(answer_text, button);
@@ -49,20 +51,19 @@ function create_new_answer_box(){
         console.log("FAIL");
     }
 
-    answer1_txt_field = document.getElementById("answer1");
-    answer2_txt_field = document.getElementById("answer2");
-    answer3_txt_field = document.getElementById("answer3");
-    answer4_txt_field = document.getElementById("answer4");
-    answer5_txt_field = document.getElementById("answer5");
+    answer1_txt_field = document.getElementById('answer1');
+    answer2_txt_field = document.getElementById('answer2');
+    answer3_txt_field = document.getElementById('answer3');
+    answer4_txt_field = document.getElementById('answer4');
+    answer5_txt_field = document.getElementById('answer5');
     answer_fields_generated = id;
-    console.log(answer_fields_generated);
 }
 
-create_QAs_button.addEventListener("click", () => {
+create_QAs_button.addEventListener('click', () => {
     if (question_txt_field.value && answer_txt_field.value) {
         create_quiz_q_a();
     } else {
-        console.log("Please enter both a question and answer.");
+        console.log('Please enter both a question and answer.');
     }
 
     question_txt_field.value = "";
@@ -96,13 +97,12 @@ create_QAs_button.addEventListener("click", () => {
 
 });
 
-start_quiz_button.addEventListener("click", () => {
-    let i = 0;
-    quiz_answers.forEach(question => {
-        add_radio(i);
-        i++;
-    });
-});
+function clear_fields() {
+    // tilføj funktion der laver alle felters .value om til = "";
+    // eller måske bare specifikke felter, måske dem der er blevet genereret, eller dem der allerede har value i sig
+}
+
+
 
 function create_quiz_q_a() {
     quiz_questions.push(question_txt_field.value);
@@ -170,23 +170,50 @@ function create_quiz_q_a() {
     question_number_createQA++;
 }
 
+start_quiz_button.addEventListener('click', () => {
+    var temp_divider;
+    const container = document.getElementById('radioChoices');
+    var newDivider = document.createElement('div');
+    let i = 0;
+    quiz_answers.forEach(question => {
+        newDivider.id = 'divider' + (i + 1);
+        container.appendChild(newDivider);
+        add_question(i);
+        add_radio(i);
+        i++;
+    });
+});
+
+function add_question(question) {
+    temp_divider = document.getElementById('divider' + (question + 1));
+    question += 1;
+    var pElement = document.createElement('p');
+    pElement.textContent = "Question " + question + ":"
+    temp_divider.appendChild(pElement);
+    //container.appendChild(pElement);
+} 
+
+// var divider = document.getElementById('divider');
+// if (divider) {
+//     divider.parentNode.removeChild(divider);
+// }
+
 function add_radio(question) {
-
-    const container = document.getElementById("radioChoices");
-
+    temp_divider = document.getElementById('divider' + (question + 1));
     quiz_answers[question].forEach(choice => {    
-        const radio = document.createElement("input");
-        radio.type = "radio";
-        radio.name = "choice";
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'choice';
         radio.value = choice;
         
-        const label = document.createElement("label");
+        const label = document.createElement('label');
         label.textContent = choice;
 
-        container.appendChild(radio);
-        container.appendChild(label);
+        temp_divider.appendChild(radio);
+        temp_divider.appendChild(label);
 
-        container.appendChild(document.createElement("br"));
+        temp_divider.appendChild(document.createElement('br'));
+        
     });
 }
 
@@ -209,6 +236,11 @@ function end_quiz() {
         console.log(str);
         str = "";
     }
+    var i = 0;
+    quiz_questions.forEach(radio_box => {
+        temp_divider = document.getElementById('divider' + i);
+    });
+
 }
 
 function clearQAs() {
