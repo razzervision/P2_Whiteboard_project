@@ -1,3 +1,5 @@
+const max_answers = 5;
+
 let quiz_questions = [];
 let quiz_answers = [];
 let user_answer = [];
@@ -25,15 +27,16 @@ const start_quiz_button = document.getElementById('start_quiz');
 function create_new_answer_box(){
     let id = document.getElementById("create_new_answer");
     id = id.previousElementSibling.id;
-    id = parseInt(id[6]);
-    if(id < 5){
-        let str = "answer" + id;
+    id = parseInt(id[8]);
+    if(id < max_answers){
         let answer_label = document.createElement("label");
         let answer_text = document.createElement("input");
+        let answer_checkbox = document.createElement("input");
+
         
         id++;
     
-        answer_label.innerHTML = "Answer "+ id + ":";
+        answer_label.textContent = "Answer "+ id + ":";
         answer_label.id = "answer"+ id + "_label";
         answer_label.class="answer_label_class";
         answer_label.setAttribute("for", "answer"+ id);
@@ -41,12 +44,18 @@ function create_new_answer_box(){
         answer_text.type="text";
         answer_text.id = "answer"+id;
         answer_text.classList.add("answer_text_class");
+
+        answer_checkbox.type="checkbox";
+        answer_checkbox.id = "checkbox"+id;
+        answer_checkbox.classList.add("answer_checkbox_class");
     
+
         let button = document.getElementById("create_new_answer");
         
         button.parentNode.insertBefore(answer_label, button);
         button.parentNode.insertBefore(answer_text, button);
-        
+        button.parentNode.insertBefore(answer_checkbox, button);
+
     } else {
         alert("Max 5 answers");
         console.log("FAIL");

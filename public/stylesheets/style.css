@@ -15,45 +15,6 @@ button:active {
   background-color: #39843a;
 }
 
-.quiz_container {
-  border: 2px SOLID black;
-  background-color: white;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  position: absolute;
-  width: 48%;
-  height: 50%;
-  left: 50%;
-}
-
-.test_container {
-  border: 2px SOLID black;
-  background-color: white;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  position: absolute;
-  width: 48%;
-  height: 500%;
-  left: 50%;
-  top: 50%;
-}
-
-#quiz_time_p {
-  margin: 10px;
-}
-
-.quiz_div,
-.test_div {
-  margin: 10px;
-}
-
-.answer_text_class {
-  width: 85%;
-  margin-top: 3%;
-}
-
 .paint {
   position: absolute;
   width: 40%;
