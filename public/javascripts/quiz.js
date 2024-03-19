@@ -8,49 +8,65 @@ let current_answers_number = 1;
 let last_answer_input = document.getElementById("answer0");
 last_answer_input.addEventListener("input", create_new_answer_box);
 
+function is_id_created(id){
+    let element = document.getElementById(id);
+    if (element) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 //This function create a new answer box to let the user dynamically add more answers.
 function create_new_answer_box(){
-
+    if(is_id_created("error_too_many_answer_inputs")){
+        return 0;
+    }
     //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
-    let id = document.getElementById("create_new_answer");
-    id = id.previousElementSibling.id;
+    let id = document.getElementById("create_new_answer").previousElementSibling;
+    id = id.querySelector(".answer_checkbox_class").id;
     //Takes the last part of the ID. e.g "checkbox0" where the 8 element is the last which is the ID.
+    
     id = parseInt(id[8]);
-
     //Ensure there is a limit of answers. 
     if(id < max_answers){
         //Create all the elements needed for an extra answers
-        let answer_label = document.createElement("label");
-        let answer_text = document.createElement("input");
-        let answer_checkbox = document.createElement("input");
+        let question_box = document.createElement("div");
+        question_box.className="answer_container";
+
 
         //Increase the ID with one to make the ID unique.
         id++;
 
+    
         //Label for answers
+        let answer_label = document.createElement("label");
         answer_label.textContent = "Answer "+ id + ":";
         answer_label.id = "answer"+ id + "_label";
-        answer_label.class="answer_label_class";
+        answer_label.className="answer_label_class";
         answer_label.setAttribute("for", "answer"+ id);
+        question_box.appendChild(answer_label);
 
         //Answer input
+        let answer_text = document.createElement("input");
+        answer_text.value="Markus";
         answer_text.type="text";
         answer_text.id = "answer"+id;
-        answer_text.classList.add("answer_text_class");
+        answer_text.className="answer_text_class";
+        question_box.appendChild(answer_text);
 
         //Correct answer checkbox
+        let answer_checkbox = document.createElement("input");
         answer_checkbox.type="checkbox";
         answer_checkbox.id = "checkbox"+id;
-        answer_checkbox.classList.add("answer_checkbox_class");
-    
+        answer_checkbox.className = "answer_checkbox_class";
+        question_box.appendChild(answer_checkbox);
+
         //Identify the element after answer inputs. 
         let button = document.getElementById("create_new_answer");
         
         //Insert them before the add new answer button to make the flow intuitive. 
-        button.parentNode.insertBefore(answer_label, button);
-        button.parentNode.insertBefore(answer_text, button);
-        button.parentNode.insertBefore(answer_checkbox, button);
+        button.parentNode.insertBefore(question_box, button);
 
         //Remove the EventListener because the new answer is created
         last_answer_input.removeEventListener("input", create_new_answer_box);
@@ -73,7 +89,7 @@ function create_new_answer_box(){
         //Identify the element after answer inputs. 
         let button = document.getElementById("create_new_answer");
         button.parentNode.insertBefore(error, button);
-
+        
     }
 }
 
@@ -137,7 +153,8 @@ create_QAs_button.addEventListener("click", () => {
 function clear_questions(){
     let inputs = document.querySelectorAll("input")
     inputs.forEach(input => {
-        if(input.id !== "quiz_name"){
+        console.log(input.id[6]);
+        if(input.id[6] >= 1){
             input.value = null;
         }
     });
@@ -160,7 +177,6 @@ start_quiz.addEventListener("click", () => {
             const jsonDisplayDiv = document.getElementById("quiz_output");
             data.quiz.forEach(q => {
                 if(q.quiz_name === quiz_id){      
-                    console.log(q.question);          
                     let question_field = document.createElement("h3");
                     question_field.textContent = q.question;
                     jsonDisplayDiv.appendChild(question_field);

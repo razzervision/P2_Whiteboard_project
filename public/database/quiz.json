@@ -67,6 +67,70 @@
                 true,
                 false
             ]
+        },
+        {
+            "quiz_name": "SLIAL",
+            "question": "hvad er en vektor",
+            "answers": [
+                "kasket",
+                "noget andet",
+                "hej"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "SLIAL",
+            "question": "hvad er to vektorer",
+            "answers": [
+                "noget andet end en vektor",
+                "en ko"
+            ],
+            "correct_answers": [
+                true,
+                false
+            ]
+        },
+        {
+            "quiz_name": "mat",
+            "question": "Lol",
+            "answers": [
+                "123"
+            ],
+            "correct_answers": [
+                false
+            ]
+        },
+        {
+            "quiz_name": "mat",
+            "question": "hej",
+            "answers": [
+                "2131",
+                "123312",
+                "123123"
+            ],
+            "correct_answers": [
+                false,
+                false,
+                false
+            ]
+        },
+        {
+            "quiz_name": "asdad",
+            "question": "asdasda",
+            "answers": [
+                "adsasdasd",
+                "adasda",
+                "adsasd"
+            ],
+            "correct_answers": [
+                false,
+                false,
+                false
+            ]
         }
     ]
 }
