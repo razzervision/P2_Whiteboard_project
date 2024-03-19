@@ -103,34 +103,6 @@
             "correct_answers": [
                 false
             ]
-        },
-        {
-            "quiz_name": "mat",
-            "question": "hej",
-            "answers": [
-                "2131",
-                "123312",
-                "123123"
-            ],
-            "correct_answers": [
-                false,
-                false,
-                false
-            ]
-        },
-        {
-            "quiz_name": "asdad",
-            "question": "asdasda",
-            "answers": [
-                "adsasdasd",
-                "adasda",
-                "adsasd"
-            ],
-            "correct_answers": [
-                false,
-                false,
-                false
-            ]
         }
     ]
 }
