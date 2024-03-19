@@ -2,13 +2,13 @@ const canvas = document.getElementById("canvas");
 canvas.width = window.innerWidth - 60;
 canvas.height = 600;
 
-let startBackground = "white";
+const startBackground = "white";
 let draw_color = "black";
-let draw_withd = "50";
+const draw_withd = "50";
 let is_drawing = false;
 
 
-let context = canvas.getContext("2d");
+const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0,0,canvas.width,canvas.height);
 
@@ -27,9 +27,10 @@ canvas.addEventListener("mouseout",stop);
 
 
 function start(event){
-   is_drawing = true;
-   context.beginPath();
-   context.moveTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+    is_drawing = true;
+    context.beginPath();
+    context.moveTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+
 }
 
 function draw(event) {
