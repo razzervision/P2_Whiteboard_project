@@ -30,15 +30,15 @@ function create_new_answer_box(){
     id = parseInt(id[8]);
     //Ensure there is a limit of answers. 
     if(id < max_answers){
-        //Create all the elements needed for an extra answers
-        let question_box = document.createElement("div");
-        question_box.className="answer_container";
-
 
         //Increase the ID with one to make the ID unique.
         id++;
+        
+        //Create all the elements needed for an extra answers
+        let question_box = document.createElement("div");
+        question_box.className="answer_container";
+        question_box.id="answer_container"+id;
 
-    
         //Label for answers
         let answer_label = document.createElement("label");
         answer_label.textContent = "Answer "+ id + ":";
@@ -89,7 +89,6 @@ function create_new_answer_box(){
         //Identify the element after answer inputs. 
         let button = document.getElementById("create_new_answer");
         button.parentNode.insertBefore(error, button);
-        
     }
 }
 
@@ -115,9 +114,9 @@ create_QAs_button.addEventListener("click", () => {
     let correct_answers_list = [];
     
     for(let i = 0; i < current_answers_number; i++){
-        current_answer_text = document.getElementById("answer"+i).value;
+        let current_answer_text = document.getElementById("answer"+i).value;
         if(current_answer_text !== ""){
-            current_answer_checkbox = document.getElementById("checkbox"+i).checked;
+            let current_answer_checkbox = document.getElementById("checkbox"+i).checked;
             answers_list.push(current_answer_text);
             correct_answers_list.push(current_answer_checkbox);
         }
@@ -151,13 +150,12 @@ create_QAs_button.addEventListener("click", () => {
 
 //VERY BAD TEMP CODE
 function clear_questions(){
-    let inputs = document.querySelectorAll("input")
-    inputs.forEach(input => {
-        console.log(input.id[6]);
-        if(input.id[6] >= 1){
-            input.value = null;
-        }
-    });
+    let input_divs = document.querySelectorAll(".answer_container");
+    console.log(input_divs);
+    for (let i = 1; i < input_divs.length; i++){
+        input_divs[i].remove();
+        current_answers_number = 1;
+    }
 }
 
 
