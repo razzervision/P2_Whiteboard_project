@@ -61,6 +61,25 @@
                 false,
                 false
             ]
+        },
+        {
+            "question": "Hvem er klogest i gruppen",
+            "answers": [
+                "Lukas",
+                "Mads",
+                "Jon",
+                "Rasmus",
+                "Allesammen",
+                ""
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false,
+                false,
+                true,
+                false
+            ]
         }
     ]
 }
