@@ -85,9 +85,12 @@ create_QAs_button.addEventListener("click", () => {
     
     for(let i = 0; i < current_answers_number; i++){
         current_answer_text = document.getElementById("answer"+i).value;
-        current_answer_checkbox = document.getElementById("checkbox"+i).checked;
-        answers_list.push(current_answer_text);
-        correct_answers_list.push(current_answer_checkbox);
+        if(current_answer_text !== ""){
+            console.log(current_answer_text);
+            current_answer_checkbox = document.getElementById("checkbox"+i).checked;
+            answers_list.push(current_answer_text);
+            correct_answers_list.push(current_answer_checkbox);
+        }
     }
     // Create an object with the data
     const data = {
@@ -95,7 +98,7 @@ create_QAs_button.addEventListener("click", () => {
         answers: answers_list,
         correct_answers: correct_answers_list
     };
-
+  
     // Send the data to the server-side script
     fetch('/upload_quiz_data', {
         method: 'POST',

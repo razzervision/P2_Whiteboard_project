@@ -8,6 +8,8 @@
     width: 48%;
     height: 50%;
     left: 50%;
+    overflow: auto; 
+
   }
   
   .test_container {

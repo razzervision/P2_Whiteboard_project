@@ -3,81 +3,43 @@
         {
             "question": "Hvad er PI",
             "answers": [
-                3.14,
-                43,
-                "kagemand"
-            ],
-            "correct_answers": [
-                1,
-                0,
-                1
-            ]
-        },
-        {
-            "question": "Hvad er software",
-            "answers": [
-                "En pind",
-                "En uddannelse",
-                "en måde at blive rig",
-                "AI"
-            ],
-            "correct_answers": [
-                0,
-                1,
-                1,
-                1
-            ]
-        },
-        {
-            "question": "Hvor gammel  er jeg",
-            "answers": [
-                "18",
-                "122",
-                "22",
-                "neh",
+                "3.14",
+                "En kage",
+                "En pizza",
+                "Et cykelmærke",
+                "Langt",
                 ""
             ],
             "correct_answers": [
+                true,
+                true,
                 false,
                 false,
                 true,
+                false
+            ]
+        },
+        {
+            "question": "Hej",
+            "answers": [
+                "heeh",
+                "rgerg"
+            ],
+            "correct_answers": [
                 false,
                 false
             ]
         },
         {
-            "question": "Hvor gammel  er jeg",
+            "question": "Hej",
             "answers": [
-                "18",
-                "122",
-                "22",
-                "neh",
-                ""
+                "heeh",
+                "rgerg",
+                "ggg"
             ],
             "correct_answers": [
                 false,
                 false,
-                true,
-                false,
-                false
-            ]
-        },
-        {
-            "question": "Hvem er klogest i gruppen",
-            "answers": [
-                "Lukas",
-                "Mads",
-                "Jon",
-                "Rasmus",
-                "Allesammen",
-                ""
-            ],
-            "correct_answers": [
-                true,
-                false,
-                false,
-                false,
-                true,
                 false
             ]
         }
