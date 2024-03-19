@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/togetherPaint", togetherPaintRouter);
+// app.use("/togetherPaint", togetherPaintRouter);
 
 
 //Upload quiz data into the database
@@ -51,8 +51,6 @@ app.post("/upload_quiz_data", (req, res) => {
 });
 
 
-
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
@@ -70,5 +68,4 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-
 
