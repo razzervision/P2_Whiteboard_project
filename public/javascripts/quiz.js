@@ -12,6 +12,7 @@ let current_answers_number = 1;
 let last_answer_input = document.getElementById("answer0");
 last_answer_input.addEventListener("input", create_new_answer_box);
 
+//Check if the element is created
 function is_id_created(id){
     let element = document.getElementById(id);
     if (element) {
@@ -21,17 +22,52 @@ function is_id_created(id){
     }
 }
 
+//Default questions:
+function autofill(){
+    let name = document.getElementById("quiz_name");
+    name.value="CS2";
+
+    let question = document.getElementById("question_txt_field");
+    question.value="Hvem er bedst til CS?";
+
+    let answer0 = document.getElementById("answer0");
+    answer0.value= "Rantzau";
+
+    let answer0_checked = document.getElementById("checkbox0");
+    
+    answer0_checked.checked = "true";
+
+}
+// autofill();
+
+//Funktion for fetch_data
+function fetch_data(path){
+    return fetch(path)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            return data;
+        })
+        .catch(error => {
+            console.error('There was a problem fetching the JSON file:', error);
+        });
+}
 //This function create a new answer box to let the user dynamically add more answers.
 function create_new_answer_box(){
     if(is_id_created("error_too_many_answer_inputs")){
         return 0;
     }
     //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
-    let id = document.getElementById("create_new_answer").previousElementSibling;
-    id = id.querySelector(".answer_checkbox_class").id;
+    let previous_element = document.getElementById("create_new_answer").previousElementSibling;
+    previous_element = previous_element.querySelector(".answer_checkbox_class");
     //Takes the last part of the ID. e.g "checkbox0" where the 8 element is the last which is the ID.
     
-    id = parseInt(id[8]);
+    let id = parseInt(previous_element.id[8]);
     //Ensure there is a limit of answers. 
     if(id < max_answers){
 
@@ -53,7 +89,6 @@ function create_new_answer_box(){
 
         //Answer input
         let answer_text = document.createElement("input");
-        answer_text.value="Markus";
         answer_text.type="text";
         answer_text.id = "answer"+id;
         answer_text.className="answer_text_class";
@@ -73,13 +108,12 @@ function create_new_answer_box(){
         button.parentNode.insertBefore(question_box, button);
 
         //Remove the EventListener because the new answer is created
+        let old_id = id - 1;
+        last_answer_input = document.getElementById("answer"+old_id);
         last_answer_input.removeEventListener("input", create_new_answer_box);
 
-        //Find the new current latest answer text.
-        last_answer_input = document.getElementById("create_new_answer").previousElementSibling.previousElementSibling;
-
         //Generate a EventListener for the new answer text input. 
-        last_answer_input.addEventListener("input", create_new_answer_box);
+        answer_text.addEventListener("input", create_new_answer_box);
 
         //Count current quizzes
         current_answers_number++;
@@ -167,52 +201,44 @@ function clear_questions(){
 //Start the quiz
 let start_quiz = document.getElementById("start_quiz");
 start_quiz.addEventListener("click", () => {
-    fetch('/database/quiz.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            let quiz_id = document.getElementById("quiz_name").value;
+    fetch_data("/database/quiz.json")
+    .then(data => {
+        console.log(data);
 
-            const jsonDisplayDiv = document.getElementById("quiz_output");
-            data.quiz.forEach(q => {
-                if(q.quiz_name === quiz_id){      
-                    let question_field = document.createElement("h3");
-                    question_field.textContent = q.question;
-                    jsonDisplayDiv.appendChild(question_field);
-            
-                    q.answers.forEach((answer, index) => {
-                        let answer_field = document.createElement("input");
-                        answer_field.type = "checkbox";
-                        answer_field.id = `answer_${index}`;
-                        let label = document.createElement("label");
-                        label.setAttribute("for", `answer_${index}`);
-                        label.textContent = answer;
-                        jsonDisplayDiv.appendChild(answer_field);
-                        jsonDisplayDiv.appendChild(label);
-                        jsonDisplayDiv.appendChild(document.createElement("br")); 
-                    });
-                }                               
-            });
+        let quiz_id = document.getElementById("quiz_name").value;
 
-            let submit_answers = document.createElement("button");
-            submit_answers.id = "submit_id";
-            submit_answers.type = "submit";
-            submit_answers.textContent = "Submit Answers";
-            jsonDisplayDiv.appendChild(submit_answers);
-
-            submit_answers_button = document.querySelector("#submit_id");
-                submit_answers_button.addEventListener("click", () => {
-                check_answers(quiz_id);
-            });
-
-        })
-        .catch(error => {
-            console.error('There was a problem fetching the JSON file:', error);
+        const jsonDisplayDiv = document.getElementById("quiz_output");
+        data.quiz.forEach(q => {
+            if(q.quiz_name === quiz_id){      
+                let question_field = document.createElement("h3");
+                question_field.textContent = q.question;
+                jsonDisplayDiv.appendChild(question_field);
+        
+                q.answers.forEach((answer, index) => {
+                    let answer_field = document.createElement("input");
+                    answer_field.type = "checkbox";
+                    answer_field.id = `answer_${index}`;
+                    let label = document.createElement("label");
+                    label.setAttribute("for", `answer_${index}`);
+                    label.textContent = answer;
+                    jsonDisplayDiv.appendChild(answer_field);
+                    jsonDisplayDiv.appendChild(label);
+                    jsonDisplayDiv.appendChild(document.createElement("br")); 
+                });
+            }                               
         });
+
+        let submit_answers = document.createElement("button");
+        submit_answers.id = "submit_id";
+        submit_answers.type = "submit";
+        submit_answers.textContent = "Submit Answers";
+        jsonDisplayDiv.appendChild(submit_answers);
+
+        submit_answers_button = document.querySelector("#submit_id");
+            submit_answers_button.addEventListener("click", () => {
+            check_answers(quiz_id);
+        });
+    });
 });
 
 function check_answers (question) {

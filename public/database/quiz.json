@@ -16,7 +16,69 @@
             "question": "Hvem er bedst til CS?",
             "answers": [
                 "Rantzau",
+                "Markus",
                 "Markus"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false
+            ],
+            "user_answer": []
+        },
+        {
+            "quiz_name": "cs",
+            "question": "Hvem er bedst til CS?",
+            "answers": [
+                "Rantzau",
+                "Jon",
+                "Lukas",
+                "Emil"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false,
+                false
+            ],
+            "user_answer": []
+        },
+        {
+            "quiz_name": "cs",
+            "question": "Hvad er en deagle",
+            "answers": [
+                "Et våben",
+                "En skyder",
+                "En ørn"
+            ],
+            "correct_answers": [
+                true,
+                true,
+                false
+            ],
+            "user_answer": []
+        },
+        {
+            "quiz_name": "cs",
+            "question": "Bailer pimp majoren?",
+            "answers": [
+                "Nej",
+                "ØB!",
+                "FUCK CS2"
+            ],
+            "correct_answers": [
+                true,
+                true,
+                false
+            ],
+            "user_answer": []
+        },
+        {
+            "quiz_name": "cs",
+            "question": "Bailer pimp majoren?",
+            "answers": [
+                "Nej",
+                "asd"
             ],
             "correct_answers": [
                 true,
