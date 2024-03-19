@@ -8,159 +8,21 @@
             ],
             "correct_answers": [
                 true
-            ]
-        },
-        {
-            "quiz_name": "mat",
-            "question": "heej",
-            "answers": [
-                "2",
-                "21",
-                "fire"
             ],
-            "correct_answers": [
-                true,
-                true,
-                false
-            ]
-        },
-        {
-            "quiz_name": "mads",
-            "question": "Hvad hedder jeg?",
-            "answers": [
-                "Mads",
-                "Thomas",
-                "Rantzau",
-                "Mads Rantzau"
-            ],
-            "correct_answers": [
-                true,
-                false,
-                true,
-                true
-            ]
-        },
-        {
-            "quiz_name": "mads",
-            "question": "Forstår jeg SLIAL",
-            "answers": [
-                "Ja",
-                "Nej ",
-                "Lidt"
-            ],
-            "correct_answers": [
-                false,
-                true,
-                false
-            ]
-        },
-        {
-            "quiz_name": "mads",
-            "question": "Spiller han pik mindst 5 gange om dagen",
-            "answers": [
-                "Tjoo",
-                "Ik mere",
-                "Nej"
-            ],
-            "correct_answers": [
-                false,
-                true,
-                false
-            ]
-        },
-        {
-            "quiz_name": "SLIAL",
-            "question": "hvad er en vektor",
-            "answers": [
-                "kasket",
-                "noget andet",
-                "hej"
-            ],
-            "correct_answers": [
-                true,
-                false,
-                true
-            ]
-        },
-        {
-            "quiz_name": "SLIAL",
-            "question": "hvad er to vektorer",
-            "answers": [
-                "noget andet end en vektor",
-                "en ko"
-            ],
-            "correct_answers": [
-                true,
-                false
-            ]
-        },
-        {
-            "quiz_name": "mat",
-            "question": "Lol",
-            "answers": [
-                "123"
-            ],
-            "correct_answers": [
-                false
-            ]
-        },
-        {
-            "quiz_name": "lol",
-            "question": "er lol sjovt",
-            "answers": [
-                "nej",
-                "det ved jeg ikke",
-                "lorte spil",
-                "test"
-            ],
-            "correct_answers": [
-                true,
-                true,
-                false,
-                false
-            ]
-        },
-        {
-            "quiz_name": "lol",
-            "question": "Er lol svsært",
-            "answers": [
-                "Nejsdf"
-            ],
-            "correct_answers": [
-                true
-            ]
+            "user_answer": []
         },
         {
             "quiz_name": "CS2",
             "question": "Hvem er bedst til CS?",
             "answers": [
                 "Rantzau",
-                "Markus",
                 "Markus"
             ],
             "correct_answers": [
                 true,
-                false,
                 false
-            ]
-        },
-        {
-            "quiz_name": "CS2",
-            "question": "Hvem er bedst til CS?",
-            "answers": [
-                "Rantzau",
-                "Markus",
-                "Markus",
-                "Markus",
-                "Markus"
             ],
-            "correct_answers": [
-                true,
-                false,
-                false,
-                false,
-                false
-            ]
+            "user_answer": []
         }
     ]
 }

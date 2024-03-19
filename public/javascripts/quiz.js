@@ -130,7 +130,8 @@ create_QAs_button.addEventListener("click", () => {
         quiz_name: quiz_name,
         question: question,
         answers: answers_list,
-        correct_answers: correct_answers_list
+        correct_answers: correct_answers_list,
+        user_answer: []
     };
   
     // Send the data to the server-side script
@@ -229,8 +230,8 @@ function check_answers (question) {
 
         .then(data => {
             data.quiz.forEach(q => {
-                answer_feedback.push([]);
                 if (q.quiz_name === question) {
+                    answer_feedback.push([]);
                     str = "#answer_";
                     for (let j = 0; j < q.correct_answers.length; j++) {
                         str = "#answer_" + j;
