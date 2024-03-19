@@ -1,5 +1,9 @@
+
+
 //Maximum answer the user can insert. 
 const max_answers = 5;
+
+let quiz_started = false;
 
 //Count how many answers there is
 let current_answers_number = 1;
@@ -180,13 +184,59 @@ start_quiz.addEventListener("click", () => {
             });
 
             let submit_answers = document.createElement("button");
+            submit_answers.id = "submit_id";
             submit_answers.type = "submit";
             submit_answers.textContent = "Submit Answers";
             jsonDisplayDiv.appendChild(submit_answers);
 
+            submit_answers_button = document.querySelector("#submit_id");
+                submit_answers_button.addEventListener("click", () => {
+                check_answers(quiz_id);
+            });
 
         })
         .catch(error => {
             console.error('There was a problem fetching the JSON file:', error);
         });
 });
+
+function check_answers (question) {
+    let answer_feedback = [];
+
+    let str = "";
+    let i = 0;
+    fetch('/database/quiz.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+
+        .then(data => {
+            data.quiz.forEach(q => {
+                answer_feedback.push([]);
+                if (q.quiz_name === question) {
+                    str = "#answer_";
+                    for (let j = 0; j < q.correct_answers.length; j++) {
+                        str = "#answer_" + j;
+                        // console.log(str);
+                        // console.log(q.answers[j]);
+                        // console.log(q.correct_answers[j]);
+                        if ((q.correct_answers[j] && document.querySelector(str)) || (!(q.correct_answers[j]) && (!(document.querySelector(str)))) ) {
+                            answer_feedback[i][j] = true;
+                        } else {
+                            answer_feedback[i][j] = false;
+                        }
+                };
+                };
+                i++;
+            });
+
+            data.quiz.forEach(q => {    
+
+            });
+        });
+};
+
+
