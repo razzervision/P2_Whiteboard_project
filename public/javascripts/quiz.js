@@ -237,7 +237,7 @@ function check_answers (question) {
                         // console.log(str);
                         // console.log(q.answers[j]);
                         // console.log(q.correct_answers[j]);
-                        if ((q.correct_answers[j] && document.querySelector(str)) || (!(q.correct_answers[j]) && (!(document.querySelector(str)))) ) {
+                        if ((q.correct_answers[j] && document.querySelector(str).checked) || (!(q.correct_answers[j]) && (!(document.querySelector(str).checked))) ) {
                             answer_feedback[i][j] = true;
                         } else {
                             answer_feedback[i][j] = false;
@@ -246,10 +246,11 @@ function check_answers (question) {
                 };
                 };
                 i++;
+                console.log(answer_feedback);
             });
             console.log(answer_feedback);
 
-            data.quiz.forEach(q => {    
+            data.quiz.forEach(q => {   
 
             });
         });
