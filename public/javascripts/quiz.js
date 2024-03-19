@@ -242,10 +242,12 @@ function check_answers (question) {
                         } else {
                             answer_feedback[i][j] = false;
                         }
+
                 };
                 };
                 i++;
             });
+            console.log(answer_feedback);
 
             data.quiz.forEach(q => {    
 

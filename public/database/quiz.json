@@ -103,6 +103,64 @@
             "correct_answers": [
                 false
             ]
+        },
+        {
+            "quiz_name": "lol",
+            "question": "er lol sjovt",
+            "answers": [
+                "nej",
+                "det ved jeg ikke",
+                "lorte spil",
+                "test"
+            ],
+            "correct_answers": [
+                true,
+                true,
+                false,
+                false
+            ]
+        },
+        {
+            "quiz_name": "lol",
+            "question": "Er lol svsært",
+            "answers": [
+                "Nejsdf"
+            ],
+            "correct_answers": [
+                true
+            ]
+        },
+        {
+            "quiz_name": "CS2",
+            "question": "Hvem er bedst til CS?",
+            "answers": [
+                "Rantzau",
+                "Markus",
+                "Markus"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false
+            ]
+        },
+        {
+            "quiz_name": "CS2",
+            "question": "Hvem er bedst til CS?",
+            "answers": [
+                "Rantzau",
+                "Markus",
+                "Markus",
+                "Markus",
+                "Markus"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false,
+                false,
+                false
+            ]
         }
     ]
 }
