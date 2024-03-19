@@ -1,45 +1,70 @@
 {
     "quiz": [
         {
-            "question": "Hvad er PI",
+            "quiz_name": "mat",
+            "question": "Pi",
             "answers": [
-                "3.14",
-                "En kage",
-                "En pizza",
-                "Et cykelmærke",
-                "Langt",
-                ""
+                "Geogebra"
+            ],
+            "correct_answers": [
+                true
+            ]
+        },
+        {
+            "quiz_name": "mat",
+            "question": "heej",
+            "answers": [
+                "2",
+                "21",
+                "fire"
             ],
             "correct_answers": [
                 true,
                 true,
+                false
+            ]
+        },
+        {
+            "quiz_name": "mads",
+            "question": "Hvad hedder jeg?",
+            "answers": [
+                "Mads",
+                "Thomas",
+                "Rantzau",
+                "Mads Rantzau"
+            ],
+            "correct_answers": [
+                true,
                 false,
+                true,
+                true
+            ]
+        },
+        {
+            "quiz_name": "mads",
+            "question": "Forstår jeg SLIAL",
+            "answers": [
+                "Ja",
+                "Nej ",
+                "Lidt"
+            ],
+            "correct_answers": [
                 false,
                 true,
                 false
             ]
         },
         {
-            "question": "Hej",
+            "quiz_name": "mads",
+            "question": "Spiller han pik mindst 5 gange om dagen",
             "answers": [
-                "heeh",
-                "rgerg"
+                "Tjoo",
+                "Ik mere",
+                "Nej"
             ],
             "correct_answers": [
                 false,
-                false
-            ]
-        },
-        {
-            "question": "Hej",
-            "answers": [
-                "heeh",
-                "rgerg",
-                "ggg"
-            ],
-            "correct_answers": [
-                false,
-                false,
+                true,
                 false
             ]
         }

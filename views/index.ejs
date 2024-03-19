@@ -23,6 +23,10 @@
   <div class="quiz_container">
 
     <div class="quiz_div">
+      <label for="quiz_name">Quiz Name:</label>
+      <input type="text" id="quiz_name"><br><br>
+
+
         <label for="question_txt_field">Question:</label>
         <input type="text" id="question_txt_field"><br>
 
@@ -35,13 +39,15 @@
         <button onclick="clearQAs()">Clear Q & A's</button><br>
         <button id="start_quiz">Start quiz</button><br>
         <button onclick="end_quiz()">End quiz</button><br>
-
     </div>
+    <div id="quiz_output">
 
+      
+    </div>
 
   </div>
 
-  <div class="test_container">
+  <!-- <div class="test_container">
     <div class="test_div">
 
       <p id="quiz_time_p">QUIZ TIME:</p>
@@ -49,7 +55,7 @@
       <div id="radioChoices"></div>
 
     </div>
-  </div>
+  </div> -->
 
   <div class="paint">
     <canvas id="canvas"></canvas>

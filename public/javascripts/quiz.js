@@ -11,6 +11,7 @@ last_answer_input.addEventListener("input", create_new_answer_box);
 
 //This function create a new answer box to let the user dynamically add more answers.
 function create_new_answer_box(){
+
     //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
     let id = document.getElementById("create_new_answer");
     id = id.previousElementSibling.id;
@@ -79,6 +80,20 @@ function create_new_answer_box(){
 const create_QAs_button = document.getElementById("create_QAs");
 
 create_QAs_button.addEventListener("click", () => {
+    let quiz_name = document.getElementById("quiz_name").value;
+    if(quiz_name === ""){
+        //Generate a error message for the user.
+        let error = document.createElement("h4");
+        error.id="error_no_quiz_name";
+        error.textContent="Please insert a quiz name, and don't change it";
+        error.style.color="red";
+
+        //Identify the element after answer inputs. 
+        let button = document.getElementById("create_new_answer");
+        button.parentNode.insertBefore(error, button);
+        return 0;
+    }
+
     let question = document.getElementById("question_txt_field").value;
     let answers_list = [];
     let correct_answers_list = [];
@@ -86,7 +101,6 @@ create_QAs_button.addEventListener("click", () => {
     for(let i = 0; i < current_answers_number; i++){
         current_answer_text = document.getElementById("answer"+i).value;
         if(current_answer_text !== ""){
-            console.log(current_answer_text);
             current_answer_checkbox = document.getElementById("checkbox"+i).checked;
             answers_list.push(current_answer_text);
             correct_answers_list.push(current_answer_checkbox);
@@ -94,6 +108,7 @@ create_QAs_button.addEventListener("click", () => {
     }
     // Create an object with the data
     const data = {
+        quiz_name: quiz_name,
         question: question,
         answers: answers_list,
         correct_answers: correct_answers_list
@@ -114,4 +129,64 @@ create_QAs_button.addEventListener("click", () => {
     .catch((error) => {
         console.error('Error:', error);
     });
+
+    clear_questions();
+});
+
+//VERY BAD TEMP CODE
+function clear_questions(){
+    let inputs = document.querySelectorAll("input")
+    inputs.forEach(input => {
+        if(input.id !== "quiz_name"){
+            input.value = null;
+        }
+    });
+}
+
+
+//Start the quiz
+let start_quiz = document.getElementById("start_quiz");
+start_quiz.addEventListener("click", () => {
+    fetch('/database/quiz.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            let quiz_id = document.getElementById("quiz_name").value;
+
+            const jsonDisplayDiv = document.getElementById("quiz_output");
+            data.quiz.forEach(q => {
+                if(q.quiz_name === quiz_id){      
+                    console.log(q.question);          
+                    let question_field = document.createElement("h3");
+                    question_field.textContent = q.question;
+                    jsonDisplayDiv.appendChild(question_field);
+            
+                    q.answers.forEach((answer, index) => {
+                        let answer_field = document.createElement("input");
+                        answer_field.type = "checkbox";
+                        answer_field.id = `answer_${index}`;
+                        let label = document.createElement("label");
+                        label.setAttribute("for", `answer_${index}`);
+                        label.textContent = answer;
+                        jsonDisplayDiv.appendChild(answer_field);
+                        jsonDisplayDiv.appendChild(label);
+                        jsonDisplayDiv.appendChild(document.createElement("br")); 
+                    });
+                }                               
+            });
+
+            let submit_answers = document.createElement("button");
+            submit_answers.type = "submit";
+            submit_answers.textContent = "Submit Answers";
+            jsonDisplayDiv.appendChild(submit_answers);
+
+
+        })
+        .catch(error => {
+            console.error('There was a problem fetching the JSON file:', error);
+        });
 });
