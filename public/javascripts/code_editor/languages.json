@@ -1,0 +1,65 @@
+{
+    "languages": [
+        {
+            "name": "JavaScript",
+            "mode": "javascript",
+            "script": "mode/javascript/javascript.js"
+        },
+        {
+            "name": "Python",
+            "mode": "python",
+            "script": "mode/python/python.js"
+        },
+        {
+            "name": "C++",
+            "mode": "text/x-c++src",
+            "script": "mode/cpp/cpp.js"
+        },
+        {
+            "name": "Java",
+            "mode": "text/x-java",
+            "script": "mode/clike/clike.js"
+        },
+        {
+            "name": "HTML",
+            "mode": "text/html",
+            "script": "mode/htmlmixed/htmlmixed.js"
+        },
+        {
+            "name": "CSS",
+            "mode": "text/css",
+            "script": "mode/css/css.js"
+        },
+        {
+            "name": "XML",
+            "mode": "application/xml",
+            "script": "mode/xml/xml.js"
+        },
+        {
+            "name": "JSON",
+            "mode": "application/json",
+            "script": "mode/javascript/javascript.js"
+        },
+        {
+            "name": "Markdown",
+            "mode": "text/x-markdown",
+            "script": "mode/markdown/markdown.js"
+        },
+        {
+            "name": "SQL",
+            "mode": "text/x-sql",
+            "script": "mode/sql/sql.js"
+        },
+        {
+            "name": "C",
+            "mode": "text/x-csrc",
+            "script": "mode/clike/clike.js"
+        },
+        {
+            "name": "Ruby",
+            "mode": "text/x-ruby",
+            "script": "mode/ruby/ruby.js"
+        }
+        
+    ]
+}

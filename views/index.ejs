@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="javascripts/code_editor/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="javascripts/code_editor/codemirror/theme/solarized.css">
+  <link rel="stylesheet" href="javascripts/code_editor/codemirror/theme/darcula.css">
+  <link rel="stylesheet" href="javascripts/code_editor/codemirror/theme/oceanic-next.css">
   <title>
     <%= title %>
   </title>
+          <link rel="stylesheet" href="/stylesheets/WCE.css">
           <link rel="stylesheet" href="/stylesheets/style.css">
           <link rel="stylesheet" href="/stylesheets/quiz.css">
           <script src="/javascripts/dropdown.js"></script>
@@ -18,11 +23,27 @@
           <script src="/javascripts/server.js"></script>
           <script src="/javascripts/phone.js"></script>
           <script src="/socket.io/socket.io.js"></script>
+
+          <script defer src="/javascripts/code_editor/codemirror/lib/codemirror.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/javascript/javascript.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/python/python.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/cpp/cpp.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/clike/clike.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/css/css.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/xml/xml.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/markdown/markdown.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/sql/sql.js"></script>
+          <script defer src="/javascripts/code_editor/codemirror/mode/ruby/ruby.js"></script>
+          <script defer src="/javascripts/code_editor/WCE.js"></script>
+
           <script> 
             if (document.location.href != "http://localhost:3000/") {
               const socket = io();
             }
           </script>
+
+          
         </head>
 
 <body>
@@ -73,6 +94,22 @@
       <input oninput="draw_width = this.value" type="range" min="1" max="100" class="pen">
     </div>
   </div>
+
+
+
+
+  <!-- JONS code editor -->
+  <div class="code_editor">
+  <textarea id="code"></textarea>
+  <select id="language">
+  </select>
+  <select id="theme">
+      <option value="darcula">Darcula</option>
+      <option value="solarized">Solarized</option>
+      <option value="oceanic-next">Oceanic Next</option>
+  </select>
+</div>
+  
 
 </body>
 
