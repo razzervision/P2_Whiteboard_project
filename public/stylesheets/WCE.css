@@ -1,19 +1,16 @@
-/* Style for select menu */
 select {
-    padding: 8px 12px; /* Adjust padding as needed */
-    font-size: 16px; /* Adjust font size as needed */
-    border: 1px solid #ccc; /* Border color */
-    border-radius: 5px; /* Border radius */
-    background-color: #f7f7f7; /* Background color */
-    color: #333; /* Text color */
-    appearance: none; /* Removes default arrow icon */
-    -webkit-appearance: none; /* For older versions of Chrome/Safari */
-    -moz-appearance: none; /* For older versions of Firefox */
+    padding: 8px 12px; 
+    font-size: 16px; 
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    background-color: #f7f7f7; 
+    color: #333;
+    appearance: none;
 }
 
 #code {
-    width: 100%; /* Adjust width as needed */
-    height: 100%; /* Adjust height as needed */
+    width: 100%; 
+    height: 100%; 
 
 }
 
