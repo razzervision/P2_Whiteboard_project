@@ -11,7 +11,7 @@ function loadLanguages() {
 const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
     lineNumbers: true,
     mode: "javascript",
-    theme: "darcula" 
+    theme: "darcula"
 });
 
 loadLanguages()
@@ -22,10 +22,6 @@ loadLanguages()
             option.value = lang.mode;
             option.textContent = lang.name;
             languageDropdown.appendChild(option);
-
-            const script = document.createElement("script");
-            script.src = lang.script;
-            document.head.appendChild(script);
         });
     })
     .catch(error => console.error("Error loading languages:", error));
