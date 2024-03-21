@@ -10,6 +10,7 @@ function loadLanguages() {
 
 const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
     lineNumbers: true,
+    autoCloseBrackets: true,
     mode: "javascript",
     theme: "darcula"
 });
