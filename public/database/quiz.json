@@ -85,6 +85,27 @@
                 false
             ],
             "user_answer": []
+        },
+        {
+            "quiz_name": "Mads",
+            "question": "Hej 22",
+            "answers": [
+                "ninsoivndskl",
+                "ivnsdviovnsdiov",
+                "nvioesnvion",
+                "vnieonvsiovnoi",
+                "vinosvisnvisdo",
+                "vineowviwonv"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "user_answer": []
         }
     ]
 }
