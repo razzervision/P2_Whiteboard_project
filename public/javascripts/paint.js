@@ -1,6 +1,7 @@
 const canvas = document.getElementById("canvas");
 canvas.width = window.innerWidth - 60;
 canvas.height = 600;
+const socket = io("http://localhost:3000");
 
 const startBackground = "white";
 let draw_color = "black";
@@ -41,6 +42,12 @@ function draw(event) {
         context.lineCap = "round";
         context.lineJoin = "round";
         context.stroke();
+        socket.emit("draw", {
+            x: event.clientX - canvas.offsetLeft,
+            y: event.clientY - canvas.offsetTop,
+            color: draw_color,
+            width: draw_withd
+        });
     }
 }
 
