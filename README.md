@@ -1,7 +1,7 @@
 # P2_Whiteboard_projectdw
 
 ## Start local server:
-I terminalen kør **npm run devStart**
+I terminalen kør **npm run devStart** // eller **npm start devStart**
 kan tilgås på localhost:3000
 
 ## Install dependences
