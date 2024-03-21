@@ -11,26 +11,26 @@
   <title>
     <%= title %>
   </title>
+          <script src="https://cdn.socket.io/4.2.0/socket.io.min.js"></script>
           <link rel="stylesheet" href="/stylesheets/WCE.css">
           <link rel="stylesheet" href="/stylesheets/style.css">
           <link rel="stylesheet" href="/stylesheets/quiz.css">
           <script src="/javascripts/dropdown.js"></script>
           <script src="/javascripts/users.js"></script>
           <script src="/javascripts/calculator.js"></script>
-          <script src="/javascripts/codeeditor.js"></script>
-          <script defer src="/javascripts/paint.js"></script>
+            <script defer src="/javascripts/paint.js"></script>
           <script src="/javascripts/pausefish.js"></script>
           <script src="/javascripts/timer.js"></script>
           <script src="/javascripts/savepdf.js"></script>
           <script defer src="/javascripts/quiz.js"></script>
           <script src="/javascripts/server.js"></script>
           <script src="/javascripts/phone.js"></script>
-          <script src="/socket.io/socket.io.js"></script>
+          
 
           <script defer src="/javascripts/code_editor/codemirror/lib/codemirror.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/javascript/javascript.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/python/python.js"></script>
-          <script defer src="/javascripts/code_editor/codemirror/mode/cpp/cpp.js"></script>
+          <script defer src="javascripts/code_editor/codemirror/mode/clike/clike.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/clike/clike.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/htmlmixed/htmlmixed.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/css/css.js"></script>
@@ -40,11 +40,6 @@
           <script defer src="/javascripts/code_editor/codemirror/mode/ruby/ruby.js"></script>
           <script defer src="/javascripts/code_editor/WCE.js"></script>
 
-          <script> 
-            if (document.location.href != "http://localhost:3000/") {
-              const socket = io();
-            }
-          </script>
 
           
         </head>
