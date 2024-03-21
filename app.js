@@ -4,7 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const indexRouter = require("./routes/index");
-const togetherPaintRouter = require("./routes/togetherPaint");
+//const togetherPaintRouter = require("./routes/togetherPaint");
 const fs = require("fs");
 const app = express();
 

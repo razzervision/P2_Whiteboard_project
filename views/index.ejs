@@ -11,6 +11,7 @@
   <title>
     <%= title %>
   </title>
+          <script src="https://cdn.socket.io/4.2.0/socket.io.min.js"></script>
           <link rel="stylesheet" href="/stylesheets/WCE.css">
           <link rel="stylesheet" href="/stylesheets/style.css">
           <link rel="stylesheet" href="/stylesheets/quiz.css">
@@ -24,7 +25,7 @@
           <script defer src="/javascripts/quiz.js"></script>
           <script src="/javascripts/server.js"></script>
           <script src="/javascripts/phone.js"></script>
-          <script src="/socket.io/socket.io.js"></script>
+          
 
           <script defer src="/javascripts/code_editor/codemirror/lib/codemirror.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/javascript/javascript.js"></script>
@@ -40,11 +41,6 @@
           <script defer src="/javascripts/code_editor/codemirror/addon/edit/closebrackets.js"></script>
           <script defer src="/javascripts/code_editor/WCE.js"></script>
 
-          <script> 
-            if (document.location.href != "http://localhost:3000/") {
-              const socket = io();
-            }
-          </script>
 
           
         </head>
