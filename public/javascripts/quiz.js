@@ -8,6 +8,7 @@ let current_answers_number = 1;
 let last_answer_input = document.getElementById("answer0");
 last_answer_input.addEventListener("input", create_new_answer_box);
 
+let quiz_answers_data = [];
 
 //Helping funktions
 
@@ -49,7 +50,6 @@ function fetch_data(path){
             return response.json();
         })
         .then(data => {
-            console.log(data);
             return data;
         })
         .catch(error => {
@@ -217,7 +217,6 @@ let start_quiz = document.getElementById("start_quiz");
 start_quiz.addEventListener("click", () => {
     fetch_data("/database/quiz.json")
     .then(data => {
-        console.log(data);
 
         let quiz_id = document.getElementById("quiz_name").value;
 
@@ -255,9 +254,9 @@ start_quiz.addEventListener("click", () => {
     });
 });
 
-function check_answers (question) {
+function check_answers (quiz_id) {
     let answer_feedback = [];
-
+    answer_feedback.push([]);
     let str = "";
     let i = 0;
     fetch('/database/quiz.json')
@@ -270,35 +269,106 @@ function check_answers (question) {
 
         .then(data => {
             data.quiz.forEach(q => {
-                if (q.quiz_name === question) {
-                    answer_feedback.push([]);
+                answer_feedback = [];
+                if (q.quiz_name === quiz_id) {
+                    console.log(q);
+
                     str = "#answer_";
                     for (let j = 0; j < q.correct_answers.length; j++) {
                         str = "#answer_" + j;
-                        // console.log(str);
-                        // console.log(q.answers[j]);
-                        // console.log(q.correct_answers[j]);
                         if ((q.correct_answers[j] && document.querySelector(str).checked) || (!(q.correct_answers[j]) && (!(document.querySelector(str).checked))) ) {
-                            answer_feedback[i][j] = true;
+                            answer_feedback[j] = true;
                         } else {
-                            answer_feedback[i][j] = false;
+                            answer_feedback[j] = false;
                         }
-
-                };
-                };
-                i++;
-                console.log(answer_feedback);
-            });
-            console.log(answer_feedback);
-
-            data.quiz.forEach(q => {   
-
+                    };
+                    quiz_answers_data.push(answer_feedback);
+                };   
+                i++; 
+                send_answers(quiz_answers_data[i], q.question, q.quiz_name, i);
             });
         });
 };
 
 
+function send_answers(answer_data, question, quiz_name_id, index) {
+    fetch_data("/database/quiz.json")
+        .then(data => {
+            
+            data.quiz.forEach(q => {
+                if (q.question === question && q.quiz_name === quiz_name_id) {
+                    console.log(q.question, question);
+                    q.user_answer = quiz_answers_data[index];
+                    // console.log(q.user_answer, quiz_answers_data[index]);
+                    console.log(1);
+                }
+            });
 
+            //Now send the modified data back
+            return fetch('/database/quiz.json', {
+                method: 'PUT', // or 'POST' if it's a new record
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(updatedData => {
+            console.log(updatedData); // Log the updated data after sending answers
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+}
+
+// function send_answers(quiz_nameee, quiz_question, answer_data) {
+//     fetch_data("/database/quiz.json")
+//         .then(data => {
+//             data.quiz.forEach(q => {
+//                 if (q.question === quiz_question) {
+//                     quiz_answers_data.push(answer_data);
+//                 }
+//             });
+//             data.quiz.forEach(q => {
+//                 if (q.quiz_name === quiz_nameee) {
+//                     for (let i = 0; i < quiz_answers_data.length; i++) {
+//                         q.user_answer = quiz_answers_data[i];
+//                         console.log(i, q.user_answer, quiz_answers_data[i]);
+//                     }
+//                 }
+//             });
+
+//             //Now send the modified data back
+//             return fetch('/database/quiz.json', {
+//                 method: 'PUT', // or 'POST' if it's a new record
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify(data),
+//             });
+
+//         })
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
+//             }
+//             return response.json();
+//         })
+//         .then(updatedData => {
+//             console.log(updatedData); // Log the updated data after sending answers
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+
+// }
 
 //Default questions for test
 function autofill(){

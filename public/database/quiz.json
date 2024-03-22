@@ -13,7 +13,7 @@
         },
         {
             "quiz_name": "CS2",
-            "question": "Hvem er bedst til CS?",
+            "question": "Hvem er bedst til CS2?",
             "answers": [
                 "Rantzau",
                 "Markus",
@@ -27,6 +27,7 @@
             "user_answer": []
         },
         {
+            "id": 1,
             "quiz_name": "cs",
             "question": "Hvem er bedst til CS?",
             "answers": [
@@ -44,6 +45,7 @@
             "user_answer": []
         },
         {
+            "id": 2,
             "quiz_name": "cs",
             "question": "Hvad er en deagle",
             "answers": [
@@ -59,6 +61,7 @@
             "user_answer": []
         },
         {
+            "id": 3,
             "quiz_name": "cs",
             "question": "Bailer pimp majoren?",
             "answers": [
@@ -74,16 +77,14 @@
             "user_answer": []
         },
         {
+            "id": 4,
             "quiz_name": "cs",
-            "question": "Bailer pimp majoren?",
+            "question": "Bailer pimp majoren? 2",
             "answers": [
                 "Nej",
                 "asd"
             ],
-            "correct_answers": [
-                true,
-                false
-            ],
+            "correct_answers": [],
             "user_answer": []
         },
         {
@@ -154,8 +155,7 @@
             ],
             "correct_answers": [
                 true
-            ],
-            "user_answer": []
+            ]
         },
         {
             "quiz_name": "asda",
@@ -169,8 +169,7 @@
                 true,
                 false,
                 false
-            ],
-            "user_answer": []
+            ]
         },
         {
             "quiz_name": "asda",
@@ -184,8 +183,7 @@
                 true,
                 false,
                 false
-            ],
-            "user_answer": []
+            ]
         },
         {
             "quiz_name": "mat",
@@ -199,8 +197,7 @@
                 true,
                 false,
                 false
-            ],
-            "user_answer": []
+            ]
         },
         {
             "quiz_name": "mat",
@@ -214,8 +211,7 @@
                 true,
                 false,
                 false
-            ],
-            "user_answer": []
+            ]
         },
         {
             "quiz_name": "mat",
@@ -227,8 +223,7 @@
             "correct_answers": [
                 true,
                 false
-            ],
-            "user_answer": []
+            ]
         },
         {
             "quiz_name": "mat",
@@ -267,8 +262,7 @@
             "correct_answers": [
                 true,
                 false
-            ],
-            "user_answer": []
+            ]
         },
         {
             "quiz_name": "asda",
@@ -316,8 +310,7 @@
                 false,
                 false,
                 false
-            ],
-            "user_answer": []
+            ]
         }
     ]
 }
