@@ -254,121 +254,64 @@ start_quiz.addEventListener("click", () => {
     });
 });
 
-function check_answers (quiz_id) {
-    let answer_feedback = [];
-    answer_feedback.push([]);
-    let str = "";
-    let i = 0;
-    fetch('/database/quiz.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-
-        .then(data => {
-            data.quiz.forEach(q => {
-                answer_feedback = [];
-                if (q.quiz_name === quiz_id) {
-                    console.log(q);
-
-                    str = "#answer_";
-                    for (let j = 0; j < q.correct_answers.length; j++) {
-                        str = "#answer_" + j;
-                        if ((q.correct_answers[j] && document.querySelector(str).checked) || (!(q.correct_answers[j]) && (!(document.querySelector(str).checked))) ) {
-                            answer_feedback[j] = true;
-                        } else {
-                            answer_feedback[j] = false;
-                        }
-                    };
-                    quiz_answers_data.push(answer_feedback);
-                };   
-                i++; 
-                send_answers(quiz_answers_data[i], q.question, q.quiz_name, i);
-            });
-        });
-};
 
 
-function send_answers(answer_data, question, quiz_name_id, index) {
-    fetch_data("/database/quiz.json")
-        .then(data => {
-            
-            data.quiz.forEach(q => {
-                if (q.question === question && q.quiz_name === quiz_name_id) {
-                    console.log(q.question, question);
-                    q.user_answer = quiz_answers_data[index];
-                    // console.log(q.user_answer, quiz_answers_data[index]);
-                    console.log(1);
+async function check_answers(quiz_id) {
+    try {
+        const response = await fetch('/database/quiz.json');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        let i = 0;
+        for (const q of data.quiz) {
+            if (q.quiz_name === quiz_id) {
+                const answer_feedback = [];
+                let str = "";
+                str = "#answer_";
+                for (let j = 0; j < q.correct_answers.length; j++) {
+                    str = "#answer_" + j;
+                    if ((q.correct_answers[j] && document.querySelector(str).checked) || (!q.correct_answers[j] && !document.querySelector(str).checked)) {
+                        answer_feedback[j] = true;
+                    } else {
+                        answer_feedback[j] = false;
+                    }
                 }
-            });
-
-            //Now send the modified data back
-            return fetch('/database/quiz.json', {
-                method: 'PUT', // or 'POST' if it's a new record
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
+                await send_answers(answer_feedback, q.question, q.quiz_name, i);
+                i++;
             }
-            return response.json();
-        })
-        .then(updatedData => {
-            console.log(updatedData); // Log the updated data after sending answers
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
-// function send_answers(quiz_nameee, quiz_question, answer_data) {
-//     fetch_data("/database/quiz.json")
-//         .then(data => {
-//             data.quiz.forEach(q => {
-//                 if (q.question === quiz_question) {
-//                     quiz_answers_data.push(answer_data);
-//                 }
-//             });
-//             data.quiz.forEach(q => {
-//                 if (q.quiz_name === quiz_nameee) {
-//                     for (let i = 0; i < quiz_answers_data.length; i++) {
-//                         q.user_answer = quiz_answers_data[i];
-//                         console.log(i, q.user_answer, quiz_answers_data[i]);
-//                     }
-//                 }
-//             });
+async function send_answers(answer_data, question1, quiz_name_id, index) {
+    try {
+        const dataResponse = await fetch("/database/quiz.json");
+        const data = await dataResponse.json();
+        for (const q of data.quiz) {
+            if (q.question === question1) {
+                q.user_answer = answer_data;
+            }
+        }
+        const response = await fetch('/database/quiz.json', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
+        }
+        const updatedData = await response.json();
+        console.log(updatedData); // Log the updated data after sending answers
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 
-//             //Now send the modified data back
-//             return fetch('/database/quiz.json', {
-//                 method: 'PUT', // or 'POST' if it's a new record
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify(data),
-//             });
-
-//         })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
-//             }
-//             return response.json();
-//         })
-//         .then(updatedData => {
-//             console.log(updatedData); // Log the updated data after sending answers
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//         });
-
-// }
 
 //Default questions for test
 function autofill(){

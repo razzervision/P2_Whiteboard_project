@@ -24,10 +24,13 @@
                 false,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                false,
+                false,
+                false
+            ]
         },
         {
-            "id": 1,
             "quiz_name": "cs",
             "question": "Hvem er bedst til CS?",
             "answers": [
@@ -42,10 +45,14 @@
                 false,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                true,
+                true,
+                true,
+                true
+            ]
         },
         {
-            "id": 2,
             "quiz_name": "cs",
             "question": "Hvad er en deagle",
             "answers": [
@@ -58,10 +65,13 @@
                 true,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                true,
+                false,
+                true
+            ]
         },
         {
-            "id": 3,
             "quiz_name": "cs",
             "question": "Bailer pimp majoren?",
             "answers": [
@@ -74,242 +84,93 @@
                 true,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                true,
+                false,
+                true
+            ]
         },
         {
-            "id": 4,
             "quiz_name": "cs",
             "question": "Bailer pimp majoren? 2",
             "answers": [
                 "Nej",
                 "asd"
             ],
-            "correct_answers": [],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "Mads",
-            "question": "Hej 22",
-            "answers": [
-                "ninsoivndskl",
-                "ivnsdviovnsdiov",
-                "nvioesnvion",
-                "vnieonvsiovnoi",
-                "vinosvisnvisdo",
-                "vineowviwonv"
-            ],
             "correct_answers": [
-                true,
                 false,
-                false,
-                false,
-                false,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "mads",
-            "question": "qw",
-            "answers": [
-                "qwqw",
-                "qwqw",
-                "qwqw"
-            ],
-            "correct_answers": [
-                true,
-                false,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "mads",
-            "question": "qw",
-            "answers": [
-                "qwqw"
-            ],
-            "correct_answers": [
                 true
             ],
-            "user_answer": []
+            "user_answer": [
+                false,
+                false
+            ]
         },
         {
-            "quiz_name": "sdfs",
-            "question": "sdfs",
+            "quiz_name": "Markus Test",
+            "question": "mp lækker",
             "answers": [
-                "sdfsdf",
-                "sfsdf"
+                "ja",
+                "nej"
             ],
             "correct_answers": [
                 true,
                 false
             ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "asda",
-            "question": "asdas",
-            "answers": [
-                "asdas"
-            ],
-            "correct_answers": [
+            "user_answer": [
+                true,
                 true
             ]
         },
         {
-            "quiz_name": "asda",
-            "question": "asdas",
+            "quiz_name": "Markus Test",
+            "question": "mp flot?",
             "answers": [
-                "asdasasda",
-                "asda",
-                "asda"
+                "ja",
+                "nej"
             ],
             "correct_answers": [
                 true,
+                false
+            ],
+            "user_answer": [
+                true,
+                true
+            ]
+        },
+        {
+            "quiz_name": "Markus Test",
+            "question": "mp god til node.js",
+            "answers": [
+                "ja",
+                "nej",
+                "chatten hjælper"
+            ],
+            "correct_answers": [
                 false,
-                false
-            ]
-        },
-        {
-            "quiz_name": "asda",
-            "question": "asdas",
-            "answers": [
-                "asdasaasdasda",
-                "asdas",
-                "asda"
-            ],
-            "correct_answers": [
                 true,
-                false,
-                false
-            ]
-        },
-        {
-            "quiz_name": "mat",
-            "question": "1+1",
-            "answers": [
-                "2",
-                "4",
-                "4"
-            ],
-            "correct_answers": [
-                true,
-                false,
-                false
-            ]
-        },
-        {
-            "quiz_name": "mat",
-            "question": "1+1",
-            "answers": [
-                "234",
-                "2342",
-                "2"
-            ],
-            "correct_answers": [
-                true,
-                false,
-                false
-            ]
-        },
-        {
-            "quiz_name": "mat",
-            "question": "1+1",
-            "answers": [
-                "112",
-                "121"
-            ],
-            "correct_answers": [
-                true,
-                false
-            ]
-        },
-        {
-            "quiz_name": "mat",
-            "question": "",
-            "answers": [],
-            "correct_answers": [],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "mat",
-            "question": "",
-            "answers": [],
-            "correct_answers": [],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "",
-            "question": "asda",
-            "answers": [
-                "asdasd",
-                "asdas"
-            ],
-            "correct_answers": [
-                true,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "asda",
-            "question": "asdas",
-            "answers": [
-                "asdasd",
-                "asdasd"
-            ],
-            "correct_answers": [
-                true,
-                false
-            ]
-        },
-        {
-            "quiz_name": "asda",
-            "question": "asd",
-            "answers": [
-                "asd"
-            ],
-            "correct_answers": [
                 true
             ],
-            "user_answer": []
+            "user_answer": [
+                false,
+                false,
+                true
+            ]
         },
         {
-            "quiz_name": "mat",
-            "question": "hej",
+            "quiz_name": "Markus Test",
+            "question": "q4",
             "answers": [
-                "sfse",
-                "sefes",
-                "sefes",
-                "sefes",
-                "sfesfs",
-                "sefesf"
+                "korrekt",
+                "forkert"
             ],
             "correct_answers": [
                 true,
-                false,
-                false,
-                false,
-                false,
                 false
             ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "mat",
-            "question": "fefsef",
-            "answers": [
-                "sfesfse",
-                "sefesfs",
-                "sefsef",
-                "sefesf"
-            ],
-            "correct_answers": [
+            "user_answer": [
                 true,
-                false,
-                false,
-                false
+                true
             ]
         }
     ]
