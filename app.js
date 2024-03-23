@@ -53,6 +53,7 @@ app.post("/upload_quiz_data", (req, res) => {
 app.put("/database/quiz.json", (req, res) => {
     // Access the updated quiz data sent from the client
     const updatedQuizData = req.body;
+    //console.log(quiz_answers_data);
 
     // Write the updated JSON back to the file
     fs.writeFile("public/database/quiz.json", JSON.stringify(updatedQuizData, null, 4), (err) => {
