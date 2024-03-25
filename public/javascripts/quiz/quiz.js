@@ -8,6 +8,7 @@ let current_answers_number = 1;
 let last_answer_input = document.getElementById("answer0");
 last_answer_input.addEventListener("input", create_new_answer_box);
 
+let quiz_answers_data = [];
 
 //Helping funktions
 
@@ -49,7 +50,6 @@ function fetch_data(path){
             return response.json();
         })
         .then(data => {
-            console.log(data);
             return data;
         })
         .catch(error => {
@@ -215,9 +215,8 @@ function clear_questions(){
 //Start the quiz
 let start_quiz = document.getElementById("start_quiz");
 start_quiz.addEventListener("click", () => {
-    fetch_data("/database/quiz.json")
+    fetch_data("../database/quiz.json")
     .then(data => {
-        console.log(data);
 
         let quiz_id = document.getElementById("quiz_name").value;
 
@@ -235,7 +234,7 @@ start_quiz.addEventListener("click", () => {
                     let label = document.createElement("label");
                     label.setAttribute("for", `answer_${index}`);
                     label.textContent = answer;
-                    jsonDisplayDiv.appendChild(answer_field);
+                    jsonDisplayDiv.appendChild(answer_field); 
                     jsonDisplayDiv.appendChild(label);
                     jsonDisplayDiv.appendChild(document.createElement("br")); 
                 });
@@ -255,50 +254,128 @@ start_quiz.addEventListener("click", () => {
     });
 });
 
-function check_answers (question) {
-    let answer_feedback = [];
-
-    let str = "";
-    let i = 0;
-    fetch('/database/quiz.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+async function check_answers(quiz_id) {
+    try {
+        const response = await fetch('../database/quiz.json');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        for (const q of data.quiz) {
+            if (q.quiz_name === quiz_id) {
+                const answer_feedback = [];
+                let str = "";
+                str = "#answer_";
+                for (let j = 0; j < q.correct_answers.length; j++) {
+                    // der er fejl her, ved ikke hvad det er
+                    str = "#answer_" + j;
+                    if ((q.correct_answers[j] && document.querySelector(str).checked) || (!q.correct_answers[j] && !document.querySelector(str).checked)) {
+                        answer_feedback[j] = true;
+                    } else {
+                        answer_feedback[j] = false;
+                    }
+                }
+                await send_answers(answer_feedback, q.question);
             }
-            return response.json();
-        })
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+    print_feedback(quiz_id);
+}
 
-        .then(data => {
-            data.quiz.forEach(q => {
-                if (q.quiz_name === question) {
-                    answer_feedback.push([]);
-                    str = "#answer_";
-                    for (let j = 0; j < q.correct_answers.length; j++) {
-                        str = "#answer_" + j;
-                        // console.log(str);
-                        // console.log(q.answers[j]);
-                        // console.log(q.correct_answers[j]);
-                        if ((q.correct_answers[j] && document.querySelector(str).checked) || (!(q.correct_answers[j]) && (!(document.querySelector(str).checked))) ) {
-                            answer_feedback[i][j] = true;
-                        } else {
-                            answer_feedback[i][j] = false;
-                        }
-
-                };
-                };
-                i++;
-                console.log(answer_feedback);
-            });
-            console.log(answer_feedback);
-
-            data.quiz.forEach(q => {   
-
-            });
+async function send_answers(answer_data, question1) {
+    try {
+        const dataResponse = await fetch("../database/quiz.json");
+        const data = await dataResponse.json();
+        for (const q of data.quiz) {
+            if (q.question === question1) {
+                q.user_answer = answer_data;
+            }
+        }
+        const response = await fetch('../database/quiz.json', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
         });
-};
+        if (!response.ok) {
+            throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
+        }
+        const updatedData = await response.json();
+        console.log(updatedData); // Log the updated data after sending answers
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+function print_feedback (quiz_id) {
+    let new_divider = document.createElement('div');
+    new_divider.id = "feedback_div_id";
+    let container = document.querySelector('#quiz_output');
+    container.appendChild(new_divider);
+
+    fetch("../database/quiz.json")
+    //fetch_data("../database/quiz.json");
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        let i = 0;
+        data.quiz.forEach(q => {
+            if (q.quiz_name === quiz_id) {
+                let new_new_divider = document.createElement('div');
+                new_new_divider.id = "new_h3_" + i + "_div";
+                new_divider.appendChild(new_new_divider);
+                let new_h3 = document.createElement('h3');
+                new_h3.id = "new_h3_" + i;
+                new_h3.textContent = q.question;
+                new_new_divider.appendChild(new_h3);
+                let corr_ans = 0;
+                let wrong_ans = 0;
+                let total_answers = q.answers.length;
+                for (let j = 0; j < q.answers.length; j++) {
+                    let new_answer = document.createElement('p');
+                    new_answer.id = "new_p_" + i + "_" + j;
+                    new_answer.textContent = q.answers[j];
+                    // new_answer.style.backgroundColor = "red";
+                    // new_answer.style.width = "5px";
+                    if (q.user_answer[j]) {
+                        new_answer.style.backgroundColor = "green";
+                        corr_ans++;
+                    } else {
+                        new_answer.style.backgroundColor = "red";
+                        wrong_ans++;
+                    }
+                    new_new_divider.appendChild(new_answer);
+                }
+                let new_new_h3 = document.createElement('h3');
+                new_new_h3.textContent = "Statistics:";
+                new_p_1 = document.createElement('p');
+                new_p_2 = document.createElement('p');
+                new_p_3 = document.createElement('p');
+                new_p_1.textContent = corr_ans + " / " + total_answers + " answered correct."
+                new_divider.appendChild(new_p_1);
+                // new_p_1
+                // new_p_1
+                
 
 
 
+
+
+                i++;
+            }
+        });
+    })
+    .catch(error => {
+        console.error('There was a problem fetching the JSON file:', error);
+    });
+}
 
 //Default questions for test
 function autofill(){
@@ -316,4 +393,4 @@ function autofill(){
     answer0_checked.checked = "true";
 
 }
-// autofill();
+autofill();
