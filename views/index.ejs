@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="javascripts/code_editor/codemirror/theme/oceanic-next.css">
   <link rel="stylesheet" href="javascripts/code_editor/codemirror/theme/shadowfox.css">
   <link rel="stylesheet" href="javascripts/code_editor/codemirror/theme/monokai.css">
+  <link rel="stylesheet" href="stylesheets/timer.css">
+
   <title>
     <%= title %>
   </title>
@@ -152,6 +154,30 @@
       <button id="clearHistory" onclick="clearHistory()">CLEAR</button>
   </div>
 </div>
+
+  <!--This is the trigger for the modal-->       
+  <div class="sticky"> <button id="pauses"> Click here for pause options </button></div>
+
+  <!--this is the modal-->        
+  <div id="myModalforPauses" class="modal">
+
+  <!--this is the modal content-->
+
+     <div class="modal-content"> 
+          <span class="close">&times;</span>
+             <p><ul>
+             <li><button id="longwork" onclick="pauselength(1)" >Long work, long break </button></li> 
+             <li><button id="shortwork" onclick="pauselength(2)" >Short work, short break </button></li>
+             <li><button id="chore" onclick="pauselength(3)" >Finish a chore! </button></li>
+             <li><button id="relax" onclick="pauselength(4)" >Relax break</button></li>
+             <li><button id="other" onclick="pauselength(5)" >other</button></li>
+             </ul></p>
+      </div>
+
+   </div>
+
+   <script src="javascripts/timer.js"> </script>
+   
 
 </body>
 
