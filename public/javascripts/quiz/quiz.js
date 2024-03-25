@@ -77,7 +77,8 @@ creat_quiz.addEventListener("click", async() => {
 });
 
 
-//Check if the quiz name is unique
+
+//Check if the quiz name already exist
 async function quiz_name_already_created(name){
     let result = false;
 
@@ -244,15 +245,73 @@ function clear_questions(){
     last_answer_input.addEventListener("input", create_new_answer_box);
 
 }
+let search_quiz_input = document.getElementById("search_quiz_text");
+search_quiz_input.addEventListener("input",() => {
+    search_quizzes();
+});
 
+//Find all unique quizzes
+async function search_quizzes(){
+    let data = await fetch_data("../database/quiz.json");
+    data = data.quiz;
+    // Use a Set to store unique quiz_names
+    const uniqueQuizNames = new Set();
+
+    // Filter out objects with duplicate quiz_names
+    const uniqueQuizData = data.filter(item => {
+        if (!uniqueQuizNames.has(item.quiz_name)) {
+            uniqueQuizNames.add(item.quiz_name);
+            return true;
+        }
+        return false;
+    });
+    let new_quizzes_searched = new Set();
+    
+    let search = document.getElementById("search_quiz_text").value;
+
+    if(search !== ""){
+        uniqueQuizData.forEach(q => {
+            if(q.quiz_name.toLowerCase().includes(search.toLowerCase())){
+                new_quizzes_searched.add(q.quiz_name);
+            }
+        });
+    } else {
+        new_quizzes_searched = uniqueQuizNames;
+    }
+   
+    let table = document.getElementById("search_quiz_table");
+    //reset the table
+    table.textContent = "";
+    new_quizzes_searched.forEach(quiz => {
+        let row = document.createElement("tr");
+
+        let quiz_name = document.createElement("td");
+        quiz_name.textContent = quiz;
+        row.appendChild(quiz_name);
+
+        let start_quiz_button = document.createElement("button");
+        start_quiz_button.textContent = "Start Quiz";
+        start_quiz_button.className = "start_quiz_button";
+        start_quiz_button.addEventListener("click", () => {
+            start_quiz(quiz);
+        });
+        row.appendChild(start_quiz_button);
+
+        table.appendChild(row);
+    });
+}
+search_quizzes();
 
 //Start the quiz
-let start_quiz = document.getElementById("start_quiz");
-start_quiz.addEventListener("click", () => {
+function start_quiz(quiz_id){
+    
+    let div = document.getElementById("quiz_output");
+    div.style.display = "block";
+    div.textContent = "";
     fetch_data("../database/quiz.json")
     .then(data => {
 
-        let quiz_id = document.getElementById("quiz_name").textContent;
+        // let quiz_id = document.getElementById("quiz_name_output").textContent;
 
         const jsonDisplayDiv = document.getElementById("quiz_output");
         data.quiz.forEach(q => {
@@ -286,7 +345,7 @@ start_quiz.addEventListener("click", () => {
             check_answers(quiz_id);
         });
     });
-});
+}
 
 async function check_answers(quiz_id) {
     try {
