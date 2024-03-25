@@ -25,7 +25,7 @@
                 false
             ],
             "user_answer": [
-                true,
+                false,
                 true,
                 true
             ]
@@ -46,6 +46,9 @@
                 false
             ],
             "user_answer": [
+                false,
+                true,
+                true,
                 true
             ]
         },
@@ -63,7 +66,7 @@
                 false
             ],
             "user_answer": [
-                true,
+                false,
                 false,
                 true
             ]
@@ -82,7 +85,8 @@
                 false
             ],
             "user_answer": [
-                true,
+                false,
+                false,
                 true
             ]
         },
@@ -98,7 +102,7 @@
                 true
             ],
             "user_answer": [
-                false,
+                true,
                 false
             ]
         },
@@ -179,6 +183,9 @@
                 true
             ],
             "user_answer": [
+                false,
+                true,
+                true,
                 true
             ]
         },
@@ -194,7 +201,8 @@
                 false
             ],
             "user_answer": [
-                true,
+                false,
+                false,
                 true
             ]
         }
