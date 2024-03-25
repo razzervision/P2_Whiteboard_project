@@ -24,7 +24,9 @@
           <script src="/javascripts/pausefish.js"></script>
           <script src="/javascripts/timer.js"></script>
           <script src="/javascripts/savepdf.js"></script>
+          <!-- QUIZ -->
           <script defer src="/javascripts/quiz/quiz.js"></script>
+
           <script src="/javascripts/server.js"></script>
           <script src="/javascripts/phone.js"></script>
           
@@ -43,8 +45,6 @@
           <script defer src="/javascripts/code_editor/codemirror/addon/edit/closebrackets.js"></script>
           <script defer src="/javascripts/code_editor/WCE.js"></script>
 
-
-          
         </head>
 
 <body>
@@ -59,32 +59,41 @@
     </nav>
 </div>
 
-  <div class="quiz_container">
-
-    <div class="quiz_div">
-      <label for="quiz_name">Quiz Name:</label>
-      <input type="text" id="quiz_name"><br><br>
 
 
-        <label for="question_txt_field">Question:</label>
-        <input type="text" id="question_txt_field"><br>
-        <div class="answer_container" id="answer_container0">
-        <label for="answer0" class="answer_label_class">Answer 0:</label>
-        <input type="text" class="answer_text_class" id="answer0">
-        <input type="checkbox" class="answer_checkbox_class" id="checkbox0" checked="true">
-        </div>
-        <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br>
-        <button id="create_QAs">Create question & answer</button><br>
-        <button onclick="clearQAs()">Clear Q & A's</button><br>
-        <button id="start_quiz">Start quiz</button><br>
-        <button onclick="end_quiz()">End quiz</button><br>
+<div class="quiz_container">
+
+  <div class="quiz_index" id="quiz_index">
+    <label for="create_quiz_text">Quiz name</label>
+    <input type="text" id="create_quiz_text">
+    <button id="create_quiz_button">Create quiz</button>
+
+    <label for="search_quiz_text">Search quizzes</label>
+    <input type="text" id="search_quiz_text">
+  </div>
+
+  <div class="creat_quiz_div" id="creat_quiz_div" style="display: none;">
+    <label for="quiz_name">Quiz Name:</label>
+    <a id="quiz_name"></a><br><br>
+
+    <label for="question_txt_field">Question:</label>
+    <input type="text" id="question_txt_field"><br>
+    <div class="answer_container" id="answer_container0">
+    <label for="answer0" class="answer_label_class">Answer 0:</label>
+    <input type="text" class="answer_text_class" id="answer0">
+    <input type="checkbox" class="answer_checkbox_class" id="checkbox0" checked="true">
     </div>
-    <div id="quiz_output">
-
-      
-    </div>
+    <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br>
+    <button id="create_QAs">Create question & answer</button><br>
+    <button onclick="clearQAs()">Clear Q & A's</button><br>
 
   </div>
+  <div id="quiz_output" style="display: none;">
+    <button id="start_quiz">Start quiz</button><br>
+    <button onclick="end_quiz()">End quiz</button><br>  
+  </div>
+
+</div>
 
   <div class="paint">
     <canvas id="canvas"></canvas>
