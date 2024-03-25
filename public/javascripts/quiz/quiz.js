@@ -58,6 +58,40 @@ function fetch_data(path){
 }
 
 
+
+let creat_quiz = document.getElementById("create_quiz_button");
+creat_quiz.addEventListener("click", async() => {
+    let name = document.getElementById("create_quiz_text").value;
+    if(await quiz_name_already_created(name)){
+        console.log("Already created");
+    } else {
+        let create_quiz_div = document.getElementById("creat_quiz_div");
+        create_quiz_div.style.display ="block";
+
+        let start_page = document.getElementById("quiz_index");
+        start_page.style.display = "none";
+
+        let quiz_name = document.getElementById("quiz_name");
+        quiz_name.textContent = name; 
+    }
+});
+
+
+//Check if the quiz name is unique
+async function quiz_name_already_created(name){
+    let result = false;
+
+    let data = await fetch_data("../database/quiz.json");
+    data.quiz.forEach(q => {
+        console.log(q.quiz_name);
+        if(q.quiz_name === name){
+            result = true;
+        } 
+    });
+    console.log(result);
+    return result;
+}
+
 //This function create a new answer box to let the user dynamically add more answers.
 function create_new_answer_box(){
 
@@ -130,7 +164,7 @@ function create_new_answer_box(){
 const create_QAs_button = document.getElementById("create_QAs");
 create_QAs_button.addEventListener("click", () => {
     //Check if the quiz name is inserted
-    let quiz_name = document.getElementById("quiz_name").value;
+    let quiz_name = document.getElementById("quiz_name").textContent;
     if(quiz_name === ""){
         //Generate a error message for the user.
         error_message("Please insert a quiz name, and don't change it");
@@ -218,7 +252,7 @@ start_quiz.addEventListener("click", () => {
     fetch_data("../database/quiz.json")
     .then(data => {
 
-        let quiz_id = document.getElementById("quiz_name").value;
+        let quiz_id = document.getElementById("quiz_name").textContent;
 
         const jsonDisplayDiv = document.getElementById("quiz_output");
         data.quiz.forEach(q => {
