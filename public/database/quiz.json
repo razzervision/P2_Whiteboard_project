@@ -63,7 +63,7 @@
                 false
             ],
             "user_answer": [
-                true,
+                false,
                 false,
                 true
             ]
@@ -98,7 +98,7 @@
                 true
             ],
             "user_answer": [
-                false,
+                true,
                 false
             ]
         },

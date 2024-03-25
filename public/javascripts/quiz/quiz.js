@@ -404,10 +404,11 @@ async function send_answers(answer_data, question1) {
 }
 
 function print_feedback (quiz_id) {
-    let new_divider = document.createElement('div');
-    new_divider.id = "feedback_div_id";
+    let quiz_total_answers = 0;
+    let quiz_total_corr_answers = 0;
+    let feedback_div = document.createElement('div');
     let container = document.querySelector('#quiz_output');
-    container.appendChild(new_divider);
+    container.appendChild(feedback_div);
 
     fetch("../database/quiz.json")
     //fetch_data("../database/quiz.json");
@@ -418,52 +419,36 @@ function print_feedback (quiz_id) {
         return response.json();
     })
     .then(data => {
-        let i = 0;
-        data.quiz.forEach(q => {
+         data.quiz.forEach(q => {
             if (q.quiz_name === quiz_id) {
-                let new_new_divider = document.createElement('div');
-                new_new_divider.id = "new_h3_" + i + "_div";
-                new_divider.appendChild(new_new_divider);
+                let new_divider = document.createElement('div');
+                feedback_div.appendChild(new_divider);
                 let new_h3 = document.createElement('h3');
-                new_h3.id = "new_h3_" + i;
                 new_h3.textContent = q.question;
-                new_new_divider.appendChild(new_h3);
+                new_divider.appendChild(new_h3);
                 let corr_ans = 0;
-                let wrong_ans = 0;
-                let total_answers = q.answers.length;
+                question_total_answers = q.answers.length;
+                quiz_total_answers += q.answers.length;
                 for (let j = 0; j < q.answers.length; j++) {
                     let new_answer = document.createElement('p');
-                    new_answer.id = "new_p_" + i + "_" + j;
                     new_answer.textContent = q.answers[j];
-                    // new_answer.style.backgroundColor = "red";
-                    // new_answer.style.width = "5px";
                     if (q.user_answer[j]) {
                         new_answer.style.backgroundColor = "green";
                         corr_ans++;
                     } else {
                         new_answer.style.backgroundColor = "red";
-                        wrong_ans++;
                     }
-                    new_new_divider.appendChild(new_answer);
+                    new_divider.appendChild(new_answer);
                 }
-                let new_new_h3 = document.createElement('h3');
-                new_new_h3.textContent = "Statistics:";
+                quiz_total_corr_answers += corr_ans;
                 new_p_1 = document.createElement('p');
-                new_p_2 = document.createElement('p');
-                new_p_3 = document.createElement('p');
-                new_p_1.textContent = corr_ans + " / " + total_answers + " answered correct."
+                new_p_1.textContent = corr_ans + " / " + question_total_answers + " answered correct."
                 new_divider.appendChild(new_p_1);
-                // new_p_1
-                // new_p_1
-                
-
-
-
-
-
-                i++;
             }
         });
+        new_p_2 = document.createElement('p');
+        new_p_2.textContent = quiz_total_corr_answers + " / " + quiz_total_answers + " total answered correct."
+        feedback_div.appendChild(new_p_2);
     })
     .catch(error => {
         console.error('There was a problem fetching the JSON file:', error);
