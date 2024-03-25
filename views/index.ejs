@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="javascripts/code_editor/codemirror/theme/oceanic-next.css">
   <link rel="stylesheet" href="javascripts/code_editor/codemirror/theme/shadowfox.css">
   <link rel="stylesheet" href="javascripts/code_editor/codemirror/theme/monokai.css">
+  <link rel="stylesheet" href="stylesheets/timer.css">
+
   <title>
     <%= title %>
   </title>
@@ -14,14 +16,17 @@
           <link rel="stylesheet" href="/stylesheets/WCE.css">
           <link rel="stylesheet" href="/stylesheets/style.css">
           <link rel="stylesheet" href="/stylesheets/quiz.css">
-          <script src="/javascripts/dropdown.js"></script>
+          <link rel="stylesheet" href="/stylesheets/toolbar.css">
+          <script defer src="/javascripts/toolbar.js"></script>
           <script src="/javascripts/users.js"></script>
           <script src="/javascripts/calculator.js"></script>
-            <script defer src="/javascripts/paint.js"></script>
+          <script defer src="/javascripts/paint.js"></script>
           <script src="/javascripts/pausefish.js"></script>
-          <script src="/javascripts/timer.js"></script>
+
           <script src="/javascripts/savepdf.js"></script>
+          <!-- QUIZ -->
           <script defer src="/javascripts/quiz/quiz.js"></script>
+
           <script src="/javascripts/server.js"></script>
           <script src="/javascripts/phone.js"></script>
           
@@ -40,39 +45,57 @@
           <script defer src="/javascripts/code_editor/codemirror/addon/edit/closebrackets.js"></script>
           <script defer src="/javascripts/code_editor/WCE.js"></script>
 
-
-          
         </head>
 
 <body>
-  <div class="quiz_container">
+  <div class="toolbar" id="toolbar">
+    <nav>
+        <menu>
+            <li id="paint_button">Paint</li>
+            <li id="code_button">Code-editor</li>
+            <li id="quiz_button">Quiz</li>
+            <li id="calc_button">Calculator</li>
+        </menu>
+    </nav>
+</div>
 
-    <div class="quiz_div">
-      <label for="quiz_name">Quiz Name:</label>
-      <input type="text" id="quiz_name"><br><br>
 
 
-        <label for="question_txt_field">Question:</label>
-        <input type="text" id="question_txt_field"><br>
-        <div class="answer_container" id="answer_container0">
-        <label for="answer0" class="answer_label_class">Answer 0:</label>
-        <input type="text" class="answer_text_class" id="answer0">
-        <input type="checkbox" class="answer_checkbox_class" id="checkbox0" checked="true">
-        </div>
-        <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br>
-        <button id="create_QAs">Create question & answer</button><br>
-        <button onclick="clearQAs()">Clear Q & A's</button><br>
-        <button id="start_quiz">Start quiz</button><br>
-        <button onclick="end_quiz()">End quiz</button><br>
-    </div>
-    <div id="quiz_output">
+  <div id="quizProgram" class="quiz_container">
 
-      
-    </div>
+  <div class="quiz_index" id="quiz_index">
+    <label for="create_quiz_text">Quiz name</label>
+    <input type="text" id="create_quiz_text">
+    <button id="create_quiz_button">Create quiz</button>
 
+    <label for="search_quiz_text">Search quizzes</label>
+    <input type="text" id="search_quiz_text">
   </div>
 
-  <div class="paint">
+  <div class="creat_quiz_div" id="creat_quiz_div" style="display: none;">
+    <label for="quiz_name">Quiz Name:</label>
+    <a id="quiz_name"></a><br><br>
+
+    <label for="question_txt_field">Question:</label>
+    <input type="text" id="question_txt_field"><br>
+    <div class="answer_container" id="answer_container0">
+    <label for="answer0" class="answer_label_class">Answer 0:</label>
+    <input type="text" class="answer_text_class" id="answer0">
+    <input type="checkbox" class="answer_checkbox_class" id="checkbox0" checked="true">
+    </div>
+    <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br>
+    <button id="create_QAs">Create question & answer</button><br>
+    <button onclick="clearQAs()">Clear Q & A's</button><br>
+
+  </div>
+  <div id="quiz_output" style="display: none;">
+    <button id="start_quiz">Start quiz</button><br>
+    <button onclick="end_quiz()">End quiz</button><br>  
+  </div>
+
+</div>
+
+  <div id="paintProgram" class="paint">
     <canvas id="canvas"></canvas>
     <div class="colors">
       <button class="color" style="background-color: black;" onclick="changeColor(this)"></button>
@@ -94,10 +117,8 @@
   </div>
 
 
-
-
   <!-- JONS code editor -->
-  <div class="code_editor">
+  <div id="codeProgram" class="code_editor">
   <textarea id="code"></textarea>
   <select id="language">
   </select>
@@ -109,8 +130,63 @@
       <option value="monokai">Monokai</option>
   </select>
 </div>
-  
 
+
+<!--- CALC -->
+<div id="calcProgram" class="calculatorMain"> 
+<div class="calc">
+  <div class="expressions">
+      <button id="1" onclick="addToResult('1')">1</button>
+      <button id="2" onclick="addToResult('2')">2</button>
+      <button id="3" onclick="addToResult('3')">3</button>
+      <button id="+" onclick="addToResult('+')">+</button> <br>
+      <button id="4" onclick="addToResult('4')">4</button>
+      <button id="5" onclick="addToResult('5')">5</button>
+      <button id="6" onclick="addToResult('6')">6</button>
+      <button id="-" onclick="addToResult('-')">-</button> <br>
+      <button id="7" onclick="addToResult('7')">7</button>
+      <button id="8" onclick="addToResult('8')">8</button>
+      <button id="9" onclick="addToResult('9')">9</button>
+      <button id="/" onclick="addToResult('/')">/</button> <br>
+      <button id="0" onclick="addToResult('0')">0</button>
+      <button id="%" onclick="addToResult('%')">%</button>
+      <button id="^" onclick="addToResult('^')">^</button>
+      <button id="*" onclick="addToResult('*')">*</button> <br>
+      <button id="!" onclick="addToResult('!')">!</button>
+      <button id="C" onclick="clearDisplay()">C</button> <br>
+      <button id="submit" onclick='calculate(); addToHistory();'>Submit</button> <br><br>
+      <input type="text" id="display" class="display"> 
+  </div>
+
+  <div class="history">
+      <input type="text" id="historyText" class="historyText"> <br>
+      <button id="clearHistory" onclick="clearHistory()">CLEAR</button>
+  </div>
+</div>
+
+  <!--This is the trigger for the modal-->       
+  <div class="sticky"> <button id="pauses"> Click here for pause options </button></div>
+
+  <!--this is the modal-->        
+  <div id="myModalforPauses" class="modal">
+
+  <!--this is the modal content-->
+
+     <div class="modal-content"> 
+          <span class="close">&times;</span>
+             <p><ul>
+             <li><button id="longwork" onclick="pauselength(1)" >Long work, long break </button></li> 
+             <li><button id="shortwork" onclick="pauselength(2)" >Short work, short break </button></li>
+             <li><button id="chore" onclick="pauselength(3)" >Finish a chore! </button></li>
+             <li><button id="relax" onclick="pauselength(4)" >Relax break</button></li>
+             <li><button id="other" onclick="pauselength(5)" >other</button></li>
+             </ul></p>
+      </div>
+
+   </div>
+  </div>
+   
+<script src="/javascripts/timer.js"></script>
 </body>
 
 </html>

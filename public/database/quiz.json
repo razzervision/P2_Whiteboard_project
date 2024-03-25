@@ -46,10 +46,7 @@
                 false
             ],
             "user_answer": [
-                false,
-                true,
-                true,
-                true
+                false
             ]
         },
         {
@@ -85,7 +82,6 @@
                 false
             ],
             "user_answer": [
-                false,
                 false,
                 true
             ]
@@ -183,10 +179,7 @@
                 true
             ],
             "user_answer": [
-                false,
-                true,
-                true,
-                true
+                false
             ]
         },
         {
@@ -202,9 +195,19 @@
             ],
             "user_answer": [
                 false,
-                false,
                 true
             ]
+        },
+        {
+            "quiz_name": "sfesfesfs",
+            "question": "Hvem er bedst til CS?",
+            "answers": [
+                "Rantzau"
+            ],
+            "correct_answers": [
+                true
+            ],
+            "user_answer": []
         }
     ]
 }
