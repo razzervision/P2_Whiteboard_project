@@ -15,7 +15,7 @@
           <link rel="stylesheet" href="/stylesheets/style.css">
           <link rel="stylesheet" href="/stylesheets/quiz.css">
           <link rel="stylesheet" href="/stylesheets/toolbar.css">
-          <script src="/javascripts/toolbar.js"></script>
+          <script defer src="/javascripts/toolbar.js"></script>
           <script src="/javascripts/users.js"></script>
           <script src="/javascripts/calculator.js"></script>
           <script defer src="/javascripts/paint.js"></script>
@@ -57,7 +57,7 @@
     </nav>
 </div>
 
-  <div class="quiz_container">
+  <div id="quizProgram" class="quiz_container">
 
     <div class="quiz_div">
       <label for="quiz_name">Quiz Name:</label>
@@ -84,7 +84,7 @@
 
   </div>
 
-  <div class="paint">
+  <div id="paintProgram" class="paint">
     <canvas id="canvas"></canvas>
     <div class="colors">
       <button class="color" style="background-color: black;" onclick="changeColor(this)"></button>
@@ -107,7 +107,7 @@
 
 
   <!-- JONS code editor -->
-  <div class="code_editor">
+  <div id="codeProgram" class="code_editor">
   <textarea id="code"></textarea>
   <select id="language">
   </select>
@@ -122,7 +122,7 @@
 
 
 <!--- CALC -->
-<div class="calculatorMain"> 
+<div id="calcProgram" class="calculatorMain"> 
 <div class="calc">
   <div class="expressions">
       <button id="1" onclick="addToResult('1')">1</button>
