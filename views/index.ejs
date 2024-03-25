@@ -14,7 +14,8 @@
           <link rel="stylesheet" href="/stylesheets/WCE.css">
           <link rel="stylesheet" href="/stylesheets/style.css">
           <link rel="stylesheet" href="/stylesheets/quiz.css">
-          <script src="/javascripts/dropdown.js"></script>
+          <link rel="stylesheet" href="/stylesheets/toolbar.css">
+          <script src="/javascripts/toolbar.js"></script>
           <script src="/javascripts/users.js"></script>
           <script src="/javascripts/calculator.js"></script>
           <script defer src="/javascripts/paint.js"></script>
@@ -45,6 +46,17 @@
         </head>
 
 <body>
+  <div class="toolbar" id="toolbar">
+    <nav>
+        <menu>
+            <li id="paint_button">Paint</li>
+            <li id="code_button">Code-editor</li>
+            <li id="quiz_button">Quiz</li>
+            <li id="calc_button">Calculator</li>
+        </menu>
+    </nav>
+</div>
+
   <div class="quiz_container">
 
     <div class="quiz_div">
@@ -92,8 +104,6 @@
       <input oninput="draw_width = this.value" type="range" min="1" max="100" class="pen">
     </div>
   </div>
-
-
 
 
   <!-- JONS code editor -->
