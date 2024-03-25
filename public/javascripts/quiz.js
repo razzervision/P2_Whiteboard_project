@@ -316,14 +316,7 @@ function print_feedback (quiz_id) {
     let container = document.querySelector('#quiz_output');
     container.appendChild(new_divider);
 
-    fetch("/database/quiz.json")
-    //fetch_data("/database/quiz.json");
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
+    fetch_data("/database/quiz.json")
     .then(data => {
         let i = 0;
         data.quiz.forEach(q => {
@@ -342,8 +335,6 @@ function print_feedback (quiz_id) {
                     let new_answer = document.createElement('p');
                     new_answer.id = "new_p_" + i + "_" + j;
                     new_answer.textContent = q.answers[j];
-                    // new_answer.style.backgroundColor = "red";
-                    // new_answer.style.width = "5px";
                     if (q.user_answer[j]) {
                         new_answer.style.backgroundColor = "green";
                         corr_ans++;
@@ -360,21 +351,10 @@ function print_feedback (quiz_id) {
                 new_p_3 = document.createElement('p');
                 new_p_1.textContent = corr_ans + " / " + total_answers + " answered correct."
                 new_divider.appendChild(new_p_1);
-                // new_p_1
-                // new_p_1
-                
-
-
-
-
-
                 i++;
             }
         });
     })
-    .catch(error => {
-        console.error('There was a problem fetching the JSON file:', error);
-    });
 }
 
 //Default questions for test
