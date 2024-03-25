@@ -25,7 +25,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 true,
                 true
             ]
@@ -46,9 +46,6 @@
                 false
             ],
             "user_answer": [
-                false,
-                true,
-                true,
                 true
             ]
         },
@@ -66,7 +63,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 false,
                 true
             ]
@@ -85,8 +82,7 @@
                 false
             ],
             "user_answer": [
-                false,
-                false,
+                true,
                 true
             ]
         },
@@ -102,7 +98,7 @@
                 true
             ],
             "user_answer": [
-                true,
+                false,
                 false
             ]
         },
@@ -170,6 +166,35 @@
             ],
             "user_answer": [
                 false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "CS2",
+            "question": "Hvem er bedst til CS?",
+            "answers": [
+                "Rantzau"
+            ],
+            "correct_answers": [
+                true
+            ],
+            "user_answer": [
+                true
+            ]
+        },
+        {
+            "quiz_name": "CS2",
+            "question": "Bailer pimp majoren?",
+            "answers": [
+                "Nej",
+                "lol"
+            ],
+            "correct_answers": [
+                true,
+                false
+            ],
+            "user_answer": [
+                true,
                 true
             ]
         }
