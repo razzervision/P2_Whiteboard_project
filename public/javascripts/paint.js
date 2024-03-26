@@ -1,12 +1,10 @@
 //here we get element id of canvas and determin its hight and width
 const canvas = document.getElementById("canvas");
-const paintProgra2m = document.getElementById("paintProgram");
-let width = (paintProgra2m.offsetWidth - canvas.offsetWidth)-paintProgra2m.offsetWidth;
-let height = (paintProgra2m.offsetHeight - canvas.offsetHeight)-canvas.offsetHeight;
+let width = canvas.offsetWidth;
+let height = canvas.offsetHeight;
 
 canvas.width = width;
 canvas.height = height;
-console.log(width,height);
 //initilize some variables essential for the program
 let startBackground = "white";
 let draw_color = "black";
@@ -29,12 +27,18 @@ let context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0,0,canvas.width,canvas.height);
 
+let canvasPosition = canvas.getBoundingClientRect();
 
 //this function works together with buttons in the html file to change draw_color
 function changeColor(element){
     draw_color = element.style.backgroundColor;
 }
 
+const mouse ={
+    x : canvas.width/2,
+    y : canvas.height/2,
+    click : false
+}
 
 if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
     stopTouchScrolling(canvas);
@@ -68,9 +72,21 @@ canvas.addEventListener("touchmove", function (event) {
     draw(mouseEvent);
 });
 
-canvas.addEventListener("mousedown", start);
-canvas.addEventListener("mousemove", draw);
+canvas.addEventListener('mousedown', function(event){
+    mouse.click = true;
+    mouse.x = event.x - canvasPosition.left;
+    mouse.y = event.y - canvasPosition.top;
+    
+    start(mouse);
+});
 
+canvas.addEventListener('mousemove', function(event){
+    mouse.click = true;
+    mouse.x = event.x - canvasPosition.left;
+    mouse.y = event.y - canvasPosition.top;
+
+    draw(mouse);
+});
 
 //here is the reasons to stop drawing. lift finger from phone or mouse up
 //or you moving mouse outside of the object canvas.
@@ -79,25 +95,21 @@ canvas.addEventListener("mouseup",stop);
 canvas.addEventListener("mouseout",stop);
 
 //function that starts a path
-function start(event,mouseEvent){
+function start(mouse){
    is_drawing = true;
    context.beginPath();
    //set start cordinat on canvas for path.
-   if(phone){
-    context.moveTo(mouseEvent.clientX, mouseEvent.clientY);
-    brush(mouseEvent);
-   }else{
-    context.moveTo(event.clientX, event.clientY);
-    brush(event);
-   }
+    context.moveTo(mouse.x, mouse.y);
+    brush(mouse);
+ 
    //run brush one time so that if you click one time you will still have drawn a dot.
 }
 
 //draw function is called continuesly and depending on the selected tool do different stuff.
-function draw(event,mouseEvent) {
+function draw(mouse) {
     if (is_drawing) {
         if (selectedTool === 1){
-            brush(event,mouseEvent);
+            brush(mouse);
         }else if (selectedTool === 2){
         
         }
@@ -106,18 +118,14 @@ function draw(event,mouseEvent) {
 }
 
 //brush is one of the selected tools. And can draw.
-function brush(event,mouseEvent){
+function brush(mouse){
     context.strokeStyle = draw_color;
     context.lineWidth = draw_withd;
     context.lineCap = "round";
     context.lineJoin = "round";
-    if(phone){
-        context.lineTo(mouseEvent.clientX, mouseEvent.clientY);
-        context.stroke();
-    }else{
-    context.lineTo(event.clientX, event.clientY);
+    context.lineTo(mouse.x, mouse.y);
     context.stroke();
-    }
+   
 }
 
 //stop is the function that is called when we want to stop drawing
@@ -159,8 +167,8 @@ function undo() {
 }
 
 window.addEventListener('resize',function(){
-    width = (paintProgra2m.offsetWidth - canvas.offsetWidth)-paintProgra2m.offsetWidth;
-    height = (paintProgra2m.offsetHeight - canvas.offsetHeight)-canvas.offsetHeight;
+    width = canvas.offsetWidth;
+    height = canvas.offsetHeight;
     
     canvas.width = width;
     canvas.height = height;
