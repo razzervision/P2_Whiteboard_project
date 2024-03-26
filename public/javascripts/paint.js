@@ -53,27 +53,20 @@ if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigat
 //here is all the addEventListeners that tells us when to start drawing.
 //touch is ment for screens you touch such as phones while mouse is for mouse.
 canvas.addEventListener("touchstart",function (event) {
-    event.preventDefault();
-    var touch = event.touches[0];
-    var mouseEvent = new MouseEvent("mousedown", {
-      clientX: touch.clientX,
-      clientY: touch.clientY
-    });
-    start(mouseEvent);
+    mouse.x = event.x - canvasPosition.left;
+    mouse.y = event.y - canvasPosition.top;
+    
+    start(mouse);
 });
 
 canvas.addEventListener("touchmove", function (event) {
-        event.preventDefault();
-    var touch = event.touches[0];
-    var mouseEvent = new MouseEvent("mousemove", {
-      clientX: touch.clientX,
-      clientY: touch.clientY
-    });
-    draw(mouseEvent);
+    mouse.x = event.x - canvasPosition.left;
+    mouse.y = event.y - canvasPosition.top;
+
+    draw(mouse);
 });
 
 canvas.addEventListener('mousedown', function(event){
-    mouse.click = true;
     mouse.x = event.x - canvasPosition.left;
     mouse.y = event.y - canvasPosition.top;
     
@@ -81,7 +74,6 @@ canvas.addEventListener('mousedown', function(event){
 });
 
 canvas.addEventListener('mousemove', function(event){
-    mouse.click = true;
     mouse.x = event.x - canvasPosition.left;
     mouse.y = event.y - canvasPosition.top;
 
