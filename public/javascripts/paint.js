@@ -37,7 +37,6 @@ function changeColor(element){
 const mouse ={
     x : canvas.width/2,
     y : canvas.height/2,
-    click : false
 }
 
 if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
