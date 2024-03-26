@@ -84,7 +84,6 @@ async function quiz_name_already_created(name){
 
     let data = await fetch_data("../database/quiz.json");
     data.quiz.forEach(q => {
-        console.log(q.quiz_name);
         if(q.quiz_name === name){
             result = true;
         } 
@@ -204,7 +203,7 @@ create_QAs_button.addEventListener("click", () => {
         correct_answers: correct_answers_list,
         user_answer: []
     };
-  
+      
     // Send the data to the server-side script
     fetch('/upload_quiz_data', {
         method: 'POST',
