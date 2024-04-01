@@ -23,7 +23,6 @@ button:active {
 }
 
 canvas {
-  border: 6px black;
   width: 100%;
   left: 0%;
   border: 2px SOLID Black;

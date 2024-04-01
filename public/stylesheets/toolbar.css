@@ -6,6 +6,8 @@ menu {
     overflow: hidden;
 }
 
+/*I think this style below is the cause for the glitch with the timer options. Since they are presented as lists items*/
+
 li {
     color: white;
     text-decoration: none;

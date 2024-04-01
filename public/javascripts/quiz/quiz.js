@@ -77,13 +77,13 @@ creat_quiz.addEventListener("click", async() => {
 });
 
 
-//Check if the quiz name is unique
+
+//Check if the quiz name already exist
 async function quiz_name_already_created(name){
     let result = false;
 
     let data = await fetch_data("../database/quiz.json");
     data.quiz.forEach(q => {
-        console.log(q.quiz_name);
         if(q.quiz_name === name){
             result = true;
         } 
@@ -203,7 +203,7 @@ create_QAs_button.addEventListener("click", () => {
         correct_answers: correct_answers_list,
         user_answer: []
     };
-  
+      
     // Send the data to the server-side script
     fetch('/upload_quiz_data', {
         method: 'POST',
@@ -244,15 +244,73 @@ function clear_questions(){
     last_answer_input.addEventListener("input", create_new_answer_box);
 
 }
+let search_quiz_input = document.getElementById("search_quiz_text");
+search_quiz_input.addEventListener("input",() => {
+    search_quizzes();
+});
 
+//Find all unique quizzes
+async function search_quizzes(){
+    let data = await fetch_data("../database/quiz.json");
+    data = data.quiz;
+    // Use a Set to store unique quiz_names
+    const uniqueQuizNames = new Set();
+
+    // Filter out objects with duplicate quiz_names
+    const uniqueQuizData = data.filter(item => {
+        if (!uniqueQuizNames.has(item.quiz_name)) {
+            uniqueQuizNames.add(item.quiz_name);
+            return true;
+        }
+        return false;
+    });
+    let new_quizzes_searched = new Set();
+    
+    let search = document.getElementById("search_quiz_text").value;
+
+    if(search !== ""){
+        uniqueQuizData.forEach(q => {
+            if(q.quiz_name.toLowerCase().includes(search.toLowerCase())){
+                new_quizzes_searched.add(q.quiz_name);
+            }
+        });
+    } else {
+        new_quizzes_searched = uniqueQuizNames;
+    }
+   
+    let table = document.getElementById("search_quiz_table");
+    //reset the table
+    table.textContent = "";
+    new_quizzes_searched.forEach(quiz => {
+        let row = document.createElement("tr");
+
+        let quiz_name = document.createElement("td");
+        quiz_name.textContent = quiz;
+        row.appendChild(quiz_name);
+
+        let start_quiz_button = document.createElement("button");
+        start_quiz_button.textContent = "Start Quiz";
+        start_quiz_button.className = "start_quiz_button";
+        start_quiz_button.addEventListener("click", () => {
+            start_quiz(quiz);
+        });
+        row.appendChild(start_quiz_button);
+
+        table.appendChild(row);
+    });
+}
+search_quizzes();
 
 //Start the quiz
-let start_quiz = document.getElementById("start_quiz");
-start_quiz.addEventListener("click", () => {
+function start_quiz(quiz_id){
+    
+    let div = document.getElementById("quiz_output");
+    div.style.display = "block";
+    div.textContent = "";
     fetch_data("../database/quiz.json")
     .then(data => {
 
-        let quiz_id = document.getElementById("quiz_name").textContent;
+        // let quiz_id = document.getElementById("quiz_name_output").textContent;
 
         const jsonDisplayDiv = document.getElementById("quiz_output");
         data.quiz.forEach(q => {
@@ -286,7 +344,7 @@ start_quiz.addEventListener("click", () => {
             check_answers(quiz_id);
         });
     });
-});
+}
 
 async function check_answers(quiz_id) {
     try {
@@ -345,10 +403,11 @@ async function send_answers(answer_data, question1) {
 }
 
 function print_feedback (quiz_id) {
-    let new_divider = document.createElement('div');
-    new_divider.id = "feedback_div_id";
+    let quiz_total_answers = 0;
+    let quiz_total_corr_answers = 0;
+    let feedback_div = document.createElement('div');
     let container = document.querySelector('#quiz_output');
-    container.appendChild(new_divider);
+    container.appendChild(feedback_div);
 
     fetch("../database/quiz.json")
     //fetch_data("../database/quiz.json");
@@ -359,52 +418,36 @@ function print_feedback (quiz_id) {
         return response.json();
     })
     .then(data => {
-        let i = 0;
-        data.quiz.forEach(q => {
+         data.quiz.forEach(q => {
             if (q.quiz_name === quiz_id) {
-                let new_new_divider = document.createElement('div');
-                new_new_divider.id = "new_h3_" + i + "_div";
-                new_divider.appendChild(new_new_divider);
+                let new_divider = document.createElement('div');
+                feedback_div.appendChild(new_divider);
                 let new_h3 = document.createElement('h3');
-                new_h3.id = "new_h3_" + i;
                 new_h3.textContent = q.question;
-                new_new_divider.appendChild(new_h3);
+                new_divider.appendChild(new_h3);
                 let corr_ans = 0;
-                let wrong_ans = 0;
-                let total_answers = q.answers.length;
+                question_total_answers = q.answers.length;
+                quiz_total_answers += q.answers.length;
                 for (let j = 0; j < q.answers.length; j++) {
                     let new_answer = document.createElement('p');
-                    new_answer.id = "new_p_" + i + "_" + j;
                     new_answer.textContent = q.answers[j];
-                    // new_answer.style.backgroundColor = "red";
-                    // new_answer.style.width = "5px";
                     if (q.user_answer[j]) {
                         new_answer.style.backgroundColor = "green";
                         corr_ans++;
                     } else {
                         new_answer.style.backgroundColor = "red";
-                        wrong_ans++;
                     }
-                    new_new_divider.appendChild(new_answer);
+                    new_divider.appendChild(new_answer);
                 }
-                let new_new_h3 = document.createElement('h3');
-                new_new_h3.textContent = "Statistics:";
+                quiz_total_corr_answers += corr_ans;
                 new_p_1 = document.createElement('p');
-                new_p_2 = document.createElement('p');
-                new_p_3 = document.createElement('p');
-                new_p_1.textContent = corr_ans + " / " + total_answers + " answered correct."
+                new_p_1.textContent = corr_ans + " / " + question_total_answers + " answered correct."
                 new_divider.appendChild(new_p_1);
-                // new_p_1
-                // new_p_1
-                
-
-
-
-
-
-                i++;
             }
         });
+        new_p_2 = document.createElement('p');
+        new_p_2.textContent = quiz_total_corr_answers + " / " + quiz_total_answers + " total answered correct."
+        feedback_div.appendChild(new_p_2);
     })
     .catch(error => {
         console.error('There was a problem fetching the JSON file:', error);

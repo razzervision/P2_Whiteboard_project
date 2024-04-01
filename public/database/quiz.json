@@ -9,7 +9,9 @@
             "correct_answers": [
                 true
             ],
-            "user_answer": []
+            "user_answer": [
+                true
+            ]
         },
         {
             "quiz_name": "CS2",
@@ -25,7 +27,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 true,
                 true
             ]
@@ -46,7 +48,7 @@
                 false
             ],
             "user_answer": [
-                false
+                true
             ]
         },
         {
@@ -82,7 +84,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 true
             ]
         },
@@ -115,7 +117,7 @@
             ],
             "user_answer": [
                 false,
-                true
+                false
             ]
         },
         {
@@ -131,7 +133,7 @@
             ],
             "user_answer": [
                 false,
-                true
+                false
             ]
         },
         {
@@ -149,7 +151,7 @@
             ],
             "user_answer": [
                 true,
-                false,
+                true,
                 false
             ]
         },
@@ -166,7 +168,7 @@
             ],
             "user_answer": [
                 false,
-                true
+                false
             ]
         },
         {
@@ -179,7 +181,7 @@
                 true
             ],
             "user_answer": [
-                false
+                true
             ]
         },
         {
@@ -194,7 +196,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 true
             ]
         },
@@ -207,7 +209,73 @@
             "correct_answers": [
                 true
             ],
-            "user_answer": []
+            "user_answer": [
+                true
+            ]
+        },
+        {
+            "quiz_name": "Lukas quiz",
+            "question": "Er lukas stærk",
+            "answers": [
+                "Nej",
+                "nje",
+                "tjoo"
+            ],
+            "correct_answers": [
+                false,
+                false,
+                true
+            ],
+            "user_answer": [
+                false,
+                true,
+                true
+            ]
+        },
+        {
+            "quiz_name": "Lukas quiz",
+            "question": "Er Lukas god til RL",
+            "answers": [
+                "Plads til forbedring ",
+                "Bliver SSL næste sæsson",
+                "Han kan ikke blive bedre"
+            ],
+            "correct_answers": [
+                true,
+                true,
+                false
+            ],
+            "user_answer": [
+                true,
+                false,
+                false
+            ]
+        },
+        {
+            "quiz_name": "Lukas quiz",
+            "question": "Carrier Lukas på SLIAL idag",
+            "answers": [
+                "JAAA",
+                "NEEEJ",
+                "JAAAAAAA",
+                "NAAAAJ",
+                "JOOOOOO"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                true,
+                false,
+                true
+            ],
+            "user_answer": [
+                true,
+                true,
+                true,
+                true,
+                true
+            ]
         }
+        
     ]
 }
