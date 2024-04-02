@@ -19,7 +19,6 @@ button:active {
   width: 40%;
   left: 0%;
   border: 2px SOLID Black;
-  height: 100%;
 }
 
 canvas {
