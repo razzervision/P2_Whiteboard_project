@@ -13,7 +13,7 @@ const startBackground = "white";
 let draw_color = "black";
 const draw_withd = "50";
 let is_drawing = false;
-let phone = false;
+//let phone = false;
 
 //1 is pensel, 2 is rectangels, idk rest
 const selectedTool = 1;
@@ -25,6 +25,8 @@ let undoindex = -1;
 //here we make a essential variable context that you can use to change the
 //context of the canvas
 const context = canvas.getContext("2d");
+context.lineCap = "round";
+context.lineJoin = "round";
 //then we fill background so its white and determin it should be white from starting point
 //0,0 because the canvas starts in the top left cornor. Then it should fill canvas width x canvas hight in
 context.fillStyle = startBackground;
@@ -44,12 +46,13 @@ const mouse ={
 
 if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
     stopTouchScrolling(canvas);
-    phone = true;
+   // phone = true;
 }
 
 
 //here is all the addEventListeners that tells us when to start drawing.
 //touch is ment for screens you touch such as phones while mouse is for mouse.
+/*
 canvas.addEventListener("touchstart",function (event) {
     mouse.x = event.x - canvasPosition.left;
     mouse.y = event.y - canvasPosition.top;
@@ -63,15 +66,16 @@ canvas.addEventListener("touchmove", function (event) {
 
     draw(mouse);
 });
-
-canvas.addEventListener("mousedown", function(event){
+canvas.addEventListener("touchend",stop);
+*/
+canvas.addEventListener("pointerdown", function(event){
     mouse.x = event.x - canvasPosition.left;
     mouse.y = event.y - canvasPosition.top;
     
     start(mouse);
 });
 
-canvas.addEventListener("mousemove", function(event){
+canvas.addEventListener("pointermove", function(event){
     mouse.x = event.x - canvasPosition.left;
     mouse.y = event.y - canvasPosition.top;
 
@@ -80,9 +84,8 @@ canvas.addEventListener("mousemove", function(event){
 
 //here is the reasons to stop drawing. lift finger from phone or mouse up
 //or you moving mouse outside of the object canvas.
-canvas.addEventListener("touchend",stop);
-canvas.addEventListener("mouseup",stop);
-canvas.addEventListener("mouseout",stop);
+canvas.addEventListener("pointerup",stop);
+canvas.addEventListener("pointerout",stop);
 
 //function that starts a path
 function start(mouse){

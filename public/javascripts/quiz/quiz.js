@@ -57,7 +57,15 @@ function fetch_data(path){
         });
 }
 
+let homescreen_button = document.getElementById("quiz_home_screen");
+homescreen_button.addEventListener("click", () => {
+    let homescreen_div = document.getElementById("quiz_index");
+    homescreen_div.style.display = "block";
 
+    let creat_quiz_div = document.getElementById("creat_quiz_div");
+    creat_quiz_div.style.display = "none";
+
+});
 
 let creat_quiz = document.getElementById("create_quiz_button");
 creat_quiz.addEventListener("click", async() => {
