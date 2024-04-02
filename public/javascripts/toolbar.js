@@ -10,6 +10,12 @@ const quizProgram = document.getElementById("quizProgram");
 const calcProgram = document.getElementById("calcProgram");
 const timerProgram = document.getElementById("timerProgram");
 
+const toolbar = document.getElementById("toolbar");
+
+codeProgram.style.display = "none";
+quizProgram.style.display = "none";
+calcProgram.style.display = "none";
+timerProgram.style.display = "none";
 
 paintButton.addEventListener("click", function() {
     if (paintProgram.style.display === "none") {
@@ -33,6 +39,7 @@ quizButton.addEventListener("click", function() {
     } else {
         quizProgram.style.display = "none";
     }
+
 });
 
 calcButton.addEventListener("click", function() {
@@ -50,6 +57,15 @@ timerButton.addEventListener("click", function() {
         timerProgram.style.display = "none";
     }
 });
+
+/*toolbar.addEventListener("click", function() {
+    if (codeProgram.style.display === "block" && quizProgram.style.display === "block"){
+        paintProgram.style.width = "50%";
+        codeProgram.style.top = "0px";
+        codeProgram.style.left = "50%";
+        quizProgram.style.top = "350px";
+    }
+}); */
 
 // Function to make an element draggable only when cursor is near the edges
 function makeDraggableNearEdge(element) {
