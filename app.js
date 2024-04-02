@@ -4,7 +4,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const indexRouter = require("./routes/index");
-//const togetherPaintRouter = require("./routes/togetherPaint");
 const fs = require("fs");
 const app = express();
 
@@ -19,9 +18,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-// app.use("/togetherPaint", togetherPaintRouter);
+// Serve the quiz data
+app.get("public/database/quiz.json", (req, res) => {
+    res.type("json");
+    res.sendFile(path.join(__dirname, "public/database/quiz.json"));
 
+});
+
+app.use("/", indexRouter);
 
 //Upload quiz data into the database
 app.post("/upload_quiz_data", (req, res) => {
