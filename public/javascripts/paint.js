@@ -4,7 +4,8 @@ let width = canvas.offsetWidth;
 let height = canvas.offsetHeight;
 
 // io
-const socket = io("http://localhost:3000");
+const serverUrl = window.location.hostname.includes("localhost") ? "http://localhost:3000" : "online-writeboard-v2.azurewebsites.net";
+const socket = io(serverUrl);
 
 canvas.width = width;
 canvas.height = height;
@@ -46,7 +47,7 @@ const mouse ={
 
 if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
     stopTouchScrolling(canvas);
-   // phone = true;
+    // phone = true;
 }
 
 
