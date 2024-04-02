@@ -113,7 +113,6 @@ function isNearEdge(e, element) {
 }
 
 // Make the draggable element
-makeDraggableNearEdge(paintProgram);
 makeDraggableNearEdge(codeProgram);
 makeDraggableNearEdge(timerProgram);
 makeDraggableNearEdge(quizProgram);
