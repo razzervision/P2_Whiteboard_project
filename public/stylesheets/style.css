@@ -1,5 +1,4 @@
 body {
-  overflow: auto;
 }
 
 button {
@@ -17,13 +16,13 @@ button:active {
 
 .paint {
   position: absolute;
-  width: 100%;
+  width: 50%;
   left: 0%;
   border: 2px SOLID Black;
 }
 
 canvas {
-  width: 50%;
+  width: 100%;
   left: 0%;
   border: 2px SOLID Black;
   height: 50%;
