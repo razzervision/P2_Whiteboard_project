@@ -145,8 +145,8 @@
 
 <!--- CALC -->
 <div id="calcProgram" class="calculatorMain"> 
-<div class="calc">
-  <div class="expressions">
+  <div class="calc">
+    <div class="expressions">
       <button id="1" onclick="addToResult('1')">1</button>
       <button id="2" onclick="addToResult('2')">2</button>
       <button id="3" onclick="addToResult('3')">3</button>
@@ -174,10 +174,15 @@
       <button id="clearHistory" onclick="clearHistory()">CLEAR</button>
   </div>
 </div>
+</div>
 
+
+<!--- TIMER -->
 <div id="timerProgram">
   <!--This is the trigger for the modal-->       
-  <div class="sticky"> <button id="pauses"> Click here for pause options </button></div>
+  <div class="sticky"> 
+    <button id="pauses"> Click here for pause options </button>
+  </div>
 
   <!--this is the modal-->        
   <div id="myModalforPauses" class="modal">
@@ -196,7 +201,7 @@
       </div>
 
    </div>
-  </div>
+</div>
    
 <script src="/javascripts/timer.js"></script>
 <script src="https://cdn.socket.io/4.2.0/socket.io.min.js"></script>
