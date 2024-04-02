@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Serve the quiz data
-app.get("public/database/quiz.json", (req, res) => {
+app.get("database/quiz.json", (req, res) => {
     res.type("json");
     res.sendFile(path.join(__dirname, "public/database/quiz.json"));
 
