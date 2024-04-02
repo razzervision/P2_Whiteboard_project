@@ -275,7 +275,107 @@
                 true,
                 true
             ]
+        },
+        {
+            "quiz_name": "catan",
+            "question": "Hvad er catan",
+            "answers": [
+                "Et brætspil",
+                "Et pindsvin",
+                "noget andet"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false
+            ],
+            "user_answer": [
+                false,
+                false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "catan",
+            "question": "Hvad er det mest value materiale?",
+            "answers": [
+                "Træ",
+                "Hø",
+                "sten",
+                "mursten",
+                "får"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false,
+                false,
+                false
+            ],
+            "user_answer": [
+                false,
+                false,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "quiz_name": "catan",
+            "question": "Er Catan grinerne?",
+            "answers": [
+                "Ja",
+                "Det må man sige nej til!",
+                "Kommer an på hvem man spørger"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false
+            ],
+            "user_answer": [
+                false,
+                false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "catan",
+            "question": "Hvad er det bedste ved Catan?",
+            "answers": [
+                "At man bliver uvenner",
+                "At der er en terning med.",
+                "At man kan samle venner eller fam"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false
+            ],
+            "user_answer": [
+                false,
+                false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "catan",
+            "question": "Er Catan på computeren lige så sjovt som i brætspilsudgave",
+            "answers": [
+                "nej",
+                "tæt på",
+                "ja, det er jo det samme"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false
+            ],
+            "user_answer": [
+                false,
+                false,
+                true
+            ]
         }
-        
     ]
 }
