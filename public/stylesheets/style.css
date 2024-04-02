@@ -52,4 +52,5 @@ canvas {
   top: 1000px;
   height: 50%;
   width: 50%;
+  border: 2px SOLID black;
 }
