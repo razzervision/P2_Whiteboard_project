@@ -376,7 +376,6 @@
                 false,
                 true
             ]
-            "user_answer": []
         },
         {
             "quiz_name": "mat",
@@ -389,7 +388,10 @@
                 true,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                true,
+                true
+            ]
         }
     ]
 }
