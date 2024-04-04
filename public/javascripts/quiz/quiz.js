@@ -89,8 +89,9 @@ creat_quiz.addEventListener("click", async() => {
 
 //Check if the quiz name already exist
 async function quiz_name_already_created(name){
+
     let result = false;
-    let data = await fetch_data("/public/database/quiz.json");
+    let data = await fetch_data("../database/quiz.json");
     data.quiz.forEach(q => {
         if(q.quiz_name === name){
             result = true;
@@ -259,7 +260,7 @@ search_quiz_input.addEventListener("input",() => {
 
 //Find all unique quizzes
 async function search_quizzes(){
-    let data = await fetch_data("/public/database/quiz.json");
+    let data = await fetch_data("../database/quiz.json");
     data = data.quiz;
     // Use a Set to store unique quiz_names
     const uniqueQuizNames = new Set();
@@ -315,7 +316,7 @@ function start_quiz(quiz_id){
     let div = document.getElementById("quiz_output");
     div.style.display = "block";
     div.textContent = "";
-    fetch_data("/public/database/quiz.json")
+    fetch_data("../database/quiz.json")
     .then(data => {
 
         // let quiz_id = document.getElementById("quiz_name_output").textContent;
@@ -356,7 +357,7 @@ function start_quiz(quiz_id){
 
 async function check_answers(quiz_id) {
     try {
-        const response = await fetch('/public/database/quiz.json');
+        const response = await fetch('../database/quiz.json');
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -386,14 +387,14 @@ async function check_answers(quiz_id) {
 
 async function send_answers(answer_data, question1) {
     try {
-        const dataResponse = await fetch("/public/database/quiz.json");
+        const dataResponse = await fetch("../database/quiz.json");
         const data = await dataResponse.json();
         for (const q of data.quiz) {
             if (q.question === question1) {
                 q.user_answer = answer_data;
             }
         }
-        const response = await fetch('/public/database/quiz.json', {
+        const response = await fetch('../database/quiz.json', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -417,8 +418,8 @@ function print_feedback (quiz_id) {
     let container = document.querySelector('#quiz_output');
     container.appendChild(feedback_div);
 
-    fetch("/public/database/quiz.json")
-    //fetch_data("/public/database/quiz.json");
+    fetch("../database/quiz.json")
+    //fetch_data("../database/quiz.json");
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
