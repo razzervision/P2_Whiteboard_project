@@ -16,14 +16,12 @@ button:active {
 
 .paint {
   position: absolute;
-  width: 40%;
+  width: 50%;
   left: 0%;
   border: 2px SOLID Black;
-  height: 100%;
 }
 
 canvas {
-  border: 6px black;
   width: 100%;
   left: 0%;
   border: 2px SOLID Black;
@@ -46,4 +44,13 @@ canvas {
 .colorpick {
   height: 50px;
   width: 100px;
+}
+
+.calculatorMain{
+  position: absolute;
+  left: 50%;
+  top: 1000px;
+  height: 50%;
+  width: 10%;
+  border: 2px SOLID black;
 }

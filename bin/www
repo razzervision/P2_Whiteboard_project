@@ -7,7 +7,10 @@
 const app = require("../app");
 const debug = require("debug")("myexpressapp:server");
 const http = require("http");
+
 const socket = require("socket.io");
+
+
 /**
  * Get port from environment and store in Express.
  */
@@ -20,7 +23,12 @@ app.set("port", port);
  */
 
 const server = http.createServer(app);
-const io = socket(server);
+const io = socket(server, { 
+    cors : {origin: process.env.CORS_ORIGIN || "*"},
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+});
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -89,23 +97,19 @@ function onListening() {
     debug("Listening on " + bind);
 }
 
-// Socket.io
+// Socket.io connection
 io.on("connection", (socket) => {
     console.log("New user connected");
+
+    socket.on("draw", (data) => {
+        socket.broadcast.emit("draw", data);
+    });
+
+    socket.on("clearCanvas", () => {
+        socket.broadcast.emit("clearCanvas");
+    });
     socket.on("disconnect", () => {
         console.log("User disconnected");
-
-        io.on("draw", (data) => {
-            console.log(data);
-
-            socket.broadcast.emit("draw", {
-                x: data.x,
-                y: data.y,
-                color: data.color,
-                width: data.width
-            });
-
-        });
     });
 });
 
