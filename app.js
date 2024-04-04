@@ -4,7 +4,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const indexRouter = require("./routes/index");
-//const togetherPaintRouter = require("./routes/togetherPaint");
 const fs = require("fs");
 const app = express();
 
@@ -19,9 +18,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-// app.use("/togetherPaint", togetherPaintRouter);
+// Serve the quiz data
+app.get("database/quiz.json", (req, res) => {
+    res.type("json");
+    res.sendFile(path.join(__dirname, "public/database/quiz.json"));
 
+});
+
+app.use("/", indexRouter);
 
 //Upload quiz data into the database
 app.post("/upload_quiz_data", (req, res) => {
@@ -50,8 +54,24 @@ app.post("/upload_quiz_data", (req, res) => {
     });
 });
 
+app.put("/database/quiz.json", (req, res) => {
+    // Access the updated quiz data sent from the client
+    const updatedQuizData = req.body;
+    //console.log(quiz_answers_data);
 
-// catch 404 and forward to error handler
+    // Write the updated JSON back to the file
+    fs.writeFile("public/database/quiz.json", JSON.stringify(updatedQuizData, null, 4), (err) => {
+        if (err) {
+            console.error("Error writing to file:", err);
+            res.status(500).send("Error writing to file");
+            return;
+        }
+        console.log("Quiz data updated successfully.");
+        res.json({ message: "Quiz data updated successfully." });
+    });
+});
+
+// catch 404 and forward to error handlerclear
 app.use(function (req, res, next) {
     next(createError(404));
 });

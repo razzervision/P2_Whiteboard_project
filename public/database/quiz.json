@@ -9,11 +9,13 @@
             "correct_answers": [
                 true
             ],
-            "user_answer": []
+            "user_answer": [
+                true
+            ]
         },
         {
             "quiz_name": "CS2",
-            "question": "Hvem er bedst til CS?",
+            "question": "Hvem er bedst til CS2?",
             "answers": [
                 "Rantzau",
                 "Markus",
@@ -24,7 +26,11 @@
                 false,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                true,
+                true,
+                true
+            ]
         },
         {
             "quiz_name": "cs",
@@ -41,7 +47,9 @@
                 false,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                true
+            ]
         },
         {
             "quiz_name": "cs",
@@ -56,7 +64,11 @@
                 true,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                true,
+                false,
+                true
+            ]
         },
         {
             "quiz_name": "cs",
@@ -71,252 +83,299 @@
                 true,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                true,
+                true
+            ]
         },
         {
             "quiz_name": "cs",
-            "question": "Bailer pimp majoren?",
+            "question": "Bailer pimp majoren? 2",
             "answers": [
                 "Nej",
                 "asd"
             ],
             "correct_answers": [
-                true,
-                false
+                false,
+                true
             ],
-            "user_answer": []
+            "user_answer": [
+                false,
+                false
+            ]
         },
         {
-            "quiz_name": "Mads",
-            "question": "Hej 22",
+            "quiz_name": "Markus Test",
+            "question": "mp lækker",
             "answers": [
-                "ninsoivndskl",
-                "ivnsdviovnsdiov",
-                "nvioesnvion",
-                "vnieonvsiovnoi",
-                "vinosvisnvisdo",
-                "vineowviwonv"
+                "ja",
+                "nej"
             ],
             "correct_answers": [
                 true,
-                false,
-                false,
-                false,
-                false,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                false,
+                true
+            ]
         },
         {
-            "quiz_name": "mads",
-            "question": "qw",
+            "quiz_name": "Markus Test",
+            "question": "mp flot?",
             "answers": [
-                "qwqw",
-                "qwqw",
-                "qwqw"
+                "ja",
+                "nej"
             ],
             "correct_answers": [
                 true,
-                false,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                false,
+                true
+            ]
         },
         {
-            "quiz_name": "mads",
-            "question": "qw",
+            "quiz_name": "Markus Test",
+            "question": "mp god til node.js",
             "answers": [
-                "qwqw"
+                "ja",
+                "nej",
+                "chatten hjælper"
+            ],
+            "correct_answers": [
+                false,
+                true,
+                true
+            ],
+            "user_answer": [
+                true,
+                false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "Markus Test",
+            "question": "q4",
+            "answers": [
+                "korrekt",
+                "forkert"
+            ],
+            "correct_answers": [
+                true,
+                false
+            ],
+            "user_answer": [
+                false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "CS2",
+            "question": "Hvem er bedst til CS?",
+            "answers": [
+                "Rantzau"
             ],
             "correct_answers": [
                 true
             ],
-            "user_answer": []
+            "user_answer": [
+                true
+            ]
         },
         {
-            "quiz_name": "sdfs",
-            "question": "sdfs",
+            "quiz_name": "CS2",
+            "question": "Bailer pimp majoren?",
             "answers": [
-                "sdfsdf",
-                "sfsdf"
+                "Nej",
+                "lol"
             ],
             "correct_answers": [
                 true,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                true,
+                true
+            ]
         },
         {
-            "quiz_name": "asda",
-            "question": "asdas",
+            "quiz_name": "sfesfesfs",
+            "question": "Hvem er bedst til CS?",
             "answers": [
-                "asdas"
+                "Rantzau"
             ],
             "correct_answers": [
                 true
             ],
-            "user_answer": []
+            "user_answer": [
+                true
+            ]
         },
         {
-            "quiz_name": "asda",
-            "question": "asdas",
+            "quiz_name": "Lukas quiz",
+            "question": "Er lukas stærk",
             "answers": [
-                "asdasasda",
-                "asda",
-                "asda"
+                "Nej",
+                "nje",
+                "tjoo"
             ],
             "correct_answers": [
-                true,
                 false,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "asda",
-            "question": "asdas",
-            "answers": [
-                "asdasaasdasda",
-                "asdas",
-                "asda"
-            ],
-            "correct_answers": [
-                true,
                 false,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "mat",
-            "question": "1+1",
-            "answers": [
-                "2",
-                "4",
-                "4"
-            ],
-            "correct_answers": [
-                true,
-                false,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "mat",
-            "question": "1+1",
-            "answers": [
-                "234",
-                "2342",
-                "2"
-            ],
-            "correct_answers": [
-                true,
-                false,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "mat",
-            "question": "1+1",
-            "answers": [
-                "112",
-                "121"
-            ],
-            "correct_answers": [
-                true,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "mat",
-            "question": "",
-            "answers": [],
-            "correct_answers": [],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "mat",
-            "question": "",
-            "answers": [],
-            "correct_answers": [],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "",
-            "question": "asda",
-            "answers": [
-                "asdasd",
-                "asdas"
-            ],
-            "correct_answers": [
-                true,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "asda",
-            "question": "asdas",
-            "answers": [
-                "asdasd",
-                "asdasd"
-            ],
-            "correct_answers": [
-                true,
-                false
-            ],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "asda",
-            "question": "asd",
-            "answers": [
-                "asd"
-            ],
-            "correct_answers": [
                 true
             ],
-            "user_answer": []
+            "user_answer": [
+                false,
+                true,
+                true
+            ]
         },
         {
-            "quiz_name": "mat",
-            "question": "hej",
+            "quiz_name": "Lukas quiz",
+            "question": "Er Lukas god til RL",
             "answers": [
-                "sfse",
-                "sefes",
-                "sefes",
-                "sefes",
-                "sfesfs",
-                "sefesf"
+                "Plads til forbedring ",
+                "Bliver SSL næste sæsson",
+                "Han kan ikke blive bedre"
+            ],
+            "correct_answers": [
+                true,
+                true,
+                false
+            ],
+            "user_answer": [
+                true,
+                false,
+                false
+            ]
+        },
+        {
+            "quiz_name": "Lukas quiz",
+            "question": "Carrier Lukas på SLIAL idag",
+            "answers": [
+                "JAAA",
+                "NEEEJ",
+                "JAAAAAAA",
+                "NAAAAJ",
+                "JOOOOOO"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                true,
+                false,
+                true
+            ],
+            "user_answer": [
+                true,
+                true,
+                true,
+                true,
+                true
+            ]
+        },
+        {
+            "quiz_name": "catan",
+            "question": "Hvad er catan",
+            "answers": [
+                "Et brætspil",
+                "Et pindsvin",
+                "noget andet"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false
+            ],
+            "user_answer": [
+                false,
+                false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "catan",
+            "question": "Hvad er det mest value materiale?",
+            "answers": [
+                "Træ",
+                "Hø",
+                "sten",
+                "mursten",
+                "får"
             ],
             "correct_answers": [
                 true,
                 false,
                 false,
                 false,
-                false,
                 false
             ],
-            "user_answer": []
+            "user_answer": [
+                false,
+                false,
+                true,
+                true,
+                true
+            ]
         },
         {
-            "quiz_name": "mat",
-            "question": "fefsef",
+            "quiz_name": "catan",
+            "question": "Er Catan grinerne?",
             "answers": [
-                "sfesfse",
-                "sefesfs",
-                "sefsef",
-                "sefesf"
+                "Ja",
+                "Det må man sige nej til!",
+                "Kommer an på hvem man spørger"
             ],
             "correct_answers": [
                 true,
                 false,
+                false
+            ],
+            "user_answer": [
+                false,
+                false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "catan",
+            "question": "Hvad er det bedste ved Catan?",
+            "answers": [
+                "At man bliver uvenner",
+                "At der er en terning med.",
+                "At man kan samle venner eller fam"
+            ],
+            "correct_answers": [
+                true,
                 false,
                 false
             ],
+            "user_answer": [
+                false,
+                false,
+                true
+            ]
+        },
+        {
+            "quiz_name": "catan",
+            "question": "Er Catan på computeren lige så sjovt som i brætspilsudgave",
+            "answers": [
+                "nej",
+                "tæt på",
+                "ja, det er jo det samme"
+            ],
+            "correct_answers": [
+                true,
+                false,
+                false
+            ],
+            "user_answer": [
+                false,
+                false,
+                true
+            ]
             "user_answer": []
         },
         {

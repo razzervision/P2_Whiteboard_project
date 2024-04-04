@@ -1,3 +1,4 @@
+
 //Maximum answer the user can insert. 
 const max_answers = 5;
 
@@ -8,6 +9,7 @@ let current_answers_number = 1;
 let last_answer_input = document.getElementById("answer0");
 last_answer_input.addEventListener("input", create_new_answer_box);
 
+let quiz_answers_data = [];
 
 //Helping funktions
 
@@ -49,7 +51,6 @@ function fetch_data(path){
             return response.json();
         })
         .then(data => {
-            console.log(data);
             return data;
         })
         .catch(error => {
@@ -57,6 +58,48 @@ function fetch_data(path){
         });
 }
 
+let homescreen_button = document.getElementById("quiz_home_screen");
+homescreen_button.addEventListener("click", () => {
+    let homescreen_div = document.getElementById("quiz_index");
+    homescreen_div.style.display = "block";
+
+    let creat_quiz_div = document.getElementById("creat_quiz_div");
+    creat_quiz_div.style.display = "none";
+
+});
+
+let creat_quiz = document.getElementById("create_quiz_button");
+creat_quiz.addEventListener("click", async() => {
+    let name = document.getElementById("create_quiz_text").value;
+    if(await quiz_name_already_created(name)){
+        console.log("Already created");
+    } else {
+        let create_quiz_div = document.getElementById("creat_quiz_div");
+        create_quiz_div.style.display ="block";
+
+        let start_page = document.getElementById("quiz_index");
+        start_page.style.display = "none";
+
+        let quiz_name = document.getElementById("quiz_name");
+        quiz_name.textContent = name; 
+    }
+});
+
+
+
+//Check if the quiz name already exist
+async function quiz_name_already_created(name){
+    let result = false;
+
+    let data = await fetch_data("../database/quiz.json");
+    data.quiz.forEach(q => {
+        if(q.quiz_name === name){
+            result = true;
+        } 
+    });
+    console.log(result);
+    return result;
+}
 
 //This function create a new answer box to let the user dynamically add more answers.
 function create_new_answer_box(){
@@ -130,7 +173,7 @@ function create_new_answer_box(){
 const create_QAs_button = document.getElementById("create_QAs");
 create_QAs_button.addEventListener("click", () => {
     //Check if the quiz name is inserted
-    let quiz_name = document.getElementById("quiz_name").value;
+    let quiz_name = document.getElementById("quiz_name").textContent;
     if(quiz_name === ""){
         //Generate a error message for the user.
         error_message("Please insert a quiz name, and don't change it");
@@ -169,7 +212,7 @@ create_QAs_button.addEventListener("click", () => {
         correct_answers: correct_answers_list,
         user_answer: []
     };
-  
+      
     // Send the data to the server-side script
     fetch('/upload_quiz_data', {
         method: 'POST',
@@ -210,18 +253,73 @@ function clear_questions(){
     last_answer_input.addEventListener("input", create_new_answer_box);
 
 }
+let search_quiz_input = document.getElementById("search_quiz_text");
+search_quiz_input.addEventListener("input",() => {
+    search_quizzes();
+});
 
+//Find all unique quizzes
+async function search_quizzes(){
+    let data = await fetch_data("../database/quiz.json");
+    data = data.quiz;
+    // Use a Set to store unique quiz_names
+    const uniqueQuizNames = new Set();
+
+    // Filter out objects with duplicate quiz_names
+    const uniqueQuizData = data.filter(item => {
+        if (!uniqueQuizNames.has(item.quiz_name)) {
+            uniqueQuizNames.add(item.quiz_name);
+            return true;
+        }
+        return false;
+    });
+    let new_quizzes_searched = new Set();
+    
+    let search = document.getElementById("search_quiz_text").value;
+
+    if(search !== ""){
+        uniqueQuizData.forEach(q => {
+            if(q.quiz_name.toLowerCase().includes(search.toLowerCase())){
+                new_quizzes_searched.add(q.quiz_name);
+            }
+        });
+    } else {
+        new_quizzes_searched = uniqueQuizNames;
+    }
+   
+    let table = document.getElementById("search_quiz_table");
+    //reset the table
+    table.textContent = "";
+    new_quizzes_searched.forEach(quiz => {
+        let row = document.createElement("tr");
+
+        let quiz_name = document.createElement("td");
+        quiz_name.textContent = quiz;
+        row.appendChild(quiz_name);
+
+        let start_quiz_button = document.createElement("button");
+        start_quiz_button.textContent = "Start Quiz";
+        start_quiz_button.className = "start_quiz_button";
+        start_quiz_button.addEventListener("click", () => {
+            start_quiz(quiz);
+        });
+        row.appendChild(start_quiz_button);
+
+        table.appendChild(row);
+    });
+}
+search_quizzes();
 
 //Start the quiz
-let start_quiz = document.getElementById("start_quiz");
-
-start_quiz.addEventListener("click", () => {
-
-    fetch_data("/database/quiz.json")
+function start_quiz(quiz_id){
+    
+    let div = document.getElementById("quiz_output");
+    div.style.display = "block";
+    div.textContent = "";
+    fetch_data("../database/quiz.json")
     .then(data => {
-        console.log(data);
 
-        let quiz_id = document.getElementById("quiz_name").value;
+        // let quiz_id = document.getElementById("quiz_name_output").textContent;
 
         const jsonDisplayDiv = document.getElementById("quiz_output");
         data.quiz.forEach(q => {
@@ -237,7 +335,7 @@ start_quiz.addEventListener("click", () => {
                     let label = document.createElement("label");
                     label.setAttribute("for", `answer_${index}`);
                     label.textContent = answer;
-                    jsonDisplayDiv.appendChild(answer_field);
+                    jsonDisplayDiv.appendChild(answer_field); 
                     jsonDisplayDiv.appendChild(label);
                     jsonDisplayDiv.appendChild(document.createElement("br")); 
                 });
@@ -255,62 +353,115 @@ start_quiz.addEventListener("click", () => {
             check_answers(quiz_id);
         });
     });
-});
-
-function check_answers (question) {
-    let answer_feedback = [];
-
-    let str = "";
-    let i = 0;
-    fetch('/database/quiz.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-
-        .then(data => {
-            data.quiz.forEach(q => {
-                if (q.quiz_name === question) {
-                    answer_feedback.push([]);
-                    str = "#answer_";
-                    for (let j = 0; j < q.correct_answers.length; j++) {
-                        str = "#answer_" + j;
-                        // console.log(str);
-                        // console.log(q.answers[j]);
-                        // console.log(q.correct_answers[j]);
-                        if ((q.correct_answers[j] && document.querySelector(str).checked) || (!(q.correct_answers[j]) && (!(document.querySelector(str).checked))) ) {
-                            answer_feedback[i][j] = true;
-                        } else {
-                            answer_feedback[i][j] = false;
-                        }
-
-                };
-                };
-                i++;
-                console.log(answer_feedback);
-            });
-            console.log(answer_feedback);
-
-            data.quiz.forEach(q => {   
-
-            });
-        });
-};
-
-//Remove all content of output div.
-let remove_quiz_button = document.getElementById("end_quiz");
-remove_quiz_button.addEventListener("click", () => {
-    remove_quiz_output();
-});
-function remove_quiz_output(){
-    let quiz = document.getElementById("quiz_output");
-    while(quiz.firstChild) { 
-        quiz.removeChild(quiz.firstChild); 
-    } 
 }
 
+async function check_answers(quiz_id) {
+    try {
+        const response = await fetch('../database/quiz.json');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        for (const q of data.quiz) {
+            if (q.quiz_name === quiz_id) {
+                const answer_feedback = [];
+                let str = "";
+                str = "#answer_";
+                for (let j = 0; j < q.correct_answers.length; j++) {
+                    // der er fejl her, ved ikke hvad det er
+                    str = "#answer_" + j;
+                    if ((q.correct_answers[j] && document.querySelector(str).checked) || (!q.correct_answers[j] && !document.querySelector(str).checked)) {
+                        answer_feedback[j] = true;
+                    } else {
+                        answer_feedback[j] = false;
+                    }
+                }
+                await send_answers(answer_feedback, q.question);
+            }
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+    print_feedback(quiz_id);
+}
+
+async function send_answers(answer_data, question1) {
+    try {
+        const dataResponse = await fetch("../database/quiz.json");
+        const data = await dataResponse.json();
+        for (const q of data.quiz) {
+            if (q.question === question1) {
+                q.user_answer = answer_data;
+            }
+        }
+        const response = await fetch('../database/quiz.json', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
+        }
+        const updatedData = await response.json();
+        console.log(updatedData); // Log the updated data after sending answers
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+function print_feedback (quiz_id) {
+    let quiz_total_answers = 0;
+    let quiz_total_corr_answers = 0;
+    let feedback_div = document.createElement('div');
+    let container = document.querySelector('#quiz_output');
+    container.appendChild(feedback_div);
+
+    fetch("../database/quiz.json")
+    //fetch_data("../database/quiz.json");
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+         data.quiz.forEach(q => {
+            if (q.quiz_name === quiz_id) {
+                let new_divider = document.createElement('div');
+                feedback_div.appendChild(new_divider);
+                let new_h3 = document.createElement('h3');
+                new_h3.textContent = q.question;
+                new_divider.appendChild(new_h3);
+                let corr_ans = 0;
+                question_total_answers = q.answers.length;
+                quiz_total_answers += q.answers.length;
+                for (let j = 0; j < q.answers.length; j++) {
+                    let new_answer = document.createElement('p');
+                    new_answer.textContent = q.answers[j];
+                    if (q.user_answer[j]) {
+                        new_answer.style.backgroundColor = "green";
+                        corr_ans++;
+                    } else {
+                        new_answer.style.backgroundColor = "red";
+                    }
+                    new_divider.appendChild(new_answer);
+                }
+                quiz_total_corr_answers += corr_ans;
+                new_p_1 = document.createElement('p');
+                new_p_1.textContent = corr_ans + " / " + question_total_answers + " answered correct."
+                new_divider.appendChild(new_p_1);
+            }
+        });
+        new_p_2 = document.createElement('p');
+        new_p_2.textContent = quiz_total_corr_answers + " / " + quiz_total_answers + " total answered correct."
+        feedback_div.appendChild(new_p_2);
+    })
+    .catch(error => {
+        console.error('There was a problem fetching the JSON file:', error);
+    });
+}
 
 //Default questions for test
 function autofill(){
@@ -328,4 +479,4 @@ function autofill(){
     answer0_checked.checked = "true";
 
 }
-// autofill();
+autofill();

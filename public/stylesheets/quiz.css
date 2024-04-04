@@ -5,7 +5,8 @@
     flex-wrap: wrap;
     justify-content: space-between;
     position: absolute;
-    width: 48%;
+    width: 49%;
+    height: 50%;
     left: 50%;
     overflow: auto; 
   }

@@ -1,0 +1,23 @@
+menu {
+    list-style-type: none;
+    background-color: hsl(0, 0%, 25%);
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+}
+
+/*I think this style below is the cause for the glitch with the timer options. Since they are presented as lists items*/
+
+li {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    display: block;
+    text-align: center;
+    float: left;
+    cursor: pointer;
+}
+
+li:hover{
+    background-color: hsl(0, 0%, 10%);
+}
