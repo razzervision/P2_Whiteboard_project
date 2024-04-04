@@ -214,7 +214,9 @@ function clear_questions(){
 
 //Start the quiz
 let start_quiz = document.getElementById("start_quiz");
+
 start_quiz.addEventListener("click", () => {
+
     fetch_data("/database/quiz.json")
     .then(data => {
         console.log(data);
@@ -297,7 +299,17 @@ function check_answers (question) {
         });
 };
 
-
+//Remove all content of output div.
+let remove_quiz_button = document.getElementById("end_quiz");
+remove_quiz_button.addEventListener("click", () => {
+    remove_quiz_output();
+});
+function remove_quiz_output(){
+    let quiz = document.getElementById("quiz_output");
+    while(quiz.firstChild) { 
+        quiz.removeChild(quiz.firstChild); 
+    } 
+}
 
 
 //Default questions for test
