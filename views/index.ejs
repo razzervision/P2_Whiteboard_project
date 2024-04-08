@@ -23,11 +23,11 @@
           <script src="/javascripts/calculator.js"></script>
           <script defer src="/javascripts/paint.js"></script>
           <script src="/javascripts/pausefish.js"></script>
-          <script src="/javascripts/timer.js"></script>
 
           <script src="/javascripts/savepdf.js"></script>
           <!-- QUIZ -->
           <script defer src="/javascripts/quiz/quiz.js"></script>
+          <!-- <script defer src="/javascripts/quiz/test.js"></script> -->
 
           <script src="/javascripts/server.js"></script>
           <script src="/javascripts/phone.js"></script>
@@ -57,7 +57,7 @@
             <li id="code_button">Code-editor</li>
             <li id="quiz_button">Quiz</li>
             <li id="calc_button">Calculator</li>
-            <li id="timer_button">Timer</li>
+<li id="timer_button">Timer</li>
         </menu>
     </nav>
 </div>
@@ -65,15 +65,18 @@
 
 
 <div id="quizProgram" class="quiz_container">
-
+  <button id="quiz_home_screen">HOME</button>
   <div class="quiz_index" id="quiz_index">
     <label for="create_quiz_text">Quiz name</label>
     <input type="text" id="create_quiz_text">
     <button id="create_quiz_button">Create quiz</button>
     <br>
-    <br>
+    <label for="join_quiz_text">Join Quiz</label>
+    <input type="text" id="join_quiz_text">
+    <button id="create_quiz_button">Join quiz</button>
+    <br>  
 
-    <label for="search_quiz_text">Search quizzes</label>
+    <label for="search_quiz_text">Search quizzes</label> 
     <input type="text" id="search_quiz_text">
 
     <table id="search_quiz_table">
@@ -85,7 +88,6 @@
   </div>
 
   <div class="creat_quiz_div" id="creat_quiz_div" style="display: none;">
-    <button id="quiz_home_screen">Home</button>
     <label for="quiz_name">Quiz Name:</label>
     <a id="quiz_name"></a><br><br>
 
@@ -103,20 +105,6 @@
   <div id="quiz_output" style="display: none;">
 
   </div>
-  <!-- <div class="">
-        <label for="question_txt_field">Question:</label>
-        <input type="text" id="question_txt_field"><br>
-        <div class="answer_container" id="answer_container0">
-        <label for="answer0" class="answer_label_class">Answer 0:</label>
-        <input type="text" class="answer_text_class" id="answer0">
-        <input type="checkbox" class="answer_checkbox_class" id="checkbox0" checked="true">
-        </div>
-        <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br>
-        <button id="create_QAs">Create question & answer</button><br>
-        <button onclick="clearQAs()">Clear Q & A's</button><br>
-        <button id="start_quiz">Start quiz</button><br>
-        <button id="end_quiz">End quiz</button><br>
-    </div> -->
  
 
 </div>
@@ -196,7 +184,7 @@
 <!--- TIMER -->
 <div id="timerProgram">
   <!--This is the trigger for the modal-->       
-  <div class="sticky"> 
+  <div class="stickymodal"> 
     <button id="pauses"> Click here for pause options </button>
   </div>
 
@@ -208,16 +196,25 @@
      <div class="modal-content"> 
           <span class="close">&times;</span>
              <p><ul>
-             <li><button id="longwork" onclick="pauselength(1)" >Long work, long break </button></li> 
-             <li><button id="shortwork" onclick="pauselength(2)" >Short work, short break </button></li>
-             <li><button id="chore" onclick="pauselength(3)" >Finish a chore! </button></li>
-             <li><button id="relax" onclick="pauselength(4)" >Relax break</button></li>
-             <li><button id="other" onclick="pauselength(5)" >other</button></li>
+             <li><button id="longwork" class="timer" onclick="timer(1,30,0)" >Long work, long break </button></li> 
+             <li><button id="shortwork" class="timer" onclick="timer(0,45,0)" >Short work, short break </button></li>
+             <li><button id="chore" class="timer" onclick="timer(3)" >Finish a chore! </button></li>
+             <li><button id="relax" class="timer" onclick="timer(4)" >Relax break</button></li>
+             <li><button id="other" class="timer" onclick="timer(5)" >other</button></li>
              </ul></p>
       </div>
-
    </div>
-</div>
+    <!--Moved a </div> from here to under the calc, since it does not pertain to this code-->
+
+    <div id="sc" class="stickyclock"> 
+      <div class="clock"> 
+        <span id="hrs">00</span>
+        <span>:</span>
+        <span id="min">00</span>
+        <span>:</span>
+        <span id="sec">00</span>
+      </div> 
+     </div>
    
 <script src="/javascripts/timer.js"></script>
 <script src="https://cdn.socket.io/4.2.0/socket.io.min.js"></script>
