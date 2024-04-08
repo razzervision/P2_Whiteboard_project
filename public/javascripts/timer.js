@@ -30,18 +30,22 @@ const min = document.getElementById("min");
 const sec = document.getElementById("sec");
 const stickymodal = document.getElementsByClassName("stickymodal");
 const stickyclock = document.getElementsByClassName("stickyclock");
-
+const clock = document.getElementsByClassName("clock");
 const workload = {hrs:"", min:"", sec:""}; 
 const breaktime = {hrs:"", min:"", sec:""};
 //setInterval(worktimeleft, 1000);
 
-const stickymodal = document.getElementsByClassName("stickymodal");
-const stickyclock = document.getElementsByClassName("stickyclock");
-
 function timer(h, m, s) {
     modal.style.display = "none";
-    stickymodal.foreach((element) => element.style.display = "none");
-    stickyclock.style.display = "block";
+    for (item of stickymodal){
+        item.style.display = "none";
+    }
+    for (item of stickyclock){
+        item.style.display = "block";
+    }
+    for (item of clock){
+        item.style.display = "block";
+    }
     hrs.innerHTML = h;
     min.innerHTML = m;
     sec.innerHTML = s; 
@@ -54,6 +58,3 @@ function timer(h, m, s) {
 
 const btn2 = document.getElementsByClassName("timer")[0];
 
-btn2.onclick = function() {
-    console.log("clicked");
-};
