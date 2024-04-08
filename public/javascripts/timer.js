@@ -31,8 +31,8 @@ let hrs = document.getElementById("hrs");
 let min = document.getElementById("min");
 let sec = document.getElementById("sec");
 
-let workload = {hrs"":, min"":, sec"":}; 
-let breaktime = {hrs"", min"", sec"";};
+let workload = {hrs:"", min:"", sec:""}; 
+let breaktime = {hrs:"", min:"", sec:""};
 
 function timer() {
     workload = document.getElementsByClassName("timer");
