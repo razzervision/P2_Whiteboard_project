@@ -1,5 +1,5 @@
 
-div.sticky > #pauses {
+div.stickymodal > #pauses {
     position:fixed;
     bottom: 0;
     right: 0;
@@ -9,7 +9,7 @@ div.sticky > #pauses {
     cursor:pointer;
     transition: background-color 0.25s;
 }
-div.sticky > #pauses:hover {
+div.stickymodal > #pauses:hover {
     background-color: orange;
 }
 
@@ -76,7 +76,7 @@ cursor: pointer;
 
 /*This is the sticky which is hidden by default, but will be brought up when btn2 is pressed, and will replace the original sticky*/
 
-div.sticky > .clock {
+div.stickyclock > .clock {
 
     display: none;
     position:fixed;
@@ -90,7 +90,7 @@ div.sticky > .clock {
 
 }
 
-div.sticky:hover {
+div.stickyclock:hover {
     display: none;
     background-color: orange;
 }
