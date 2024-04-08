@@ -70,3 +70,28 @@ color: #000;
 text-decoration: none;
 cursor: pointer;
 }
+
+
+/*The below styling is meant to replace the content of the sticky class with a digital clock when the modal buttons have been pressed*/
+
+/*This is the sticky which is hidden by default, but will be brought up when btn2 is pressed, and will replace the original sticky*/
+
+div.sticky > .clock {
+
+    display: none;
+    position:fixed;
+    bottom: 0;
+    right: 0;
+    padding: 5px;
+    background-color: rgb(99, 95, 160);
+    border: 5px solid rgb(95, 160, 133);
+    cursor:pointer;
+    transition: background-color 0.25s;
+
+}
+
+div.sticky:hover {
+    display: none;
+    background-color: orange;
+}
+

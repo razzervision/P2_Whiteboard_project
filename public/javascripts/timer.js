@@ -26,3 +26,22 @@ window.onclick = function(event) {
     }
 };
 
+
+let hrs = document.getElementById("hrs");
+let min = document.getElementById("min");
+let sec = document.getElementById("sec");
+
+let workload = {hrs"":, min"":, sec"":}; 
+let breaktime = {hrs"", min"", sec"";};
+
+function timer() {
+    workload = document.getElementsByClassName("timer");
+}
+
+//When the user clicks the options, the sticky's content should be replaced//
+
+const btn2 = document.getElementsByClassName("timer");
+
+btn2.onclick = function() {
+    sticky.style.
+}
