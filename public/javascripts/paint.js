@@ -131,6 +131,7 @@ function brush(mouse){
 //stop is the function that is called when we want to stop drawing
 function stop(event){
     if (is_drawing){
+        0;
         context.stroke();
         context.closePath();
         is_drawing = false;
