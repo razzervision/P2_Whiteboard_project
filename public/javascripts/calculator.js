@@ -37,9 +37,6 @@ function submitCalculation() {
 
 
 
-
-
-
 /*
 function insertText(text) {
     document.getElementById("description").value= text;
