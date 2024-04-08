@@ -1,18 +1,80 @@
 .quiz_container {
-    border: 2px SOLID black;
-    background-color: white;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    position: absolute;
-    width: 49%;
-    height: 50%;
-    left: 50%;
-    overflow: auto; 
-  }
-  
+  border: 5px solid black;
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  position: absolute;
+  width: 49%;
+  height: 50%;
+  left: 50%;
+  overflow: auto; 
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
 .answer_container{ 
-  display: flex; 
-  align-items: center; 
-  margin-top: 5%;
+display: flex; 
+align-items: center; 
+margin-top: 5%;
+}
+
+
+/* Quiz index */
+.quiz_index label {
+display: block;
+margin-bottom: 5px;
+}
+
+.quiz_index input[type="text"],
+.quiz_index button {
+margin-bottom: 10px;
+}
+
+/* Search quiz table */
+#search_quiz_table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 10px;
+}
+
+#search_quiz_table th,
+#search_quiz_table td {
+border: 1px solid #ccc;
+padding: 8px;
+text-align: left;
+}
+
+/* Create quiz div */
+.creat_quiz_div label {
+display: block;
+margin-bottom: 5px;
+}
+
+.creat_quiz_div input[type="text"] {
+margin-bottom: 10px;
+}
+
+.answer_container {
+margin-bottom: 10px;
+}
+
+.answer_label_class {
+margin-right: 10px;
+}
+
+.answer_text_class {
+margin-right: 10px;
+}
+
+.answer_checkbox_class {
+margin-right: 10px;
+}
+
+/* Buttons */
+#create_new_answer,
+#create_QAs,
+button {
+margin-bottom: 10px;
 }
