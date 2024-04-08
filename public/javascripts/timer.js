@@ -37,7 +37,7 @@ setInterval(worktimeleft, 1000);
 
 function timer() {
     modal.style.display = "none";
-    stickymodal.style.display = "none";
+    stickymodal.style.visibility = "none";
     stickyclock.style.display = "block";
     workload = document.getElementsByClassName("timer"); 
     // function worktimeleft(workload){
