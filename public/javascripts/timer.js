@@ -27,12 +27,12 @@ window.onclick = function(event) {
 };
 
 
-let hrs = document.getElementById("hrs");
-let min = document.getElementById("min");
-let sec = document.getElementById("sec");
+const hrs = document.getElementById("hrs");
+const min = document.getElementById("min");
+const sec = document.getElementById("sec");
 
 let workload = {hrs:"", min:"", sec:""}; 
-let breaktime = {hrs:"", min:"", sec:""};
+const breaktime = {hrs:"", min:"", sec:""};
 
 function timer() {
     workload = document.getElementsByClassName("timer");
@@ -40,8 +40,8 @@ function timer() {
 
 //When the user clicks the options, the sticky's content should be replaced//
 
-const btn2 = document.getElementsByClassName("timer");
+const btn2 = document.getElementsByClassName("timer")[0];
 
 btn2.onclick = function() {
-    sticky.style.
-}
+    console.log("clicked");
+};
