@@ -1,0 +1,6 @@
+done = ✅
+in progress = 🛠️
+
+-Insert images
+-Styling 🛠️
+-Start en session
