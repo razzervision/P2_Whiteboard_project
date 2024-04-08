@@ -58,14 +58,57 @@ timerButton.addEventListener("click", function() {
     }
 });
 
-/*toolbar.addEventListener("click", function() {
-    if (codeProgram.style.display === "block" && quizProgram.style.display === "block"){
+toolbar.addEventListener("click", function() {
+    if ((codeProgram.style.display === "block" && quizProgram.style.display === "block" && calcProgram.style.display !== "block")){
         paintProgram.style.width = "50%";
-        codeProgram.style.top = "0px";
-        codeProgram.style.left = "50%";
-        quizProgram.style.top = "350px";
+        codeProgram.style.top = "55px";
+        codeProgram.style.left = "970px";
+        codeProgram.style.width = "45%";
+        quizProgram.style.top = "400px";
+        quizProgram.style.left = "970px";
+        quizProgram.style.width = "20%";
+
+    } else if (codeProgram.style.display === "block" && quizProgram.style.display === "block" && calcProgram.style.display === "block"){
+        paintProgram.style.width = "50%";
+        codeProgram.style.top = "55px";
+        codeProgram.style.left = "970px";
+        quizProgram.style.top = "73%";
+        quizProgram.style.left = "2px";
+        quizProgram.style.width = "20%";
+        calcProgram.style.top = "400px";
+        calcProgram.style.left = "970px";
+
+    } else if (codeProgram.style.display === "block" && quizProgram.style.display !== "block" && calcProgram.style.display !== "block"){
+        paintProgram.style.width = "50%";
+        codeProgram.style.top = "55px";
+        codeProgram.style.left = "970px";
+        codeProgram.style.width = "45%";
+    } else if (codeProgram.style.display !== "block" && quizProgram.style.display === "block" && calcProgram.style.display !== "block"){
+        paintProgram.style.width = "50%";
+        quizProgram.style.top = "55px";
+        quizProgram.style.left = "970px";
+        quizProgram.style.width = "20%";
+    } else if (codeProgram.style.display !== "block" && quizProgram.style.display !== "block" && calcProgram.style.display === "block"){
+        paintProgram.style.width = "50%";
+        calcProgram.style.top = "55px";
+        calcProgram.style.left = "970px";
+    } else if (codeProgram.style.display !== "block" && quizProgram.style.display === "block" && calcProgram.style.display === "block"){
+        paintProgram.style.width = "50%";
+        calcProgram.style.top = "55px";
+        calcProgram.style.left = "970px";
+        quizProgram.style.top = "55px";
+        quizProgram.style.left = "62%";
+        quizProgram.style.width = "20%";
+    } else if (codeProgram.style.display !== "block" && quizProgram.style.display !== "block" && calcProgram.style.display !== "block" && paintProgram.style.display === "block"){
+        paintProgram.style.width = "100%";
+    } else if (codeProgram.style.display === "block" && quizProgram.style.display !== "block" && calcProgram.style.display === "block" && paintProgram.style.display !== "block"){
+        calcProgram.style.top = "400px";
+        calcProgram.style.left = "970px";
+        codeProgram.style.top = "55px";
+        codeProgram.style.left = "970px";
     }
-}); */
+});
+
 
 // Function to make an element draggable only when cursor is near the edges
 function makeDraggableNearEdge(element) {

@@ -16,7 +16,7 @@ button:active {
 
 .paint {
   position: absolute;
-  width: 50%;
+  width: 100%;
   left: 0%;
   border: 2px SOLID Black;
 }
