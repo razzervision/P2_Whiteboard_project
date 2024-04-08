@@ -30,6 +30,8 @@ window.onclick = function(event) {
 const hrs = document.getElementById("hrs");
 const min = document.getElementById("min");
 const sec = document.getElementById("sec");
+const stickymodal = document.getElementsByClassName("stickymodal");
+const stickyclock = document.getElementsByClassName("stickyclock");
 
 let workload = {hrs:"", min:"", sec:""}; 
 const breaktime = {hrs:"", min:"", sec:""};
@@ -37,7 +39,7 @@ setInterval(worktimeleft, 1000);
 
 function timer() {
     modal.style.display = "none";
-    stickymodal.style.visibility = "none";
+    stickymodal.style.display = "none";
     stickyclock.style.display = "block";
     workload = document.getElementsByClassName("timer"); 
     // function worktimeleft(workload){
