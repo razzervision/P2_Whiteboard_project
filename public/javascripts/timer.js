@@ -28,6 +28,8 @@ window.onclick = function(event) {
 const hrs = document.getElementById("hrs");
 const min = document.getElementById("min");
 const sec = document.getElementById("sec");
+const stickymodal = document.getElementsByClassName("stickymodal");
+const stickyclock = document.getElementsByClassName("stickyclock");
 
 const workload = {hrs:"", min:"", sec:""}; 
 const breaktime = {hrs:"", min:"", sec:""};
