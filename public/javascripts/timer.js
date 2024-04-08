@@ -33,9 +33,16 @@ const sec = document.getElementById("sec");
 
 let workload = {hrs:"", min:"", sec:""}; 
 const breaktime = {hrs:"", min:"", sec:""};
+setInterval(worktimeleft, 1000);
 
 function timer() {
-    workload = document.getElementsByClassName("timer");
+    modal.style.display = "none";
+    stickymodal.style.display = "none";
+    stickyclock.style.display = "block";
+    workload = document.getElementsByClassName("timer"); 
+    // function worktimeleft(workload){
+    //stickymodal.getElementsByClassName("timer").innerHTML.
+    //}
 }
 
 //When the user clicks the options, the sticky's content should be replaced//
