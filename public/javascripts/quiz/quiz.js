@@ -1,3 +1,4 @@
+
 //Maximum answer the user can insert. 
 const max_answers = 5;
 
@@ -88,8 +89,8 @@ creat_quiz.addEventListener("click", async() => {
 
 //Check if the quiz name already exist
 async function quiz_name_already_created(name){
-    let result = false;
 
+    let result = false;
     let data = await fetch_data("../database/quiz.json");
     data.quiz.forEach(q => {
         if(q.quiz_name === name){
