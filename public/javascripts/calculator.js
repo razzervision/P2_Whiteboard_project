@@ -37,20 +37,10 @@ function submitCalculation() {
 
 
 
-/*
-function insertText(text) {
-    document.getElementById("description").value= text;
-}
-
-function ssss() {
-    let display = document.getElementById('display');
-    let currentExpression = display.value; 
-    let historyText = document.getElementById('historyText');
-    historyText.value += currentExpression + "\n"; 
-}
 
 
-/*
+
+
 let str = "10^2";
 let i = 0;
 let left_str = "";
@@ -74,21 +64,5 @@ parseInt(right_str);
 calc(left_str, right_str);
 
 function calc (l, r) {
-    console.log(Math.pow(l, r));*/
-
-
-
-    //goofy
-/*
-
-function powerOf(){
-    
-    let num = document.getElementById('power').value;
-    let power = document.getElementById('num').value;
-    
-    console.log(num);
-    console.log(power);
-    let result = Math.pow(num, power);
-    console.log(result);
-    
-*/
+    console.log(Math.pow(l, r));
+}
