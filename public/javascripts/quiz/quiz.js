@@ -41,7 +41,7 @@ function error_message(message){
     button.parentNode.insertBefore(error, button);
 }
 
-
+//this function return all the data from the quiz.json file.
 async function fetchQuizData() {
     try {
       const response = await fetch('/api/quiz-data');
@@ -56,7 +56,6 @@ async function fetchQuizData() {
     }
 }
 
-let data = await fetchQuizData(); 
 
 let homescreen_button = document.getElementById("quiz_home_screen");
 homescreen_button.addEventListener("click", () => {

@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 
-
+//return the json file to the client.
 app.get('/api/quiz-data', (req, res) => {
     try {
       const data = fs.readFileSync(path.join(__dirname, '/database/quiz.json'), 'utf8');

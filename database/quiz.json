@@ -290,7 +290,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 true,
                 true
             ]
@@ -313,7 +313,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 true,
                 true,
                 true,
@@ -334,7 +334,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 true,
                 true
             ]
@@ -353,7 +353,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 true,
                 true
             ]
@@ -372,7 +372,7 @@
                 false
             ],
             "user_answer": [
-                false,
+                true,
                 true,
                 true
             ]
