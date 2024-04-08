@@ -1,5 +1,3 @@
-
-
 // Get the modal
 const modal = document.getElementById("myModalforPauses");
 
@@ -31,15 +29,20 @@ const hrs = document.getElementById("hrs");
 const min = document.getElementById("min");
 const sec = document.getElementById("sec");
 
-let workload = {hrs:"", min:"", sec:""}; 
+const workload = {hrs:"", min:"", sec:""}; 
 const breaktime = {hrs:"", min:"", sec:""};
-setInterval(worktimeleft, 1000);
+//setInterval(worktimeleft, 1000);
 
-function timer() {
+const stickymodal = document.getElementsByClassName("stickymodal");
+const stickyclock = document.getElementsByClassName("stickyclock");
+
+function timer(h, m, s) {
     modal.style.display = "none";
-    stickymodal.style.display = "none";
+    stickymodal.foreach((element) => element.style.display = "none");
     stickyclock.style.display = "block";
-    workload = document.getElementsByClassName("timer"); 
+    hrs.innerHTML = h;
+    min.innerHTML = m;
+    sec.innerHTML = s; 
     // function worktimeleft(workload){
     //stickymodal.getElementsByClassName("timer").innerHTML.
     //}
