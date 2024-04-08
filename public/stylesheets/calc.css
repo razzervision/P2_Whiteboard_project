@@ -1,0 +1,55 @@
+.calculatorMain{
+    position: absolute;
+    left: 50%;
+    top: 1000px;
+    height: 57%;
+    width: 34%;
+    border: 2px SOLID black;
+  }
+
+.calcKeys{
+    width: 50%;
+    height: 100%;
+
+}
+
+.calcHistory{
+    width:50%;
+
+}
+
+.calcbuttonKey {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: 1px black;
+    background-color: grey;
+    font-size: 16px;
+}
+
+.calcbuttonCalc {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: 1px black;
+    background-color: red;
+    font-size: 16px;
+}
+
+.calcbuttonDelete {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: 1px black;
+    background-color: yellow;
+    font-size: 16px;
+}
+
+.calcbuttonSubmit {
+    width: 80px;
+    height: 50px;
+    border-radius: 15px;
+    border: 1px black;
+    background-color: green;
+    font-size: 16px;
+}

@@ -17,6 +17,7 @@
           <link rel="stylesheet" href="/stylesheets/style.css">
           <link rel="stylesheet" href="/stylesheets/quiz.css">
           <link rel="stylesheet" href="/stylesheets/toolbar.css">
+          <link rel="stylesheet" href="/stylesheets/calc.css">
           <script defer src="/javascripts/toolbar.js"></script>
           <script src="/javascripts/users.js"></script>
           <script src="/javascripts/calculator.js"></script>
@@ -159,36 +160,37 @@
 
 <!--- CALC -->
 <div id="calcProgram" class="calculatorMain"> 
-  <div class="calc">
+  <div class="calcKeys">
     <div class="expressions">
-      <button id="1" onclick="addToResult('1')">1</button>
-      <button id="2" onclick="addToResult('2')">2</button>
-      <button id="3" onclick="addToResult('3')">3</button>
-      <button id="+" onclick="addToResult('+')">+</button> <br>
-      <button id="4" onclick="addToResult('4')">4</button>
-      <button id="5" onclick="addToResult('5')">5</button>
-      <button id="6" onclick="addToResult('6')">6</button>
-      <button id="-" onclick="addToResult('-')">-</button> <br>
-      <button id="7" onclick="addToResult('7')">7</button>
-      <button id="8" onclick="addToResult('8')">8</button>
-      <button id="9" onclick="addToResult('9')">9</button>
-      <button id="/" onclick="addToResult('/')">/</button> <br>
-      <button id="0" onclick="addToResult('0')">0</button>
-      <button id="%" onclick="addToResult('%')">%</button>
-      <button id="^" onclick="addToResult('^')">^</button>
-      <button id="*" onclick="addToResult('*')">*</button> <br>
-      <button id="!" onclick="addToResult('!')">!</button>
-      <button id="C" onclick="clearDisplay()">C</button> <br>
-      <button id="submit" onclick='calculate(); addToHistory();'>Submit</button> <br><br>
+      <button class="calcbuttonKey" id="1" onclick="addToResult('1')">1</button>
+      <button class="calcbuttonKey" id="2" onclick="addToResult('2')">2</button>
+      <button class="calcbuttonKey" id="3" onclick="addToResult('3')">3</button>
+      <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button> <br>
+      <button class="calcbuttonKey" id="4" onclick="addToResult('4')">4</button>
+      <button class="calcbuttonKey" id="5" onclick="addToResult('5')">5</button>
+      <button class="calcbuttonKey" id="6" onclick="addToResult('6')">6</button>
+      <button class="calcbuttonCalc" id="-" onclick="addToResult('-')">-</button> <br>
+      <button class="calcbuttonKey" id="7" onclick="addToResult('7')">7</button>
+      <button class="calcbuttonKey" id="8" onclick="addToResult('8')">8</button>
+      <button class="calcbuttonKey" id="9" onclick="addToResult('9')">9</button>
+      <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button> <br>
+      <button class="calcbuttonKey" id="0" onclick="addToResult('0')">0</button>
+      <button class="calcbuttonCalc" id="%" onclick="addToResult('%')">%</button>
+      <button class="calcbuttonCalc" id="^" onclick="addToResult('^')">^</button>
+      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> <br>
+      <button class="calcbuttonCalc" id="!" onclick="addToResult('!')">!</button>
+      <button class="calcbuttonDelete" id="C" onclick="clearDisplay()">C</button> 
+      <button class="calcbuttonSubmit" id="submit" onclick="submitCalculation()">Submit</button> <br><br>
       <input type="text" id="display" class="display"> 
-  </div>
+    </div>
 
-  <div class="history">
-      <input type="text" id="historyText" class="historyText"> <br>
-      <button id="clearHistory" onclick="clearHistory()">CLEAR</button>
+    <div class="calcHistory">
+      <textarea id="classHistory" class="classHistory" cols="40" rows="5"></textarea> <br>
+        <button id="clearHistory" onclick="clearHistory()">CLEAR</button>  
+    </div>
   </div>
 </div>
-</div>
+
 
 
 <!--- TIMER -->
