@@ -291,7 +291,7 @@
             ],
             "user_answer": [
                 false,
-                false,
+                true,
                 true
             ]
         },
@@ -314,7 +314,7 @@
             ],
             "user_answer": [
                 false,
-                false,
+                true,
                 true,
                 true,
                 true
@@ -335,7 +335,7 @@
             ],
             "user_answer": [
                 false,
-                false,
+                true,
                 true
             ]
         },
@@ -354,7 +354,7 @@
             ],
             "user_answer": [
                 false,
-                false,
+                true,
                 true
             ]
         },
@@ -373,7 +373,7 @@
             ],
             "user_answer": [
                 false,
-                false,
+                true,
                 true
             ]
         },

@@ -18,14 +18,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Serve the quiz data
-// app.get("database/quiz.json", (req, res) => {
-//     res.type("json");
-//     res.sendFile(path.join(__dirname, "public/database/quiz.json"));
-
-// });
 
 app.use("/", indexRouter);
+
+
+app.get('/api/quiz-data', (req, res) => {
+    try {
+      const data = fs.readFileSync(path.join(__dirname, '/database/quiz.json'), 'utf8');
+      res.json(JSON.parse(data));
+    } catch (error) {
+      console.error('Error fetching quiz data:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
 
 //Upload quiz data into the database
 app.post("/upload_quiz_data", (req, res) => {
@@ -33,7 +39,7 @@ app.post("/upload_quiz_data", (req, res) => {
     const newQuestion = req.body;
 
     // Append quiz data to the current JSON file
-    fs.readFile("public/database/quiz.json", "utf8", (err, data) => {
+    fs.readFile("database/quiz.json", "utf8", (err, data) => {
         let questionsData = [];
         //Get the current data
         questionsData = JSON.parse(data);
@@ -44,7 +50,7 @@ app.post("/upload_quiz_data", (req, res) => {
         const updatedJSON = JSON.stringify(questionsData, null, 4); // 2 is for indentation for readability
 
         // Write the updated JSON back to the file
-        fs.writeFile("public/database/quiz.json", updatedJSON, (err) => {
+        fs.writeFile("database/quiz.json", updatedJSON, (err) => {
             if (err) {
                 console.error("Error writing to file:", err);
                 return;
@@ -60,7 +66,7 @@ app.put("/database/quiz.json", (req, res) => {
     //console.log(quiz_answers_data);
 
     // Write the updated JSON back to the file
-    fs.writeFile("public/database/quiz.json", JSON.stringify(updatedQuizData, null, 4), (err) => {
+    fs.writeFile("database/quiz.json", JSON.stringify(updatedQuizData, null, 4), (err) => {
         if (err) {
             console.error("Error writing to file:", err);
             res.status(500).send("Error writing to file");
