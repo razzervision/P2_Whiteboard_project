@@ -107,8 +107,9 @@ function create_new_answer_box(){
         return 0;
     }
     //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
-    let previous_element = document.getElementById("create_new_answer").previousElementSibling;
+    let previous_element = document.getElementById("append_new_question").previousElementSibling;
     previous_element = previous_element.querySelector(".answer_checkbox_class");
+    console.log(previous_element.id[8]);
     
     //Takes the last part of the ID. e.g "checkbox0" where the 8 element is the last which is the ID.
     let id = parseInt(previous_element.id[8]);
@@ -147,7 +148,7 @@ function create_new_answer_box(){
         question_box.appendChild(answer_checkbox);
 
         //Identify the element after answer inputs. 
-        let button = document.getElementById("create_new_answer");
+        let button = document.getElementById("append_new_question");
         
         //Insert them before the add new answer button to make the flow intuitive. 
         button.parentNode.insertBefore(question_box, button);
@@ -169,9 +170,16 @@ function create_new_answer_box(){
     }
 }
 
+//Generate template for a new question
+const append_new_question = document.getElementById("append_new_question");
+append_new_question.addEventListener("click", () =>{
+    let questionLabel = document.createElement("")
+});
+
+
 //Create a question and insert the data into the quiz.JSON file
-const create_QAs_button = document.getElementById("create_QAs");
-create_QAs_button.addEventListener("click", () => {
+const upload_quiz_button = document.getElementById("upload_quiz_button");
+upload_quiz_button.addEventListener("click", () => {
     //Check if the quiz name is inserted
     let quiz_name = document.getElementById("quiz_name").textContent;
     

@@ -90,18 +90,19 @@
   <div class="creat_quiz_div" id="creat_quiz_div" style="display: none;">
     <label for="quiz_name">Quiz Name:</label>
     <a id="quiz_name"></a><br><br>
-
-    <label for="question_txt_field">Question 1:</label>
+    <div class="question_DIV" id="question_DIV0">
+    <label for="question_txt_field" id="label1">Question 0:</label>
     <input type="text" id="question_txt_field"><br>
     <div class="answer_container" id="answer_container0">
       <label for="answer0" class="answer_label_class">Answer 0:</label>
       <input type="text" class="answer_text_class" id="answer0">
       <input type="checkbox" class="answer_checkbox_class" id="checkbox0" checked="true">
     </div>
-    <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br>
-    <button id="create_QAs">Next Question</button><br>
-    <button id="prev_question">Previous Question</button><br>
-    <button onclick="clearQAs()">Remove Question</button><br>
+    </div>
+    <!-- Commented out because when you do a input a new answer box occur, but if it bad just insert it again -->
+    <!-- <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br> --> 
+    <button id="append_new_question">New Question =></button><br>
+    <button id="upload_quiz_button">Upload Quiz</button><br>
   </div>
   <div id="quiz_output" style="display: none;">
 
