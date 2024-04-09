@@ -1,18 +1,11 @@
-// const { default: test } = require("node:test");
+//---------------------------------------------------------------------------------------Constants
 
 //Maximum answer the user can insert. 
 const max_answers = 5;
 
-//Count how many answers there is
-let current_answers_number = 1;
 
-//Generate a new answers input when typing on the first answer text input. 
-let last_answer_input = document.getElementById("answer0");
-last_answer_input.addEventListener("input", create_new_answer_box);
 
-let quiz_answers_data = [];
-
-//Helping funktions
+//---------------------------------------------------------------------------------------Helping funktions
 
 //Check if the element is created
 function is_id_created(id){
@@ -56,6 +49,21 @@ async function fetchQuizData() {
 }
 
 
+//Check if the quiz name already exist
+async function quiz_name_already_created(name){
+    let result = false;
+    let data = await fetchQuizData();
+    data.quiz.forEach(q => {
+        if(q.quiz_name === name){
+            result = true;
+        } 
+    });
+    console.log(result);
+    return result;
+}
+
+//---------------------------------------------------------------------------------------Home page
+//Home button
 let homescreen_button = document.getElementById("quiz_home_screen");
 homescreen_button.addEventListener("click", () => {
     let homescreen_div = document.getElementById("quiz_index");
@@ -63,8 +71,9 @@ homescreen_button.addEventListener("click", () => {
 
     let creat_quiz_div = document.getElementById("creat_quiz_div");
     creat_quiz_div.style.display = "none";
-
 });
+
+//---------------------------------------------------------------------------------------Create quiz
 
 let creat_quiz = document.getElementById("create_quiz_button");
 creat_quiz.addEventListener("click", async() => {
@@ -83,20 +92,12 @@ creat_quiz.addEventListener("click", async() => {
     }
 });
 
+//Count how many answers there is
+let current_answers_number = 1;
 
-
-//Check if the quiz name already exist
-async function quiz_name_already_created(name){
-    let result = false;
-    let data = await fetchQuizData();
-    data.quiz.forEach(q => {
-        if(q.quiz_name === name){
-            result = true;
-        } 
-    });
-    console.log(result);
-    return result;
-}
+//Generate a new answers input when typing on the first answer text input. 
+let last_answer_input = document.getElementById("answer0");
+last_answer_input.addEventListener("input", create_new_answer_box);
 
 //This function create a new answer box to let the user dynamically add more answers.
 function create_new_answer_box(){
@@ -136,6 +137,7 @@ function create_new_answer_box(){
         answer_text.id = "answer"+id;
         answer_text.className="answer_text_class";
         question_box.appendChild(answer_text);
+        answer_text.addEventListener("input", create_new_answer_box);
 
         //Correct answer checkbox
         let answer_checkbox = document.createElement("input");
@@ -162,7 +164,8 @@ function create_new_answer_box(){
         current_answers_number++;
     } else {
         //If theres is too many answers make an error message.
-        error_message("You can max insert" + max_answers + "answers",button);
+        let button = document.getElementById("create_new_answer");
+        error_message("You can max insert " + max_answers + " answers",button);
     }
 }
 
@@ -171,18 +174,7 @@ const create_QAs_button = document.getElementById("create_QAs");
 create_QAs_button.addEventListener("click", () => {
     //Check if the quiz name is inserted
     let quiz_name = document.getElementById("quiz_name").textContent;
-    if(quiz_name === ""){
-        //Generate a error message for the user.
-        error_message("Please insert a quiz name, and don't change it",create_QAs_button);
-        // Return to exit the funktion
-        return 0;
-    } else {
-        //Ensure that if their already is a error message it disappear.
-        if(is_id_created("error_message")){
-            document.getElementById("error_message").remove();
-        }
-    }
-
+    
     //Get the value from the question input field
     let question = document.getElementById("question_txt_field").value;
     let answers_list = [];
@@ -206,8 +198,7 @@ create_QAs_button.addEventListener("click", () => {
         quiz_name: quiz_name,
         question: question,
         answers: answers_list,
-        correct_answers: correct_answers_list,
-        user_answer: []
+        correct_answers: correct_answers_list
     };
       
     // Send the data to the server-side script
@@ -250,6 +241,10 @@ function clear_questions(){
     last_answer_input.addEventListener("input", create_new_answer_box);
 
 }
+
+//---------------------------------------------------------------------------------------Search quizzes
+
+
 let search_quiz_input = document.getElementById("search_quiz_text");
 search_quiz_input.addEventListener("input",() => {
     search_quizzes();
@@ -307,6 +302,9 @@ async function search_quizzes(){
 }
 search_quizzes();
 
+//---------------------------------------------------------------------------------------Start quiz
+
+
 //Start the quiz
 function start_quiz(quiz_id){
     
@@ -351,6 +349,9 @@ function start_quiz(quiz_id){
         });
     });
 }
+
+//---------------------------------------------------------------------------------------Quiz verifying
+
 
 async function check_answers(quiz_id) {
     let data = await fetchQuizData();
@@ -436,6 +437,11 @@ async function print_feedback (quiz_id) {
     new_p_2.textContent = quiz_total_corr_answers + " / " + quiz_total_answers + " total answered correct."
     feedback_div.appendChild(new_p_2);
 }
+
+
+
+//---------------------------------------------------------------------------------------tests
+
 
 //Default questions for test
 function autofill(){

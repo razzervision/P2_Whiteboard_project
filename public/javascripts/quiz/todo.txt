@@ -9,9 +9,11 @@ in progress = 🛠️
 -Make the answers go into the new database
 -Make a overview for the session starter.
 -Make a overview for the quiztaker.
--Make a error message function that always place the text below the 
--Fix the bug the first time adding an answer the new eventlistener when doing input dosen't occurr. 
+-Make a error message function ✅
+-Fix the bug the first time adding an answer the new eventlistener when doing input dosen't occurr. ✅
 -Make all input secure
 -Tilføj algoritme til søge funktionen. 
 -Scrample rækkefølge på svarene (evt en algoritme)
--Slet quiz funktion.
+-Slet quiz funktion. (evt med admin adgang)
+-Make the quiz local until all the questions are done and then upload to the server.
+

@@ -336,6 +336,18 @@
                 true,
                 false
             ]
+        },
+        {
+            "quiz_name": "asda",
+            "question": "",
+            "answers": [],
+            "correct_answers": []
+        },
+        {
+            "quiz_name": "asda",
+            "question": "ads",
+            "answers": [],
+            "correct_answers": []
         }
     ]
 }
