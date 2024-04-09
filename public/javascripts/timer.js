@@ -33,6 +33,7 @@ const stickyclock = document.getElementsByClassName("stickyclock");
 const clock = document.getElementsByClassName("clock");
 const workload = {hrs:"", min:"", sec:""}; 
 const breaktime = {hrs:"", min:"", sec:""};
+const StartingTime = 1000;
 //setInterval(worktimeleft, 1000);
 
 function timer(h, m, s) {
@@ -46,9 +47,31 @@ function timer(h, m, s) {
     for (item of clock){
         item.style.display = "block";
     }
+    
+
     hrs.innerHTML = h;
     min.innerHTML = m;
     sec.innerHTML = s; 
+    
+    workload.hrs = h;
+    workload.min = m;
+    workload.sec = s;
+
+    let StartingTime = workload.hrs*60*60 + workload.min*60 + workload.sec;
+    setInterval(UpdateCountdown, 1000);
+
+    function UpdateCountdown(){
+        
+    
+        StartingTime--;
+
+        console.log(StartingTime); 
+        
+        sec.innerHTML = (StartingTime % 60);
+        min.innerHTML = Math.floor((StartingTime - (Math.floor(StartingTime / 3600) * 3600)) / 60);
+        hrs.innerHTML = Math.floor(StartingTime / 3600); 
+
+    }
     // function worktimeleft(workload){
     //stickymodal.getElementsByClassName("timer").innerHTML.
     //}
