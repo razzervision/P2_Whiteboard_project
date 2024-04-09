@@ -24,7 +24,7 @@ function is_id_created(id){
     }
 }
 
-function error_message(message){
+function error_message(message,placement){
     //Check if there already is a fail message
     if(is_id_created("error_message")){
         document.getElementById("error_message").remove();
@@ -37,8 +37,7 @@ function error_message(message){
     error.style.color = "red";
 
     //Identify the element after answer inputs. 
-    let button = document.getElementById("create_new_answer");
-    button.parentNode.insertBefore(error, button);
+    placement.parentNode.insertBefore(error, placement);
 }
 
 //this function return all the data from the quiz.json file.
@@ -71,7 +70,7 @@ let creat_quiz = document.getElementById("create_quiz_button");
 creat_quiz.addEventListener("click", async() => {
     let name = document.getElementById("create_quiz_text").value;
     if(await quiz_name_already_created(name)){
-        console.log("Already created");
+        error_message("Already created",creat_quiz);
     } else {
         let create_quiz_div = document.getElementById("creat_quiz_div");
         create_quiz_div.style.display ="block";
@@ -163,7 +162,7 @@ function create_new_answer_box(){
         current_answers_number++;
     } else {
         //If theres is too many answers make an error message.
-        error_message("You can max insert" + max_answers + "answers");
+        error_message("You can max insert" + max_answers + "answers",button);
     }
 }
 
@@ -174,7 +173,7 @@ create_QAs_button.addEventListener("click", () => {
     let quiz_name = document.getElementById("quiz_name").textContent;
     if(quiz_name === ""){
         //Generate a error message for the user.
-        error_message("Please insert a quiz name, and don't change it");
+        error_message("Please insert a quiz name, and don't change it",create_QAs_button);
         // Return to exit the funktion
         return 0;
     } else {

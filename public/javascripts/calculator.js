@@ -1,8 +1,11 @@
 
-//calc
+
+//add single digits to textarea function
 function addToResult(value) {
     document.getElementById('display').value += value;
+    document.getElementById('classHistory').value += value;
 }
+
 
 function clearDisplay() {
     document.getElementById('display').value = '';
@@ -16,39 +19,28 @@ function calculate() {
 
 }
 
-//goofy
-
-function powerOf(){
-    
-    let num = document.getElementById('power').value;
-    let power = document.getElementById('num').value;
-    
-    console.log(num);
-    console.log(power);
-    let result = Math.pow(num, power);
-    console.log(result);
-    
-}
-
 //history
 
 function clearHistory() {
-    document.getElementById('historyText').value = '';
+    document.getElementById('classHistory').value = '';
 }
 
 
-function addToHistory() {
-    let display = document.getElementById('display');
-
-    let currentExpression = display.value; 
-
-    let historyText = document.getElementById('historyText');
-    
-    historyText.value += currentExpression + "\n"; 
-
+function addHistory(value) {
+    document.getElementById('classHistory').value += value;
 }
 
-/*
+function submitCalculation() {
+    calculate(); // Assuming you have a calculate function defined elsewhere
+    addHistory();
+}
+
+
+
+
+
+
+
 let str = "10^2";
 let i = 0;
 let left_str = "";
@@ -72,4 +64,5 @@ parseInt(right_str);
 calc(left_str, right_str);
 
 function calc (l, r) {
-    console.log(Math.pow(l, r));*/
+    console.log(Math.pow(l, r));
+}

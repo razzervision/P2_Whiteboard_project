@@ -1,0 +1,69 @@
+.calculatorMain{
+    position: absolute;
+    left: 50%;
+    top: 1000px;
+    height: 40%;
+    width: 15%;
+    border: 5px solid black;
+    background-image: linear-gradient(to bottom right, #ddd 0%, #eee 25%, rgb(192, 201, 199) 50%, #eee 75%, #ddd 100%);
+    background-size: 200% 100%;
+    border-radius: 10px;
+}
+
+
+
+  .calculatorMain::after {
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02))
+}
+
+.calcKeys{
+    width: 100%;
+    height: 100%;
+
+}
+
+.calcHistory{
+    width:100%;
+
+}
+
+.calcbuttonKey {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: 1px black;
+    background-color: grey;
+    font-size: 16px;
+}
+
+.calcbuttonCalc {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: 1px black;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+}
+
+.calcbuttonDelete {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: 1px black;
+    background-color: yellow;
+    font-size: 16px;
+}
+
+.calcbuttonSubmit {
+    width: 80px;
+    height: 50px;
+    border-radius: 15px;
+    border: 1px black;
+    background-color: green;
+    font-size: 16px;
+}
+
+.classHistory {
+    width: 95%;
+}
