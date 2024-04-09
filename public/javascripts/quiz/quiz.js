@@ -173,8 +173,13 @@ function create_new_answer_box(){
 //Generate template for a new question
 const append_new_question = document.getElementById("append_new_question");
 append_new_question.addEventListener("click", () =>{
-    let questionLabel = document.createElement("")
+    let questionDiv = document.getElementById("question_DIV0");
+    console.log(questionDiv);
+    let newQuestionDiv = document.createElement("div");
+    //not done at all. The plan is to copy all the index.ejs elements and change the id with a ID 
+    // so in the public it can find all the elements from 0 -> questions created og ligge ind i databasen.
 });
+
 
 
 //Create a question and insert the data into the quiz.JSON file
