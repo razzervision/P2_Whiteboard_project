@@ -90,18 +90,19 @@
   <div class="creat_quiz_div" id="creat_quiz_div" style="display: none;">
     <label for="quiz_name">Quiz Name:</label>
     <a id="quiz_name"></a><br><br>
-
-    <label for="question_txt_field">Question:</label>
+    <div class="question_DIV" id="question_DIV0">
+    <label for="question_txt_field" id="label1">Question 0:</label>
     <input type="text" id="question_txt_field"><br>
     <div class="answer_container" id="answer_container0">
       <label for="answer0" class="answer_label_class">Answer 0:</label>
       <input type="text" class="answer_text_class" id="answer0">
       <input type="checkbox" class="answer_checkbox_class" id="checkbox0" checked="true">
     </div>
-    <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br>
-    <button id="create_QAs">Next Question</button><br>
-    <button id="prev_question">Previous Question</button><br>
-    <button onclick="clearQAs()">Remove Question</button><br>
+    </div>
+    <!-- Commented out because when you do a input a new answer box occur, but if it bad just insert it again -->
+    <!-- <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br> --> 
+    <button id="append_new_question">New Question =></button><br>
+    <button id="upload_quiz_button">Upload Quiz</button><br>
   </div>
   <div id="quiz_output" style="display: none;">
 
@@ -151,31 +152,37 @@
 <div id="calcProgram" class="calculatorMain"> 
   <div class="calcKeys">
     <div class="expressions">
+      <input type="text" id="display" class="display"> 
+
+
+      <button class="calcbuttonDelete" id="C" onclick="clearDisplay()">C</button> 
+      
+      <button class="calcbuttonCalc" id="+/-" onclick="negative('-')">+/-</button>
+      <button class="calcbuttonCalc" id="()" onclick="addToResult('()')">( )</button>
+      <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button>
       <button class="calcbuttonKey" id="1" onclick="addToResult('1')">1</button>
       <button class="calcbuttonKey" id="2" onclick="addToResult('2')">2</button>
       <button class="calcbuttonKey" id="3" onclick="addToResult('3')">3</button>
-      <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button> <br>
+      <button class="calcbuttonCalc" id="^" onclick="addToResult('^')">^</button>
       <button class="calcbuttonKey" id="4" onclick="addToResult('4')">4</button>
       <button class="calcbuttonKey" id="5" onclick="addToResult('5')">5</button>
-      <button class="calcbuttonKey" id="6" onclick="addToResult('6')">6</button>
-      <button class="calcbuttonCalc" id="-" onclick="addToResult('-')">-</button> <br>
+      <button class="calcbuttonKey" id="6" onclick="addToResult('6')">6</button> 
+      <button class="calcbuttonCalc" id="-" onclick="addToResult('-')">-</button> 
       <button class="calcbuttonKey" id="7" onclick="addToResult('7')">7</button>
       <button class="calcbuttonKey" id="8" onclick="addToResult('8')">8</button>
       <button class="calcbuttonKey" id="9" onclick="addToResult('9')">9</button>
-      <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button> <br>
+      <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button>
       <button class="calcbuttonKey" id="0" onclick="addToResult('0')">0</button>
       <button class="calcbuttonCalc" id="%" onclick="addToResult('%')">%</button>
-      <button class="calcbuttonCalc" id="^" onclick="addToResult('^')">^</button>
-      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> <br>
+      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> 
       <button class="calcbuttonCalc" id="!" onclick="addToResult('!')">!</button>
-      <button class="calcbuttonDelete" id="C" onclick="clearDisplay()">C</button> 
-      <button class="calcbuttonSubmit" id="submit" onclick="submitCalculation()">Submit</button> <br><br>
-      <input type="text" id="display" class="display"> 
+      <button class="calcbuttonSubmit" id="submit" onclick="calculate()">Submit</button> <br><br>
+      
     </div>
 
     <div class="calcHistory">
       <textarea id="classHistory" class="classHistory" cols="40" rows="5"></textarea> <br>
-        <button id="clearHistory" onclick="clearHistory()">CLEAR</button>  
+        <button id="clearHistoryButton" class="clearHistoryButton" onclick="clearHistory()">CLEAR ALL HISTORY</button>  
     </div>
   </div>
 </div>
