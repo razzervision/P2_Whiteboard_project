@@ -35,7 +35,7 @@ const workload = {hrs:"", min:"", sec:""};
 const breaktime = {hrs:"", min:"", sec:""};
 //const StartingTime = 1000; was used as an early test example.
 
-function PauseTimerArgument(h,m,s){
+function PauseTimerArgument(h, m, s){
     PauseTimer(h, m, s);
 }
 
