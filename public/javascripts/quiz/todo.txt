@@ -15,5 +15,5 @@ in progress = 🛠️
 -Tilføj algoritme til søge funktionen. 
 -Scrample rækkefølge på svarene (evt en algoritme)
 -Slet quiz funktion. (evt med admin adgang)
--Make the quiz local until all the questions are done and then upload to the server.
--Make the first question: question 1 instead of 0
+-Make the quiz local until all the questions are done and then upload to the server.✅
+-Make the first question: question 1 instead of 0 

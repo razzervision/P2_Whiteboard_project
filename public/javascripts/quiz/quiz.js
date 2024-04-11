@@ -31,6 +31,11 @@ function error_message(message,placement){
 
     //Identify the element after answer inputs. 
     placement.parentNode.insertBefore(error, placement);
+
+    // Remove it again after 3 seconds
+    setTimeout(function() {
+        error.remove();
+    }, 3000);
 }
 
 //this function return all the data from the quiz.json file.
@@ -96,11 +101,20 @@ creat_quiz.addEventListener("click", async() => {
 let current_answers_number = 1;
 
 //Generate a new answers input when typing on the first answer text input. 
-let last_answer_input = document.getElementById("answer0");
-last_answer_input.addEventListener("input", create_new_answer_box);
+let last_answer_input;
+
+function inputHandler() {
+    create_new_answer_box(last_answer_input);
+}
 
 //This function create a new answer box to let the user dynamically add more answers.
-function create_new_answer_box(){
+function create_new_answer_box(delete_event_listener){
+    console.log(delete_event_listener);
+    //Remove the EventListener because the new answer is created
+    if(delete_event_listener){
+        console.log("delete", delete_event_listener);
+        delete_event_listener.removeEventListener("input", inputHandler);
+    }
 
     //Stop the funktion if too many answer inputs
     if(is_id_created("error_too_many_answer_inputs")){
@@ -108,17 +122,19 @@ function create_new_answer_box(){
     }
     //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
     let previous_element = document.getElementById("append_new_question").previousElementSibling;
-    previous_element = previous_element.querySelector(".answer_checkbox_class");
-    console.log(previous_element.id[8]);
-    
-    //Takes the last part of the ID. e.g "checkbox0" where the 8 element is the last which is the ID.
-    let id = parseInt(previous_element.id[8]);
+    previous_element = previous_element.lastElementChild;
+
+    let id = -1;
+    if(previous_element !== null && previous_element.className === "answer_container"){
+        id = previous_element.id[16];
+    } 
     //Ensure there is a limit of answers. 
-    if(id < max_answers){
+    if(id < max_answers - 1 && previous_element.id !== "error_message"){
 
         //Increase the ID with one to make the ID unique.
         id++;
-        
+        let userFrindlyId = id+1;
+
         //Create all the elements needed for an extra answers
         let question_box = document.createElement("div");
         question_box.className="answer_container";
@@ -126,7 +142,7 @@ function create_new_answer_box(){
 
         //Label for answers
         let answer_label = document.createElement("label");
-        answer_label.textContent = "Answer "+ id + ":";
+        answer_label.textContent = "Answer "+ userFrindlyId + ":";
         answer_label.id = "answer"+ id + "_label";
         answer_label.className="answer_label_class";
         answer_label.setAttribute("for", "answer"+ id);
@@ -138,7 +154,9 @@ function create_new_answer_box(){
         answer_text.id = "answer"+id;
         answer_text.className="answer_text_class";
         question_box.appendChild(answer_text);
-        answer_text.addEventListener("input", create_new_answer_box);
+        //Generate a EventListener for the new answer text input. 
+        answer_text.addEventListener("input", inputHandler);
+        last_answer_input = answer_text;
 
         //Correct answer checkbox
         let answer_checkbox = document.createElement("input");
@@ -147,25 +165,16 @@ function create_new_answer_box(){
         answer_checkbox.className = "answer_checkbox_class";
         question_box.appendChild(answer_checkbox);
 
-        //Identify the element after answer inputs. 
-        let button = document.getElementById("append_new_question");
-        
-        //Insert them before the add new answer button to make the flow intuitive. 
-        button.parentNode.insertBefore(question_box, button);
-
-        //Remove the EventListener because the new answer is created
-        let old_id = id - 1;
-        last_answer_input = document.getElementById("answer"+old_id);
-        last_answer_input.removeEventListener("input", create_new_answer_box);
-
-        //Generate a EventListener for the new answer text input. 
-        answer_text.addEventListener("input", create_new_answer_box);
+        //Identify the element before append_new_question button and insert the div before. 
+        let button = document.getElementById("append_new_question").previousElementSibling;
+        console.log(button.previousSibling.id);
+        button.appendChild(question_box);
 
         //Increase current quizzes
         current_answers_number++;
     } else {
         //If theres is too many answers make an error message.
-        let button = document.getElementById("create_new_answer");
+        let button = document.getElementById("append_new_question");
         error_message("You can max insert " + max_answers + " answers",button);
     }
 }
@@ -173,12 +182,51 @@ function create_new_answer_box(){
 //Generate template for a new question
 const append_new_question = document.getElementById("append_new_question");
 append_new_question.addEventListener("click", () =>{
-    let questionDiv = document.getElementById("question_DIV0");
-    console.log(questionDiv);
-    let newQuestionDiv = document.createElement("div");
-    //not done at all. The plan is to copy all the index.ejs elements and change the id with a ID 
-    // so in the public it can find all the elements from 0 -> questions created og ligge ind i databasen.
+    create_new_question();
 });
+function create_new_question(){
+    //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
+    let previous_element = document.getElementById("append_new_question").previousElementSibling;
+    
+    let questionNumber = -1;
+    //Takes the last part of the ID. e.g "question_DIV1" where the 12 element is the last which is the ID.
+    if (previous_element.id.includes("question_DIV")){
+        questionNumber = parseInt(previous_element.id[12]);
+    }
+    questionNumber++;
+    let userFrindlyId = questionNumber + 1;
+    // Create the main div for the question
+    var questionDiv = document.createElement('div');
+    questionDiv.classList.add('question_DIV');
+    questionDiv.id = 'question_DIV' + questionNumber;
+
+    // Create label for the question
+    var questionLabel = document.createElement('label');
+    questionLabel.htmlFor = 'question_txt_field';
+    questionLabel.id = 'label' + questionNumber;
+    questionLabel.textContent = 'Question ' + userFrindlyId + ':';
+
+    // Create input field for the question
+    var questionInput = document.createElement('input');
+    questionInput.type = 'text';
+    questionInput.id = 'question_txt_field' + questionNumber;
+    questionInput.name = 'question_txt_field';
+
+    // Append elements to the main question div
+    questionDiv.appendChild(questionLabel);
+    questionDiv.appendChild(questionInput);
+
+    let insert_last = document.getElementById("append_new_question");
+    //Insert them before the add new answer button to make the flow intuitive. 
+    insert_last.parentNode.insertBefore(questionDiv, insert_last);
+
+    //make the answer options
+    create_new_answer_box();
+
+}
+    
+
+create_new_question();
 
 
 
