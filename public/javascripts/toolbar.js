@@ -12,8 +12,9 @@ const timerProgram = document.getElementById("timerProgram");
 
 const toolbar = document.getElementById("toolbar");
 
+paintProgram.style.display = "none";
 codeProgram.style.display = "none";
-quizProgram.style.display = "none";
+quizProgram.style.display = "block";
 calcProgram.style.display = "none";
 timerProgram.style.display = "none";
 
@@ -66,7 +67,7 @@ toolbar.addEventListener("click", function() {
         codeProgram.style.width = "45%";
         quizProgram.style.top = "400px";
         quizProgram.style.left = "970px";
-        quizProgram.style.width = "20%";
+        quizProgram.style.width = "40%";
 
     } else if (codeProgram.style.display === "block" && quizProgram.style.display === "block" && calcProgram.style.display === "block"){
         paintProgram.style.width = "50%";
@@ -74,7 +75,7 @@ toolbar.addEventListener("click", function() {
         codeProgram.style.left = "970px";
         quizProgram.style.top = "73%";
         quizProgram.style.left = "2px";
-        quizProgram.style.width = "20%";
+        quizProgram.style.width = "40%";
         calcProgram.style.top = "400px";
         calcProgram.style.left = "970px";
 
@@ -87,7 +88,7 @@ toolbar.addEventListener("click", function() {
         paintProgram.style.width = "50%";
         quizProgram.style.top = "55px";
         quizProgram.style.left = "970px";
-        quizProgram.style.width = "20%";
+        quizProgram.style.width = "40%";
     } else if (codeProgram.style.display !== "block" && quizProgram.style.display !== "block" && calcProgram.style.display === "block"){
         paintProgram.style.width = "50%";
         calcProgram.style.top = "55px";
@@ -98,7 +99,7 @@ toolbar.addEventListener("click", function() {
         calcProgram.style.left = "970px";
         quizProgram.style.top = "55px";
         quizProgram.style.left = "62%";
-        quizProgram.style.width = "20%";
+        quizProgram.style.width = "40%";
     } else if (codeProgram.style.display !== "block" && quizProgram.style.display !== "block" && calcProgram.style.display !== "block" && paintProgram.style.display === "block"){
         paintProgram.style.width = "100%";
     } else if (codeProgram.style.display === "block" && quizProgram.style.display !== "block" && calcProgram.style.display === "block" && paintProgram.style.display !== "block"){
