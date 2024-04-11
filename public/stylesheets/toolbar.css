@@ -4,7 +4,8 @@ menu {
     padding: 0px;
     margin: 0px;
     overflow: hidden;
-    height: 100px;
+    height: 75px;
+    width: 100%;
 }
 
 /*I think this style below is the cause for the glitch with the timer options. Since they are presented as lists items*/
