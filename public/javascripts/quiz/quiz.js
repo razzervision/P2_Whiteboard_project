@@ -3,8 +3,6 @@
 //Maximum answer the user can insert. 
 const max_answers = 5;
 
-
-
 //---------------------------------------------------------------------------------------Helping funktions
 
 //Check if the element is created
@@ -208,6 +206,7 @@ function create_new_question(){
     questionInput.type = 'text';
     questionInput.id = 'question_txt_field' + questionNumber;
     questionInput.name = 'question_txt_field';
+    questionInput.className = "question_txt_field_class";
 
     // Append elements to the main question div
     questionDiv.appendChild(questionLabel);
@@ -221,7 +220,6 @@ function create_new_question(){
     create_new_answer_box();
 
 }
-    
 // Call it the first time.
 create_new_question();
 
@@ -229,8 +227,25 @@ let upload_quiz_button = document.getElementById("upload_quiz_button");
 upload_quiz_button.addEventListener("click", get_question_and_answers);
 
 function get_question_and_answers(){
+    let quiz_name = document.getElementById("quiz_name").textContent;
+    console.log(quiz_name);
     let numberOfQuestions = document.querySelectorAll(".question_DIV");
-    console.log(numberOfQuestions);
+    numberOfQuestions.forEach(q =>{
+        let question = q.querySelector(".question_txt_field_class").value;
+        
+        let answers = [];
+        let correct_answers = [];
+        let answers_value = q.querySelectorAll(".answer_container");
+        answers_value.forEach(a => {
+            let answer_text = a.querySelector(".answer_text_class").value;
+            answers.push(answer_text)
+            let answer_checkbox = a.querySelector(".answer_checkbox_class").checked;
+            correct_answers.push(answer_checkbox)
+        });
+        console.log(question);
+        console.log(answers);
+        console.log(correct_answers);
+    });
 }
 
 
