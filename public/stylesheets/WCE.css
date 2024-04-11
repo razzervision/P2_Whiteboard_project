@@ -7,15 +7,3 @@ select {
     color: #333;
     appearance: none;
 }
-
-#code {
-    width: 100%; 
-    height: 100%; 
-
-}
-
-.code_editor{
-    position: absolute;
-    top: 1000px;
-    width: 50%;
-}
