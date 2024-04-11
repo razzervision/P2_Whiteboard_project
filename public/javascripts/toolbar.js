@@ -58,8 +58,22 @@ function div_converter (draggedElement) {
         let str = "#" + draggedElement.dataset.value;
         let elem = document.querySelector(str);
         elem.style.display = "block";
-        elem.style.left = dragged_element_x;
-        elem.style.top = dragged_element_y;
+        create_new_dropzone(1, elem);
+    }   
+
+}
+
+function create_new_dropzone (live_features, elem) {
+    let new_dropzone = document.createElement("div")
+    let user_friendly_id = live_features + 1;
+    new_dropzone.id = "dropzone_" + user_friendly_id;
+    if (live_features == 1) {
+        primary_dropzone.appendChild(new_dropzone);
+        new_dropzone.style.height = "33%";
+        new_dropzone.style.width = "100%";
+        elem.style.height = "33%";
+        elem.style.width = "100%";
+        new_dropzone.appendChild(elem);
+        
     }
-    
 }
