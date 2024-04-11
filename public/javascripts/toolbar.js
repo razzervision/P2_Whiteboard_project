@@ -6,6 +6,8 @@ const timer_element = document.querySelector("#timer_element");
 
 const toolbar = document.getElementById("toolbar");
 
+const primary_dropzone = document.querySelector("#primary_dropzone");
+
 codeProgram.style.display = "none";
 quizProgram.style.display = "none";
 calcProgram.style.display = "none";
@@ -13,6 +15,9 @@ timerProgram.style.display = "none";
 paintProgram.style.display = "none";
 
 let dragged_element_x, dragged_element_y = 0;
+
+primary_dropzone.appendChild(document.querySelector("#paintProgram"));
+document.querySelector("#paintProgram").style.display = "block";
 
 
 document.querySelectorAll('.toolbar_element').forEach(item => {
@@ -49,7 +54,6 @@ function dragEnd() {
 }
 
 function div_converter (draggedElement) {
-    console.log(draggedElement.dataset.value);
     let str = "#" + draggedElement.dataset.value;
     let elem = document.querySelector(str);
     elem.style.display = "block";
