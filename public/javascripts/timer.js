@@ -35,52 +35,9 @@ const workload = {hrs:"", min:"", sec:""};
 const breaktime = {hrs:"", min:"", sec:""};
 //const StartingTime = 1000; was used as an early test example.
 
-//The pause function should be very similar to the timer function.
-function PauseTimer(h, m, s) {
-
-    console.log("Hello World"); //Test to see that the function gets called.
-    
-    hrs.innerHTML = h;
-    min.innerHTML = m;
-    sec.innerHTML = s; 
-    
-    breaktime.hrs = h;
-    breaktime.min = m;
-    breaktime.sec = s;
-
-    let StartingTime = breaktime.hrs*60*60 + breaktime.min*60 + breaktime.sec;
-    const PauseInterval = setInterval(UpdateCountdown, 1000);
-
-    function UpdateCountdown(){
-
-        //Every time we iterate or run the function again, the amount of seconds in starting time gets reduced by 1 second. 
-        StartingTime--; 
-        console.log(StartingTime); //Test
-        
-        //converting the amount of seconds in starting time to hrs, min, sec, representation. Then putting them into the appropriate HTML elements. 
-        sec.innerHTML = (StartingTime % 60);
-        min.innerHTML = Math.floor((StartingTime - (Math.floor(StartingTime / 3600) * 3600)) / 60);
-        hrs.innerHTML = Math.floor(StartingTime / 3600); 
-        
-        
-        if (StartingTime === 0){
-            clearInterval(PauseInterval);
-            modal.style.display = "block";
-            for (item of stickymodal){
-                item.style.display = "block";
-            }
-            for (item of stickyclock){
-                item.style.display = "none";
-            }
-            for (item of clock){
-                item.style.display = "none";
-            }
-        }
-
-    }
-
+function PauseTimerArgument(h,m,s){
+    PauseTimer(h, m, s);
 }
-
 
 function timer(h, m, s) {
     //Hides the original modal
@@ -126,10 +83,56 @@ function timer(h, m, s) {
         //Or just a function being called every second. I need to be able to check if the innerHTML is all equal to 0 that I can make it do something else.
         if (StartingTime === 0){
             clearInterval(TimerInterval);
-            PauseTimer(0,0,5);
+            PauseTimer(h, m, s);
             alert("Break time");
 
         }
     }
+}
+
+//The pause function should be very similar to the timer function.
+function PauseTimer(h, m, s) {
+
+    console.log("Hello World"); //Test to see that the function gets called.
+    
+    hrs.innerHTML = h;
+    min.innerHTML = m;
+    sec.innerHTML = s; 
+    
+    breaktime.hrs = h;
+    breaktime.min = m;
+    breaktime.sec = s;
+
+    let StartingTime = breaktime.hrs*60*60 + breaktime.min*60 + breaktime.sec;
+    const PauseInterval = setInterval(UpdateCountdown, 1000);
+
+    function UpdateCountdown(){
+
+        //Every time we iterate or run the function again, the amount of seconds in starting time gets reduced by 1 second. 
+        StartingTime--; 
+        console.log(StartingTime); //Test
+        
+        //converting the amount of seconds in starting time to hrs, min, sec, representation. Then putting them into the appropriate HTML elements. 
+        sec.innerHTML = (StartingTime % 60);
+        min.innerHTML = Math.floor((StartingTime - (Math.floor(StartingTime / 3600) * 3600)) / 60);
+        hrs.innerHTML = Math.floor(StartingTime / 3600); 
+        
+        
+        if (StartingTime === 0){
+            clearInterval(PauseInterval);
+            modal.style.display = "block";
+            for (item of stickymodal){
+                item.style.display = "block";
+            }
+            for (item of stickyclock){
+                item.style.display = "none";
+            }
+            for (item of clock){
+                item.style.display = "none";
+            }
+        }
+
+    }
+
 }
 
