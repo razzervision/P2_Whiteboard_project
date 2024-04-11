@@ -4,20 +4,31 @@ menu {
     padding: 0px;
     margin: 0px;
     overflow: hidden;
+    height: 100px;
 }
 
 /*I think this style below is the cause for the glitch with the timer options. Since they are presented as lists items*/
 
-li {
+.toolbar_element {
     color: white;
-    text-decoration: none;
-    padding: 15px;
+    padding: 25px;
     display: block;
+    display: flex;
     text-align: center;
     float: left;
     cursor: pointer;
+    height: 50px;
+    width: 50px;
+    border: 1px solid black;
 }
 
 li:hover{
     background-color: hsl(0, 0%, 10%);
+}
+
+#primary_dropzone {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    border: 1px solid black;
 }

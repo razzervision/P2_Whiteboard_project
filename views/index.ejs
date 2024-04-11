@@ -19,7 +19,7 @@
           <link rel="stylesheet" href="/stylesheets/toolbar.css">
           <link rel="stylesheet" href="/stylesheets/calc.css">
           <script defer src="/javascripts/toolbar.js"></script>
-          <script src="/javascripts/users.js"></script>
+          <script defer src="/javascripts/users.js"></script>
           <script src="/javascripts/calculator.js"></script>
           <script defer src="/javascripts/paint.js"></script>
           <script src="/javascripts/pausefish.js"></script>
@@ -52,15 +52,20 @@
 <body>
   <div class="toolbar" id="toolbar">
     <nav>
-        <menu>
-            <li id="paint_button">Paint</li>
-            <li id="code_button">Code-editor</li>
-            <li id="quiz_button">Quiz</li>
-            <li id="calc_button">Calculator</li>
-<li id="timer_button">Timer</li>
-        </menu>
+      <menu>
+        <div class = "toolbar_element" id = "paint_element" data-value="paintProgram">Paint</div>
+        <div class = "toolbar_element" id = "code_editor_element" data-value="codeProgram">Code Editor</div>
+        <div class = "toolbar_element" id = "quiz_element" data-value="quizProgram">Quiz</div>
+        <div class = "toolbar_element" id = "calculator_element" data-value="calcProgram">Calc</div>
+        <div class = "toolbar_element" id = "timer_element">Timer</div>
+      </menu>
     </nav>
-</div>
+  </div>
+
+  <div id = "primary_dropzone">
+
+
+  </div>
 
 
 
@@ -141,31 +146,37 @@
 <div id="calcProgram" class="calculatorMain"> 
   <div class="calcKeys">
     <div class="expressions">
+      <input type="text" id="display" class="display"> 
+
+
+      <button class="calcbuttonDelete" id="C" onclick="clearDisplay()">C</button> 
+      
+      <button class="calcbuttonCalc" id="+/-" onclick="negative('-')">+/-</button>
+      <button class="calcbuttonCalc" id="()" onclick="addToResult('()')">( )</button>
+      <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button>
       <button class="calcbuttonKey" id="1" onclick="addToResult('1')">1</button>
       <button class="calcbuttonKey" id="2" onclick="addToResult('2')">2</button>
       <button class="calcbuttonKey" id="3" onclick="addToResult('3')">3</button>
-      <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button> <br>
+      <button class="calcbuttonCalc" id="^" onclick="addToResult('^')">^</button>
       <button class="calcbuttonKey" id="4" onclick="addToResult('4')">4</button>
       <button class="calcbuttonKey" id="5" onclick="addToResult('5')">5</button>
-      <button class="calcbuttonKey" id="6" onclick="addToResult('6')">6</button>
-      <button class="calcbuttonCalc" id="-" onclick="addToResult('-')">-</button> <br>
+      <button class="calcbuttonKey" id="6" onclick="addToResult('6')">6</button> 
+      <button class="calcbuttonCalc" id="-" onclick="addToResult('-')">-</button> 
       <button class="calcbuttonKey" id="7" onclick="addToResult('7')">7</button>
       <button class="calcbuttonKey" id="8" onclick="addToResult('8')">8</button>
       <button class="calcbuttonKey" id="9" onclick="addToResult('9')">9</button>
-      <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button> <br>
+      <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button>
       <button class="calcbuttonKey" id="0" onclick="addToResult('0')">0</button>
       <button class="calcbuttonCalc" id="%" onclick="addToResult('%')">%</button>
-      <button class="calcbuttonCalc" id="^" onclick="addToResult('^')">^</button>
-      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> <br>
+      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> 
       <button class="calcbuttonCalc" id="!" onclick="addToResult('!')">!</button>
-      <button class="calcbuttonDelete" id="C" onclick="clearDisplay()">C</button> 
-      <button class="calcbuttonSubmit" id="submit" onclick="submitCalculation()">Submit</button> <br><br>
-      <input type="text" id="display" class="display"> 
+      <button class="calcbuttonSubmit" id="submit" onclick="calculate()">Submit</button> <br><br>
+      
     </div>
 
     <div class="calcHistory">
       <textarea id="classHistory" class="classHistory" cols="40" rows="5"></textarea> <br>
-        <button id="clearHistory" onclick="clearHistory()">CLEAR</button>  
+        <button id="clearHistoryButton" class="clearHistoryButton" onclick="clearHistory()">CLEAR ALL HISTORY</button>  
     </div>
   </div>
 </div>
@@ -189,7 +200,7 @@
              <p><ul>
              <li><button id="longwork" class="timer" onclick="timer(1,30,0)" >Long work, long break </button></li> 
              <li><button id="shortwork" class="timer" onclick="timer(0,45,0)" >Short work, short break </button></li>
-             <li><button id="chore" class="timer" onclick="timer(3)" >Finish a chore! </button></li>
+             <li><button id="chore" class="timer" onclick="timer(0,0,5)" >Finish a chore! </button></li>
              <li><button id="relax" class="timer" onclick="timer(4)" >Relax break</button></li>
              <li><button id="other" class="timer" onclick="timer(5)" >other</button></li>
              </ul></p>

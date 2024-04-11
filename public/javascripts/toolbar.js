@@ -1,14 +1,8 @@
-const paintButton = document.getElementById("paint_button");
-const quizButton = document.getElementById("quiz_button");
-const calcButton = document.getElementById("calc_button");
-const codeButton = document.getElementById("code_button");
-const timerButton = document.getElementById("timer_button");
-
-const paintProgram = document.getElementById("paintProgram");
-const codeProgram = document.getElementById("codeProgram");
-const quizProgram = document.getElementById("quizProgram");
-const calcProgram = document.getElementById("calcProgram");
-const timerProgram = document.getElementById("timerProgram");
+const paint_element = document.querySelector("#paint_element");
+const code_editor_element = document.querySelector("#code_editor_element");
+const quiz_element = document.querySelector("#quiz_element");
+const calculator_element = document.querySelector("#calculator_element");
+const timer_element = document.querySelector("#timer_element");
 
 const toolbar = document.getElementById("toolbar");
 
@@ -16,164 +10,49 @@ codeProgram.style.display = "none";
 quizProgram.style.display = "none";
 calcProgram.style.display = "none";
 timerProgram.style.display = "none";
+paintProgram.style.display = "none";
 
-paintButton.addEventListener("click", function() {
-    if (paintProgram.style.display === "none") {
-        paintProgram.style.display = "block";
-    } else {
-        paintProgram.style.display = "none";
-    }
+let dragged_element_x, dragged_element_y = 0;
+
+
+document.querySelectorAll('.toolbar_element').forEach(item => {
+    item.addEventListener('mousedown', dragStart);
+    item.addEventListener('dragstart', function(e) { e.preventDefault(); });
 });
 
-codeButton.addEventListener("click", function() {
-    if (codeProgram.style.display === "none") {
-        codeProgram.style.display = "block";
-    } else {
-        codeProgram.style.display = "none";
-    }
-});
+document.addEventListener('mousemove', drag);
+document.addEventListener('mouseup', dragEnd);
 
-quizButton.addEventListener("click", function() {
-    if (quizProgram.style.display === "none") {
-        quizProgram.style.display = "block";
-    } else {
-        quizProgram.style.display = "none";
-    }
+let draggedElement = null;
+let offsetX = 0;
+let offsetY = 0;
 
-});
-
-calcButton.addEventListener("click", function() {
-    if (calcProgram.style.display === "none") {
-        calcProgram.style.display = "block";
-    } else {
-        calcProgram.style.display = "none";
-    }
-});
-
-timerButton.addEventListener("click", function() {
-    if (timerProgram.style.display === "none") {
-        timerProgram.style.display = "block";
-    } else {
-        timerProgram.style.display = "none";
-    }
-});
-
-toolbar.addEventListener("click", function() {
-    if ((codeProgram.style.display === "block" && quizProgram.style.display === "block" && calcProgram.style.display !== "block")){
-        paintProgram.style.width = "50%";
-        codeProgram.style.top = "55px";
-        codeProgram.style.left = "970px";
-        codeProgram.style.width = "45%";
-        quizProgram.style.top = "400px";
-        quizProgram.style.left = "970px";
-        quizProgram.style.width = "20%";
-
-    } else if (codeProgram.style.display === "block" && quizProgram.style.display === "block" && calcProgram.style.display === "block"){
-        paintProgram.style.width = "50%";
-        codeProgram.style.top = "55px";
-        codeProgram.style.left = "970px";
-        quizProgram.style.top = "73%";
-        quizProgram.style.left = "2px";
-        quizProgram.style.width = "20%";
-        calcProgram.style.top = "400px";
-        calcProgram.style.left = "970px";
-
-    } else if (codeProgram.style.display === "block" && quizProgram.style.display !== "block" && calcProgram.style.display !== "block"){
-        paintProgram.style.width = "50%";
-        codeProgram.style.top = "55px";
-        codeProgram.style.left = "970px";
-        codeProgram.style.width = "45%";
-    } else if (codeProgram.style.display !== "block" && quizProgram.style.display === "block" && calcProgram.style.display !== "block"){
-        paintProgram.style.width = "50%";
-        quizProgram.style.top = "55px";
-        quizProgram.style.left = "970px";
-        quizProgram.style.width = "20%";
-    } else if (codeProgram.style.display !== "block" && quizProgram.style.display !== "block" && calcProgram.style.display === "block"){
-        paintProgram.style.width = "50%";
-        calcProgram.style.top = "55px";
-        calcProgram.style.left = "970px";
-    } else if (codeProgram.style.display !== "block" && quizProgram.style.display === "block" && calcProgram.style.display === "block"){
-        paintProgram.style.width = "50%";
-        calcProgram.style.top = "55px";
-        calcProgram.style.left = "970px";
-        quizProgram.style.top = "55px";
-        quizProgram.style.left = "62%";
-        quizProgram.style.width = "20%";
-    } else if (codeProgram.style.display !== "block" && quizProgram.style.display !== "block" && calcProgram.style.display !== "block" && paintProgram.style.display === "block"){
-        paintProgram.style.width = "100%";
-    } else if (codeProgram.style.display === "block" && quizProgram.style.display !== "block" && calcProgram.style.display === "block" && paintProgram.style.display !== "block"){
-        calcProgram.style.top = "400px";
-        calcProgram.style.left = "970px";
-        codeProgram.style.top = "55px";
-        codeProgram.style.left = "970px";
-    }
-});
-
-
-// Function to make an element draggable only when cursor is near the edges
-function makeDraggableNearEdge(element) {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    let isDragging = false;
-
-    // Function to handle mouse down event for dragging
-    function dragMouseDown(e) {
-        if (!isNearEdge(e, element)) {return;}
-        e = e || window.event;
-        e.preventDefault();
-        // Get the initial mouse cursor position
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        isDragging = true;
-        document.onmouseup = closeDragElement;
-        // Call a function whenever the cursor moves
-        document.onmousemove = elementDrag;
-    }
-
-    // Function to handle element drag
-    function elementDrag(e) {
-        if (!isDragging) {return;}
-        e = e || window.event;
-        e.preventDefault();
-        // Calculate the new cursor position
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        // Set the element's new position
-        element.style.top = (element.offsetTop - pos2) + "px";
-        element.style.left = (element.offsetLeft - pos1) + "px";
-    }
-
-    // Function to handle mouse up event for dragging
-    function closeDragElement() {
-        // Stop dragging when mouse button is released
-        isDragging = false;
-        document.onmouseup = null;
-        document.onmousemove = null;
-    }
-
-    // Add event listener for mouse down event to start dragging
-    element.onmousedown = dragMouseDown;
+function dragStart(e) {
+    draggedElement = this;
+    offsetX = e.clientX - draggedElement.getBoundingClientRect().left;
+    offsetY = e.clientY - draggedElement.getBoundingClientRect().top;
 }
 
-// Function to check if cursor is near the edges of an element
-function isNearEdge(e, element) {
-    const edgeDistance = 20; // Adjust this value as needed
-    const rect = element.getBoundingClientRect();
-    const x = e.clientX;
-    const y = e.clientY;
-
-    return (
-        x <= rect.left + edgeDistance ||
-        x >= rect.right - edgeDistance ||
-        y <= rect.top + edgeDistance ||
-        y >= rect.bottom - edgeDistance
-    );
+function drag(e) {
+    if (draggedElement !== null) {
+        draggedElement.style.position = 'absolute';
+        draggedElement.style.left = (e.clientX - offsetX) + 'px';
+        draggedElement.style.top = (e.clientY - offsetY) + 'px';
+    }
+    dragged_element_x = (e.clientX - offsetX) + 'px';
+    dragged_element_y = (e.clientY - offsetY) + 'px';
 }
 
-// Make the draggable element
-makeDraggableNearEdge(codeProgram);
-makeDraggableNearEdge(timerProgram);
-makeDraggableNearEdge(quizProgram);
-makeDraggableNearEdge(calcProgram);
+function dragEnd() {
+    div_converter(draggedElement);
+    draggedElement = null;
+}
 
+function div_converter (draggedElement) {
+    console.log(draggedElement.dataset.value);
+    let str = "#" + draggedElement.dataset.value;
+    let elem = document.querySelector(str);
+    elem.style.display = "block";
+    elem.style.left = dragged_element_x;
+    elem.style.top = dragged_element_y;
+}

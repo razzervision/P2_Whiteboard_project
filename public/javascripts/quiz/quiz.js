@@ -444,16 +444,16 @@ async function send_answers(answer_data, question1) {
             q.user_answer = answer_data;
         }
     }
-    const response = await fetch('/database/quiz.json', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    });
-    if (!response.ok) {
-        throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
-    }
+    // const response = await fetch('/database/quiz.json', {
+    //     method: 'PUT',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(data),
+    // });
+    // if (!response.ok) {
+    //     throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
+    // }
     const updatedData = await response.json();
     console.log(updatedData); // Log the updated data after sending answers
 }
