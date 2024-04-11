@@ -61,7 +61,6 @@ async function quiz_name_already_created(name){
             result = true;
         } 
     });
-    console.log(result);
     return result;
 }
 
@@ -97,17 +96,16 @@ creat_quiz.addEventListener("click", async() => {
 
 //Generate a new answers input when typing on the first answer text input. 
 let last_answer_input;
-
+let last_div;
 function inputHandler() {
-    create_new_answer_box(last_answer_input);
+    create_new_answer_box(last_answer_input,last_div);
 }
 
 //This function create a new answer box to let the user dynamically add more answers.
-function create_new_answer_box(delete_event_listener){
-    console.log(delete_event_listener);
+function create_new_answer_box(delete_event_listener,current_div){
+    console.log(current_div.id);
     //Remove the EventListener because the new answer is created
     if(delete_event_listener){
-        console.log("delete", delete_event_listener);
         delete_event_listener.removeEventListener("input", inputHandler);
     }
 
@@ -115,14 +113,12 @@ function create_new_answer_box(delete_event_listener){
     if(is_id_created("error_too_many_answer_inputs")){
         return 0;
     }
-    //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
-    let previous_element = document.getElementById("append_new_question").previousElementSibling;
-    previous_element = previous_element.lastElementChild;
+    let previous_element = current_div.lastElementChild;
 
     let id = -1;
     if(previous_element !== null && previous_element.className === "answer_container"){
         id = previous_element.id[16];
-    } 
+    }
     //Ensure there is a limit of answers. 
     if(id < max_answers - 1 && previous_element.id !== "error_message"){
 
@@ -159,11 +155,9 @@ function create_new_answer_box(delete_event_listener){
         answer_checkbox.id = "checkbox"+id;
         answer_checkbox.className = "answer_checkbox_class";
         question_box.appendChild(answer_checkbox);
-
-        //Identify the element before append_new_question button and insert the div before. 
-        let button = document.getElementById("append_new_question").previousElementSibling;
-        console.log(button.previousSibling.id);
-        button.appendChild(question_box);
+        console.log(current_div);
+        
+        current_div.appendChild(question_box);
 
     } else {
         //If theres is too many answers make an error message.
@@ -180,6 +174,7 @@ append_new_question.addEventListener("click", () =>{
 
 
 function create_new_question(){
+    
     //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
     let previous_element = document.getElementById("append_new_question").previousElementSibling;
     
@@ -194,7 +189,7 @@ function create_new_question(){
     var questionDiv = document.createElement('div');
     questionDiv.classList.add('question_DIV');
     questionDiv.id = 'question_DIV' + questionNumber;
-
+    last_div = questionDiv;
     // Create label for the question
     var questionLabel = document.createElement('label');
     questionLabel.htmlFor = 'question_txt_field';
@@ -217,7 +212,7 @@ function create_new_question(){
     insert_last.parentNode.insertBefore(questionDiv, insert_last);
 
     //make the answer options
-    create_new_answer_box();
+    create_new_answer_box(null,questionDiv);
 
 }
 // Call it the first time.
