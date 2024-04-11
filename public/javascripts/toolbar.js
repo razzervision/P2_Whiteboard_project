@@ -54,9 +54,12 @@ function dragEnd() {
 }
 
 function div_converter (draggedElement) {
-    let str = "#" + draggedElement.dataset.value;
-    let elem = document.querySelector(str);
-    elem.style.display = "block";
-    elem.style.left = dragged_element_x;
-    elem.style.top = dragged_element_y;
+    if (draggedElement != null) {
+        let str = "#" + draggedElement.dataset.value;
+        let elem = document.querySelector(str);
+        elem.style.display = "block";
+        elem.style.left = dragged_element_x;
+        elem.style.top = dragged_element_y;
+    }
+    
 }
