@@ -35,7 +35,7 @@ function error_message(message,placement){
     // Remove it again after 3 seconds
     setTimeout(function() {
         error.remove();
-    }, 3000);
+    }, 1000);
 }
 
 //this function return all the data from the quiz.json file.
@@ -96,9 +96,6 @@ creat_quiz.addEventListener("click", async() => {
         quiz_name.textContent = name; 
     }
 });
-
-//Count how many answers there is
-let current_answers_number = 1;
 
 //Generate a new answers input when typing on the first answer text input. 
 let last_answer_input;
@@ -170,8 +167,6 @@ function create_new_answer_box(delete_event_listener){
         console.log(button.previousSibling.id);
         button.appendChild(question_box);
 
-        //Increase current quizzes
-        current_answers_number++;
     } else {
         //If theres is too many answers make an error message.
         let button = document.getElementById("append_new_question");
@@ -184,6 +179,8 @@ const append_new_question = document.getElementById("append_new_question");
 append_new_question.addEventListener("click", () =>{
     create_new_question();
 });
+
+
 function create_new_question(){
     //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that
     let previous_element = document.getElementById("append_new_question").previousElementSibling;
@@ -225,83 +222,88 @@ function create_new_question(){
 
 }
     
-
+// Call it the first time.
 create_new_question();
 
+let upload_quiz_button = document.getElementById("upload_quiz_button");
+upload_quiz_button.addEventListener("click", get_question_and_answers);
+
+function get_question_and_answers(){
+    let numberOfQuestions = document.querySelectorAll(".question_DIV");
+    console.log(numberOfQuestions);
+}
 
 
 //Create a question and insert the data into the quiz.JSON file
-const upload_quiz_button = document.getElementById("upload_quiz_button");
-upload_quiz_button.addEventListener("click", () => {
-    //Check if the quiz name is inserted
-    let quiz_name = document.getElementById("quiz_name").textContent;
+// const upload_quiz_buttons = document.getElementById("upload_quiz_button");
+// upload_quiz_buttons.addEventListener("click", () => {
+//     //Check if the quiz name is inserted
+//     let quiz_name = document.getElementById("quiz_name").textContent;
     
-    //Get the value from the question input field
-    let question = document.getElementById("question_txt_field").value;
-    let answers_list = [];
-    let correct_answers_list = [];
+//     //Get the value from the question input field
+//     let question = document.getElementById("question_txt_field").value;
+//     let answers_list = [];
+//     let correct_answers_list = [];
     
-    //For loop for each answered inserted
-    for(let i = 0; i < current_answers_number; i++){
-        //Get the value from the specific answer input
-        let current_answer_text = document.getElementById("answer"+i).value;
-        //Check if the user has inserted any data or if its empty
-        if(current_answer_text !== ""){
-            //If there is a input it check if the answer is correct or false.
-            let current_answer_checkbox = document.getElementById("checkbox"+i).checked;
-            //push the answer and its correctness to the array which is used to insert it to a JSON file.
-            answers_list.push(current_answer_text);
-            correct_answers_list.push(current_answer_checkbox);
-        }
-    }
-    // Create an object with the data
-    const data = {
-        quiz_name: quiz_name,
-        question: question,
-        answers: answers_list,
-        correct_answers: correct_answers_list
-    };
+//     //For loop for each answered inserted
+//     for(let i = 0; i < current_answers_number; i++){
+//         //Get the value from the specific answer input
+//         let current_answer_text = document.getElementById("answer"+i).value;
+//         //Check if the user has inserted any data or if its empty
+//         if(current_answer_text !== ""){
+//             //If there is a input it check if the answer is correct or false.
+//             let current_answer_checkbox = document.getElementById("checkbox"+i).checked;
+//             //push the answer and its correctness to the array which is used to insert it to a JSON file.
+//             answers_list.push(current_answer_text);
+//             correct_answers_list.push(current_answer_checkbox);
+//         }
+//     }
+//     // Create an object with the data
+//     const data = {
+//         quiz_name: quiz_name,
+//         question: question,
+//         answers: answers_list,
+//         correct_answers: correct_answers_list
+//     };
       
-    // Send the data to the server-side script
-    fetch('/upload_quiz_data', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Data has been successfully saved:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-    //Clear questions and their answers after creating a question.
-    clear_questions();
-});
+//     // Send the data to the server-side script
+//     fetch('/upload_quiz_data', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(data),
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log('Data has been successfully saved:', data);
+//     })
+//     .catch((error) => {
+//         console.error('Error:', error);
+//     });
+//     //Clear questions and their answers after creating a question.
+//     clear_questions();
+// });
 
-//Clear questions and their answers after creating a question.
-function clear_questions(){
-    //Get all the elements with the class answer_container
-    let input_divs = document.querySelectorAll(".answer_container");
+// //Clear questions and their answers after creating a question.
+// function clear_questions(){
+//     //Get all the elements with the class answer_container
+//     let input_divs = document.querySelectorAll(".answer_container");
 
-    //Iterate trough the answer exept the first because a new answer should be able to be written
-    for (let i = 1; i < input_divs.length; i++){
-        //Remove the element from the document.
-        input_divs[i].remove();
-    }
-    //After the element is removed there is only 1 answer option
-    current_answers_number = 1;   
+//     //Iterate trough the answer exept the first because a new answer should be able to be written
+//     for (let i = 1; i < input_divs.length; i++){
+//         //Remove the element from the document.
+//         input_divs[i].remove();
+//     }  
 
-    //Remove the text from the question and answers
-    document.getElementById("answer0").value = "";
-    document.getElementById("question_txt_field").value = "";
+//     //Remove the text from the question and answers
+//     document.getElementById("answer0").value = "";
+//     document.getElementById("question_txt_field").value = "";
 
-    // generate the eventlistener so everything its back a when its runned at first
-    last_answer_input.addEventListener("input", create_new_answer_box);
+//     // generate the eventlistener so everything its back a when its runned at first
+//     last_answer_input.addEventListener("input", create_new_answer_box);
 
-}
+// }
 
 //---------------------------------------------------------------------------------------Search quizzes
 
