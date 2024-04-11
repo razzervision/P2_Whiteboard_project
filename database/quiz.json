@@ -365,15 +365,7 @@
             "quiz_name": "asda",
             "question": "ads",
             "answers": [],
-            "correct_answers": [],
-            "user_answer": []
-        },
-        {
-            "quiz_name": "",
-            "question": "",
-            "answers": [],
-            "correct_answers": [],
-            "user_answer": []
+            "correct_answers": []
         }
     ]
 }
