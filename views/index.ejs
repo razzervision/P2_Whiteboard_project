@@ -19,7 +19,7 @@
           <link rel="stylesheet" href="/stylesheets/toolbar.css">
           <link rel="stylesheet" href="/stylesheets/calc.css">
           <script defer src="/javascripts/toolbar.js"></script>
-          <script defer src="/javascripts/users.js"></script>
+          <script src="/javascripts/users.js"></script>
           <script src="/javascripts/calculator.js"></script>
           <script defer src="/javascripts/paint.js"></script>
           <script src="/javascripts/pausefish.js"></script>
@@ -52,22 +52,15 @@
 <body>
   <div class="toolbar" id="toolbar">
     <nav>
-      <menu>
-        <!-- <div class = "toolbar_element" id = "paint_element" data-value="paintProgram">Paint</div> -->
-        <div class = "toolbar_element" id = "code_editor_element" data-value="codeProgram">Code Editor</div>
-        <div class = "toolbar_element" id = "quiz_element" data-value="quizProgram">Quiz</div>
-        <div class = "toolbar_element" id = "calculator_element" data-value="calcProgram">Calc</div>
-        <div class = "toolbar_element" id = "timer_element">Timer</div>
-      </menu>
+        <menu>
+            <li id="paint_button">Paint</li>
+            <li id="code_button">Code-editor</li>
+            <li id="quiz_button">Quiz</li>
+            <li id="calc_button">Calculator</li>
+<li id="timer_button">Timer</li>
+        </menu>
     </nav>
-  </div>
-  <div id="draw_area">
-    <div id = "primary_dropzone">
-
-
-    </div>
-  </div>
-  
+</div>
 
 
 
@@ -97,6 +90,17 @@
   <div class="creat_quiz_div" id="creat_quiz_div" style="display: none;">
     <label for="quiz_name">Quiz Name:</label>
     <a id="quiz_name"></a><br><br>
+    <div class="question_DIV" id="question_DIV0">
+    <label for="question_txt_field" id="label1">Question 0:</label>
+    <input type="text" id="question_txt_field"><br>
+    <div class="answer_container" id="answer_container0">
+      <label for="answer0" class="answer_label_class">Answer 0:</label>
+      <input type="text" class="answer_text_class" id="answer0">
+      <input type="checkbox" class="answer_checkbox_class" id="checkbox0" checked="true">
+    </div>
+    </div>
+    <!-- Commented out because when you do a input a new answer box occur, but if it bad just insert it again -->
+    <!-- <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br> --> 
     <button id="append_new_question">New Question =></button><br>
     <button id="upload_quiz_button">Upload Quiz</button><br>
   </div>
