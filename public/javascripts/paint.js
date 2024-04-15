@@ -1,13 +1,15 @@
 const canvas = document.getElementById("canvas");
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
+const uploadInput = document.getElementById("uploadInput");
+const backgroundCanvas = document.getElementById("backgroundCanvas");
 let width = canvas.offsetWidth;
 let height = canvas.offsetHeight;
 canvas.width = width;
 canvas.height = height;
 const startBackground = "white";
 let draw_color = "black";
-const draw_withd = 50;
+let draw_withd = 50;
 const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0, 0, canvas.width, canvas.height);
@@ -25,7 +27,27 @@ const mouse = {
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
-canvas.addEventListener("pointerdown", function (event) {
+backgroundCanvas.addEventListener("click",uploadePicture);
+
+
+function uploadePicture(){
+    var img = new Image();
+    img.src = URL.createObjectURL(this.files[0]);
+    img.onload = function(){
+        img.width = canvas.width;
+        img.height = canvas.height;
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+    img.onerror = function(){
+        console.log("img load fail");
+    }
+};
+
+canvas.addEventListener("pointerdown", pointerDown)
+
+
+
+function pointerDown(event){
         event.preventDefault();
         mouse.x = event.clientX - canvasPosition.left;
         mouse.y = event.clientY - canvasPosition.top;
@@ -38,7 +60,7 @@ canvas.addEventListener("pointerdown", function (event) {
             color: draw_color,
             width: draw_withd
         });
-});
+};
 
 
 function onMouseMove(event) {
