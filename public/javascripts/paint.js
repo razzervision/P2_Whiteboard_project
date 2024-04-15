@@ -1,6 +1,7 @@
 const canvas = document.getElementById("canvas");
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
+const uploadInput = document.getElementById("uploadInput");
 let width = canvas.offsetWidth;
 let height = canvas.offsetHeight;
 canvas.width = width;
