@@ -2,6 +2,7 @@ const canvas = document.getElementById("canvas");
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
 const uploadInput = document.getElementById("uploadInput");
+const backgroundCanvas = document.getElementById("backgroundCanvas");
 let width = canvas.offsetWidth;
 let height = canvas.offsetHeight;
 canvas.width = width;
@@ -26,7 +27,7 @@ const mouse = {
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
-uploadInput.addEventListener("change", uploadePicture)
+backgroundCanvas.addEventListener("click",uploadePicture);
 
 
 function uploadePicture(){
