@@ -33,14 +33,20 @@ function uploadePicture(event){
     if (!file) return;
 
     const reader = new FileReader();//reads the url of the file
+    reader.readAsDataURL(file);
     reader.onload = function(event) {
         const img = new Image(); //takes the event and says its a image.
+        img.src = event.target.result;//here you set where the reader found file to be the img.src
         img.onload = function() {
+
             context.drawImage(img, 0, 0, canvas.width, canvas.height);
         };
-        img.src = event.target.result;//here you set where the reader found file to be the img.src
     };
-    reader.readAsDataURL(file);
+    //The readAsDataURL() method of the FileReader object reads the contents of the specified file 
+    //(passed as an argument) and returns the data as a data URL. This line reads the content of the file (file) selected by the
+    // user and converts it into a data URL. Once the file is read, the onload event of the 
+    //FileReader object will be triggered, and you can access the data URL containing the file's 
+    //contents using event.target.result.
 };
 
 
