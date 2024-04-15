@@ -35,13 +35,13 @@ function uploadePicture(){
     var img = new Image();
     img.src = URL.createObjectURL(this.files[0]);
     img.onload = function(){
-        if(imgheightButton.value === null || imgwithdButton.value === null){
+        if(imgheightButton.value>= canvas.height || imgwithdButton.value>= canvas.width){
             img.width = canvas.width;
             img.height = canvas.height;  
-        }else if(imgheightButton.value === null){
+        }else if(imgheightButton.value>= canvas.height){
             img.height = canvas.height;
             img.width = imgwithdButton.value;
-        }else if(imgwithdButton.value === null){
+        }else if(imgwithdButton.value>= canvas.width){
             img.width = canvas.width;
             img.height = imgheightButton.value;
         }else{
