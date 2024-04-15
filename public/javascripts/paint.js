@@ -48,9 +48,8 @@ canvas.addEventListener("pointerdown", function (event) {
         color: draw_color,
         width: draw_withd
     });
-    }
-    );
 });
+
 
 function onMouseMove(event) {
     mouse.x = event.clientX - canvasPosition.left;
