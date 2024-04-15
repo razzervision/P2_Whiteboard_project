@@ -35,7 +35,7 @@ function uploadePicture(){
     var img = new Image();
     img.src = URL.createObjectURL(this.files[0]);
     img.onload = function(){
-        if(imgheightButton.value == null || imgwithdButton.value == null){
+        if(imgheightButton.value === null || imgwithdButton.value === null){
             img.width = canvas.width;
             img.height = canvas.height;  
         }else if(imgheightButton.value === null){
