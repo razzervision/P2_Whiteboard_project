@@ -2,6 +2,8 @@ const canvas = document.getElementById("canvas");
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
 const uploadInput = document.getElementById("uploadInput");
+const imgheightButton =document.getElementById("Imgheight");
+const imgwithdButton = document.getElementById("Imgwithd");
 let width = canvas.offsetWidth;
 let height = canvas.offsetHeight;
 canvas.width = width;
@@ -33,20 +35,20 @@ function uploadePicture(){
     var img = new Image();
     img.src = URL.createObjectURL(this.files[0]);
     img.onload = function(){
-        if(document.getElementById("Imgheight") === null || document.getElementById("Imgwithd")=== null){
+        if(imgheightButton.value == null || imgwithdButton.value == null){
             img.width = canvas.width;
             img.height = canvas.height;  
-        }else if(document.getElementById("Imgheight") === null){
+        }else if(imgheightButton.value === null){
             img.height = canvas.height;
-            img.width = document.getElementById("Imgwithd").value;
-        }else if(document.getElementById("Imgwithd") === null){
+            img.width = imgwithdButton.value;
+        }else if(imgwithdButton.value === null){
             img.width = canvas.width;
-            img.height = document.getElementById("Imgheight").value;
+            img.height = imgheightButton.value;
         }else{
-            img.height = document.getElementById("Imgwithd").value;
-            img.width = document.getElementById("Imgwithd").value;
+            img.height = imgheightButton.value;
+            img.width = imgwithdButton.value;
         }
-        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        context.drawImage(img, 0, 0, img.width, img.height);
     }
     img.onerror = function(){
         console.log("img load fail");
