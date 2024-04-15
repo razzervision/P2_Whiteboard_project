@@ -33,8 +33,8 @@ function uploadePicture(event){
     var img = new Image();
     img.src = URL.createObjectURL(this.files[0]);
     img.onload = function(){
-        canvas.width = img.width;
-        canvas.height = img.height;
+        img.width = canvas.width;
+        img.height = canvas.height;
         context.drawImage(img,0,0);
     }
     img.onerror = function(){
