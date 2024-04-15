@@ -31,23 +31,16 @@ uploadInput.addEventListener("onchange", uploadePicture)
 
 function uploadePicture(event){
     var img = new Image();
-    img.onload = draw;
-    img.onerror = failed;
     img.src = URL.createObjectURL(this.files[0]);
+    img.onload = function(){
+        canvas.width = img.width;
+        canvas.height = img.height;
+        context.drawImage(img,0,0);
+    }
+    img.onerror = function(){
+        console.log("img load fail");
+    }
   };
-  function draw() {
-    img.width = canvas.width;
-    img.height = canvas.height;
-    context.drawImage(img, 0,0);
-  }
-  function failed() {
-    console.error("The provided file couldn't be loaded as an Image media");
-  
-};
-
-
-
-
 
 canvas.addEventListener("pointerdown", pointerDown)
 
