@@ -53,9 +53,9 @@
 
   <div class="toolbar" id="toolbar">
     <nav>
-      <menu>
-        <div class = "toolbar_element" id = "paint_element" data-value="paintProgram">Paint</div>
-        <div class = "toolbar_element" id = "code_editor_element" data-value="codeProgram">Code Editor</div>
+      <menu id="toolbar_menu">
+        <div class = "toolbar_element" id = "paint_element" data-value="paintProgram" draggable="true">Paint</div>
+        <div class = "toolbar_element" id = "code_editor_element" data-value="codeProgram" draggable="true">Code Editor</div>
         <div class = "toolbar_element" id = "quiz_element" data-value="quizProgram">Quiz</div>
         <div class = "toolbar_element" id = "calculator_element" data-value="calcProgram">Calc</div>
         <div class = "toolbar_element" id = "timer_element">Timer</div>
@@ -224,15 +224,16 @@
    </div>
     <!--Moved a </div> from here to under the calc, since it does not pertain to this code-->
 
-    <div id="sc" class="stickyclock"> <button> 
-      <div class="clock"> 
-        <span id="hrs">00</span>
-        <span>:</span>
-        <span id="min">00</span>
-        <span>:</span>
-        <span id="sec">00</span>
-      </div> 
-     </div> </button>
+    <div id="sc" class="stickyclock"> 
+        <div class="clock"> 
+          <span id="hrs">00</span>
+          <span>:</span>
+          <span id="min">00</span>
+          <span>:</span>
+          <span id="sec">00</span>
+        </div> 
+     </div> 
+    
 <script src="/javascripts/timer.js"></script>
 <script src="https://cdn.socket.io/4.2.0/socket.io.min.js"></script>
 </body>
