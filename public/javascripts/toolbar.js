@@ -8,16 +8,60 @@ const toolbar = document.getElementById("toolbar");
 
 const primary_dropzone = document.querySelector("#primary_dropzone");
 
+const paintProgram = document.querySelector("#paintProgram");
+
+paintProgram.style.display = "none";
 codeProgram.style.display = "none";
 quizProgram.style.display = "none";
 calcProgram.style.display = "none";
 timerProgram.style.display = "none";
-paintProgram.style.display = "none";
+
+// let paint_program_active = true;
+// let code_program_active = false;
+// let quiz_program_active = false;
+// let calc_program_active = false;
+// let timer_program_active = false;
+
+let programs_active = [true, false, false, false, false];
+
+class programs {
+    constructor(name, value) {
+      this.name = name;
+      this.value = value;
+    }
+  
+    // Method to update the value
+    updateValue(newValue) {
+      this.value = newValue;
+    }
+  
+    // Method to get the value
+    getValue() {
+      return this.value;
+    }
+}
+
+
+const programs_active_class = [
+    new programs("paint_program_active", true),
+    new programs("code_program_active", false),
+    new programs("quiz_program_active", false),
+    new programs("calc_program_active", false),
+    new programs("timer_program_active", false)
+];
+
+
+// let paint_program_active = new programs("paint_program_active", true);
+// let code_program_active = new programs("code_program_active", false);
+// let quiz_program_active = new programs("quiz_program_active", false);
+// let calc_program_active = new programs("calc_program_active", false);
+// let timer_program_active = new programs("timer_program_active", false);
+
 
 let dragged_element_x, dragged_element_y = 0;
 
 primary_dropzone.appendChild(document.querySelector("#paintProgram"));
-document.querySelector("#paintProgram").style.display = "block";
+paintProgram.style.display = "block";
 
 
 document.querySelectorAll('.toolbar_element').forEach(item => {
@@ -51,6 +95,7 @@ function drag(e) {
 function dragEnd() {
     div_converter(draggedElement);
     draggedElement = null;
+    split_screen();
 }
 
 function div_converter (draggedElement) {
@@ -58,22 +103,22 @@ function div_converter (draggedElement) {
         let str = "#" + draggedElement.dataset.value;
         let elem = document.querySelector(str);
         elem.style.display = "block";
-        create_new_dropzone(1, elem);
     }   
-
 }
 
-function create_new_dropzone (live_features, elem) {
-    let new_dropzone = document.createElement("div")
-    let user_friendly_id = live_features + 1;
-    new_dropzone.id = "dropzone_" + user_friendly_id;
-    if (live_features == 1) {
-        primary_dropzone.appendChild(new_dropzone);
-        new_dropzone.style.height = "33%";
-        new_dropzone.style.width = "100%";
-        elem.style.height = "33%";
-        elem.style.width = "100%";
-        new_dropzone.appendChild(elem);
-        
-    }
+function check_active_programs () {
+    let i = 0;
+    let j = 0;
+    programs_active.forEach(e => {
+        if (programs_active[i] == true) {
+            j++;
+        }
+        i++;
+    });
+    return j;
+}
+
+function split_screen () {
+    console.log(check_active_programs());
+
 }

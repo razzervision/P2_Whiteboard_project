@@ -5,8 +5,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  position: absolute;
   overflow: auto; 
+  position: fixed;
   padding: 20px;
   margin-bottom: 20px;
 }
