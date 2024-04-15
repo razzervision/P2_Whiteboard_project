@@ -22,12 +22,6 @@ const mouse = {
     y: 0
 };
 
-canvas.addEventListener("mousemove", function(event) {
-    mouse.x = event.clientX;
-    mouse.y = event.clientY;
-    // Now mouse.x and mouse.y contain the current mouse coordinates
-});
-
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
