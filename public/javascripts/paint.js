@@ -35,7 +35,7 @@ function uploadePicture(event){
     img.onload = function(){
         img.width = canvas.width;
         img.height = canvas.height;
-        context.drawImage(img,0,0);
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
     }
     img.onerror = function(){
         console.log("img load fail");
