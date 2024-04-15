@@ -12,7 +12,6 @@ const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0, 0, canvas.width, canvas.height);
 let canvasPosition = canvas.getBoundingClientRect();
-const drawing = true;
 let undoarray = [];
 let undoindex = -1;
 const serverurl = document.location.origin;
@@ -33,7 +32,6 @@ clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
 canvas.addEventListener("pointerdown", function (event) {
-    if(drawing){
         event.preventDefault();
         mouse.x = event.clientX - canvasPosition.left;
         mouse.y = event.clientY - canvasPosition.top;
@@ -46,9 +44,6 @@ canvas.addEventListener("pointerdown", function (event) {
             color: draw_color,
             width: draw_withd
         });
-    }
-
-    
 });
 
 
