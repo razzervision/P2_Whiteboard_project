@@ -7,7 +7,7 @@ canvas.width = width;
 canvas.height = height;
 const startBackground = "white";
 let draw_color = "black";
-const draw_withd = 50;
+let draw_withd = 50;
 const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0, 0, canvas.width, canvas.height);
