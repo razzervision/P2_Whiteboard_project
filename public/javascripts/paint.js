@@ -40,14 +40,16 @@ canvas.addEventListener("pointerdown", function (event) {
         dot(event);
         canvas.addEventListener("pointermove", onMouseMove);
         canvas.addEventListener("pointerup", removeMouseMove);
+        
+        socket.emit("draw", {
+            x: mouse.x,
+            y: mouse.y,
+            color: draw_color,
+            width: draw_withd
+        });
     }
 
-    socket.emit("draw", {
-        x: mouse.x,
-        y: mouse.y,
-        color: draw_color,
-        width: draw_withd
-    });
+    
 });
 
 
