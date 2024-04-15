@@ -57,6 +57,7 @@ function removeMouseMove() {
     undoarray.push(context.getImageData(0, 0, canvas.width, canvas.height));
     undoindex += 1;
     canvas.removeEventListener("pointermove", onMouseMove);
+    context.closePath();
 }
 
 function dot(input) {
