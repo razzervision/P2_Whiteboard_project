@@ -38,7 +38,7 @@ function uploadePicture(event){
   function draw() {
     canvas.width = this.width;
     canvas.height = this.height;
-    ctx.drawImage(this, 0,0);
+    context.drawImage(this, 0,0);
   }
   function failed() {
     console.error("The provided file couldn't be loaded as an Image media");
