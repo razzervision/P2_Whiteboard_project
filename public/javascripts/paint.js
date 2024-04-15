@@ -2,7 +2,6 @@ const canvas = document.getElementById("canvas");
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
 const uploadInput = document.getElementById("uploadInput");
-const backgroundCanvas = document.getElementById("backgroundCanvas");
 let width = canvas.offsetWidth;
 let height = canvas.offsetHeight;
 canvas.width = width;
@@ -27,15 +26,26 @@ const mouse = {
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
-backgroundCanvas.addEventListener("click", uploadePicture(uploadInput));
+uploadInput.addEventListener("change", uploadePicture);
 
 
 function uploadePicture(){
     var img = new Image();
     img.src = URL.createObjectURL(this.files[0]);
     img.onload = function(){
-        img.width = canvas.width;
-        img.height = canvas.height;
+        if(document.getElementById("Imgheight") === null || document.getElementById("Imgwithd")=== null){
+            img.width = canvas.width;
+            img.height = canvas.height;  
+        }else if(document.getElementById("Imgheight") === null){
+            img.height = canvas.height;
+            img.width = document.getElementById("Imgwithd").value;
+        }else if(document.getElementById("Imgwithd") === null){
+            img.width = canvas.width;
+            img.height = document.getElementById("Imgheight").value;
+        }else{
+            img.height = document.getElementById("Imgwithd").value;
+            img.width = document.getElementById("Imgwithd").value;
+        }
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
     }
     img.onerror = function(){
