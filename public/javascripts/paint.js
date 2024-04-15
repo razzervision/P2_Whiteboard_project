@@ -29,7 +29,7 @@ undoB.addEventListener("click", undo);
 uploadInput.addEventListener("change", uploadePicture)
 
 
-function uploadePicture(event){
+function uploadePicture(){
     var img = new Image();
     img.src = URL.createObjectURL(this.files[0]);
     img.onload = function(){
