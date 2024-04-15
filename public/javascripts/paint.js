@@ -25,7 +25,31 @@ const mouse = {
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
-canvas.addEventListener("pointerdown", function (event) {
+uploadInput.addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+
+
+
+
+canvas.addEventListener("pointerdown", pointerDown)
+
+
+
+function pointerDown(event){
         event.preventDefault();
         mouse.x = event.clientX - canvasPosition.left;
         mouse.y = event.clientY - canvasPosition.top;
@@ -38,7 +62,7 @@ canvas.addEventListener("pointerdown", function (event) {
             color: draw_color,
             width: draw_withd
         });
-});
+};
 
 
 function onMouseMove(event) {
