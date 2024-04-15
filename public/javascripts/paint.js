@@ -25,21 +25,23 @@ const mouse = {
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
-uploadInput.addEventListener("change", function(event) {
+uploadInput.addEventListener("change", uploadePicture)
+
+
+function uploadePicture(event){
     const file = event.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
+    const reader = new FileReader();//reads the url of the file
     reader.onload = function(event) {
-        const img = new Image();
+        const img = new Image(); //takes the event and says its a image.
         img.onload = function() {
-            context.clearRect(0, 0, canvas.width, canvas.height);
             context.drawImage(img, 0, 0, canvas.width, canvas.height);
         };
-        img.src = event.target.result;
+        img.src = event.target.result;//here you set where the reader found file to be the img.src
     };
     reader.readAsDataURL(file);
-});
+};
 
 
 
