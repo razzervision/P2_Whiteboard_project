@@ -40,7 +40,6 @@ canvas.addEventListener("pointerdown", function (event) {
         dot(event);
         canvas.addEventListener("pointermove", onMouseMove);
         canvas.addEventListener("pointerup", removeMouseMove);
-        
         socket.emit("draw", {
             x: mouse.x,
             y: mouse.y,
@@ -57,6 +56,12 @@ function onMouseMove(event) {
     mouse.x = event.clientX - canvasPosition.left;
     mouse.y = event.clientY - canvasPosition.top;
     draw();
+    socket.emit("draw", {
+        x: mouse.x,
+        y: mouse.y,
+        color: draw_color,
+        width: draw_withd
+    });
 }
 
 function removeMouseMove() {
@@ -70,6 +75,8 @@ function dot(input) {
     context.moveTo(mouse.x, mouse.y);
     console.log(mouse.x, mouse.y);
     draw();
+
+
 }
 
 function draw() {
@@ -122,6 +129,7 @@ function changeColor(element) {
 }
 
 socket.on("draw", function (data) {
+    context.moveTo(data.x, data.y);
     context.strokeStyle = data.color;
     context.lineWidth = data.width;
     context.lineCap = "round";
