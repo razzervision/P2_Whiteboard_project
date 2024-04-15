@@ -1,28 +1,26 @@
 const canvas = document.getElementById("canvas");
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
-const uploadInput = document.getElementById("uploadInput");
 let width = canvas.offsetWidth;
 let height = canvas.offsetHeight;
 canvas.width = width;
 canvas.height = height;
 const startBackground = "white";
 let draw_color = "black";
-let draw_withd = 50;
+const draw_withd = 50;
 const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0, 0, canvas.width, canvas.height);
 let canvasPosition = canvas.getBoundingClientRect();
-let firstClick = { x: 0, y: 0 };
-let secondClick = { x: 0, y: 0 };
-let clickCount = 0;
-var drawing = true;
+const drawing = true;
 let undoarray = [];
 let undoindex = -1;
+const serverurl = document.location.origin;
+const socket = io(serverurl);
 
 const mouse = {
     x: 0,
-    y: 0,
+    y: 0
 };
 
 canvas.addEventListener("mousemove", function(event) {
@@ -34,16 +32,25 @@ canvas.addEventListener("mousemove", function(event) {
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
-    canvas.addEventListener("pointerdown", function (event) {
-        if(drawing){
-            event.preventDefault();
-            mouse.x = event.clientX - canvasPosition.left;
-            mouse.y = event.clientY - canvasPosition.top;
-            dot(event);
-            canvas.addEventListener("pointermove", onMouseMove);
-            canvas.addEventListener("pointerup", removeMouseMove);
-        }
+canvas.addEventListener("pointerdown", function (event) {
+    if(drawing){
+        event.preventDefault();
+        mouse.x = event.clientX - canvasPosition.left;
+        mouse.y = event.clientY - canvasPosition.top;
+        dot(event);
+        canvas.addEventListener("pointermove", onMouseMove);
+        canvas.addEventListener("pointerup", removeMouseMove);
+    }
+
+    socket.emit("draw", {
+        x: mouse.x,
+        y: mouse.y,
+        color: draw_color,
+        width: draw_withd
     });
+    }
+    );
+});
 
 function onMouseMove(event) {
     mouse.x = event.clientX - canvasPosition.left;
@@ -80,6 +87,7 @@ function clearCanvas() {
 
     undoarray = [];
     undoindex = -1;
+    socket.emit("clearCanvas");
 }
 
 function undo() {
@@ -111,3 +119,16 @@ window.addEventListener("resize", function () {
 function changeColor(element) {
     draw_color = element.style.backgroundColor;
 }
+
+socket.on("draw", function (data) {
+    context.strokeStyle = data.color;
+    context.lineWidth = data.width;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+    context.lineTo(data.x, data.y);
+    context.stroke();
+});
+
+socket.on("clearCanvas", function () {
+    clearCanvas();
+});
