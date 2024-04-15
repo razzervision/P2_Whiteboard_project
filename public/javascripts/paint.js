@@ -26,7 +26,7 @@ const mouse = {
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
-uploadInput.addEventListener("onchange", uploadePicture)
+uploadInput.addEventListener("change", uploadePicture)
 
 
 function uploadePicture(event){
@@ -40,7 +40,7 @@ function uploadePicture(event){
     img.onerror = function(){
         console.log("img load fail");
     }
-  };
+};
 
 canvas.addEventListener("pointerdown", pointerDown)
 
