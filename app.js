@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const fs = require("fs");
+const sequelize = require("./database/database");
 const app = express();
 
 
@@ -22,15 +23,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 
 //return the json file to the client.
-app.get('/api/quiz-data', (req, res) => {
+app.get("/api/quiz-data", (req, res) => {
     try {
-      const data = fs.readFileSync(path.join(__dirname, '/database/quiz.json'), 'utf8');
-      res.json(JSON.parse(data));
+        const data = fs.readFileSync(path.join(__dirname, "/database/quiz.json"), "utf8");
+        res.json(JSON.parse(data));
     } catch (error) {
-      console.error('Error fetching quiz data:', error);
-      res.status(500).send('Internal Server Error');
+        console.error("Error fetching quiz data:", error);
+        res.status(500).send("Internal Server Error");
     }
-  });
+});
   
 
 //Upload quiz data into the database
@@ -92,6 +93,14 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render("error");
 });
+
+// Sync the database
+sequelize.sync().then(() => {
+    console.log("Database synced successfully.");
+}).catch((error) => {
+    console.error("Error syncing database:", error);
+});
+
 
 module.exports = app;
 
