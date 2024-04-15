@@ -26,7 +26,7 @@ const mouse = {
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
-uploadInput.addEventListener("change", uploadePicture)
+uploadInput.addEventListener("onchange", uploadePicture)
 
 
 function uploadePicture(event){
