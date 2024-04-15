@@ -28,12 +28,12 @@ function error_message(message,placement){
     error.style.color = "red";
 
     //Identify the element after answer inputs. 
-    placement.parentNode.insertBefore(error, placement);
+    placement.appendChild(error);
 
     // Remove it again after 3 seconds
     setTimeout(function() {
         error.remove();
-    }, 1000);
+    }, 5000);
 }
 
 //this function return all the data from the quiz.json file.
@@ -95,15 +95,15 @@ creat_quiz.addEventListener("click", async() => {
 });
 
 //Generate a new answers input when typing on the first answer text input. 
-let last_answer_input;
-let last_div;
-function inputHandler() {
-    create_new_answer_box(last_answer_input,last_div);
+function inputHandler(event) {
+    let elementThatTriggeredEvent = event.target;
+    let DivThatTriggeredEvent = elementThatTriggeredEvent.parentNode.parentNode;
+
+    create_new_answer_box(elementThatTriggeredEvent,DivThatTriggeredEvent);
 }
 
 //This function create a new answer box to let the user dynamically add more answers.
 function create_new_answer_box(delete_event_listener,current_div){
-    console.log(current_div.id);
     //Remove the EventListener because the new answer is created
     if(delete_event_listener){
         delete_event_listener.removeEventListener("input", inputHandler);
@@ -114,9 +114,8 @@ function create_new_answer_box(delete_event_listener,current_div){
         return 0;
     }
     let previous_element = current_div.lastElementChild;
-
     let id = -1;
-    if(previous_element !== null && previous_element.className === "answer_container"){
+    if(previous_element.className === "answer_container"){
         id = previous_element.id[16];
     }
     //Ensure there is a limit of answers. 
@@ -155,14 +154,12 @@ function create_new_answer_box(delete_event_listener,current_div){
         answer_checkbox.id = "checkbox"+id;
         answer_checkbox.className = "answer_checkbox_class";
         question_box.appendChild(answer_checkbox);
-        console.log(current_div);
         
         current_div.appendChild(question_box);
 
     } else {
         //If theres is too many answers make an error message.
-        let button = document.getElementById("append_new_question");
-        error_message("You can max insert " + max_answers + " answers",button);
+        error_message("You can max insert " + max_answers + " answers",current_div);
     }
 }
 
@@ -225,7 +222,7 @@ function get_question_and_answers(){
     let quiz_name = document.getElementById("quiz_name").textContent;
     console.log(quiz_name);
     let numberOfQuestions = document.querySelectorAll(".question_DIV");
-    numberOfQuestions.forEach(q =>{
+    numberOfQuestions.forEach((q, index) =>{
         let question = q.querySelector(".question_txt_field_class").value;
         
         let answers = [];
@@ -237,9 +234,9 @@ function get_question_and_answers(){
             let answer_checkbox = a.querySelector(".answer_checkbox_class").checked;
             correct_answers.push(answer_checkbox)
         });
-        console.log(question);
-        console.log(answers);
-        console.log(correct_answers);
+        console.log(index,question);
+        console.log(index,answers);
+        console.log(index,correct_answers);
     });
 }
 
@@ -467,7 +464,7 @@ async function send_answers(answer_data, question1) {
     //     throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
     // }
     const updatedData = await response.json();
-    console.log(updatedData); // Log the updated data after sending answers
+    // console.log(updatedData); // Log the updated data after sending answers
 }
 
 async function print_feedback (quiz_id) {

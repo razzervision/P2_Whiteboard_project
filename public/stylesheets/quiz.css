@@ -6,7 +6,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   overflow: auto; 
-  position: fixed;
+  position: absolute;
   padding: 20px;
   margin-bottom: 20px;
 }

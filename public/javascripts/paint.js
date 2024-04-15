@@ -1,18 +1,20 @@
 const canvas = document.getElementById("canvas");
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
+const uploadInput = document.getElementById("uploadInput");
+const imgheightButton =document.getElementById("Imgheight");
+const imgwithdButton = document.getElementById("Imgwithd");
 let width = canvas.offsetWidth;
 let height = canvas.offsetHeight;
 canvas.width = width;
 canvas.height = height;
 const startBackground = "white";
 let draw_color = "black";
-const draw_withd = 50;
+let draw_withd = 50;
 const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0, 0, canvas.width, canvas.height);
 let canvasPosition = canvas.getBoundingClientRect();
-const drawing = true;
 let undoarray = [];
 let undoindex = -1;
 const serverurl = document.location.origin;
@@ -23,17 +25,41 @@ const mouse = {
     y: 0
 };
 
-canvas.addEventListener("mousemove", function(event) {
-    mouse.x = event.clientX;
-    mouse.y = event.clientY;
-    // Now mouse.x and mouse.y contain the current mouse coordinates
-});
-
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 
-canvas.addEventListener("pointerdown", function (event) {
-    if(drawing){
+uploadInput.addEventListener("change", uploadePicture);
+
+
+function uploadePicture(){
+    var img = new Image();
+    img.src = URL.createObjectURL(this.files[0]);
+    img.onload = function(){
+        if(imgheightButton.value>= canvas.height || imgwithdButton.value>= canvas.width){
+            img.width = canvas.width;
+            img.height = canvas.height;  
+        }else if(imgheightButton.value>= canvas.height){
+            img.height = canvas.height;
+            img.width = imgwithdButton.value;
+        }else if(imgwithdButton.value>= canvas.width){
+            img.width = canvas.width;
+            img.height = imgheightButton.value;
+        }else{
+            img.height = imgheightButton.value;
+            img.width = imgwithdButton.value;
+        }
+        context.drawImage(img, 0, 0, img.width, img.height);
+    }
+    img.onerror = function(){
+        console.log("img load fail");
+    }
+};
+
+canvas.addEventListener("pointerdown", pointerDown)
+
+
+
+function pointerDown(event){
         event.preventDefault();
         mouse.x = event.clientX - canvasPosition.left;
         mouse.y = event.clientY - canvasPosition.top;
@@ -46,10 +72,7 @@ canvas.addEventListener("pointerdown", function (event) {
             color: draw_color,
             width: draw_withd
         });
-    }
-
-    
-});
+};
 
 
 function onMouseMove(event) {
@@ -68,6 +91,7 @@ function removeMouseMove() {
     undoarray.push(context.getImageData(0, 0, canvas.width, canvas.height));
     undoindex += 1;
     canvas.removeEventListener("pointermove", onMouseMove);
+    context.closePath();
 }
 
 function dot(input) {
