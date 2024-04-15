@@ -14,7 +14,7 @@ paintProgram.style.display = "none";
 codeProgram.style.display = "none";
 quizProgram.style.display = "none";
 calcProgram.style.display = "none";
-timerProgram.style.display = "none";
+timerProgram.style.display = "block";
 
 // let paint_program_active = true;
 // let code_program_active = false;
@@ -22,22 +22,22 @@ timerProgram.style.display = "none";
 // let calc_program_active = false;
 // let timer_program_active = false;
 
-let programs_active = [true, false, false, false, false];
+const programs_active = [true, false, false, false, false];
 
 class programs {
     constructor(name, value) {
-      this.name = name;
-      this.value = value;
+        this.name = name;
+        this.value = value;
     }
   
     // Method to update the value
     updateValue(newValue) {
-      this.value = newValue;
+        this.value = newValue;
     }
   
     // Method to get the value
     getValue() {
-      return this.value;
+        return this.value;
     }
 }
 
@@ -64,13 +64,13 @@ primary_dropzone.appendChild(document.querySelector("#paintProgram"));
 paintProgram.style.display = "block";
 
 
-document.querySelectorAll('.toolbar_element').forEach(item => {
-    item.addEventListener('mousedown', dragStart);
-    item.addEventListener('dragstart', function(e) { e.preventDefault(); });
+document.querySelectorAll(".toolbar_element").forEach(item => {
+    item.addEventListener("mousedown", dragStart);
+    item.addEventListener("dragstart", function(e) { e.preventDefault(); });
 });
 
-document.addEventListener('mousemove', drag);
-document.addEventListener('mouseup', dragEnd);
+document.addEventListener("mousemove", drag);
+document.addEventListener("mouseup", dragEnd);
 
 let draggedElement = null;
 let offsetX = 0;
@@ -84,12 +84,12 @@ function dragStart(e) {
 
 function drag(e) {
     if (draggedElement !== null) {
-        draggedElement.style.position = 'absolute';
-        draggedElement.style.left = (e.clientX - offsetX) + 'px';
-        draggedElement.style.top = (e.clientY - offsetY) + 'px';
+        draggedElement.style.position = "absolute";
+        draggedElement.style.left = (e.clientX - offsetX) + "px";
+        draggedElement.style.top = (e.clientY - offsetY) + "px";
     }
-    dragged_element_x = (e.clientX - offsetX) + 'px';
-    dragged_element_y = (e.clientY - offsetY) + 'px';
+    dragged_element_x = (e.clientX - offsetX) + "px";
+    dragged_element_y = (e.clientY - offsetY) + "px";
 }
 
 function dragEnd() {
@@ -100,8 +100,8 @@ function dragEnd() {
 
 function div_converter (draggedElement) {
     if (draggedElement != null) {
-        let str = "#" + draggedElement.dataset.value;
-        let elem = document.querySelector(str);
+        const str = "#" + draggedElement.dataset.value;
+        const elem = document.querySelector(str);
         elem.style.display = "block";
     }   
 }
