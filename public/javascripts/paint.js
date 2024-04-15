@@ -36,9 +36,9 @@ function uploadePicture(event){
     img.src = URL.createObjectURL(this.files[0]);
   };
   function draw() {
-    canvas.width = this.width;
-    canvas.height = this.height;
-    context.drawImage(this, 0,0);
+    img.width = canvas.width;
+    img.height = canvas.height;
+    context.drawImage(img, 0,0);
   }
   function failed() {
     console.error("The provided file couldn't be loaded as an Image media");
