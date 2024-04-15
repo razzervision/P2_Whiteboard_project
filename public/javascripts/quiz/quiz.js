@@ -118,7 +118,6 @@ function create_new_answer_box(delete_event_listener,current_div){
     if(previous_element.className === "answer_container"){
         id = previous_element.id[16];
     }
-    console.log("current div",current_div.id);
     //Ensure there is a limit of answers. 
     if(id < max_answers - 1 && previous_element.id !== "error_message"){
 
@@ -223,7 +222,7 @@ function get_question_and_answers(){
     let quiz_name = document.getElementById("quiz_name").textContent;
     console.log(quiz_name);
     let numberOfQuestions = document.querySelectorAll(".question_DIV");
-    numberOfQuestions.forEach(q =>{
+    numberOfQuestions.forEach((q, index) =>{
         let question = q.querySelector(".question_txt_field_class").value;
         
         let answers = [];
@@ -235,9 +234,9 @@ function get_question_and_answers(){
             let answer_checkbox = a.querySelector(".answer_checkbox_class").checked;
             correct_answers.push(answer_checkbox)
         });
-        console.log(question);
-        console.log(answers);
-        console.log(correct_answers);
+        console.log(index,question);
+        console.log(index,answers);
+        console.log(index,correct_answers);
     });
 }
 
