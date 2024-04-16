@@ -219,7 +219,7 @@ uploadQuizButton.addEventListener("click", get_question_and_answers);
 
 function get_question_and_answers(){
     let quizName = document.getElementById("quiz_name").textContent;
-    console.log(quizName);
+    // console.log(quizName);
     let numberOfQuestions = document.querySelectorAll(".question_DIV");
     numberOfQuestions.forEach((q, index) =>{
         let question = q.querySelector(".question_txt_field_class").value;
@@ -233,10 +233,33 @@ function get_question_and_answers(){
             let answerCheckbox = a.querySelector(".answer_checkbox_class").checked;
             correctAnswers.push(answerCheckbox)
         });
-        console.log(index,question);
-        console.log(index,answers);
-        console.log(index,correctAnswers);
-    });
+        // console.log(index,question);
+        // console.log(index,answers);
+        // console.log(index,correctAnswers);
+        const data = {
+            quizName: quizName,
+            question: question,
+            answers: answers,
+            correctAnswers: correctAnswers
+        };
+        // Send the data to the server-side script
+        fetch('/uploadQuiz', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data has been successfully saved:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        //Clear questions and their answers after creating a question.
+        // clear_questions();
+        });   
 }
 
 
