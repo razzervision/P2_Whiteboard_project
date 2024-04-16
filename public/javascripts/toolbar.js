@@ -1,24 +1,24 @@
-const paint_element = document.querySelector("#paint_element");
-const code_editor_element = document.querySelector("#code_editor_element");
-const quiz_element = document.querySelector("#quiz_element");
-const calculator_element = document.querySelector("#calculator_element");
-const timer_element = document.querySelector("#timer_element");
+const paintElement = document.querySelector("#paintElement");
+const codeEditorElement = document.querySelector("#codeEditorElement");
+const quizElement = document.querySelector("#quizElement");
+const calculatorElement = document.querySelector("#calculatorElement");
+const timerElement = document.querySelector("#timerElement");
 
 const toolbar = document.getElementById("toolbar");
 
-const primary_dropzone = document.querySelector("#primary_dropzone");
+const primaryDropzone = document.querySelector("#primaryDropzone");
 
-const paintProgram_id = document.querySelector("#paintProgram");
-const codeProgram_id = document.querySelector("#codeProgram");
-const quizProgram_id = document.querySelector("#quizProgram");
-const calcProgram_id = document.querySelector("#calcProgram");
-const timerProgram_id = document.querySelector("#timerProgram");
+const paintProgramId = document.querySelector("#paintProgram");
+const codeProgramId = document.querySelector("#codeProgram");
+const quizProgramId = document.querySelector("#quizProgram");
+const calcProgramId = document.querySelector("#calcProgram");
+const timerProgramId = document.querySelector("#timerProgram");
 
-paintProgram_id.style.display = "none";
-codeProgram_id.style.display = "none";
-quizProgram_id.style.display = "none";
-calcProgram_id.style.display = "none";
-timerProgram_id.style.display = "block";
+paintProgramId.style.display = "none";
+codeProgramId.style.display = "none";
+quizProgramId.style.display = "none";
+calcProgramId.style.display = "none";
+timerProgramId.style.display = "block";
 
 class Program {
     constructor(name, value, width, height, top, left, isActive = false) {
@@ -41,19 +41,18 @@ const timerProgram = new Program("Timer Program", "timerProgram", 0, 0, 0, 0);
 // An array to hold all program instances
 const programs = [paintProgram, codeProgram, quizProgram, calcProgram, timerProgram];
 
-let dragged_element_x, dragged_element_y = 0;
+let draggedElementX, draggedElementY = 0;
 
-primary_dropzone.appendChild(document.querySelector("#paintProgram"));
-paintProgram_id.style.display = "block";
+primaryDropzone.appendChild(document.querySelector("#paintProgram"));
+paintProgramId.style.display = "block";
 
 
-document.querySelectorAll('.toolbar_element').forEach(item => {
-    item.addEventListener('mousedown', dragStart);
-    item.addEventListener('dragstart', function(e) { e.preventDefault(); });
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', dragEnd);
+document.querySelectorAll(".toolbarElement").forEach(item => {
+    item.addEventListener("mousedown", dragStart);
+    item.addEventListener("dragstart", function(e) { e.preventDefault(); });
+    document.addEventListener("mousemove", drag);
+    document.addEventListener("mouseup", dragEnd);
 });
-
 
 
 let draggedElement = null;
@@ -65,26 +64,26 @@ function dragStart(e) {
 
     offsetX = e.clientX - draggedElement.getBoundingClientRect().left;
     offsetY = e.clientY - draggedElement.getBoundingClientRect().top;
-    console.log(check_active_programs());
+    console.log(checkActivePrograms());
 }
 
 function drag(e) {
     if (draggedElement !== null) {
-        draggedElement.style.position = 'absolute';
-        draggedElement.style.left = (e.clientX - offsetX) + 'px';
-        draggedElement.style.top = (e.clientY - offsetY) + 'px';
+        draggedElement.style.position = "absolute";
+        draggedElement.style.left = (e.clientX - offsetX) + "px";
+        draggedElement.style.top = (e.clientY - offsetY) + "px";
 
-        let element_to_display = div_converter(draggedElement);
-        if (e.clientX < (document.querySelector("#draw_area").offsetWidth)/2) {
+        const elementToDisplay = divConverter(draggedElement);
+        if (e.clientX < (document.querySelector("#drawArea").offsetWidth)/2) {
 
-            split_screen(check_active_programs(), true, element_to_display);
+            splitScreen(checkActivePrograms(), true, elementToDisplay);
         } else {
-            split_screen(check_active_programs(), false, element_to_display);
+            splitScreen(checkActivePrograms(), false, elementToDisplay);
         }
     }
     
-    dragged_element_x = (e.clientX - offsetX) + 'px';
-    dragged_element_y = (e.clientY - offsetY) + 'px';
+    draggedElementX = (e.clientX - offsetX) + "px";
+    draggedElementY = (e.clientY - offsetY) + "px";
 }
 
 function dragEnd() {
@@ -94,45 +93,45 @@ function dragEnd() {
     draggedElement = null;
 }
 
-function div_converter (draggedElement) {
-    if (draggedElement != null) {
-        let str = "#" + draggedElement.dataset.value;
-        let elem = document.querySelector(str);
+function divConverter (draggedElement) {
+    if (draggedElement !== null) {
+        const str = "#" + draggedElement.dataset.value;
+        const elem = document.querySelector(str);
         return elem;
     }   
 }
 
-function check_active_programs () {
-    let i = [];
+function checkActivePrograms () {
+    const i = [];
     programs.forEach(program => {
-        if (program.isActive == true) {
+        if (program.isActive === true) {
             i.push(program);
         }
     });
     return i;
 }
 
-function split_screen (active_programs, left_or_right, element_to_display) {
+function splitScreen (activePrograms, leftOrRight, elementToDisplay) {
     // let new_divider = document.createElement("div");
     // document.querySelector("#draw_area").appendChild(new_divider);
     
-    if (active_programs.length == 1) {
+    if (activePrograms.length === 1) {
 
-        let program_id = active_programs[0].value;
-        let program_change = document.querySelector('#' + program_id);
-        program_change.style.width = "70%";
-        if (!left_or_right) {
-            program_change.style.left = "0%";
-            size_element(element_to_display, "30%", "100%", "70%", "0%");
+        const programId = activePrograms[0].value;
+        const programChange = document.querySelector("#" + programId);
+        programChange.style.width = "70%";
+        if (!leftOrRight) {
+            programChange.style.left = "0%";
+            sizeElement(elementToDisplay, "30%", "100%", "70%", "0%");
         } else {
-            program_change.style.left = "30%";
-            size_element(element_to_display, "30%", "100%", "0%", "0%");
+            programChange.style.left = "30%";
+            sizeElement(elementToDisplay, "30%", "100%", "0%", "0%");
         }
     }
 }
 
-function size_element (element, width, height, left, top) {
-    primary_dropzone.appendChild(element);
+function sizeElement (element, width, height, left, top) {
+    primaryDropzone.appendChild(element);
 
     element.style.display = "block";
     element.style.width = width;
