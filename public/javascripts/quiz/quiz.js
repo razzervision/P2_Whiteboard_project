@@ -51,6 +51,35 @@ async function fetchQuizData() {
     }
 }
 
+async function fetchQuizData2() {
+    try {
+        const response = await fetch("/api/quizzes");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        // Use the data to display your quiz
+        return data;
+    } catch (error) {
+        console.error("Error fetching quiz data:", error);
+        return null; // Return null or handle the error as needed
+    }
+}
+let knap = document.getElementById("quiz_home_screen");
+knap.addEventListener("click", function() {
+    fetchQuizData2().then(data => {
+        // Here you can use the retrieved data to display your quiz
+        if (data) {
+            // Display the quiz using the data
+            console.log("Quiz data:", data);
+        } else {
+            // Handle the case where data is null (error occurred)
+            console.log("Failed to fetch quiz data");
+        }
+    });    
+});
+
 
 //Check if the quiz name already exist
 async function IsQuizNameUnique(name){
@@ -219,11 +248,15 @@ uploadQuizButton.addEventListener("click", get_question_and_answers);
 
 function get_question_and_answers(){
     let quizName = document.getElementById("quiz_name").textContent;
-    // console.log(quizName);
+    let questionList = [];
+    let answersList = [];
+    let correctAnswersList = [];
+
     let numberOfQuestions = document.querySelectorAll(".question_DIV");
     numberOfQuestions.forEach((q, index) =>{
         let question = q.querySelector(".question_txt_field_class").value;
-        
+        questionList.push(question);
+
         let answers = [];
         let correctAnswers = [];
         let answersValue = q.querySelectorAll(".answer_container");
@@ -233,33 +266,35 @@ function get_question_and_answers(){
             let answerCheckbox = a.querySelector(".answer_checkbox_class").checked;
             correctAnswers.push(answerCheckbox)
         });
-        // console.log(index,question);
-        // console.log(index,answers);
-        // console.log(index,correctAnswers);
-        const data = {
-            quizName: quizName,
-            question: question,
-            answers: answers,
-            correctAnswers: correctAnswers
-        };
-        // Send the data to the server-side script
-        fetch('/uploadQuiz', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Data has been successfully saved:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-        //Clear questions and their answers after creating a question.
-        // clear_questions();
-        });   
+
+        answersList.push(answers);
+        correctAnswersList.push(correctAnswers);
+    });   
+
+    const data = {
+        quizName: quizName,
+        questionList: questionList,
+        answersList: answersList,
+        correctAnswersList: correctAnswersList
+    };
+    console.log(data);
+    // Send the data to the server-side script
+    fetch('/uploadQuiz', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Data has been successfully saved:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+    //Clear questions and their answers after creating a question.
+    // clear_questions();
 }
 
 

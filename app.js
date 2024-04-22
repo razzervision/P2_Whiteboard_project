@@ -22,6 +22,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 
+app.get("/api/quizzes2",(req,res) => {
+    console.log("hej");
+});
+
+
 //return the json file to the client.
 app.get("/api/quiz-data", (req, res) => {
     try {
@@ -32,7 +37,7 @@ app.get("/api/quiz-data", (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-  
+
 
 //Upload quiz data into the database
 app.post("/upload_quiz_data", (req, res) => {
