@@ -27,4 +27,7 @@ are done and then upload to the server.✅
 -Make the first question: question 1 instead of 0✅ (id + 1)
 -Hjælperfunktion til at display:block,none osv. forksellige sider ✅
 -Skrive tests
+-Lave alle elementer til en funktion sådan man skal skal indsætte alt data som textContent og Id derind.
+-Gør koden bedre!!!
+
 
