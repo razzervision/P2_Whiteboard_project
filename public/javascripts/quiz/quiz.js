@@ -80,7 +80,6 @@ async function IsQuizNameUnique(name){
     let result = false;
     let data = await fetchAllQuizData();
     data.quizzes.forEach(q => {
-        console.log(q.quizName);
         if(q.quizName === name){
             result = true;
         } 
@@ -92,12 +91,13 @@ function hideDivs(show) {
     let start = document.getElementById("quiz_index");
     let createQuiz = document.getElementById("creat_quiz_div");
     let quizOutput = document.getElementById("quiz_output");
+    let quizResult = document.getElementById("quiz_output_results");
 
     // Hide all elements first
     start.style.display = "none";
     createQuiz.style.display = "none";
     quizOutput.style.display = "none";
-
+    quizResult.style.display = "none";
     // Show the element based on the parameter
     if (show === "start") {
         start.style.display = "block";
@@ -105,6 +105,8 @@ function hideDivs(show) {
         createQuiz.style.display = "block";
     } else if (show === "quizOutput") {
         quizOutput.style.display = "block";
+    } else if (show === "quizResult") {
+        quizResult.style.display = "block";
     }
 }
 
@@ -116,6 +118,13 @@ let homeScreenButton = document.getElementById("quiz_home_screen");
 homeScreenButton.addEventListener("click", () => {
     hideDivs("start");
 });
+
+
+
+
+
+
+
 
 
 
@@ -289,7 +298,6 @@ function get_question_and_answers(){
         answersList: answersList,
         correctAnswersList: correctAnswersList
     };
-    console.log(data);
     // Send the data to the server-side script
     fetch('/uploadQuiz', {
         method: 'POST',
@@ -321,6 +329,14 @@ function clear_questions(){
     create_new_question();
 
 }
+
+
+
+
+
+
+
+
 
 //---------------------------------------------------------------------------------------Search quizzes
 
@@ -361,7 +377,16 @@ async function search_quizzes(input){
 }
 search_quizzes();
 
-//---------------------------------------------------------------------------------------Start quiz
+
+
+
+
+
+
+
+
+
+//---------------------------------------------------------------------------------------Start quiz session
 
 async function startQuizSession(quizId){
     // Make the session name current time in milliseconds + the quiz id number
@@ -371,7 +396,14 @@ async function startQuizSession(quizId){
         sessionName: sessionName,
         quizId: quizId
     };
-    let data = await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
+    await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
+
+    let quizDiv = document.getElementById("quiz_output_results");
+    hideDivs("quizResult");
+    if(isIdCreated("sessionCodeId")){
+        errorMessage("You alredy have a session opened",quizDiv);
+        return 0;
+    }
     let sessionCode = document.createElement("h3");
     sessionCode.id = "sessionCodeId";
     sessionCode.textContent = "Code: " + sessionName;
@@ -382,10 +414,16 @@ async function startQuizSession(quizId){
         navigator.clipboard.writeText(sessionName);
     });
 
-    let quizDiv = document.getElementById("quizProgram");
     quizDiv.appendChild(sessionCode);
     quizDiv.appendChild(copyButton);
 }
+
+
+
+
+
+
+
 
 //---------------------------------------------------------------------------------------Join Quiz
 let joinQuiz = document.getElementById("join_quiz_button");
@@ -396,7 +434,6 @@ async function startQuiz(){
     let sessionName = document.getElementById("join_quiz_text").value;
     let sessionNameJSON = {sessionName: sessionName};
     let findSession = await fetchPostQuizData("/api/GetSpecificQuizSession",sessionNameJSON);
-    console.log(findSession);
     
     if(!findSession.session){
         errorMessage("No sessions found",joinQuiz);
@@ -404,31 +441,55 @@ async function startQuiz(){
     }
     hideDivs("quizOutput");
     let quizId = findSession.session.QuizNameId;
-    console.log(quizId);
     let div = document.getElementById("quiz_output");
     div.style.display = "block";
     div.textContent = "";
     let quizIdJSON = {id: quizId};
     let data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
-    console.log(data);
     const jsonDisplayDiv = document.getElementById("quiz_output");
 
-    data.quiz.Questions.forEach(question =>{
-        let questionField = document.createElement("h3");
-        questionField.textContent = question.questionText;
-        jsonDisplayDiv.appendChild(questionField);
+    let quizNameLabel = document.createElement("h1");
+    quizNameLabel.id = "quizNameLabel"
+    quizNameLabel.textContent = "name) " + data.quiz.quizName;
+    jsonDisplayDiv.appendChild(quizNameLabel);
 
-        question.Answers.forEach((answer, index) => {
-            let answerField = document.createElement("input");
-            answerField.type = "checkbox";
-            answerField.id = `answer_${index}`;
-            let label = document.createElement("label");
-            label.setAttribute("for", `answer_${index}`);
-            label.textContent = answer.answerText;
-            jsonDisplayDiv.appendChild(answerField); 
-            jsonDisplayDiv.appendChild(label);
-            jsonDisplayDiv.appendChild(document.createElement("br")); 
+    let sessionNameLabel = document.createElement("h2");
+    sessionNameLabel.id = "quizSessionLabel";
+    sessionNameLabel.textContent = "session)" + sessionName;
+    jsonDisplayDiv.appendChild(sessionNameLabel);
+
+
+    data.quiz.Questions.forEach((question , id) =>{
+
+        //Create all the elements needed for an extra answers
+        let questionDiv = document.createElement("div");
+        questionDiv.className = "q_container";
+        questionDiv.id = "q_container"+id;
+
+        // Questions
+        let questionField = document.createElement("h3");
+        questionField.id = "question_field" + id;
+        questionField.textContent = (id + 1) + ") " + question.questionText;
+        questionDiv.appendChild(questionField);
+
+        question.Answers.forEach((answer,i) =>{
+
+            //Label for answers
+            let answerLabel = document.createElement("label");
+            answerLabel.textContent = answer.answerText;
+            answerLabel.id = "answer"+ i + "_label";
+            answerLabel.className="answerLabel_class";
+            answerLabel.setAttribute("for", "answer"+ i);
+            questionDiv.appendChild(answerLabel);
+
+            //Correct answer checkbox
+            let answerCheckbox = document.createElement("input");
+            answerCheckbox.type="checkbox";
+            answerCheckbox.id = "checkbox"+i;
+            answerCheckbox.className = "answer_checkbox_class";
+            questionDiv.appendChild(answerCheckbox);
         });
+        jsonDisplayDiv.appendChild(questionDiv);
     });                         
 
     let submitAnswers = document.createElement("button");
@@ -439,96 +500,77 @@ async function startQuiz(){
 
     submitAnswersButton = document.querySelector("#submitId");
     submitAnswersButton.addEventListener("click", () => {
-        checkAnswers(quizId);
+        checkAnswers(quizId,sessionName);
     });
 }
 
 
-//---------------------------------------------------------------------------------------Quiz verifying
-async function checkAnswers(quizId) {
-    let data = await fetchAllQuizData();
-    for (const q of data.quiz) {
-        if (q.quiz_name === quizId) {
-            const answerFeedback = [];
-            let str = "";
-            str = "#answer_";
-            for (let j = 0; j < q.correct_answers.length; j++) {
-                // der er fejl her, ved ikke hvad det er
-                str = "#answer_" + j;
-                if ((q.correct_answers[j] && document.querySelector(str).checked) || (!q.correct_answers[j] && !document.querySelector(str).checked)) {
-                    answerFeedback[j] = true;
-                } else {
-                    answerFeedback[j] = false;
-                }
-            }
-            await sendAnswers(answerFeedback, q.question);
-        }
+
+
+
+
+
+
+
+
+
+//---------------------------------------------------------------------------------------User input upload
+async function checkAnswers(quizId,sessionName){
+    let quizIdJSON = {id: quizId};
+    let data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
+    let userDataAnswerList = [];
+    let userDataQuestion = document.querySelectorAll("#quiz_output .q_container");
+    userDataQuestion.forEach(question =>{
+        let QuestionAnswerList =[];
+        let answersValue = question.querySelectorAll("#quiz_output .answer_checkbox_class");
+        answersValue.forEach(answer => {
+            QuestionAnswerList.push(answer.checked);
+        });
+        userDataAnswerList.push(QuestionAnswerList);        
+    });
+    let isCorrectList = [];
+    data.quiz.Questions.forEach((question, questionIndex) => {
+        isQuestionCorrectList = [];
+        question.Answers.forEach((answer, answerIndex) => {
+            let isCorrect = answer.isCorrect === userDataAnswerList[questionIndex][answerIndex];
+            isQuestionCorrectList.push(isCorrect)
+        });
+        isCorrectList.push(isQuestionCorrectList);
+    });
+    console.log(isCorrectList);
+    userData = {
+        session: sessionName,
+        userId: "Kung Fu Panda",
+        isCorrect: isCorrectList
     }
-    printFeedback(quizId);
+    await fetchPostQuizData("/api/insertQuizUserData",userData);
+
+    userQuizResponse(userDataQuestion,isCorrectList);
+
 }
 
 
-async function send_answers(answer_data, question1) {
-    let data = await fetchAllQuizData();
-    for (const q of data.quiz) {
-        if (q.question === question1) {
-            q.user_answer = answer_data;
-        }
-    }
-    // const response = await fetch('/database/quiz.json', {
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(data),
-    // });
-    // if (!response.ok) {
-    //     throw new Error('Failed to send answers. Status: ' + response.status + ' ' + response.statusText);
-    // }
-    const updatedData = await response.json();
-    // console.log(updatedData); // Log the updated data after sending answers
-}
 
-async function print_feedback (quiz_id) {
-    let quiz_total_answers = 0;
-    let quiz_total_corr_answers = 0;
-    let feedback_div = document.createElement('div');
-    let container = document.querySelector('#quiz_output');
-    container.appendChild(feedback_div);
 
-    
-    let data = await fetchAllQuizData();
-    data.quiz.forEach(q => {
-    if (q.quiz_name === quiz_id) {
-        let new_divider = document.createElement('div');
-        feedback_div.appendChild(new_divider);
-        let new_h3 = document.createElement('h3');
-        new_h3.textContent = q.question;
-        new_divider.appendChild(new_h3);
-        let corr_ans = 0;
-        question_total_answers = q.answers.length;
-        quiz_total_answers += q.answers.length;
-        for (let j = 0; j < q.answers.length; j++) {
-            let new_answer = document.createElement('p');
-            new_answer.textContent = q.answers[j];
-            if (q.user_answer[j]) {
-                new_answer.style.backgroundColor = "green";
-                corr_ans++;
+
+//---------------------------------------------------------------------------------------Verify input
+function userQuizResponse(questionElement,isCorrectList){
+    questionElement.forEach((question,questionIndex) => {
+        let answersValue = question.querySelectorAll("#quiz_output .answer_checkbox_class");
+        answersValue.forEach((answer,answerIndex) => {
+            if(isCorrectList[questionIndex][answerIndex]){
+                answer.previousElementSibling.style.backgroundColor = "green";
             } else {
-                new_answer.style.backgroundColor = "red";
+                answer.previousElementSibling.style.backgroundColor = "red";
             }
-            new_divider.appendChild(new_answer);
-        }
-        quiz_total_corr_answers += corr_ans;
-        new_p_1 = document.createElement('p');
-        new_p_1.textContent = corr_ans + " / " + question_total_answers + " answered correct."
-        new_divider.appendChild(new_p_1);
-    }
+        });
     });
-    new_p_2 = document.createElement('p');
-    new_p_2.textContent = quiz_total_corr_answers + " / " + quiz_total_answers + " total answered correct."
-    feedback_div.appendChild(new_p_2);
+    
 }
+
+
+
+
 
 
 

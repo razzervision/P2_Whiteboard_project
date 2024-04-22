@@ -141,4 +141,48 @@ router.post("/api/GetSpecificQuizSession", async (req, res) => {
 });
 
 
+router.post("/api/insertQuizUserData", async (req, res) => {
+    try {
+        const { session, userId, isCorrect } = req.body;
+        // Fetch one quiz with quiz id
+        const quizData = await Quiz.Session.findOne({
+            where: { 
+                sessionName: session,
+                sessionOpen: true
+            },
+            include: [
+                {
+                    model: Quiz.QuizName,
+                    include: [
+                        {
+                            model: Quiz.Question,
+                            include: Quiz.Answer 
+                        }
+                    ]
+                }
+            ]
+        });
+        
+        for (let questionIndex = 0; questionIndex < quizData.QuizName.Questions.length; questionIndex++) {
+            const question = quizData.QuizName.Questions[questionIndex];
+            // Loop through answers
+            for (let answerIndex = 0; answerIndex < question.Answers.length; answerIndex++) {
+                const answer = question.Answers[answerIndex];
+                // Use await within an async function
+                const userData = await Quiz.UserAnswer.create({
+                    userId: userId,
+                    isCorrect: isCorrect[questionIndex][answerIndex],
+                    AnswerId: answer.id,
+                    SessionId: quizData.dataValues.id
+                });
+            }
+        }
+
+        res.status(200).json({ quizData });
+    } catch (error) {
+        console.error("Error fetching quiz", error);
+        res.status(500).send("Error fetching quiz");
+    }
+});
+
 module.exports = router;

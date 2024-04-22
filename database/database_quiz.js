@@ -70,11 +70,7 @@ UserAnswer.init({
         type: DataTypes.NUMBER,
         allowNull: false
     },
-    session: {
-        type: DataTypes.NUMBER,
-        allowNull: false
-    },
-    userAnswer: {
+    isCorrect: {
         type: DataTypes.BOOLEAN,
         allowNull: false
     }
