@@ -31,7 +31,10 @@ router.post("/uploadQuiz", async (req, res) => {
     // await Quiz.QuizName.drop();
     // await Quiz.Question.drop();
     // await Quiz.Answer.drop();
-
+    // await Quiz.UserAnswer.drop();
+    // await Quiz.Session.drop();
+    // return 0;
+    
     try {
         console.log(req.body);
         const { quizName, questionList, answersList, correctAnswersList } = req.body;
@@ -65,8 +68,7 @@ router.post("/uploadQuiz", async (req, res) => {
     }
 });
 
-router.get("/api/quizzes", async (req, res) => {
-    console.log("WOW"); 
+router.get("/api/Getquizzes", async (req, res) => {
     try {
         // Fetch all quizzes with their associated questions and answers
         const quizzes = await Quiz.QuizName.findAll({
@@ -84,6 +86,59 @@ router.get("/api/quizzes", async (req, res) => {
     }
 });
 
+
+router.post("/api/GetSpecificQuiz", async (req, res) => {
+    let quizId = req.body;
+    try {
+        // Fetch one quiz with quiz id
+        const quiz = await Quiz.QuizName.findOne({
+            where: { id: quizId.id }, 
+            include: [
+                {
+                    model: Quiz.Question,
+                    include: Quiz.Answer
+                }
+            ]
+        });
+        res.status(200).json({ quiz });
+    } catch (error) {
+        console.error("Error fetching quiz", error);
+        res.status(500).send("Error fetching quiz");
+    }
+});
+
+
+router.post("/api/startQuizSession", async (req, res) => {
+    let JSON = req.body;
+    console.log(JSON);
+    try {
+        const session = await Quiz.Session.create({ 
+            sessionName: JSON.sessionName,
+            sessionOpen: true,
+            QuizNameId: JSON.quizId 
+        });
+        res.status(200).json({ session });
+    } catch (error) {
+        console.error("Error fetching quiz", error);
+        res.status(500).send("Error fetching quiz");
+    }
+});
+
+
+
+router.post("/api/GetSpecificQuizSession", async (req, res) => {
+    let sessionName = req.body;
+    try {
+        // Fetch one quiz with quiz id
+        const session = await Quiz.Session.findOne({
+            where: { sessionName: sessionName.sessionName }
+        });
+        res.status(200).json({ session });
+    } catch (error) {
+        console.error("Error fetching quiz", error);
+        res.status(500).send("Error fetching quiz");
+    }
+});
 
 
 module.exports = router;

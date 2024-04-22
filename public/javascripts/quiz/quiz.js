@@ -37,28 +37,13 @@ function errorMessage(message,placement){
 }
 
 //this function return all the data from the quiz.json file.
-async function fetchQuizData() {
+async function fetchAllQuizData() {
     try {
-      const response = await fetch('/api/quiz-data');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-      // Use the data to display your quiz
-    } catch (error) {
-      console.error("Error fetching quiz data:", error);
-    }
-}
-
-async function fetchQuizData2() {
-    try {
-        const response = await fetch("/api/quizzes");
+        const response = await fetch("/api/Getquizzes");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         // Use the data to display your quiz
         return data;
     } catch (error) {
@@ -66,44 +51,73 @@ async function fetchQuizData2() {
         return null; // Return null or handle the error as needed
     }
 }
-let knap = document.getElementById("quiz_home_screen");
-knap.addEventListener("click", function() {
-    fetchQuizData2().then(data => {
-        // Here you can use the retrieved data to display your quiz
-        if (data) {
-            // Display the quiz using the data
-            console.log("Quiz data:", data);
-        } else {
-            // Handle the case where data is null (error occurred)
-            console.log("Failed to fetch quiz data");
+
+async function fetchPostQuizData(link,id) {
+    try {
+        // Send the data to the server-side script
+        const response = await fetch(link, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(id),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    });    
-});
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching quiz data:", error);
+        return null; // Return null or handle the error as needed
+    }
+}
+
 
 
 //Check if the quiz name already exist
 async function IsQuizNameUnique(name){
     let result = false;
-    let data = await fetchQuizData();
-    data.quiz.forEach(q => {
-        if(q.quiz_name === name){
+    let data = await fetchAllQuizData();
+    data.quizzes.forEach(q => {
+        console.log(q.quizName);
+        if(q.quizName === name){
             result = true;
         } 
     });
     return result;
 }
 
+function hideDivs(show) {
+    let start = document.getElementById("quiz_index");
+    let createQuiz = document.getElementById("creat_quiz_div");
+    let quizOutput = document.getElementById("quiz_output");
+
+    // Hide all elements first
+    start.style.display = "none";
+    createQuiz.style.display = "none";
+    quizOutput.style.display = "none";
+
+    // Show the element based on the parameter
+    if (show === "start") {
+        start.style.display = "block";
+    } else if (show === "createQuiz") {
+        createQuiz.style.display = "block";
+    } else if (show === "quizOutput") {
+        quizOutput.style.display = "block";
+    }
+}
+
+
+
 //---------------------------------------------------------------------------------------Home page
 //Home button
-let createQuizDiv = document.getElementById("creat_quiz_div");
 let homeScreenButton = document.getElementById("quiz_home_screen");
-let homeScreenDiv = document.getElementById("quiz_index");
-
 homeScreenButton.addEventListener("click", () => {
-    homeScreenDiv.style.display = "block";
-
-    createQuizDiv.style.display = "none";
+    hideDivs("start");
 });
+
+
 
 //---------------------------------------------------------------------------------------Create quiz
 
@@ -113,9 +127,7 @@ creat_quiz.addEventListener("click", async() => {
     if(await IsQuizNameUnique(name)){
         errorMessage("Already created",creat_quiz);
     } else {
-        createQuizDiv.style.display ="block";
-        homeScreenDiv.style.display = "none";
-
+        hideDivs("createQuiz");
         let quizName = document.getElementById("quiz_name");
         quizName.textContent = name; 
     }
@@ -294,217 +306,170 @@ function get_question_and_answers(){
         console.error('Error:', error);
     });
     //Clear questions and their answers after creating a question.
-    // clear_questions();
+    clear_questions();
 }
 
 
-//Create a question and insert the data into the quiz.JSON file
-// const upload_quiz_buttons = document.getElementById("upload_quiz_button");
-// upload_quiz_buttons.addEventListener("click", () => {
-//     //Check if the quiz name is inserted
-//     let quiz_name = document.getElementById("quiz_name").textContent;
-    
-//     //Get the value from the question input field
-//     let question = document.getElementById("question_txt_field").value;
-//     let answers_list = [];
-//     let correct_answers_list = [];
-    
-//     //For loop for each answered inserted
-//     for(let i = 0; i < current_answers_number; i++){
-//         //Get the value from the specific answer input
-//         let current_answer_text = document.getElementById("answer"+i).value;
-//         //Check if the user has inserted any data or if its empty
-//         if(current_answer_text !== ""){
-//             //If there is a input it check if the answer is correct or false.
-//             let current_answer_checkbox = document.getElementById("checkbox"+i).checked;
-//             //push the answer and its correctness to the array which is used to insert it to a JSON file.
-//             answers_list.push(current_answer_text);
-//             correct_answers_list.push(current_answer_checkbox);
-//         }
-//     }
-//     // Create an object with the data
-//     const data = {
-//         quiz_name: quiz_name,
-//         question: question,
-//         answers: answers_list,
-//         correct_answers: correct_answers_list
-//     };
-      
-//     // Send the data to the server-side script
-//     fetch('/upload_quiz_data', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(data),
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log('Data has been successfully saved:', data);
-//     })
-//     .catch((error) => {
-//         console.error('Error:', error);
-//     });
-//     //Clear questions and their answers after creating a question.
-//     clear_questions();
-// });
 
-// //Clear questions and their answers after creating a question.
-// function clear_questions(){
-//     //Get all the elements with the class answer_container
-//     let input_divs = document.querySelectorAll(".answer_container");
+//Clear questions and their answers after creating a question.
+function clear_questions(){
+    //Get all the elements with the class answer_container
+    let input_divs = document.querySelectorAll(".question_DIV");
+    input_divs.forEach(div => {
+        div.remove();
+    });
+    create_new_question();
 
-//     //Iterate trough the answer exept the first because a new answer should be able to be written
-//     for (let i = 1; i < input_divs.length; i++){
-//         //Remove the element from the document.
-//         input_divs[i].remove();
-//     }  
-
-//     //Remove the text from the question and answers
-//     document.getElementById("answer0").value = "";
-//     document.getElementById("question_txt_field").value = "";
-
-//     // generate the eventlistener so everything its back a when its runned at first
-//     last_answer_input.addEventListener("input", create_new_answer_box);
-
-// }
+}
 
 //---------------------------------------------------------------------------------------Search quizzes
 
 
-let search_quiz_input = document.getElementById("search_quiz_text");
-search_quiz_input.addEventListener("input",() => {
-    search_quizzes();
+let searchQuizInput = document.getElementById("search_quiz_text");
+searchQuizInput.addEventListener("input", () => {
+    search_quizzes(searchQuizInput.value);
 });
 
 //Find all unique quizzes
-async function search_quizzes(){
-    let data = await fetchQuizData();
-    data = data.quiz;
-    // Use a Set to store unique quiz_names
-    const uniqueQuizNames = new Set();
-
-    // Filter out objects with duplicate quiz_names
-    const uniqueQuizData = data.filter(item => {
-        if (!uniqueQuizNames.has(item.quiz_name)) {
-            uniqueQuizNames.add(item.quiz_name);
-            return true;
-        }
-        return false;
-    });
-    let new_quizzes_searched = new Set();
-    
-    let search = document.getElementById("search_quiz_text").value;
-
-    if(search !== ""){
-        uniqueQuizData.forEach(q => {
-            if(q.quiz_name.toLowerCase().includes(search.toLowerCase())){
-                new_quizzes_searched.add(q.quiz_name);
-            }
-        });
-    } else {
-        new_quizzes_searched = uniqueQuizNames;
-    }
-   
+async function search_quizzes(input){
+    let data = await fetchAllQuizData();
+       
     let table = document.getElementById("search_quiz_table");
     //reset the table
     table.textContent = "";
-    new_quizzes_searched.forEach(quiz => {
-        let row = document.createElement("tr");
+    data.quizzes.forEach(quiz => {
+        // Check if their is a input and if its in the quiz name
+        if(input && quiz.quizName.toLowerCase().includes(input.toLowerCase()) || !input){
+            let row = document.createElement("tr");
 
-        let quiz_name = document.createElement("td");
-        quiz_name.textContent = quiz;
-        row.appendChild(quiz_name);
+            let quizName = document.createElement("td");
+            quizName.textContent = quiz.quizName;
+            row.appendChild(quizName);
+    
+            let start_quiz_button = document.createElement("button");
+            start_quiz_button.textContent = "Start Quiz";
+            start_quiz_button.className = "start_quiz_button";
+            start_quiz_button.addEventListener("click", () => {
+                startQuizSession(quiz.id);
+            });
+            row.appendChild(start_quiz_button);
+    
+            table.appendChild(row);
+        } 
 
-        let start_quiz_button = document.createElement("button");
-        start_quiz_button.textContent = "Start Quiz";
-        start_quiz_button.className = "start_quiz_button";
-        start_quiz_button.addEventListener("click", () => {
-            start_quiz(quiz);
-        });
-        row.appendChild(start_quiz_button);
-
-        table.appendChild(row);
     });
 }
 search_quizzes();
 
 //---------------------------------------------------------------------------------------Start quiz
 
+async function startQuizSession(quizId){
+    // Make the session name current time in milliseconds + the quiz id number
+    const currentTimeInMilliseconds = Date.now();
+    const sessionName = currentTimeInMilliseconds + "q" + quizId;
+    let sessionNameJson = {
+        sessionName: sessionName,
+        quizId: quizId
+    };
+    let data = await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
+    let sessionCode = document.createElement("h3");
+    sessionCode.id = "sessionCodeId";
+    sessionCode.textContent = "Code: " + sessionName;
+
+    let copyButton = document.createElement("button");
+    copyButton.textContent = "Copy";
+    copyButton.addEventListener("click", () => {
+        navigator.clipboard.writeText(sessionName);
+    });
+
+    let quizDiv = document.getElementById("quizProgram");
+    quizDiv.appendChild(sessionCode);
+    quizDiv.appendChild(copyButton);
+}
+
+//---------------------------------------------------------------------------------------Join Quiz
+let joinQuiz = document.getElementById("join_quiz_button");
+joinQuiz.addEventListener("click", startQuiz);
 
 //Start the quiz
-function start_quiz(quiz_id){
+async function startQuiz(){
+    let sessionName = document.getElementById("join_quiz_text").value;
+    let sessionNameJSON = {sessionName: sessionName};
+    let findSession = await fetchPostQuizData("/api/GetSpecificQuizSession",sessionNameJSON);
+    console.log(findSession);
     
+    if(!findSession.session){
+        errorMessage("No sessions found",joinQuiz);
+        return 0;
+    }
+    hideDivs("quizOutput");
+    let quizId = findSession.session.QuizNameId;
+    console.log(quizId);
     let div = document.getElementById("quiz_output");
     div.style.display = "block";
     div.textContent = "";
-    fetchQuizData()
-    .then(data => {
+    let quizIdJSON = {id: quizId};
+    let data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
+    console.log(data);
+    const jsonDisplayDiv = document.getElementById("quiz_output");
 
-        // let quiz_id = document.getElementById("quiz_name_output").textContent;
+    data.quiz.Questions.forEach(question =>{
+        let questionField = document.createElement("h3");
+        questionField.textContent = question.questionText;
+        jsonDisplayDiv.appendChild(questionField);
 
-        const jsonDisplayDiv = document.getElementById("quiz_output");
-        data.quiz.forEach(q => {
-            if(q.quiz_name === quiz_id){      
-                let question_field = document.createElement("h3");
-                question_field.textContent = q.question;
-                jsonDisplayDiv.appendChild(question_field);
-        
-                q.answers.forEach((answer, index) => {
-                    let answer_field = document.createElement("input");
-                    answer_field.type = "checkbox";
-                    answer_field.id = `answer_${index}`;
-                    let label = document.createElement("label");
-                    label.setAttribute("for", `answer_${index}`);
-                    label.textContent = answer;
-                    jsonDisplayDiv.appendChild(answer_field); 
-                    jsonDisplayDiv.appendChild(label);
-                    jsonDisplayDiv.appendChild(document.createElement("br")); 
-                });
-            }                               
+        question.Answers.forEach((answer, index) => {
+            let answerField = document.createElement("input");
+            answerField.type = "checkbox";
+            answerField.id = `answer_${index}`;
+            let label = document.createElement("label");
+            label.setAttribute("for", `answer_${index}`);
+            label.textContent = answer.answerText;
+            jsonDisplayDiv.appendChild(answerField); 
+            jsonDisplayDiv.appendChild(label);
+            jsonDisplayDiv.appendChild(document.createElement("br")); 
         });
+    });                         
 
-        let submit_answers = document.createElement("button");
-        submit_answers.id = "submit_id";
-        submit_answers.type = "submit";
-        submit_answers.textContent = "Submit Answers";
-        jsonDisplayDiv.appendChild(submit_answers);
+    let submitAnswers = document.createElement("button");
+    submitAnswers.id = "submitId";
+    submitAnswers.type = "submit";
+    submitAnswers.textContent = "Submit Answers";
+    jsonDisplayDiv.appendChild(submitAnswers);
 
-        submit_answers_button = document.querySelector("#submit_id");
-            submit_answers_button.addEventListener("click", () => {
-            check_answers(quiz_id);
-        });
+    submitAnswersButton = document.querySelector("#submitId");
+    submitAnswersButton.addEventListener("click", () => {
+        checkAnswers(quizId);
     });
 }
 
+
 //---------------------------------------------------------------------------------------Quiz verifying
-
-
-async function check_answers(quiz_id) {
-    let data = await fetchQuizData();
+async function checkAnswers(quizId) {
+    let data = await fetchAllQuizData();
     for (const q of data.quiz) {
-        if (q.quiz_name === quiz_id) {
-            const answer_feedback = [];
+        if (q.quiz_name === quizId) {
+            const answerFeedback = [];
             let str = "";
             str = "#answer_";
             for (let j = 0; j < q.correct_answers.length; j++) {
                 // der er fejl her, ved ikke hvad det er
                 str = "#answer_" + j;
                 if ((q.correct_answers[j] && document.querySelector(str).checked) || (!q.correct_answers[j] && !document.querySelector(str).checked)) {
-                    answer_feedback[j] = true;
+                    answerFeedback[j] = true;
                 } else {
-                    answer_feedback[j] = false;
+                    answerFeedback[j] = false;
                 }
             }
-            await send_answers(answer_feedback, q.question);
+            await sendAnswers(answerFeedback, q.question);
         }
     }
-    print_feedback(quiz_id);
+    printFeedback(quizId);
+}
 
-} 
 
 async function send_answers(answer_data, question1) {
-    let data = await fetchQuizData();
+    let data = await fetchAllQuizData();
     for (const q of data.quiz) {
         if (q.question === question1) {
             q.user_answer = answer_data;
@@ -532,7 +497,7 @@ async function print_feedback (quiz_id) {
     container.appendChild(feedback_div);
 
     
-    let data = await fetchQuizData();
+    let data = await fetchAllQuizData();
     data.quiz.forEach(q => {
     if (q.quiz_name === quiz_id) {
         let new_divider = document.createElement('div');
