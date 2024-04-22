@@ -28,7 +28,7 @@ function errorMessage(message,placement){
     error.style.color = "red";
 
     //Identify the element after answer inputs. 
-    placement.appendChild(error);
+    placement.parentNode.appendChild(error); 
 
     // Remove it again after 3 seconds
     setTimeout(function() {
@@ -537,7 +537,6 @@ async function checkAnswers(quizId,sessionName){
         });
         isCorrectList.push(isQuestionCorrectList);
     });
-    console.log(isCorrectList);
     userData = {
         session: sessionName,
         userId: "Kung Fu Panda",
@@ -565,9 +564,47 @@ function userQuizResponse(questionElement,isCorrectList){
             }
         });
     });
-    
+    totalScore(isCorrectList);
 }
 
+function totalScore(isCorrectList){
+    console.log(isCorrectList);
+    let question = document.querySelectorAll("#quiz_output .q_container");
+    let totalSum = 0;
+    let totalAnswers = 0;
+    let totalQuestionSum = 0;
+    question.forEach((question,questionIndex) => {
+        // find sum of a boolean list
+        let answersSum = isCorrectList[questionIndex].length;
+        let questionSum = isCorrectList[questionIndex].filter(Boolean).length;
+        let questionResult = document.createElement("h3");
+        questionResult.id = "questionResult"+questionIndex;
+        questionResult.className = "questionResult";
+        questionResult.textContent = questionSum +"/"+answersSum + "correct";
+
+        question.appendChild(questionResult);
+        totalSum += questionSum;
+        totalAnswers += answersSum;
+        if(questionSum === answersSum){
+            totalQuestionSum += 1;
+        }
+    });
+    let submitButton = document.getElementById("submitId");
+    
+    let totalResult = document.createElement("h2");
+    totalResult.id = "totalResult";
+    totalResult.className = "totalResult";
+    totalResult.textContent = "Total Answers) " + totalSum +"/"+totalAnswers + " correct";
+    submitButton.parentNode.appendChild(totalResult); 
+
+    
+    let totalQuestionResult = document.createElement("h2");
+    totalQuestionResult.id = "totalQuestionResult";
+    totalQuestionResult.className = "totalQuestionResult";
+    totalQuestionResult.textContent = "Total Questions) " + totalQuestionSum +"/"+question.length + " correct";
+    submitButton.parentNode.appendChild(totalQuestionResult); 
+    submitButton.remove();
+}
 
 
 

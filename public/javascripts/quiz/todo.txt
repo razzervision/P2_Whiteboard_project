@@ -4,18 +4,27 @@ in progress = 🛠️
 
 -Insert images
 -Styling 
--Go to previous questions to edit. 
--Start a session
--Make the answers go into the new database
+-Go to previous questions to edit.✅ 
+-Start a session ✅
+-Make the answers go into the new database ✅
 -Make a overview for the session starter.
--Make a overview for the quiztaker.
+-Make a overview for the quiztaker. ✅
 -Make a error message function ✅
--Fix the bug the first time adding an answer the new eventlistener when doing input dosen't occurr. ✅
+-Fix the bug the first time adding an answer the new eventlistener
+when doing input dosen't occurr. ✅
+
 -Make all input secure
 -Tilføj algoritme til søge funktionen. 
 -Scrample rækkefølge på svarene (evt en algoritme)
+(evt lig alle answer og question div
+ind i et array også shuffle det array og først bagefter
+div.appendchild(shuffledList))
+
 -Slet quiz funktion. (evt med admin adgang)
--Make the quiz local until all the questions are done and then upload to the server.
--Make the first question: question 1 instead of 0
--Hjælperfunktion til at display:block,none osv. forksellige sider
+-Make the quiz local until all the questions
+are done and then upload to the server.✅
+
+-Make the first question: question 1 instead of 0✅ (id + 1)
+-Hjælperfunktion til at display:block,none osv. forksellige sider ✅
 -Skrive tests
+
