@@ -44,12 +44,56 @@ Answer.init({
     modelName: "Answer"
 });
 
+class Session extends Model {}
+
+Session.init({
+    // Model attributes are defined here
+    sessionName: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    sessionOpen: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    }
+}, {
+    sequelize,
+    modelName: "Session"
+});
+
+
+class UserAnswer extends Model {}
+
+UserAnswer.init({
+    // Model attributes are defined here
+    userId: {
+        type: DataTypes.NUMBER,
+        allowNull: false
+    },
+    isCorrect: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    }
+}, {
+    sequelize,
+    modelName: "UserAnswer"
+});
 
 // Define associations
 QuizName.hasMany(Question);
 Question.belongsTo(QuizName);
 
+QuizName.hasMany(Session);
+Session.belongsTo(QuizName);
+
 Question.hasMany(Answer);
 Answer.belongsTo(Question);
 
-module.exports = { QuizName, Question, Answer };
+Session.hasMany(UserAnswer);
+UserAnswer.belongsTo(Session);
+
+Answer.hasMany(UserAnswer);
+UserAnswer.belongsTo(Answer);
+
+
+module.exports = { QuizName, Question, Answer, UserAnswer , Session };
