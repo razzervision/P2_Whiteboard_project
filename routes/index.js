@@ -185,4 +185,91 @@ router.post("/api/insertQuizUserData", async (req, res) => {
     }
 });
 
+
+router.post("/api/userResponsData", async (req, res) => {
+    try {
+        const { session } = req.body;
+        // Fetch one quiz with quiz id
+        const quizData = await Quiz.Session.findOne({
+            where: { 
+                sessionName: session,
+                sessionOpen: true
+            },
+            include: [
+                {
+                    model: Quiz.QuizName,
+                    include: [
+                        {
+                            model: Quiz.Question,
+                            include: Quiz.Answer 
+                        }
+                    ]
+                }, 
+                {
+                    model: Quiz.UserAnswer, 
+                    where: {
+                        sessionId: sequelize.col('Session.id')
+                    }
+                }
+            ]
+        });
+        
+        
+        res.status(200).json({ quizData });
+    } catch (error) {
+        console.error("Error fetching quiz", error);
+        res.status(500).send("Error fetching quiz");
+    }
+});
+
+router.post("/api/findQuestionScore", async (req, res) => {
+    try {
+        const { session, questionId } = req.body;
+        console.log(questionId,session);
+        const answers = await Quiz.UserAnswer.findAll({
+            where: {
+                SessionId: session
+            },
+            include: [
+                {
+                    model: Quiz.Answer,
+                    include: [
+                        {
+                            model: Quiz.Question,
+                            where: {
+                                id: questionId
+                            },
+                            include: [
+                                {
+                                    model: Quiz.QuizName,
+                                    include: [
+                                        {
+                                            model: Quiz.Session,
+                                            where: {
+                                                sessionName: session,
+                                                sessionOpen: true
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });
+
+        
+
+        
+        
+        res.status(200).json({ answers });
+    } catch (error) {
+        console.error("Error fetching quiz", error);
+        res.status(500).send("Error fetching quiz");
+    }
+});
+
+
+
 module.exports = router;

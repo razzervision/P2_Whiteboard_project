@@ -111,6 +111,14 @@ function hideDivs(show) {
 }
 
 
+function createAllElement(type,id,className,textContent){
+    let element = document.createElement(type);
+    element.id = id;
+    element.className = className
+    element.textContent = textContent;
+    return element;
+}
+
 
 //---------------------------------------------------------------------------------------Home page
 //Home button
@@ -386,44 +394,6 @@ search_quizzes();
 
 
 
-//---------------------------------------------------------------------------------------Start quiz session
-
-async function startQuizSession(quizId){
-    // Make the session name current time in milliseconds + the quiz id number
-    const currentTimeInMilliseconds = Date.now();
-    const sessionName = currentTimeInMilliseconds + "q" + quizId;
-    let sessionNameJson = {
-        sessionName: sessionName,
-        quizId: quizId
-    };
-    await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
-
-    let quizDiv = document.getElementById("quiz_output_results");
-    hideDivs("quizResult");
-    if(isIdCreated("sessionCodeId")){
-        errorMessage("You alredy have a session opened",quizDiv);
-        return 0;
-    }
-    let sessionCode = document.createElement("h3");
-    sessionCode.id = "sessionCodeId";
-    sessionCode.textContent = "Code: " + sessionName;
-
-    let copyButton = document.createElement("button");
-    copyButton.textContent = "Copy";
-    copyButton.addEventListener("click", () => {
-        navigator.clipboard.writeText(sessionName);
-    });
-
-    quizDiv.appendChild(sessionCode);
-    quizDiv.appendChild(copyButton);
-}
-
-
-
-
-
-
-
 
 //---------------------------------------------------------------------------------------Join Quiz
 let joinQuiz = document.getElementById("join_quiz_button");
@@ -568,7 +538,6 @@ function userQuizResponse(questionElement,isCorrectList){
 }
 
 function totalScore(isCorrectList){
-    console.log(isCorrectList);
     let question = document.querySelectorAll("#quiz_output .q_container");
     let totalSum = 0;
     let totalAnswers = 0;
@@ -607,6 +576,119 @@ function totalScore(isCorrectList){
 }
 
 
+
+
+
+
+//---------------------------------------------------------------------------------------Start quiz session
+
+async function startQuizSession(quizId){
+    // Make the session name current time in milliseconds + the quiz id number
+    const currentTimeInMilliseconds = Date.now();
+    const sessionName = currentTimeInMilliseconds + "q" + quizId;
+    localStorage.setItem("sessionId",sessionName);
+    let sessionNameJson = {
+        sessionName: sessionName,
+        quizId: quizId
+    };
+    await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
+
+    let quizDiv = document.getElementById("quiz_output_results");
+    hideDivs("quizResult");
+    if(isIdCreated("sessionCodeId")){
+        errorMessage("You alredy have a session opened",quizDiv);
+        return 0;
+    }
+    let sessionCode = document.createElement("h3");
+    sessionCode.id = "sessionCodeId";
+    sessionCode.textContent = "Code: " + sessionName;
+
+    let copyButton = document.createElement("button");
+    copyButton.textContent = "Copy";
+    copyButton.addEventListener("click", () => {
+        navigator.clipboard.writeText(sessionName);
+    });
+
+    let reloadData = document.createElement("button");
+    reloadData.textContent = "Reload";
+    reloadData.addEventListener("click", teacherOverview);
+
+    let endSession = document.createElement("button");
+    endSession.textContent = "End Session";
+    endSession.addEventListener("click", teacherOverview);
+
+    quizDiv.appendChild(sessionCode);
+    quizDiv.appendChild(copyButton);
+    quizDiv.appendChild(reloadData);
+    quizDiv.appendChild(endSession);
+
+
+
+}
+
+
+async function teacherOverview(){
+    let div = document.getElementById("quiz_output_results");
+    let session = localStorage.getItem("sessionId");
+    let sessionJSON = {session:session};
+    let data = await fetchPostQuizData("/api/userResponsData",sessionJSON);
+    let totalSum = 0;
+    let totalAnswers = 0;
+    let totalQuestionSum = 0;
+
+    let questions = data.quizData.QuizName.Questions;
+    for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {
+        let answerCorrect = 0;
+        let questionSum = 0;
+
+        let question = questions[questionIndex];
+
+        let JSON = {
+            session: data.quizData.id,
+            questionId: question.id
+        }
+        let answerSum = await fetchPostQuizData("/api/findQuestionScore", JSON);
+        answerSum.answers.forEach(answer => {
+            if(answer.isCorrect){
+                answerCorrect += 1;
+            }
+            questionSum += 1;
+        });
+        let questionResult = question.questionText + ")  "+ answerCorrect+"/"+questionSum+" Is correct";
+        let questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
+        div.appendChild(questionLabel);
+    }
+
+
+
+    // question.forEach((question,questionIndex) => {
+    //     // find sum of a boolean list
+    //     let answersSum = isCorrectList[questionIndex].length;
+    //     let questionSum = isCorrectList[questionIndex].filter(Boolean).length;
+
+    //     question.appendChild(questionResult);
+    //     totalSum += questionSum;
+    //     totalAnswers += answersSum;
+    //     if(questionSum === answersSum){
+    //         totalQuestionSum += 1;
+    //     }
+    // });
+    // let submitButton = document.getElementById("submitId");
+    
+    // let totalResult = document.createElement("h2");
+    // totalResult.id = "totalResult";
+    // totalResult.className = "totalResult";
+    // totalResult.textContent = "Total Answers) " + totalSum +"/"+totalAnswers + " correct";
+    // submitButton.parentNode.appendChild(totalResult); 
+
+    
+    // let totalQuestionResult = document.createElement("h2");
+    // totalQuestionResult.id = "totalQuestionResult";
+    // totalQuestionResult.className = "totalQuestionResult";
+    // totalQuestionResult.textContent = "Total Questions) " + totalQuestionSum +"/"+question.length + " correct";
+    // submitButton.parentNode.appendChild(totalQuestionResult); 
+    // submitButton.remove();
+}   
 
 
 
