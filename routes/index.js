@@ -233,31 +233,16 @@ router.post("/api/findQuestionScore", async (req, res) => {
             include: [
                 {
                     model: Quiz.Answer,
+                    where: {
+                        QuestionId: questionId
+                    },
+                    required: true,
                     include: [
-                        {
-                            model: Quiz.Question,
-                            where: {
-                                id: questionId
-                            },
-                            include: [
-                                {
-                                    model: Quiz.QuizName,
-                                    include: [
-                                        {
-                                            model: Quiz.Session,
-                                            where: {
-                                                sessionName: session,
-                                                sessionOpen: true
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
                     ]
                 }
             ]
         });
+        
 
         
 

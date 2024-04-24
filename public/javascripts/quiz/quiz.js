@@ -635,7 +635,11 @@ async function teacherOverview(){
     let totalSum = 0;
     let totalAnswers = 0;
     let totalQuestionSum = 0;
-
+    if(isIdCreated("resultDiv")){
+        document.getElementById("resultDiv").remove();
+    }
+    let resultDiv = createAllElement("div","resultDiv","resultDiv",null);
+    div.appendChild(resultDiv);
     let questions = data.quizData.QuizName.Questions;
     for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {
         let answerCorrect = 0;
@@ -648,6 +652,7 @@ async function teacherOverview(){
             questionId: question.id
         }
         let answerSum = await fetchPostQuizData("/api/findQuestionScore", JSON);
+        console.log(answerSum);
         answerSum.answers.forEach(answer => {
             if(answer.isCorrect){
                 answerCorrect += 1;
@@ -656,38 +661,10 @@ async function teacherOverview(){
         });
         let questionResult = question.questionText + ")  "+ answerCorrect+"/"+questionSum+" Is correct";
         let questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
-        div.appendChild(questionLabel);
+        resultDiv.appendChild(questionLabel);
+        answerCorrect = 0;
+        questionSum = 0;
     }
-
-
-
-    // question.forEach((question,questionIndex) => {
-    //     // find sum of a boolean list
-    //     let answersSum = isCorrectList[questionIndex].length;
-    //     let questionSum = isCorrectList[questionIndex].filter(Boolean).length;
-
-    //     question.appendChild(questionResult);
-    //     totalSum += questionSum;
-    //     totalAnswers += answersSum;
-    //     if(questionSum === answersSum){
-    //         totalQuestionSum += 1;
-    //     }
-    // });
-    // let submitButton = document.getElementById("submitId");
-    
-    // let totalResult = document.createElement("h2");
-    // totalResult.id = "totalResult";
-    // totalResult.className = "totalResult";
-    // totalResult.textContent = "Total Answers) " + totalSum +"/"+totalAnswers + " correct";
-    // submitButton.parentNode.appendChild(totalResult); 
-
-    
-    // let totalQuestionResult = document.createElement("h2");
-    // totalQuestionResult.id = "totalQuestionResult";
-    // totalQuestionResult.className = "totalQuestionResult";
-    // totalQuestionResult.textContent = "Total Questions) " + totalQuestionSum +"/"+question.length + " correct";
-    // submitButton.parentNode.appendChild(totalQuestionResult); 
-    // submitButton.remove();
 }   
 
 
