@@ -15,6 +15,7 @@
           
           <link rel="stylesheet" href="/stylesheets/WCE.css">
           <link rel="stylesheet" href="/stylesheets/style.css">
+
           <link rel="stylesheet" href="/stylesheets/quiz.css">
           <link rel="stylesheet" href="/stylesheets/toolbar.css">
           <link rel="stylesheet" href="/stylesheets/calc.css">
@@ -53,24 +54,21 @@
 
   <div class="toolbar" id="toolbar">
     <nav>
-      <menu>
-        <div class = "toolbar_element" id = "paint_element" data-value="paintProgram">Paint</div>
-        <div class = "toolbar_element" id = "code_editor_element" data-value="codeProgram">Code Editor</div>
-        <div class = "toolbar_element" id = "quiz_element" data-value="quizProgram">Quiz</div>
-        <div class = "toolbar_element" id = "calculator_element" data-value="calcProgram">Calc</div>
-        <div class = "toolbar_element" id = "timer_element">Timer</div>
+      <menu id="toolbarMenu">
+        <div class = "toolbarElement" id = "paintElement" data-value="paintProgram" draggable="true">Paint</div>
+        <div class = "toolbarElement" id = "codeEditorElement" data-value="codeProgram" draggable="true">Code Editor</div>
+        <div class = "toolbarElement" id = "quizElement" data-value="quizProgram" draggable="true">Quiz</div>
+        <div class = "toolbarElement" id = "calculatorElement" data-value="calcProgram" draggable="true">Calc</div>
+        <div class = "toolbarElement" id = "timerElement">Timer</div>
       </menu>
     </nav>
   </div>
 
-  <div id="primary_dropzone">
-    <div id="draw_area">
+  <div id="primaryDropzone">
+    <div id="drawArea">
       
     </div>
   </div>
-
-
-  
 
 
 
@@ -83,7 +81,7 @@
     <br>
     <label for="join_quiz_text">Join Quiz</label>
     <input type="text" id="join_quiz_text">
-    <button id="create_quiz_button">Join quiz</button>
+    <button id="join_quiz_button">Join quiz</button>
     <br>  
 
     <label for="search_quiz_text">Search quizzes</label> 
@@ -100,21 +98,13 @@
   <div class="creat_quiz_div" id="creat_quiz_div" style="display: none;">
     <label for="quiz_name">Quiz Name:</label>
     <a id="quiz_name"></a><br><br>
-    <div class="question_DIV" id="question_DIV0">
-    <label for="question_txt_field" id="label1">Question 0:</label>
-    <input type="text" id="question_txt_field"><br>
-    <div class="answer_container" id="answer_container0">
-      <label for="answer0" class="answer_label_class">Answer 0:</label>
-      <input type="text" class="answer_text_class" id="answer0">
-      <input type="checkbox" class="answer_checkbox_class" id="checkbox0" checked="true">
-    </div>
-    </div>
-    <!-- Commented out because when you do a input a new answer box occur, but if it bad just insert it again -->
-    <!-- <button id="create_new_answer" value="ADD ANSWER" onclick="create_new_answer_box()">Add answer</button><br> --> 
     <button id="append_new_question">New Question =></button><br>
     <button id="upload_quiz_button">Upload Quiz</button><br>
   </div>
   <div id="quiz_output" style="display: none;">
+
+  </div>
+  <div id="quiz_output_results">
 
   </div>
  
@@ -122,23 +112,17 @@
 </div>
 
   <div id="paintProgram" class="paint">
-    <canvas id="canvas"></canvas>
-    <div class="colors">
-      <button class="color" style="background-color: black;" onclick="changeColor(this)"></button>
-      <button class="color" style="background-color: red;" onclick="changeColor(this)"></button>
-      <button class="color" style="background-color: green;" onclick="changeColor(this)"></button>
-      <button class="color" style="background-color: yellow;" onclick="changeColor(this)"></button>
-      <button class="color" style="background-color: purple;" onclick="changeColor(this)"></button>
-      <button class="color" style="background-color: brown;" onclick="changeColor(this)"></button>
-      <button class="color" style="background-color: wheat;" onclick="changeColor(this)"></button>
-      <button class="color" style="background-color: indianred;" onclick="changeColor(this)"></button>
-      <button class="color" style="background-color: orchid;" onclick="changeColor(this)"></button>
-      <button class="color" style="background-color: paleturquoise;" onclick="changeColor(this)"></button>
-    </div>
-    <div class="options">
-      <button onclick="clearCanvas()" id="clearCanvas" class="color">Clear canvas</button>
-      <input oninput="draw_color = this.value" type="color" class="colorpick">
-      <input oninput="draw_withd = this.value" type="range" min="1" max="100" class="pen">
+    <canvas id = "canvas"></canvas>
+    <div class="nav">
+            <div class ="options">
+                <input type="file" id="uploadInput" accept="image/*">
+                <input type="number" id="Imgheight">
+                <input type="number" id="Imgwithd">
+                <button id = "clearCanvas">Clear canvas</button>
+                <input oninput="draw_color = this.value" id = "colorpick" type = "color" class="colorpick">
+                <input oninput="draw_withd = this.value" type="range" min="1" max="100" class="pen">
+                <button id ="undoB" type ="button">Undo</button>
+            </div>
     </div>
   </div>
 

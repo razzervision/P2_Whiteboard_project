@@ -1,4 +1,4 @@
-menu {
+#toolbarMenu {
     list-style-type: none;
     background-color: hsl(0, 0%, 25%);
     padding: 0px;
@@ -8,13 +8,10 @@ menu {
     width: 100%;
 }
 
-/*I think this style below is the cause for the glitch with the timer options. Since they are presented as lists items*/
-
-.toolbar_element {
+.toolbarElement {
     color: white;
     padding: 25px;
     display: block;
-    display: flex;
     text-align: center;
     float: left;
     cursor: pointer;
