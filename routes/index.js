@@ -255,6 +255,21 @@ router.post("/api/findQuestionScore", async (req, res) => {
     }
 });
 
-
+router.post("/api/checkIfSessionIsOpened", async (req, res) => {
+    try {
+        const { sessionName } = req.body;
+        const isSession = await Quiz.Session.findOne({
+            where: {
+                sessionName: sessionName
+            }
+        });
+        console.log(isSession);
+        
+        res.status(200).json({ isSession });
+    } catch (error) {
+        console.error("Error fetching quiz", error);
+        res.status(500).send("Error fetching quiz");
+    }
+});
 
 module.exports = router;
