@@ -153,3 +153,9 @@ function PauseTimer(h, m, s) {
 
 }
 
+function ClaireDeLune(h, m, s){
+    
+    PauseTimer(h, m, s);
+   
+    
+}
