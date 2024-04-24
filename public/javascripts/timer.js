@@ -100,6 +100,10 @@ function timer(h, m, s) {
         //Or just a function being called every second. I need to be able to check if the innerHTML is all equal to 0 that I can make it do something else.
         if (StartingTime === 0){
             clearInterval(TimerInterval);
+            if (PauseTimerArgument(h=null, m=null, s=null)===null){ //delete this if statement here and it works again
+                alert("IT WORKS");
+            }
+
             PauseTimer(h, m, s);
             alert("Break time");
 
