@@ -1,15 +1,24 @@
 // Get the modal
 const modal = document.getElementById("myModalforPauses");
+const modal2 = document.getElementById("Modalforclockbutton"); 
 
 // Get the button that opens the modal
-const btn = document.getElementById("pauses");
+const btn = document.getElementById("pauses"); 
+const btn2 = document.getElementById("clockbutton");
 
 // Get the <span> element that closes the modal
-const span = document.getElementsByClassName("close")[0];
+const span = document.getElementsByClassName("close")[0]; 
+const span2 = document.getElementsByClassName("close")[1]; //Depending on the span we want to access, this array number has to match.
+//Whenever I try to let span, I can't change it in my function. I would prefer that I could set the span variable as the button is clicked. But this make do.
 
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
     modal.style.display = "block";
+
+};
+
+btn2.onclick = function() {
+    modal2.style.display = "block";
 };
 
 // When the user clicks on <span> (x), close the modal
@@ -17,10 +26,18 @@ span.onclick = function() {
     modal.style.display = "none";
 };
 
+// When the user clicks on <span> (x), close the modal
+span2.onclick = function() {
+    modal2.style.display = "none";
+};
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target === modal) {
         modal.style.display = "none";
+    }
+    if (event.target === modal2) {
+        modal2.style.display = "none";
     }
 };
 
@@ -83,6 +100,10 @@ function timer(h, m, s) {
         //Or just a function being called every second. I need to be able to check if the innerHTML is all equal to 0 that I can make it do something else.
         if (StartingTime === 0){
             clearInterval(TimerInterval);
+            if (PauseTimerArgument(h=null, m=null, s=null)===null){ //delete this if statement here and it works again
+                alert("IT WORKS");
+            }
+
             PauseTimer(h, m, s);
             alert("Break time");
 
@@ -136,3 +157,9 @@ function PauseTimer(h, m, s) {
 
 }
 
+function ClaireDeLune(h, m, s){
+    
+    PauseTimer(h, m, s);
+   
+    
+}

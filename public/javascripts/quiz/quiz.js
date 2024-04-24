@@ -581,6 +581,41 @@ function totalScore(isCorrectList){
 
 
 //---------------------------------------------------------------------------------------Start quiz session
+async function quizSessionResultHtml(sessionName){
+    // check if session is opened
+    let sessionNameJSON = {sessionName: sessionName}
+    let isSession = await fetchPostQuizData("/api/checkIfSessionIsOpened",sessionNameJSON);  
+    
+    let quizDiv = document.getElementById("quiz_output_results");
+    hideDivs("quizResult");
+    if(isIdCreated("sessionCodeId")){
+        errorMessage("You alredy have a session opened",quizDiv);
+        return 0;
+    } else if(!isSession.isSession){
+        errorMessage("No session found with your input, please start a new", quizDiv);
+        hideDivs("start");
+        return 0;
+    }
+
+    let sessionCode = createAllElement("h3","sessionCodeId","sessionCodeId","Code: " + sessionName);
+
+    let copyButton = createAllElement("button","copyQuizSession","copyQuizSession","Copy");
+    copyButton.addEventListener("click", () => {
+        navigator.clipboard.writeText(sessionName);
+    });
+
+    let reloadData = createAllElement("button","quizReloadResult","quizReloadResult","Reload");
+    reloadData.addEventListener("click", teacherOverview);
+
+    let endSession = createAllElement("button","endSessionButton","endSessionButton","End Session");
+    endSession.addEventListener("click", teacherOverview);
+
+    quizDiv.appendChild(sessionCode);
+    quizDiv.appendChild(copyButton);
+    quizDiv.appendChild(reloadData);
+    quizDiv.appendChild(endSession);
+}
+
 
 async function startQuizSession(quizId){
     // Make the session name current time in milliseconds + the quiz id number
@@ -593,37 +628,16 @@ async function startQuizSession(quizId){
     };
     await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
 
-    let quizDiv = document.getElementById("quiz_output_results");
-    hideDivs("quizResult");
-    if(isIdCreated("sessionCodeId")){
-        errorMessage("You alredy have a session opened",quizDiv);
-        return 0;
-    }
-    let sessionCode = document.createElement("h3");
-    sessionCode.id = "sessionCodeId";
-    sessionCode.textContent = "Code: " + sessionName;
-
-    let copyButton = document.createElement("button");
-    copyButton.textContent = "Copy";
-    copyButton.addEventListener("click", () => {
-        navigator.clipboard.writeText(sessionName);
-    });
-
-    let reloadData = document.createElement("button");
-    reloadData.textContent = "Reload";
-    reloadData.addEventListener("click", teacherOverview);
-
-    let endSession = document.createElement("button");
-    endSession.textContent = "End Session";
-    endSession.addEventListener("click", teacherOverview);
-
-    quizDiv.appendChild(sessionCode);
-    quizDiv.appendChild(copyButton);
-    quizDiv.appendChild(reloadData);
-    quizDiv.appendChild(endSession);
+    quizSessionResultHtml(sessionName);
+}
 
 
+let join_session = document.getElementById("join_quiz_session_button");
+join_session.addEventListener("click",joinSessionResult);
 
+function joinSessionResult(){
+    let sessionInput = document.getElementById("join_quiz_session").value;
+    quizSessionResultHtml(sessionInput);
 }
 
 
@@ -635,11 +649,16 @@ async function teacherOverview(){
     let totalSum = 0;
     let totalAnswers = 0;
     let totalQuestionSum = 0;
-
+    if(isIdCreated("resultDiv")){
+        document.getElementById("resultDiv").remove();
+    }
+    let resultDiv = createAllElement("div","resultDiv","resultDiv",null);
+    div.appendChild(resultDiv);
     let questions = data.quizData.QuizName.Questions;
     for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {
         let answerCorrect = 0;
         let questionSum = 0;
+        let questionCorrect = false;
 
         let question = questions[questionIndex];
 
@@ -648,46 +667,21 @@ async function teacherOverview(){
             questionId: question.id
         }
         let answerSum = await fetchPostQuizData("/api/findQuestionScore", JSON);
+        console.log(answerSum);
         answerSum.answers.forEach(answer => {
+            console.log(answer);
             if(answer.isCorrect){
                 answerCorrect += 1;
             }
             questionSum += 1;
         });
+    
         let questionResult = question.questionText + ")  "+ answerCorrect+"/"+questionSum+" Is correct";
         let questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
-        div.appendChild(questionLabel);
+        resultDiv.appendChild(questionLabel);
+        answerCorrect = 0;
+        questionSum = 0;
     }
-
-
-
-    // question.forEach((question,questionIndex) => {
-    //     // find sum of a boolean list
-    //     let answersSum = isCorrectList[questionIndex].length;
-    //     let questionSum = isCorrectList[questionIndex].filter(Boolean).length;
-
-    //     question.appendChild(questionResult);
-    //     totalSum += questionSum;
-    //     totalAnswers += answersSum;
-    //     if(questionSum === answersSum){
-    //         totalQuestionSum += 1;
-    //     }
-    // });
-    // let submitButton = document.getElementById("submitId");
-    
-    // let totalResult = document.createElement("h2");
-    // totalResult.id = "totalResult";
-    // totalResult.className = "totalResult";
-    // totalResult.textContent = "Total Answers) " + totalSum +"/"+totalAnswers + " correct";
-    // submitButton.parentNode.appendChild(totalResult); 
-
-    
-    // let totalQuestionResult = document.createElement("h2");
-    // totalQuestionResult.id = "totalQuestionResult";
-    // totalQuestionResult.className = "totalQuestionResult";
-    // totalQuestionResult.textContent = "Total Questions) " + totalQuestionSum +"/"+question.length + " correct";
-    // submitButton.parentNode.appendChild(totalQuestionResult); 
-    // submitButton.remove();
 }   
 
 
