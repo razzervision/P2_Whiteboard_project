@@ -11,6 +11,11 @@ const span = document.getElementsByClassName("close")[0];
 const span2 = document.getElementsByClassName("close")[1]; //Depending on the span we want to access, this array number has to match.
 //Whenever I try to let span, I can't change it in my function. I would prefer that I could set the span variable as the button is clicked. But this make do.
 
+const reservedHours = 0;
+const reservedMinutes = 0;
+let reservedSeconds = 0;
+
+
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
     modal.style.display = "block";
@@ -52,10 +57,15 @@ const workload = {hrs:"", min:"", sec:""};
 const breaktime = {hrs:"", min:"", sec:""};
 //const StartingTime = 1000; was used as an early test example.
 
-function PauseTimerArgument(h2, m2, s2){
-    PauseTimer(h2, m2, s2);
+function PauseTimerArgument(){
+    const h = hrs.innerHTML;
+    const m = min.innerHTML;
+    const s = sec.innerHTML;
+    return h, m, s;
 }
 
+reservedHours, reservedMinutes, reservedSeconds = PauseTimerArgument();
+PauseTimer(reservedHours, reservedMinutes, reservedSeconds);
 function timer(h, m, s) {
     //Hides the original modal
     modal.style.display = "none";
@@ -81,32 +91,35 @@ function timer(h, m, s) {
     workload.min = m;
     workload.sec = s;
     //Starting time is the amount of seconds there is in an hour, minutes, and seconds. 
-    let StartingTime = workload.hrs*60*60 + workload.min*60 + workload.sec;
+    const StartingTime = workload.hrs*60*60 + workload.min*60 + workload.sec;
     const TimerInterval = setInterval(UpdateCountdown, 1000); //We then make the update countdown function run every second. 
+    UpdateCountdown(); //We also run the function once to make sure it starts at the right time.
+    
+}
 
-    function UpdateCountdown(){
+function UpdateCountdown(){
         
-        //Every time we iterate or run the function again, the amount of seconds in starting time gets reduced by 1 second. 
-        StartingTime--; 
-        console.log(StartingTime); //Test
+    //Every time we iterate or run the function again, the amount of seconds in starting time gets reduced by 1 second. 
+    StartingTime--; 
+    console.log(StartingTime); //Test
         
-        //converting the amount of seconds in starting time to hrs, min, sec, representation. Then putting them into the appropriate HTML elements. 
-        sec.innerHTML = (StartingTime % 60);
-        min.innerHTML = Math.floor((StartingTime - (Math.floor(StartingTime / 3600) * 3600)) / 60);
-        hrs.innerHTML = Math.floor(StartingTime / 3600); 
+    //converting the amount of seconds in starting time to hrs, min, sec, representation. Then putting them into the appropriate HTML elements. 
+    sec.innerHTML = (StartingTime % 60);
+    min.innerHTML = Math.floor((StartingTime - (Math.floor(StartingTime / 3600) * 3600)) / 60);
+    hrs.innerHTML = Math.floor(StartingTime / 3600); 
         
-        //Here I intend on terminating the function and call a new one called "pause" which will have its own parameters. 
-        //From what I can gather, I can use a return statement, since I can't figure out if this is a loop
-        //Or just a function being called every second. I need to be able to check if the innerHTML is all equal to 0 that I can make it do something else.
-        if (StartingTime === 0){
-            clearInterval(TimerInterval);
+    //Here I intend on terminating the function and call a new one called "pause" which will have its own parameters. 
+    //From what I can gather, I can use a return statement, since I can't figure out if this is a loop
+    //Or just a function being called every second. I need to be able to check if the innerHTML is all equal to 0 that I can make it do something else.
+    if (StartingTime === 0){
+        clearInterval(TimerInterval);
 
-            PauseTimer(h2, m2, s2);
-            alert("Break time");
+        PauseTimer(0, 0, 9);
+        alert("Break time");
 
-        }
     }
 }
+
 
 //The pause function should be very similar to the timer function.
 function PauseTimer(h2, m2, s2) {
