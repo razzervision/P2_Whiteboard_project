@@ -19,6 +19,7 @@ let undoarray = [];
 let undoindex = -1;
 const serverurl = document.location.origin;
 const socket = io(serverurl);
+let imgclick = false;
 
 const mouse = {
     x: 0,
@@ -53,7 +54,13 @@ function uploadePicture(){
         canvas.removeEventListener("pointerdown", pointerDown);
         canvas.removeEventListener("pointerup", removeMouseMove);
         canvas.addEventListener("click", placeImg);
-    }
+        
+        if(imgclick){
+            context.drawImage(img, mouse.x, mouse.y, img.width, img.height);
+            canvas.removeEventListenercanvas.addEventListener("click", placeImg);
+            canvas.addEventListener("pointerdown", pointerDown); 
+        }
+    }   
     img.onerror = function(){
         console.log("img load fail");
     }
@@ -64,9 +71,7 @@ canvas.addEventListener("pointerdown", pointerDown);
 function placeImg(event){
     mouse.x = event.clientX - canvasPosition.left;
     mouse.y = event.clientY - canvasPosition.top;
-    context.drawImage(img, mouse.x, mouse.y, img.width, img.height);
-    canvas.removeEventListenercanvas.addEventListener("click", placeImg);
-    canvas.addEventListener("pointerdown", pointerDown);
+    imgclick=true;
 }
 
 function pointerDown(event){
