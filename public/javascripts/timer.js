@@ -52,8 +52,8 @@ const workload = {hrs:"", min:"", sec:""};
 const breaktime = {hrs:"", min:"", sec:""};
 //const StartingTime = 1000; was used as an early test example.
 
-function PauseTimerArgument(h, m, s){
-    PauseTimer(h, m, s);
+function PauseTimerArgument(h2, m2, s2){
+    PauseTimer(h2, m2, s2);
 }
 
 function timer(h, m, s) {
@@ -100,11 +100,8 @@ function timer(h, m, s) {
         //Or just a function being called every second. I need to be able to check if the innerHTML is all equal to 0 that I can make it do something else.
         if (StartingTime === 0){
             clearInterval(TimerInterval);
-            if (PauseTimerArgument(h=null, m=null, s=null)===null){ //delete this if statement here and it works again
-                alert("IT WORKS");
-            }
 
-            PauseTimer(h, m, s);
+            PauseTimer(h2, m2, s2);
             alert("Break time");
 
         }
@@ -112,17 +109,17 @@ function timer(h, m, s) {
 }
 
 //The pause function should be very similar to the timer function.
-function PauseTimer(h, m, s) {
+function PauseTimer(h2, m2, s2) {
 
     console.log("Hello World"); //Test to see that the function gets called.
     
-    hrs.innerHTML = h;
-    min.innerHTML = m;
-    sec.innerHTML = s; 
+    hrs.innerHTML = h2;
+    min.innerHTML = m2;
+    sec.innerHTML = s2; 
     
-    breaktime.hrs = h;
-    breaktime.min = m;
-    breaktime.sec = s;
+    breaktime.hrs = h2;
+    breaktime.min = m2;
+    breaktime.sec = s2;
 
     let StartingTime = breaktime.hrs*60*60 + breaktime.min*60 + breaktime.sec;
     const PauseInterval = setInterval(UpdateCountdown, 1000);
@@ -158,6 +155,7 @@ function PauseTimer(h, m, s) {
 }
 
 function ClaireDeLune(h, m, s){
+    
     
     PauseTimer(h, m, s);
    
