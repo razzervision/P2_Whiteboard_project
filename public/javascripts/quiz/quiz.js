@@ -1,18 +1,18 @@
 //---------------------------------------------------------------------------------------Constants
 
 //Maximum answer the user can insert. 
-const max_answers = 5;
+const maxAnswers = 5;
 
 //---------------------------------------------------------------------------------------Helping funktions
 
 //Check if the element is created
 function isIdCreated(id){
-    let element = document.getElementById(id);
+    const element = document.getElementById(id);
     if (element) {
         return true;
-    } else {
-        return false;
-    }
+    } 
+    return false;
+    
 }
 
 function errorMessage(message,placement){
@@ -22,7 +22,7 @@ function errorMessage(message,placement){
     }
 
     //Generate a error message for the user.
-    let error = document.createElement("h4");
+    const error = document.createElement("h4");
     error.id = "error_message";
     error.textContent = message;
     error.style.color = "red";
@@ -56,11 +56,11 @@ async function fetchPostQuizData(link,id) {
     try {
         // Send the data to the server-side script
         const response = await fetch(link, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json"
             },
-            body: JSON.stringify(id),
+            body: JSON.stringify(id)
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -73,12 +73,10 @@ async function fetchPostQuizData(link,id) {
     }
 }
 
-
-
 //Check if the quiz name already exist
 async function IsQuizNameUnique(name){
     let result = false;
-    let data = await fetchAllQuizData();
+    const data = await fetchAllQuizData();
     data.quizzes.forEach(q => {
         if(q.quizName === name){
             result = true;
@@ -88,10 +86,10 @@ async function IsQuizNameUnique(name){
 }
 
 function hideDivs(show) {
-    let start = document.getElementById("quiz_index");
-    let createQuiz = document.getElementById("creat_quiz_div");
-    let quizOutput = document.getElementById("quiz_output");
-    let quizResult = document.getElementById("quiz_output_results");
+    const start = document.getElementById("quiz_index");
+    const createQuiz = document.getElementById("creat_quiz_div");
+    const quizOutput = document.getElementById("quiz_output");
+    const quizResult = document.getElementById("quiz_output_results");
 
     // Hide all elements first
     start.style.display = "none";
@@ -112,9 +110,9 @@ function hideDivs(show) {
 
 
 function createAllElement(type,id,className,textContent){
-    let element = document.createElement(type);
+    const element = document.createElement(type);
     element.id = id;
-    element.className = className
+    element.className = className;
     element.textContent = textContent;
     return element;
 }
@@ -122,30 +120,22 @@ function createAllElement(type,id,className,textContent){
 
 //---------------------------------------------------------------------------------------Home page
 //Home button
-let homeScreenButton = document.getElementById("quiz_home_screen");
+const homeScreenButton = document.getElementById("quiz_home_screen");
 homeScreenButton.addEventListener("click", () => {
     hideDivs("start");
 });
 
 
-
-
-
-
-
-
-
-
 //---------------------------------------------------------------------------------------Create quiz
 
-let creat_quiz = document.getElementById("create_quiz_button");
-creat_quiz.addEventListener("click", async() => {
-    let name = document.getElementById("create_quiz_text").value;
+const creatQuiz = document.getElementById("create_quiz_button");
+creatQuiz.addEventListener("click", async() => {
+    const name = document.getElementById("create_quiz_text").value;
     if(await IsQuizNameUnique(name)){
-        errorMessage("Already created",creat_quiz);
+        errorMessage("Already created",creatQuiz);
     } else {
         hideDivs("createQuiz");
-        let quizName = document.getElementById("quiz_name");
+        const quizName = document.getElementById("quiz_name");
         quizName.textContent = name; 
     }
 });
@@ -153,20 +143,20 @@ creat_quiz.addEventListener("click", async() => {
 //Generate a new answers input when typing on the first answer text input. 
 function eventListenerHandler(event) {
     //The input element that called this function
-    let elementThatTriggeredEvent = event.target;
+    const elementThatTriggeredEvent = event.target;
     //The whole question div
-    let DivThatTriggeredEvent = elementThatTriggeredEvent.parentNode.parentNode;
-    create_new_answer_box(elementThatTriggeredEvent,DivThatTriggeredEvent);
+    const DivThatTriggeredEvent = elementThatTriggeredEvent.parentNode.parentNode;
+    createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent);
 }
 
 //This function create a new answer box to let the user dynamically add more answers.
-function create_new_answer_box(elementThatTriggeredEvent,DivThatTriggeredEvent){
+function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
     //Remove the EventListener because the new answer is created
     if(elementThatTriggeredEvent){
         elementThatTriggeredEvent.removeEventListener("input", eventListenerHandler);
     }
     //Get the last element in the current div e.g <div class="answer_container" id="answer_container4">
-    let lastElementInCurrentDiv = DivThatTriggeredEvent.lastElementChild;
+    const lastElementInCurrentDiv = DivThatTriggeredEvent.lastElementChild;
 
     //Start id with -1 because if there is none answer then i should generate the first one and the next step is to increase the ID.
     let id = -1;
@@ -175,60 +165,48 @@ function create_new_answer_box(elementThatTriggeredEvent,DivThatTriggeredEvent){
         id = lastElementInCurrentDiv.id[16];
     }
     //Ensure there is a limit of answers and the last . 
-    if(id < max_answers - 1){
+    if(id < maxAnswers - 1){
 
         //Increase the ID with one to make the ID unique.
         id++;
-        let userFrindlyId = id+1;
 
         //Create all the elements needed for an extra answers
-        let questionDiv = document.createElement("div");
-        questionDiv.className = "answer_container";
-        questionDiv.id = "answer_container"+id;
+        const questionDiv = createAllElement("div","answer_container"+id,"answer_container",null);
 
         //Label for answers
-        let answerLabel = document.createElement("label");
-        answerLabel.textContent = "Answer "+ userFrindlyId + ":";
-        answerLabel.id = "answer"+ id + "_label";
-        answerLabel.className="answerLabel_class";
-        answerLabel.setAttribute("for", "answer"+ id);
+        const answerLabel = createAllElement("label","answer"+ id + "_label","answerLabel_class","Answer "+ (id+1) + ":");
         questionDiv.appendChild(answerLabel);
 
         //Answer input
-        let answerText = document.createElement("input");
+        const answerText = createAllElement("input","answer"+id,"answer_text_class",null);
         answerText.type="text";
-        answerText.id = "answer"+id;
-        answerText.className="answer_text_class";
         questionDiv.appendChild(answerText);
         //Generate a EventListener for the new answer text input. 
         answerText.addEventListener("input", eventListenerHandler);
 
         //Correct answer checkbox
-        let answerCheckbox = document.createElement("input");
+        const answerCheckbox = createAllElement("input","checkbox"+id,"answer_checkbox_class",null);
         answerCheckbox.type="checkbox";
-        answerCheckbox.id = "checkbox"+id;
-        answerCheckbox.className = "answer_checkbox_class";
         questionDiv.appendChild(answerCheckbox);
         
         DivThatTriggeredEvent.appendChild(questionDiv);
 
     } else {
         //If theres is too many answers make an error message.
-        errorMessage("You can max insert " + max_answers + " answers", DivThatTriggeredEvent);
+        errorMessage("You can max insert " + maxAnswers + " answers", DivThatTriggeredEvent);
     }
 }
 
 //Generate template for a new question
-const append_new_question = document.getElementById("append_new_question");
-append_new_question.addEventListener("click", () =>{
-    create_new_question();
-});
+const appendNewQuestion = document.getElementById("append_new_question");
+appendNewQuestion.addEventListener("click",createNewQuestion);
+
 // Call it the first time to make the first one.
-create_new_question();
-function create_new_question(){
+createNewQuestion();
+function createNewQuestion(){
     
     //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that e.g <div class="question_DIV" id="question_DIV0">
-    let previousQuestionDiv = document.getElementById("append_new_question").previousElementSibling;
+    const previousQuestionDiv = document.getElementById("append_new_question").previousElementSibling;
 
     //Make the number of question generated to -1 because it start by increase the numbers by one to make the new DIV.
     let questionNumber = -1;
@@ -237,63 +215,53 @@ function create_new_question(){
         questionNumber = parseInt(previousQuestionDiv.id[12]);
     }
     questionNumber++;
-    //This make a ID that is more userfriendly so that it is called question 1 instead of question 0 to the user. 
-    let userFrindlyId = questionNumber + 1;
 
     // Create the main div for the question
-    var questionDiv = document.createElement("div");
-    questionDiv.classList.add("question_DIV");
-    questionDiv.id = "question_DIV" + questionNumber;
+    const questionDiv = createAllElement("div","question_DIV" + questionNumber,"question_DIV",null);
     
     // Create label for the question
-    var questionLabel = document.createElement("label");
-    questionLabel.htmlFor = "question_txt_field";
-    questionLabel.id = "label" + questionNumber;
-    questionLabel.textContent = "Question " + userFrindlyId + ":";
+    const questionLabel = createAllElement("label","label" + questionNumber,"questionLabelClass","Question " + (questionNumber+1) + ":");
 
     // Create input field for the question
-    var questionInput = document.createElement("input");
+    const questionInput = createAllElement("input","question_txt_field" + questionNumber,"question_txt_field_class",null);
     questionInput.type = "text";
-    questionInput.id = "question_txt_field" + questionNumber;
-    questionInput.name = "question_txt_field";
-    questionInput.className = "question_txt_field_class";
 
     // Append elements to the main question div
     questionDiv.appendChild(questionLabel);
     questionDiv.appendChild(questionInput);
 
-    let appendQuestionButton = document.getElementById("append_new_question");
+    const appendQuestionButton = document.getElementById("append_new_question");
     //Insert them before the add new answer button to make the flow intuitive. 
     appendQuestionButton.parentNode.insertBefore(questionDiv, appendQuestionButton);
 
     //make the answer options
-    create_new_answer_box(null,questionDiv);
+    createNewAnswerBox(null,questionDiv);
 
 }
 
 
-let uploadQuizButton = document.getElementById("upload_quiz_button");
-uploadQuizButton.addEventListener("click", get_question_and_answers);
+const uploadQuizButton = document.getElementById("upload_quiz_button");
+uploadQuizButton.addEventListener("click", getQuestionAndAnswers);
 
-function get_question_and_answers(){
-    let quizName = document.getElementById("quiz_name").textContent;
-    let questionList = [];
-    let answersList = [];
-    let correctAnswersList = [];
+async function getQuestionAndAnswers(){
+    const quizName = document.getElementById("quiz_name").textContent;
+    const questionList = [];
+    const answersList = [];
+    const correctAnswersList = [];
 
-    let numberOfQuestions = document.querySelectorAll(".question_DIV");
+    const numberOfQuestions = document.querySelectorAll(".question_DIV");
     numberOfQuestions.forEach((q, index) =>{
-        let question = q.querySelector(".question_txt_field_class").value;
+        const question = q.querySelector(".question_txt_field_class").value;
         questionList.push(question);
 
-        let answers = [];
-        let correctAnswers = [];
-        let answersValue = q.querySelectorAll(".answer_container");
+        const answers = [];
+        const correctAnswers = [];
+        const answersValue = q.querySelectorAll(".answer_container");
         answersValue.forEach(a => {
-            let answerText = a.querySelector(".answer_text_class").value;
-            answers.push(answerText)
-            let answerCheckbox = a.querySelector(".answer_checkbox_class").checked;
-            correctAnswers.push(answerCheckbox)
+            const answerText = a.querySelector(".answer_text_class").value;
+            answers.push(answerText);
+            const answerCheckbox = a.querySelector(".answer_checkbox_class").checked;
+            correctAnswers.push(answerCheckbox);
         });
 
         answersList.push(answers);
@@ -306,212 +274,161 @@ function get_question_and_answers(){
         answersList: answersList,
         correctAnswersList: correctAnswersList
     };
-    // Send the data to the server-side script
-    fetch('/uploadQuiz', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Data has been successfully saved:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-    //Clear questions and their answers after creating a question.
-    clear_questions();
-}
+    const uploadQuiz = await fetchPostQuizData("/uploadQuiz",data);
 
+    hideDivs("start");
+    if(uploadQuiz){
+        alert("quiz is succesfully made");  
+    }
+    
+    //Clear questions and their answers after creating a question.
+    clearQuizzes();
+}
 
 
 //Clear questions and their answers after creating a question.
-function clear_questions(){
+function clearQuizzes(){
     //Get all the elements with the class answer_container
-    let input_divs = document.querySelectorAll(".question_DIV");
-    input_divs.forEach(div => {
+    const inputDivs = document.querySelectorAll(".question_DIV");
+    inputDivs.forEach(div => {
         div.remove();
     });
-    create_new_question();
-
+    createNewQuestion();
 }
-
-
-
-
-
-
-
 
 
 //---------------------------------------------------------------------------------------Search quizzes
 
 
-let searchQuizInput = document.getElementById("search_quiz_text");
+const searchQuizInput = document.getElementById("search_quiz_text");
 searchQuizInput.addEventListener("input", () => {
-    search_quizzes(searchQuizInput.value);
+    searchQuizzes(searchQuizInput.value);
 });
 
 //Find all unique quizzes
-async function search_quizzes(input){
-    let data = await fetchAllQuizData();
+async function searchQuizzes(input){
+    const data = await fetchAllQuizData();
        
-    let table = document.getElementById("search_quiz_table");
+    const table = document.getElementById("search_quiz_table");
     //reset the table
     table.textContent = "";
     data.quizzes.forEach(quiz => {
         // Check if their is a input and if its in the quiz name
         if(input && quiz.quizName.toLowerCase().includes(input.toLowerCase()) || !input){
-            let row = document.createElement("tr");
+            const row = document.createElement("tr");
 
-            let quizName = document.createElement("td");
+            const quizName = document.createElement("td");
             quizName.textContent = quiz.quizName;
             row.appendChild(quizName);
     
-            let start_quiz_button = document.createElement("button");
-            start_quiz_button.textContent = "Start Quiz";
-            start_quiz_button.className = "start_quiz_button";
-            start_quiz_button.addEventListener("click", () => {
+            const startQuizButton = createAllElement("button","startQuizButtonId","startQuizButtonClass","Start Quiz");
+            startQuizButton.addEventListener("click", () => {
                 startQuizSession(quiz.id);
             });
-            row.appendChild(start_quiz_button);
+            row.appendChild(startQuizButton);
     
             table.appendChild(row);
         } 
 
     });
 }
-search_quizzes();
-
-
-
-
-
-
-
-
-
+searchQuizzes();
 
 
 //---------------------------------------------------------------------------------------Join Quiz
-let joinQuiz = document.getElementById("join_quiz_button");
+const joinQuiz = document.getElementById("join_quiz_button");
 joinQuiz.addEventListener("click", startQuiz);
 
 //Start the quiz
 async function startQuiz(){
-    let sessionName = document.getElementById("join_quiz_text").value;
-    let sessionNameJSON = {sessionName: sessionName};
-    let findSession = await fetchPostQuizData("/api/GetSpecificQuizSession",sessionNameJSON);
+    const sessionName = document.getElementById("join_quiz_text").value;
+    const sessionNameJSON = {sessionName: sessionName};
+    const findSession = await fetchPostQuizData("/api/GetSpecificQuizSession",sessionNameJSON);
     
     if(!findSession.session){
         errorMessage("No sessions found",joinQuiz);
         return 0;
     }
     hideDivs("quizOutput");
-    let quizId = findSession.session.QuizNameId;
-    let div = document.getElementById("quiz_output");
+    const quizId = findSession.session.QuizNameId;
+    const div = document.getElementById("quiz_output");
     div.style.display = "block";
     div.textContent = "";
-    let quizIdJSON = {id: quizId};
-    let data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
+    const quizIdJSON = {id: quizId};
+    const data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
     const jsonDisplayDiv = document.getElementById("quiz_output");
 
-    let quizNameLabel = document.createElement("h1");
-    quizNameLabel.id = "quizNameLabel"
-    quizNameLabel.textContent = "name) " + data.quiz.quizName;
+    const quizNameLabel = createAllElement("h1","quizNameLabel","quizNameLabelClass","name) " + data.quiz.quizName);
     jsonDisplayDiv.appendChild(quizNameLabel);
 
-    let sessionNameLabel = document.createElement("h2");
-    sessionNameLabel.id = "quizSessionLabel";
-    sessionNameLabel.textContent = "session)" + sessionName;
+    const sessionNameLabel = createAllElement("h2","quizSessionLabel","quizSessionLabelClass","session)" + sessionName); 
     jsonDisplayDiv.appendChild(sessionNameLabel);
 
 
     data.quiz.Questions.forEach((question , id) =>{
 
         //Create all the elements needed for an extra answers
-        let questionDiv = document.createElement("div");
-        questionDiv.className = "q_container";
-        questionDiv.id = "q_container"+id;
+        const questionDiv = createAllElement("div","q_container"+id,"q_container",null);
 
         // Questions
-        let questionField = document.createElement("h3");
-        questionField.id = "question_field" + id;
-        questionField.textContent = (id + 1) + ") " + question.questionText;
+        const questionField = createAllElement("h3","question_field" + id,"question_fieldClass",(id + 1) + ") " + question.questionText);
         questionDiv.appendChild(questionField);
 
         question.Answers.forEach((answer,i) =>{
 
             //Label for answers
-            let answerLabel = document.createElement("label");
-            answerLabel.textContent = answer.answerText;
-            answerLabel.id = "answer"+ i + "_label";
-            answerLabel.className="answerLabel_class";
+            const answerLabel = createAllElement("label","answer"+ i + "_label","answerLabelClass",answer.answerText);
+
             answerLabel.setAttribute("for", "answer"+ i);
             questionDiv.appendChild(answerLabel);
 
             //Correct answer checkbox
-            let answerCheckbox = document.createElement("input");
+            const answerCheckbox = createAllElement("input","checkbox"+i,"answer_checkbox_class",null);
             answerCheckbox.type="checkbox";
-            answerCheckbox.id = "checkbox"+i;
-            answerCheckbox.className = "answer_checkbox_class";
             questionDiv.appendChild(answerCheckbox);
         });
         jsonDisplayDiv.appendChild(questionDiv);
     });                         
 
-    let submitAnswers = document.createElement("button");
-    submitAnswers.id = "submitId";
+    const submitAnswers = createAllElement("button","submitId","submitId","Submit Answers");
     submitAnswers.type = "submit";
-    submitAnswers.textContent = "Submit Answers";
     jsonDisplayDiv.appendChild(submitAnswers);
 
-    submitAnswersButton = document.querySelector("#submitId");
+    const submitAnswersButton = document.querySelector("#submitId");
     submitAnswersButton.addEventListener("click", () => {
         checkAnswers(quizId,sessionName);
     });
 }
 
 
-
-
-
-
-
-
-
-
-
 //---------------------------------------------------------------------------------------User input upload
 async function checkAnswers(quizId,sessionName){
-    let quizIdJSON = {id: quizId};
-    let data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
-    let userDataAnswerList = [];
-    let userDataQuestion = document.querySelectorAll("#quiz_output .q_container");
+    const quizIdJSON = {id: quizId};
+    const data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
+    const userDataAnswerList = [];
+    const userDataQuestion = document.querySelectorAll("#quiz_output .q_container");
     userDataQuestion.forEach(question =>{
-        let QuestionAnswerList =[];
-        let answersValue = question.querySelectorAll("#quiz_output .answer_checkbox_class");
+        const QuestionAnswerList =[];
+        const answersValue = question.querySelectorAll("#quiz_output .answer_checkbox_class");
         answersValue.forEach(answer => {
             QuestionAnswerList.push(answer.checked);
         });
         userDataAnswerList.push(QuestionAnswerList);        
     });
-    let isCorrectList = [];
+    const isCorrectList = [];
     data.quiz.Questions.forEach((question, questionIndex) => {
-        isQuestionCorrectList = [];
+        const isQuestionCorrectList = [];
         question.Answers.forEach((answer, answerIndex) => {
-            let isCorrect = answer.isCorrect === userDataAnswerList[questionIndex][answerIndex];
-            isQuestionCorrectList.push(isCorrect)
+            const isCorrect = answer.isCorrect === userDataAnswerList[questionIndex][answerIndex];
+            isQuestionCorrectList.push(isCorrect);
         });
         isCorrectList.push(isQuestionCorrectList);
     });
-    userData = {
+    const userData = {
         session: sessionName,
         userId: "Kung Fu Panda",
         isCorrect: isCorrectList
-    }
+    };
     await fetchPostQuizData("/api/insertQuizUserData",userData);
 
     userQuizResponse(userDataQuestion,isCorrectList);
@@ -519,13 +436,10 @@ async function checkAnswers(quizId,sessionName){
 }
 
 
-
-
-
 //---------------------------------------------------------------------------------------Verify input
 function userQuizResponse(questionElement,isCorrectList){
     questionElement.forEach((question,questionIndex) => {
-        let answersValue = question.querySelectorAll("#quiz_output .answer_checkbox_class");
+        const answersValue = question.querySelectorAll("#quiz_output .answer_checkbox_class");
         answersValue.forEach((answer,answerIndex) => {
             if(isCorrectList[questionIndex][answerIndex]){
                 answer.previousElementSibling.style.backgroundColor = "green";
@@ -538,19 +452,18 @@ function userQuizResponse(questionElement,isCorrectList){
 }
 
 function totalScore(isCorrectList){
-    let question = document.querySelectorAll("#quiz_output .q_container");
+    const question = document.querySelectorAll("#quiz_output .q_container");
     let totalSum = 0;
     let totalAnswers = 0;
     let totalQuestionSum = 0;
     question.forEach((question,questionIndex) => {
         // find sum of a boolean list
-        let answersSum = isCorrectList[questionIndex].length;
-        let questionSum = isCorrectList[questionIndex].filter(Boolean).length;
-        let questionResult = document.createElement("h3");
-        questionResult.id = "questionResult"+questionIndex;
-        questionResult.className = "questionResult";
-        questionResult.textContent = questionSum +"/"+answersSum + "correct";
+        const answersSum = isCorrectList[questionIndex].length;
+        const questionSum = isCorrectList[questionIndex].filter(Boolean).length;
 
+        const questionResultText = questionSum +"/"+answersSum + "correct";
+        const questionResult = createAllElement("h3","questionResult"+questionIndex,"questionResult",questionResultText);
+        
         question.appendChild(questionResult);
         totalSum += questionSum;
         totalAnswers += answersSum;
@@ -558,35 +471,26 @@ function totalScore(isCorrectList){
             totalQuestionSum += 1;
         }
     });
-    let submitButton = document.getElementById("submitId");
+    const totalResultText = "Total Answers) " + totalSum +"/"+totalAnswers + " correct";
+    const totalResult = createAllElement("h2","totalResult","totalResult",totalResultText);
     
-    let totalResult = document.createElement("h2");
-    totalResult.id = "totalResult";
-    totalResult.className = "totalResult";
-    totalResult.textContent = "Total Answers) " + totalSum +"/"+totalAnswers + " correct";
-    submitButton.parentNode.appendChild(totalResult); 
+    const totalQuestionText = "Total Questions) " + totalQuestionSum +"/"+question.length + " correct";
+    const totalQuestionResult = createAllElement("h2","totalQuestionResult","totalQuestionResult",totalQuestionText);
 
-    
-    let totalQuestionResult = document.createElement("h2");
-    totalQuestionResult.id = "totalQuestionResult";
-    totalQuestionResult.className = "totalQuestionResult";
-    totalQuestionResult.textContent = "Total Questions) " + totalQuestionSum +"/"+question.length + " correct";
+    const submitButton = document.getElementById("submitId");
+    submitButton.parentNode.appendChild(totalResult); 
     submitButton.parentNode.appendChild(totalQuestionResult); 
     submitButton.remove();
 }
 
 
-
-
-
-
 //---------------------------------------------------------------------------------------Start quiz session
 async function quizSessionResultHtml(sessionName){
     // check if session is opened
-    let sessionNameJSON = {sessionName: sessionName}
-    let isSession = await fetchPostQuizData("/api/checkIfSessionIsOpened",sessionNameJSON);  
+    const sessionNameJSON = {sessionName: sessionName};
+    const isSession = await fetchPostQuizData("/api/checkIfSessionIsOpened",sessionNameJSON);  
     
-    let quizDiv = document.getElementById("quiz_output_results");
+    const quizDiv = document.getElementById("quiz_output_results");
     hideDivs("quizResult");
     if(isIdCreated("sessionCodeId")){
         errorMessage("You alredy have a session opened",quizDiv);
@@ -597,17 +501,17 @@ async function quizSessionResultHtml(sessionName){
         return 0;
     }
 
-    let sessionCode = createAllElement("h3","sessionCodeId","sessionCodeId","Code: " + sessionName);
+    const sessionCode = createAllElement("h3","sessionCodeId","sessionCodeId","Code: " + sessionName);
 
-    let copyButton = createAllElement("button","copyQuizSession","copyQuizSession","Copy");
+    const copyButton = createAllElement("button","copyQuizSession","copyQuizSession","Copy");
     copyButton.addEventListener("click", () => {
         navigator.clipboard.writeText(sessionName);
     });
 
-    let reloadData = createAllElement("button","quizReloadResult","quizReloadResult","Reload");
+    const reloadData = createAllElement("button","quizReloadResult","quizReloadResult","Reload");
     reloadData.addEventListener("click", teacherOverview);
 
-    let endSession = createAllElement("button","endSessionButton","endSessionButton","End Session");
+    const endSession = createAllElement("button","endSessionButton","endSessionButton","End Session");
     endSession.addEventListener("click", teacherOverview);
 
     quizDiv.appendChild(sessionCode);
@@ -622,7 +526,7 @@ async function startQuizSession(quizId){
     const currentTimeInMilliseconds = Date.now();
     const sessionName = currentTimeInMilliseconds + "q" + quizId;
     localStorage.setItem("sessionId",sessionName);
-    let sessionNameJson = {
+    const sessionNameJson = {
         sessionName: sessionName,
         quizId: quizId
     };
@@ -632,52 +536,56 @@ async function startQuizSession(quizId){
 }
 
 
-let join_session = document.getElementById("join_quiz_session_button");
-join_session.addEventListener("click",joinSessionResult);
+const joinSession = document.getElementById("join_quiz_session_button");
+joinSession.addEventListener("click",joinSessionResult);
 
 function joinSessionResult(){
-    let sessionInput = document.getElementById("join_quiz_session").value;
+    const sessionInput = document.getElementById("join_quiz_session").value;
     quizSessionResultHtml(sessionInput);
 }
 
 
 async function teacherOverview(){
-    let div = document.getElementById("quiz_output_results");
-    let session = localStorage.getItem("sessionId");
-    let sessionJSON = {session:session};
-    let data = await fetchPostQuizData("/api/userResponsData",sessionJSON);
-    let totalSum = 0;
-    let totalAnswers = 0;
-    let totalQuestionSum = 0;
+    const div = document.getElementById("quiz_output_results");
+
+    // Remove current data. 
     if(isIdCreated("resultDiv")){
         document.getElementById("resultDiv").remove();
     }
-    let resultDiv = createAllElement("div","resultDiv","resultDiv",null);
+    const resultDiv = createAllElement("div","resultDiv","resultDiv",null);
     div.appendChild(resultDiv);
-    let questions = data.quizData.QuizName.Questions;
+
+    const session = localStorage.getItem("sessionId");
+    const sessionJSON = {session:session};
+    const data = await fetchPostQuizData("/api/userResponsData",sessionJSON);
+
+    const questions = data.quizData.QuizName.Questions;
     for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {
         let answerCorrect = 0;
         let questionSum = 0;
-        let questionCorrect = false;
+        const questionCorrect = false;
+        
+        const question = questions[questionIndex];
 
-        let question = questions[questionIndex];
-
-        let JSON = {
+        const JSON = {
             session: data.quizData.id,
             questionId: question.id
-        }
-        let answerSum = await fetchPostQuizData("/api/findQuestionScore", JSON);
+        };
+        const answerSum = await fetchPostQuizData("/api/findQuestionScore", JSON);
         console.log(answerSum);
+        const userNameList = [];
         answerSum.answers.forEach(answer => {
-            console.log(answer);
+            
+            console.log(answer.userId);
             if(answer.isCorrect){
                 answerCorrect += 1;
             }
             questionSum += 1;
+
         });
-    
-        let questionResult = question.questionText + ")  "+ answerCorrect+"/"+questionSum+" Is correct";
-        let questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
+        
+        const questionResult = question.questionText + ")  "+ answerCorrect+"/"+questionSum+" Is correct";
+        const questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
         resultDiv.appendChild(questionLabel);
         answerCorrect = 0;
         questionSum = 0;
@@ -685,26 +593,23 @@ async function teacherOverview(){
 }   
 
 
-
-
 //---------------------------------------------------------------------------------------tests
 
 
 //Default questions for test
 function autofill(){
-    let name = document.getElementById("quiz_name");
+    const name = document.getElementById("quiz_name");
     name.value="CS2";
 
-    let question = document.getElementById("question_txt_field");
+    const question = document.getElementById("question_txt_field");
     question.value="Hvem er bedst til CS?";
 
-    let answer0 = document.getElementById("answer0");
+    const answer0 = document.getElementById("answer0");
     answer0.value= "Rantzau";
 
-    let answer0_checked = document.getElementById("checkbox0");
+    const answer0Checked = document.getElementById("checkbox0");
     
-    answer0_checked.checked = "true";
+    answer0Checked.checked = "true";
 
 }
 // autofill();
-

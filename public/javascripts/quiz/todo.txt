@@ -4,14 +4,14 @@ in progress = 🛠️
 
 -Insert images
 -Styling 
--Go to previous questions to edit.✅ 
--Start a session ✅
--Make the answers go into the new database ✅
+✅-Go to previous questions to edit.
+✅-Start a session 
+✅-Make the answers go into the new database 
 -Make a overview for the session starter.
--Make a overview for the quiztaker. ✅
--Make a error message function ✅
--Fix the bug the first time adding an answer the new eventlistener
-when doing input dosen't occurr. ✅
+✅-Make a overview for the quiztaker. 
+✅-Make a error message function 
+✅-Fix the bug the first time adding an answer the new eventlistener
+when doing input dosen't occurr. 
 
 -Make all input secure
 -Tilføj algoritme til søge funktionen. 
@@ -22,13 +22,13 @@ div.appendchild(shuffledList))
 
 -Slet quiz funktion. (evt med admin adgang)
 -Slet questions (når man laver dem)
--Make the quiz local until all the questions
-are done and then upload to the server.✅
+✅-Make the quiz local until all the questions
+are done and then upload to the server.
 
--Make the first question: question 1 instead of 0✅ (id + 1)
--Hjælperfunktion til at display:block,none osv. forksellige sider ✅
+✅-Make the first question: question 1 instead of 0 (id + 1)
+✅-Hjælperfunktion til at display:block,none osv. forksellige sider 
 -Skrive tests
--Lave alle elementer til en funktion sådan man skal skal indsætte alt data som textContent og Id derind.
+✅-Lave alle elementer til en funktion sådan man skal skal indsætte alt data som textContent og Id derind.
 -Gør koden bedre!!!
 
 
