@@ -11,10 +11,6 @@ const span = document.getElementsByClassName("close")[0];
 const span2 = document.getElementsByClassName("close")[1]; //Depending on the span we want to access, this array number has to match.
 //Whenever I try to let span, I can't change it in my function. I would prefer that I could set the span variable as the button is clicked. But this make do.
 
-const reservedHours = 0;
-const reservedMinutes = 0;
-let reservedSeconds = 0;
-
 
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
@@ -55,17 +51,53 @@ const stickyclock = document.getElementsByClassName("stickyclock");
 const clock = document.getElementsByClassName("clock");
 const workload = {hrs:"", min:"", sec:""}; 
 const breaktime = {hrs:"", min:"", sec:""};
+let StartingTime = 0;
+let TimerInterval = 0;
+let PauseInterval = 0;
 //const StartingTime = 1000; was used as an early test example.
+let reservedHours = 0;
+let reservedMinutes = 0;
+let reservedSeconds = 5;
 
-function PauseTimerArgument(){
-    const h = hrs.innerHTML;
-    const m = min.innerHTML;
-    const s = sec.innerHTML;
-    return h, m, s;
+function PauseTimerArgument(h, m, s){
+    reservedHours=h;
+    reservedMinutes=m;
+    reservedSeconds=s;
+
+    console.log(reservedHours);
+    console.log("reservedMinutes =", reservedMinutes);
+    console.log(reservedSeconds);
 }
 
-reservedHours, reservedMinutes, reservedSeconds = PauseTimerArgument();
-PauseTimer(reservedHours, reservedMinutes, reservedSeconds);
+function UpdateCountdownForPause(){
+
+    //Every time we iterate or run the function again, the amount of seconds in starting time gets reduced by 1 second. 
+    StartingTime--; 
+    console.log(StartingTime); //Test
+    
+    //converting the amount of seconds in starting time to hrs, min, sec, representation. Then putting them into the appropriate HTML elements. 
+    sec.innerHTML = (StartingTime % 60);
+    min.innerHTML = Math.floor((StartingTime - (Math.floor(StartingTime / 3600) * 3600)) / 60);
+    hrs.innerHTML = Math.floor(StartingTime / 3600); 
+    
+    
+    if (StartingTime === 0){
+        clearInterval(PauseInterval);
+        modal.style.display = "block";
+        for (item of stickymodal){
+            item.style.display = "block";
+        }
+        for (item of stickyclock){
+            item.style.display = "none";
+        }
+        for (item of clock){
+            item.style.display = "none";
+        }
+    }
+
+}
+
+
 function timer(h, m, s) {
     //Hides the original modal
     modal.style.display = "none";
@@ -91,8 +123,8 @@ function timer(h, m, s) {
     workload.min = m;
     workload.sec = s;
     //Starting time is the amount of seconds there is in an hour, minutes, and seconds. 
-    const StartingTime = workload.hrs*60*60 + workload.min*60 + workload.sec;
-    const TimerInterval = setInterval(UpdateCountdown, 1000); //We then make the update countdown function run every second. 
+    StartingTime = workload.hrs*60*60 + workload.min*60 + workload.sec;
+    TimerInterval = setInterval(UpdateCountdown, 1000); //We then make the update countdown function run every second. 
     UpdateCountdown(); //We also run the function once to make sure it starts at the right time.
     
 }
@@ -114,7 +146,7 @@ function UpdateCountdown(){
     if (StartingTime === 0){
         clearInterval(TimerInterval);
 
-        PauseTimer(0, 0, 9);
+        PauseTimer(reservedHours, reservedMinutes, reservedSeconds);
         alert("Break time");
 
     }
@@ -134,36 +166,9 @@ function PauseTimer(h2, m2, s2) {
     breaktime.min = m2;
     breaktime.sec = s2;
 
-    let StartingTime = breaktime.hrs*60*60 + breaktime.min*60 + breaktime.sec;
-    const PauseInterval = setInterval(UpdateCountdown, 1000);
-
-    function UpdateCountdown(){
-
-        //Every time we iterate or run the function again, the amount of seconds in starting time gets reduced by 1 second. 
-        StartingTime--; 
-        console.log(StartingTime); //Test
-        
-        //converting the amount of seconds in starting time to hrs, min, sec, representation. Then putting them into the appropriate HTML elements. 
-        sec.innerHTML = (StartingTime % 60);
-        min.innerHTML = Math.floor((StartingTime - (Math.floor(StartingTime / 3600) * 3600)) / 60);
-        hrs.innerHTML = Math.floor(StartingTime / 3600); 
-        
-        
-        if (StartingTime === 0){
-            clearInterval(PauseInterval);
-            modal.style.display = "block";
-            for (item of stickymodal){
-                item.style.display = "block";
-            }
-            for (item of stickyclock){
-                item.style.display = "none";
-            }
-            for (item of clock){
-                item.style.display = "none";
-            }
-        }
-
-    }
+    StartingTime = breaktime.hrs*60*60 + breaktime.min*60 + breaktime.sec;
+    PauseInterval = setInterval(UpdateCountdownForPause, 1000);
+    UpdateCountdownForPause();
 
 }
 
