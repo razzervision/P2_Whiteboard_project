@@ -1,4 +1,5 @@
 const canvas = document.getElementById("canvas");
+const pictureLocation = document.getElementById("picture location");
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
 const uploadInput = document.getElementById("uploadInput");
@@ -19,6 +20,8 @@ let undoarray = [];
 let undoindex = -1;
 const serverurl = document.location.origin;
 const socket = io(serverurl);
+let imgX = 0;
+let imgY = 0;
 
 const mouse = {
     x: 0,
@@ -27,6 +30,7 @@ const mouse = {
 
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
+pictureLocation.addEventListener("click",choseLocation);
 
 uploadInput.addEventListener("change", uploadePicture);
 
@@ -48,18 +52,34 @@ function uploadePicture(){
             img.height = imgheightButton.value;
             img.width = imgwithdButton.value;
         }
-        context.drawImage(img, 0, 0, img.width, img.height);
+        context.drawImage(img, imgX, imgY, img.width, img.height);
     }
     img.onerror = function(){
         console.log("img load fail");
     }
 };
 
-canvas.addEventListener("pointerdown", pointerDown)
+canvas.addEventListener("pointerdown", pointerDown);
+
+function choseLocation(){
+    canvas.removeEventListener("pointermove", onMouseMove);
+    canvas.removeEventListener("pointerdown", pointerDown);
+    canvas.removeEventListener("pointerup", removeMouseMove);
+    canvas.addEventListener("pointerdown", ChoseCanvasLocation);
+}
+
+
+function ChoseCanvasLocation(event) {
+    imgX = event.clientX - canvasPosition.left;
+    imgY = event.clientY - canvasPosition.top;
+    console.log(imgX, " & ", imgY);
+    canvas.addEventListener("pointerdown", pointerDown);
+}
 
 
 
 function pointerDown(event){
+    canvas.removeEventListener("pointerdown", ChoseCanvasLocation);
         event.preventDefault();
         mouse.x = event.clientX - canvasPosition.left;
         mouse.y = event.clientY - canvasPosition.top;

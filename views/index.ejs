@@ -125,6 +125,7 @@
                 <input type="file" id="uploadInput" accept="image/*">
                 <input type="number" id="Imgheight">
                 <input type="number" id="Imgwithd">
+                <button id="picture location">Click to chose picture location</button>
                 <button id = "clearCanvas">Clear canvas</button>
                 <input oninput="draw_color = this.value" id = "colorpick" type = "color" class="colorpick">
                 <input oninput="draw_withd = this.value" type="range" min="1" max="100" class="pen">
@@ -207,7 +208,7 @@
              <p><ul>
              <li><button id="longwork" class="timer" onclick="timer(1,30,0)" >Long work, long break </button></li> 
              <li><button id="shortwork" class="timer" onclick="timer(0,45,0)" >Short work, short break </button></li>
-             <li><button id="chore" class="timer" onclick="timer(0,0,5)" onclick="PauseTimerArgument(0,0,5)">Finish a chore! </button></li>
+             <li><button id="chore" class="timer" onclick="timer(0,0,5)" onclick="PauseTimerArgument(0,0,9)">Finish a chore! </button></li>
              <li><button id="relax" class="timer" onclick="timer(0, 0, 5)" onclick="ClaireDeLune(0,0,5)" onclick>Relax break</button></li>
              <li><button id="other" class="timer" onclick="timer(5)" >other</button></li>
              </ul></p>
