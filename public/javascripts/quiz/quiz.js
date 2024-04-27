@@ -248,10 +248,16 @@ async function getQuestionAndAnswers(){
     const questionList = [];
     const answersList = [];
     const correctAnswersList = [];
-
+    let quit = false;
     const numberOfQuestions = document.querySelectorAll(".question_DIV");
     numberOfQuestions.forEach((q, index) =>{
         const question = q.querySelector(".question_txt_field_class").value;
+        // If the question is = ""
+        if(!question){
+            errorMessage("Please fill question",q);
+            quit = true;
+            return;
+        }
         questionList.push(question);
 
         const answers = [];
@@ -259,6 +265,10 @@ async function getQuestionAndAnswers(){
         const answersValue = q.querySelectorAll(".answer_container");
         answersValue.forEach(a => {
             const answerText = a.querySelector(".answer_text_class").value;
+            // Dont push if the answer is = ""
+            if(!answerText){
+                return;
+            }
             answers.push(answerText);
             const answerCheckbox = a.querySelector(".answer_checkbox_class").checked;
             correctAnswers.push(answerCheckbox);
@@ -267,13 +277,16 @@ async function getQuestionAndAnswers(){
         answersList.push(answers);
         correctAnswersList.push(correctAnswers);
     });   
-
+    if(quit){
+        return;
+    }
     const data = {
         quizName: quizName,
         questionList: questionList,
         answersList: answersList,
         correctAnswersList: correctAnswersList
     };
+
     const uploadQuiz = await fetchPostQuizData("/uploadQuiz",data);
 
     hideDivs("start");
@@ -358,6 +371,15 @@ async function startQuiz(){
     const data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
     const jsonDisplayDiv = document.getElementById("quiz_output");
 
+    // Username
+    const userIdLabel = createAllElement("label","userIdLabel","userIdLabel","Username");
+    userIdLabel.setAttribute("for", "quizUsername");
+    jsonDisplayDiv.appendChild(userIdLabel);
+
+    const userId = createAllElement("input","quizUsername","quizUsername",null);
+    userId.type = "text";
+    jsonDisplayDiv.appendChild(userId);
+
     const quizNameLabel = createAllElement("h1","quizNameLabel","quizNameLabelClass","name) " + data.quiz.quizName);
     jsonDisplayDiv.appendChild(quizNameLabel);
 
@@ -403,6 +425,7 @@ async function startQuiz(){
 
 //---------------------------------------------------------------------------------------User input upload
 async function checkAnswers(quizId,sessionName){
+    const userId = document.getElementById("quizUsername").value;
     const quizIdJSON = {id: quizId};
     const data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
     const userDataAnswerList = [];
@@ -426,7 +449,7 @@ async function checkAnswers(quizId,sessionName){
     });
     const userData = {
         session: sessionName,
-        userId: "Kung Fu Panda",
+        userId: userId,
         isCorrect: isCorrectList
     };
     await fetchPostQuizData("/api/insertQuizUserData",userData);
@@ -493,7 +516,7 @@ async function quizSessionResultHtml(sessionName){
     const quizDiv = document.getElementById("quiz_output_results");
     hideDivs("quizResult");
     if(isIdCreated("sessionCodeId")){
-        errorMessage("You alredy have a session opened",quizDiv);
+        errorMessage("You already have a session opened",quizDiv);
         return 0;
     } else if(!isSession.isSession){
         errorMessage("No session found with your input, please start a new", quizDiv);
@@ -512,7 +535,7 @@ async function quizSessionResultHtml(sessionName){
     reloadData.addEventListener("click", teacherOverview);
 
     const endSession = createAllElement("button","endSessionButton","endSessionButton","End Session");
-    endSession.addEventListener("click", teacherOverview);
+    endSession.addEventListener("click", endSessionFunction);
 
     quizDiv.appendChild(sessionCode);
     quizDiv.appendChild(copyButton);
@@ -520,6 +543,11 @@ async function quizSessionResultHtml(sessionName){
     quizDiv.appendChild(endSession);
 }
 
+function endSessionFunction(){
+    localStorage.removeItem("sessionId");
+    document.getElementById("sessionCodeId").remove();
+    hideDivs("start");
+}
 
 async function startQuizSession(quizId){
     // Make the session name current time in milliseconds + the quiz id number
@@ -556,42 +584,72 @@ async function teacherOverview(){
     div.appendChild(resultDiv);
 
     const session = localStorage.getItem("sessionId");
+    
     const sessionJSON = {session:session};
     const data = await fetchPostQuizData("/api/userResponsData",sessionJSON);
+    if(!data.quizData){
+        errorMessage("No data yet",div);
+        return;
+    }
+
+    let totalQuestionCorrect = 0;
 
     const questions = data.quizData.QuizName.Questions;
-    for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {
-        let answerCorrect = 0;
-        let questionSum = 0;
-        const questionCorrect = false;
-        
+    for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {        
         const question = questions[questionIndex];
-
+        const questionText = createAllElement("h1","questionText"+questionIndex,"questionText",question.questionText + ":");
+        resultDiv.appendChild(questionText);
         const JSON = {
             session: data.quizData.id,
             questionId: question.id
         };
         const answerSum = await fetchPostQuizData("/api/findQuestionScore", JSON);
-        console.log(answerSum);
-        const userNameList = [];
-        answerSum.answers.forEach(answer => {
-            
-            console.log(answer.userId);
-            if(answer.isCorrect){
-                answerCorrect += 1;
+        const sortedAnswerList = groupAnswersByUser(answerSum.answers);
+
+        let questionsCorrect = 0;
+        let questionCounter = 0;
+        Object.entries(sortedAnswerList).forEach(([name, { answers }]) => {
+            let result = "Wrong";
+            let color = "red";
+            if(answers.every(answer => answer === true)){
+                result = "Correct";
+                color = "green";
+                questionsCorrect++;
             }
-            questionSum += 1;
-
+            questionCounter++;
+            const questionResult = name + " Answered " + result;
+            const questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
+            questionLabel.style.color=color;
+            resultDiv.appendChild(questionLabel);
         });
-        
-        const questionResult = question.questionText + ")  "+ answerCorrect+"/"+questionSum+" Is correct";
-        const questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
-        resultDiv.appendChild(questionLabel);
-        answerCorrect = 0;
-        questionSum = 0;
-    }
-}   
 
+        const totalQuestionLabelText = questionsCorrect + "/" + questionCounter + " Correct";
+        const totalQuestionLabel = createAllElement("h2","totalQuestionLabel","totalQuestionLabel",totalQuestionLabelText);
+        resultDiv.appendChild(totalQuestionLabel);
+        if(questionsCorrect === questionCounter){
+            totalQuestionCorrect++;
+        }
+    }  
+
+    const totalResultText = "Total: " + totalQuestionCorrect + "/" + questions.length + " Correct";
+    const totalResultElement = createAllElement("h1","totalResultElement","totalResultElement",totalResultText);
+    resultDiv.appendChild(totalResultElement);
+} 
+
+function groupAnswersByUser(data) {
+    const groupedAnswers = {};
+    
+    data.forEach(data => {
+        if (!groupedAnswers[data.userId]) {
+            groupedAnswers[data.userId] = { answers: [data.isCorrect] };
+        } else {
+            groupedAnswers[data.userId].answers.push(data.isCorrect);
+        }
+        
+    });
+    
+    return groupedAnswers;
+}
 
 //---------------------------------------------------------------------------------------tests
 

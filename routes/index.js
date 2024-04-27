@@ -5,7 +5,6 @@ const User = require("../database/user");
 const Quiz = require("../database/database_quiz");
 
 
-
 /* GET home page. */
 router.get("/", function(req, res, next) {
     res.render("index", { title: "Mikkel er cool" });
@@ -26,15 +25,23 @@ router.get("/:room", function(req, res, next) {
 
 
 //------------------------------------------------------------------------------------- quiz
+router.get("/resetAllQuizData", async (req, res) => {    
+    try {
+        // Reset all tables
+        await Quiz.QuizName.drop();
+        await Quiz.Question.drop();
+        await Quiz.Answer.drop();
+        await Quiz.UserAnswer.drop();
+        await Quiz.Session.drop();
+        res.status(201).json({ data: "Succesfully deleted" });
+    } catch (error) {
+        console.error("Error creating quiz", error);
+        res.status(400).send("Error creating quiz");
+    }
+});
+
+
 router.post("/uploadQuiz", async (req, res) => {
-    // Reset all tables
-    // await Quiz.QuizName.drop();
-    // await Quiz.Question.drop();
-    // await Quiz.Answer.drop();
-    // await Quiz.UserAnswer.drop();
-    // await Quiz.Session.drop();
-    // return 0;
-    
     try {
         console.log(req.body);
         const { quizName, questionList, answersList, correctAnswersList } = req.body;
@@ -88,7 +95,7 @@ router.get("/api/Getquizzes", async (req, res) => {
 
 
 router.post("/api/GetSpecificQuiz", async (req, res) => {
-    let quizId = req.body;
+    const quizId = req.body;
     try {
         // Fetch one quiz with quiz id
         const quiz = await Quiz.QuizName.findOne({
@@ -109,7 +116,7 @@ router.post("/api/GetSpecificQuiz", async (req, res) => {
 
 
 router.post("/api/startQuizSession", async (req, res) => {
-    let JSON = req.body;
+    const JSON = req.body;
     console.log(JSON);
     try {
         const session = await Quiz.Session.create({ 
@@ -125,9 +132,8 @@ router.post("/api/startQuizSession", async (req, res) => {
 });
 
 
-
 router.post("/api/GetSpecificQuizSession", async (req, res) => {
-    let sessionName = req.body;
+    const sessionName = req.body;
     try {
         // Fetch one quiz with quiz id
         const session = await Quiz.Session.findOne({
@@ -208,7 +214,7 @@ router.post("/api/userResponsData", async (req, res) => {
                 {
                     model: Quiz.UserAnswer, 
                     where: {
-                        sessionId: sequelize.col('Session.id')
+                        sessionId: sequelize.col("Session.id")
                     }
                 }
             ]
@@ -242,10 +248,6 @@ router.post("/api/findQuestionScore", async (req, res) => {
                 }
             ]
         });
-        
-
-        
-
         
         
         res.status(200).json({ answers });
