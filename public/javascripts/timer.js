@@ -179,3 +179,91 @@ function ClaireDeLune(h, m, s){
    
     
 }
+
+let leavePageCounter = 0;
+let reconPageCounter = 0;
+let mouseClicks = 0;
+let leavingTime; 
+let leftPageTime;
+let leftPageTimeAverage = 0;
+let keyStrokes = 0;
+
+
+function calcAverageActivity(leftPageTime, leftPageTimeOld) {
+    if (leftPageTimeOld === 0) {
+        return leftPageTime;
+    } 
+    return (leftPageTimeOld + leftPageTime)/2;
+    
+}
+
+function clickTracker(){
+
+    document.addEventListener("keydown", () => {
+        keyStrokes++;
+
+    }); 
+
+    document.addEventListener("click", () => {
+        mouseClicks++;
+    });
+}
+
+
+function recursiveClicks(){
+    const counterResult = leavePageCounter === reconPageCounter ? leavePageCounter : (leavePageCounter - 1);
+    const data = {
+        pageActivity:(mouseClicks + keyStrokes),
+        leavePageCounter: counterResult,
+        averageLeftPageTime: leftPageTimeAverage
+    };
+
+    console.log(data);
+    
+
+    leavePageCounter = leavePageCounter === reconPageCounter ? 0 : 1;
+
+ 
+    reconPageCounter = 0;
+    mouseClicks = 0;
+    leftPageTimeAverage = 0;
+    keyStrokes = 0;
+    setTimeout(() => {
+        console.log("Big dick Rasmus");
+        recursiveClicks();
+    }, 6000);
+}
+
+
+function timeAwayFromPage(){
+    window.addEventListener("blur", () => {
+        leavePageCounter++;
+        leavingTime = Date.now(); 
+
+    });
+    window.addEventListener("focus", () => {
+    
+    
+        if (leavePageCounter === 0) {
+            return 0;
+        }
+        const currentTime = Date.now();
+
+        leftPageTime = currentTime - leavingTime; 
+        console.log(leftPageTime, leftPageTimeAverage);
+        leftPageTimeAverage = calcAverageActivity(leftPageTime, leftPageTimeAverage);
+
+        console.log(leftPageTimeAverage);
+        reconPageCounter++;
+    });
+}
+
+
+startLogging();
+
+function startLogging(){
+    clickTracker();
+    recursiveClicks();
+    timeAwayFromPage();
+
+}
