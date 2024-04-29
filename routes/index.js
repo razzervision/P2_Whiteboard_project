@@ -25,15 +25,21 @@ router.get("/:room", function(req, res, next) {
 
 
 //------------------------------------------------------------------------------------- quiz
-router.get("/resetAllQuizData", async (req, res) => {    
+router.post("/resetAllQuizData", async (req, res) => {    
     try {
-        // Reset all tables
-        await Quiz.QuizName.drop();
-        await Quiz.Question.drop();
-        await Quiz.Answer.drop();
-        await Quiz.UserAnswer.drop();
-        await Quiz.Session.drop();
-        res.status(201).json({ data: "Succesfully deleted" });
+        const {key} = req.body;
+        if(key === "Delete"){
+            // Reset all tables
+            await Quiz.QuizName.drop();
+            await Quiz.Question.drop();
+            await Quiz.Answer.drop();
+            await Quiz.UserAnswer.drop();
+            await Quiz.Session.drop();
+            res.status(201).json({ data: "Succesfully deleted" });
+        } else {
+            res.status(201).json({data: "Wrong Key"});
+        }
+        
     } catch (error) {
         console.error("Error creating quiz", error);
         res.status(400).send("Error creating quiz");

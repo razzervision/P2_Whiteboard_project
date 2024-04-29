@@ -28,8 +28,11 @@ display: block;
 margin-bottom: 5px;
 }
 
-.quiz_index input[type="text"],
+.quiz_index input[type="text"]{
+  width: 50%;
+}
 .quiz_index button {
+  width: 30%;
 margin-bottom: 10px;
 }
 
