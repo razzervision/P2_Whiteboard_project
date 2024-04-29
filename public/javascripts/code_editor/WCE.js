@@ -37,7 +37,15 @@ document.getElementById("language").addEventListener("change", function() {
     editor.setOption("mode", mode);
 });
 
-document.getElementById("theme").addEventListener("change", function() {
-    const theme = this.value; 
-    editor.setOption("theme", theme);
+const themeDropdown = document.getElementById("theme");
+themeDropdown.addEventListener("change", () =>{
+    const value = themeDropdown.value;
+    changeTheme(value);    
 });
+
+function changeTheme(value){
+    const theme = value; 
+    editor.setOption("theme", theme);
+}
+changeTheme("solarized");
+changeTheme("darcula");
