@@ -18,7 +18,10 @@ function isIdCreated(id){
 function errorMessage(message,placement){
     //Check if there already is a fail message
     if(isIdCreated("error_message")){
-        document.getElementById("error_message").remove();
+        const oldMessage = document.getElementById("error_message");
+        if(oldMessage.textContent === message){
+            return;
+        }
     }
 
     //Generate a error message for the user.
@@ -52,7 +55,7 @@ async function fetchAllQuizData() {
     }
 }
 
-async function fetchPostQuizData(link,id) {
+async function fetchPostQuizData(link,postData) {
     try {
         // Send the data to the server-side script
         const response = await fetch(link, {
@@ -60,7 +63,7 @@ async function fetchPostQuizData(link,id) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(id)
+            body: JSON.stringify(postData)
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -73,17 +76,6 @@ async function fetchPostQuizData(link,id) {
     }
 }
 
-//Check if the quiz name already exist
-async function IsQuizNameUnique(name){
-    let result = false;
-    const data = await fetchAllQuizData();
-    data.quizzes.forEach(q => {
-        if(q.quizName === name){
-            result = true;
-        } 
-    });
-    return result;
-}
 
 function hideDivs(show) {
     const start = document.getElementById("quiz_index");
@@ -127,6 +119,18 @@ homeScreenButton.addEventListener("click", () => {
 
 
 //---------------------------------------------------------------------------------------Create quiz
+//Check if the quiz name already exist
+async function IsQuizNameUnique(name){
+    let result = false;
+    const data = await fetchAllQuizData();
+    if(!data){return;}
+    data.quizzes.forEach(q => {
+        if(q.quizName === name){
+            result = true;
+        } 
+    });
+    return result;
+}
 
 const creatQuiz = document.getElementById("create_quiz_button");
 creatQuiz.addEventListener("click", async() => {
@@ -165,36 +169,34 @@ function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
         id = lastElementInCurrentDiv.id[16];
     }
     //Ensure there is a limit of answers and the last . 
-    if(id < maxAnswers - 1){
-
-        //Increase the ID with one to make the ID unique.
-        id++;
-
-        //Create all the elements needed for an extra answers
-        const questionDiv = createAllElement("div","answer_container"+id,"answer_container",null);
-
-        //Label for answers
-        const answerLabel = createAllElement("label","answer"+ id + "_label","answerLabel_class","Answer "+ (id+1) + ":");
-        questionDiv.appendChild(answerLabel);
-
-        //Answer input
-        const answerText = createAllElement("input","answer"+id,"answer_text_class",null);
-        answerText.type="text";
-        questionDiv.appendChild(answerText);
-        //Generate a EventListener for the new answer text input. 
-        answerText.addEventListener("input", eventListenerHandler);
-
-        //Correct answer checkbox
-        const answerCheckbox = createAllElement("input","checkbox"+id,"answer_checkbox_class",null);
-        answerCheckbox.type="checkbox";
-        questionDiv.appendChild(answerCheckbox);
-        
-        DivThatTriggeredEvent.appendChild(questionDiv);
-
-    } else {
+    if(id >= maxAnswers -1){
         //If theres is too many answers make an error message.
-        errorMessage("You can max insert " + maxAnswers + " answers", DivThatTriggeredEvent);
+        errorMessage("You can max insert " + maxAnswers + " answers", lastElementInCurrentDiv);
+        return;
     }
+    //Increase the ID with one to make the ID unique.
+    id++;
+
+    //Create all the elements needed for an extra answers
+    const questionDiv = createAllElement("div","answer_container"+id,"answer_container",null);
+
+    //Label for answers
+    const answerLabel = createAllElement("label","answer"+ id + "_label","answerLabel_class","Answer "+ (id+1) + ":");
+    questionDiv.appendChild(answerLabel);
+
+    //Answer input
+    const answerText = createAllElement("input","answer"+id,"answer_text_class",null);
+    answerText.type="text";
+    questionDiv.appendChild(answerText);
+    //Generate a EventListener for the new answer text input. 
+    answerText.addEventListener("input", eventListenerHandler);
+
+    //Correct answer checkbox
+    const answerCheckbox = createAllElement("input","checkbox"+id,"answer_checkbox_class",null);
+    answerCheckbox.type="checkbox";
+    questionDiv.appendChild(answerCheckbox);
+    
+    DivThatTriggeredEvent.appendChild(questionDiv); 
 }
 
 //Generate template for a new question
@@ -321,7 +323,7 @@ searchQuizInput.addEventListener("input", () => {
 //Find all unique quizzes
 async function searchQuizzes(input){
     const data = await fetchAllQuizData();
-       
+    if(!data){return;}
     const table = document.getElementById("search_quiz_table");
     //reset the table
     table.textContent = "";
