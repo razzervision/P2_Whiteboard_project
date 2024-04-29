@@ -100,6 +100,19 @@ router.get("/api/Getquizzes", async (req, res) => {
 });
 
 
+router.get("/api/GetQuizSessions", async (req, res) => {
+    try {
+        // Fetch all quizzes with their associated questions and answers
+        const lastQuizSession = await Quiz.Session.findOne({
+            order: [['id', 'DESC']] // Order by ID in descending order to get the highest ID
+        });             
+        
+        res.status(200).json({ lastQuizSession });
+    } catch (error) {
+        console.error("Error fetching quizzes", error);
+        res.status(500).send("Error fetching quizzes");
+    }
+});
 router.post("/api/GetSpecificQuiz", async (req, res) => {
     const quizId = req.body;
     try {
@@ -271,7 +284,6 @@ router.post("/api/checkIfSessionIsOpened", async (req, res) => {
                 sessionName: sessionName
             }
         });
-        console.log(isSession);
         
         res.status(200).json({ isSession });
     } catch (error) {
@@ -279,5 +291,26 @@ router.post("/api/checkIfSessionIsOpened", async (req, res) => {
         res.status(500).send("Error fetching quiz");
     }
 });
+
+
+router.post("/api/endSession", async (req, res) => {
+    try {
+        const { sessionName } = req.body;
+        const session = await Quiz.Session.findOne({
+            where: {
+                sessionName: sessionName
+            }
+        });
+
+        await session.update({ sessionOpen: false });
+        
+        res.status(200).json({ session });
+    } catch (error) {
+        console.error("Error fetching quiz", error);
+        res.status(500).send("Error fetching quiz");
+    }
+});
+
+
 
 module.exports = router;

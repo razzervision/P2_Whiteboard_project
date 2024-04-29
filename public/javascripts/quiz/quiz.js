@@ -40,9 +40,9 @@ function errorMessage(message,placement){
 }
 
 //this function return all the data from the quiz.json file.
-async function fetchAllQuizData() {
+async function fetchGetQuizData(link) {
     try {
-        const response = await fetch("/api/Getquizzes");
+        const response = await fetch(link);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -122,7 +122,7 @@ homeScreenButton.addEventListener("click", () => {
 //Check if the quiz name already exist
 async function IsQuizNameUnique(name){
     let result = false;
-    const data = await fetchAllQuizData();
+    const data = await fetchGetQuizData("/api/Getquizzes");
     if(!data){return;}
     data.quizzes.forEach(q => {
         if(q.quizName === name){
@@ -134,13 +134,16 @@ async function IsQuizNameUnique(name){
 
 const creatQuiz = document.getElementById("create_quiz_button");
 creatQuiz.addEventListener("click", async() => {
-    const name = document.getElementById("create_quiz_text").value;
-    if(await IsQuizNameUnique(name)){
-        errorMessage("Already created",creatQuiz);
+    const name = document.getElementById("create_quiz_text");
+    const nameValue = name.value;
+    if (nameValue === ""){
+        errorMessage("Please insert a name",name);
+    } else if(await IsQuizNameUnique(nameValue)){
+        errorMessage("Already created",name);
     } else {
         hideDivs("createQuiz");
         const quizName = document.getElementById("quiz_name");
-        quizName.textContent = name; 
+        quizName.textContent = nameValue; 
     }
 });
 
@@ -325,7 +328,7 @@ searchQuizInput.addEventListener("input", () => {
 
 //Find all unique quizzes
 async function searchQuizzes(input){
-    const data = await fetchAllQuizData();
+    const data = await fetchGetQuizData("/api/Getquizzes");
     if(!data){return;}
     const table = document.getElementById("search_quiz_table");
     //reset the table
@@ -531,33 +534,38 @@ async function quizSessionResultHtml(sessionName){
 
     const sessionCode = createAllElement("h3","sessionCodeId","sessionCodeId","Code: " + sessionName);
 
-    const copyButton = createAllElement("button","copyQuizSession","copyQuizSession","Copy");
+    const copyButton = createAllElement("button","copyQuizSession","copyQuizSession","Copy code");
     copyButton.addEventListener("click", () => {
         navigator.clipboard.writeText(sessionName);
     });
 
-    const reloadData = createAllElement("button","quizReloadResult","quizReloadResult","Reload");
+    const reloadData = createAllElement("button","quizReloadResult","quizReloadResult","Reload data");
     reloadData.addEventListener("click", teacherOverview);
 
     const endSession = createAllElement("button","endSessionButton","endSessionButton","End Session");
     endSession.addEventListener("click", endSessionFunction);
 
+    sessionCode.appendChild(copyButton);
     quizDiv.appendChild(sessionCode);
-    quizDiv.appendChild(copyButton);
     quizDiv.appendChild(reloadData);
     quizDiv.appendChild(endSession);
 }
 
 function endSessionFunction(){
+    let startDiv = document.getElementById("quiz_home_screen");
+    const sessionName = localStorage.getItem("sessionId");
+    console.log(sessionName);
+
     localStorage.removeItem("sessionId");
     document.getElementById("sessionCodeId").remove();
-    hideDivs("start");
+    hideDivs("start")
+    errorMessage("Your session has been successfully ended",startDiv);
 }
 
 async function startQuizSession(quizId){
-    // Make the session name current time in milliseconds + the quiz id number
-    const currentTimeInMilliseconds = Date.now();
-    const sessionName = currentTimeInMilliseconds + "q" + quizId;
+    let sessionName = await fetchGetQuizData("/api/GetQuizSessions");
+    sessionName = (sessionName.lastQuizSession.id + 1) + "q" + quizId;
+
     localStorage.setItem("sessionId",sessionName);
     const sessionNameJson = {
         sessionName: sessionName,
@@ -567,7 +575,6 @@ async function startQuizSession(quizId){
 
     quizSessionResultHtml(sessionName);
 }
-
 
 const joinSession = document.getElementById("join_quiz_session_button");
 joinSession.addEventListener("click",joinSessionResult);
@@ -593,7 +600,7 @@ async function teacherOverview(){
     const sessionJSON = {session:session};
     const data = await fetchPostQuizData("/api/userResponsData",sessionJSON);
     if(!data.quizData){
-        errorMessage("No data yet",div);
+        errorMessage("No players have completed the quiz at this time.",div);
         return;
     }
 
