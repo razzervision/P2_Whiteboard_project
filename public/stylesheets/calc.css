@@ -2,9 +2,10 @@
     border: 5px solid black;
     background-image: linear-gradient(to bottom right, #ddd 0%, #eee 25%, rgb(192, 201, 199) 50%, #eee 75%, #ddd 100%);
     background-size: 200% 100%;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     display: flex;
-    position: fixed;
+    position: absolute;
+    box-sizing: border-box;
 }
 
   .calculatorMain::after {
@@ -74,10 +75,12 @@
 }
 
 .classHistory {
-    width: 93%;
+    /* width: 93%; */
+    width: auto;
+    height: auto;
     padding: 5px;
     margin: 5px;
-    height: 170px;
+    /* height: 170px; */
     border-radius: 4px;
     border: 1px black;
     background-color: white;

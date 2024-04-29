@@ -76,16 +76,21 @@
   <button id="quiz_home_screen">HOME</button>
   <div class="quiz_index" id="quiz_index">
     <label for="create_quiz_text">Quiz name</label>
-    <input type="text" id="create_quiz_text">
+    <input type="text" id="create_quiz_text" placeholder="e.g Mergesort">
     <button id="create_quiz_button">Create quiz</button>
     <br>
     <label for="join_quiz_text">Join Quiz</label>
-    <input type="text" id="join_quiz_text">
+    <input type="text" id="join_quiz_text" placeholder="e.g 111q2">
     <button id="join_quiz_button">Join quiz</button>
+    <br> 
+     
     <br>  
-
+    <label for="join_quiz_session">Insert session</label>
+    <input type="text" id="join_quiz_session" placeholder="e.g 111q2">
+    <button id="join_quiz_session_button">Join session results</button>
+    <br>  
     <label for="search_quiz_text">Search quizzes</label> 
-    <input type="text" id="search_quiz_text">
+    <input type="text" id="search_quiz_text" placeholder="e.g Mergesort">
 
     <table id="search_quiz_table">
       <tr>
@@ -94,11 +99,7 @@
       </tr>
     </table>
 
-    <br>  
-    <label for="join_quiz_session">Insert session</label>
-    <input type="text" id="join_quiz_session">
-    <button id="join_quiz_session_button">Join session results</button>
-    <br>  
+ 
     
   </div>
 
@@ -209,7 +210,7 @@
              <p><ul>
              <li><button id="longwork" class="timer" onclick="timer(1,30,0)" >Long work, long break </button></li> 
              <li><button id="shortwork" class="timer" onclick="timer(0,45,0)" >Short work, short break </button></li>
-             <li><button id="chore" class="timer" onclick="timer(0,0,5)" onclick="PauseTimerArgument(0,0,5)">Finish a chore! </button></li>
+             <li><button id="chore" class="timer" onclick="timer(0,0,5);PauseTimerArgument(0,0,9)">Finish a chore! </button></li>
              <li><button id="relax" class="timer" onclick="timer(0, 0, 5)" onclick="ClaireDeLune(0,0,5)" onclick>Relax break</button></li>
              <li><button id="other" class="timer" onclick="timer(5)" >other</button></li>
              </ul></p>

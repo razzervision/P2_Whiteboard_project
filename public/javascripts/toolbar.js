@@ -7,6 +7,7 @@ const timerElement = document.querySelector("#timerElement");
 const toolbar = document.getElementById("toolbar");
 
 const primaryDropzone = document.querySelector("#primaryDropzone");
+const drawArea = document.querySelector("#drawArea");
 
 const paintProgramId = document.querySelector("#paintProgram");
 const codeProgramId = document.querySelector("#codeProgram");
@@ -19,6 +20,8 @@ codeProgramId.style.display = "none";
 quizProgramId.style.display = "none";
 calcProgramId.style.display = "none";
 timerProgramId.style.display = "block";
+
+codeProgramId.style.position = "absolute";
 
 class Program {
     constructor(name, value, width, height, top, left, isActive = false) {
@@ -43,6 +46,11 @@ const programs = [paintProgram, codeProgram, quizProgram, calcProgram, timerProg
 
 let draggedElementX, draggedElementY = 0;
 
+primaryDropzone.style.height = window.innerHeight + "px";
+const primaryDropzoneHeight = window.innerHeight;
+primaryDropzone.style.width = window.innerWidth + "px";
+const primaryDropzoneWidth = window.innerWidth;
+console.log(primaryDropzoneWidth);
 primaryDropzone.appendChild(document.querySelector("#paintProgram"));
 paintProgramId.style.display = "block";
 
@@ -64,7 +72,6 @@ function dragStart(e) {
 
     offsetX = e.clientX - draggedElement.getBoundingClientRect().left;
     offsetY = e.clientY - draggedElement.getBoundingClientRect().top;
-    console.log(checkActivePrograms());
 }
 
 function drag(e) {
@@ -74,16 +81,19 @@ function drag(e) {
         draggedElement.style.top = (e.clientY - offsetY) + "px";
 
         const elementToDisplay = divConverter(draggedElement);
-        if (e.clientX < (document.querySelector("#drawArea").offsetWidth)/2) {
-
-            splitScreen(checkActivePrograms(), true, elementToDisplay);
-        } else {
-            splitScreen(checkActivePrograms(), false, elementToDisplay);
+        if (e.clientX < (document.querySelector("#drawArea").offsetWidth)/2 && e.clientY < (primaryDropzoneHeight/2)) {
+            sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 1);
+        } else if (e.clientX > (document.querySelector("#drawArea").offsetWidth)/2 && e.clientY < (primaryDropzoneHeight/2)) {
+            sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 2);
+        } else if (e.clientX < (document.querySelector("#drawArea").offsetWidth)/2 && e.clientY > (primaryDropzoneHeight/2)) {
+            sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 3);
+        } else if (e.clientX > (document.querySelector("#drawArea").offsetWidth)/2 && e.clientY > (primaryDropzoneHeight/2)) {
+            sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 4);
         }
+        primaryDropzone.appendChild(elementToDisplay);
+        draggedElementX = (e.clientX - offsetX) + "px";
+        draggedElementY = (e.clientY - offsetY) + "px";
     }
-    
-    draggedElementX = (e.clientX - offsetX) + "px";
-    draggedElementY = (e.clientY - offsetY) + "px";
 }
 
 function dragEnd() {
@@ -91,6 +101,7 @@ function dragEnd() {
     const program = programs.find(program => program.value === dataValue);
     program.isActive = true;
     draggedElement = null;
+    console.log(checkActiveProgramsList());
 }
 
 function divConverter (draggedElement) {
@@ -102,7 +113,17 @@ function divConverter (draggedElement) {
 }
 
 function checkActivePrograms () {
-    const i = [];
+    let i = 0;
+    programs.forEach(program => {
+        if (program.isActive === true) {
+            i++;
+        }
+    });
+    return i;
+}
+
+function checkActiveProgramsList () {
+    let i = [];
     programs.forEach(program => {
         if (program.isActive === true) {
             i.push(program);
@@ -111,31 +132,55 @@ function checkActivePrograms () {
     return i;
 }
 
-function splitScreen (activePrograms, leftOrRight, elementToDisplay) {
-    // let new_divider = document.createElement("div");
-    // document.querySelector("#draw_area").appendChild(new_divider);
-    
-    if (activePrograms.length === 1) {
 
-        const programId = activePrograms[0].value;
-        const programChange = document.querySelector("#" + programId);
-        programChange.style.width = "70%";
-        if (!leftOrRight) {
-            programChange.style.left = "0%";
-            sizeElement(elementToDisplay, "30%", "100%", "70%", "0%");
+// place = 1,2,3,4   1 topleft, 2 topright, 3 bottomleft, 4 bottomright
+function sizeElement (element, activePrograms, activeProgramsList, place) {
+    if (activePrograms == 1) {
+        let str = "#" + activeProgramsList[0].value;
+        let activeProgram = document.querySelector(str);
+
+        if (place == 1 || place == 3) {
+            element.style.left = "0%";
+            activeProgram.style.left = "30%";
         } else {
-            programChange.style.left = "30%";
-            sizeElement(elementToDisplay, "30%", "100%", "0%", "0%");
+            element.style.left = "70%";
+            activeProgram.style.left = "0%";
         }
+
+        element.style.width = "30%";
+        element.style.height = "100%";
+        element.style.top = "8.3%";
+        element.style.display = "block";
+
+        activeProgram.style.width = "70%";
+        activeProgram.style.height = "100%";
+        activeProgram.style.top = "8.3%";
     }
-}
 
-function sizeElement (element, width, height, left, top) {
-    primaryDropzone.appendChild(element);
+    if (activePrograms == 2) {
+        activeProgramsList.forEach(element => {
+            let str = "#" + element.value;
+            let activeProgram = document.querySelector(str);
 
-    element.style.display = "block";
-    element.style.width = width;
-    element.style.height = height;
-    element.style.left = left;
-    element.style.top = top;
+            if (place == 1 || place == 2) {
+                activeProgram.style.top = "38.3%";
+            } else {
+                activeProgram.style.top = "8.3%";
+
+            }
+            activeProgram.style.height = "70%";
+        });
+
+        if (place == 1 || place == 2) {
+            element.style.top = "8.3%";
+        } else {
+            element.style.top = "70%";
+        }
+        element.style.width = "100%";
+        element.style.height = "30%";
+        element.style.left = "0%";
+        element.style.display = "block";
+    }
+
+
 }
