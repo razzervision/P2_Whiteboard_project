@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require("path");
+
 const express = require("express");
 const router = express.Router();
 const sequelize = require("../database/database");
@@ -22,7 +25,17 @@ router.post("/users", (req, res) => {
 router.get("/:room", function(req, res, next) {
     res.render("index", { room: req.params.room, title: "Together Paint"});
 });
-
+//------------------------------------------------------------------------------------- code editor
+router.get("/api/loadLanguages", (req, res) => {
+    try {
+        const data = fs.readFileSync(path.join(__dirname, "../database/languages.json"), "utf8");
+        console.log(data);
+        res.json(JSON.parse(data));
+    } catch (error) {
+        console.error("Error fetching quiz data:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 //------------------------------------------------------------------------------------- quiz
 router.post("/resetAllQuizData", async (req, res) => {    
