@@ -1,14 +1,15 @@
+//canvas setup
 const canvas = document.getElementById("canvas");
-const pictureLocation = document.getElementById("picture location");
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
-const uploadInput = document.getElementById("uploadInput");
-const imgheightButton =document.getElementById("Imgheight");
-const imgwithdButton = document.getElementById("Imgwithd");
+
 let width = canvas.offsetWidth;
 let height = canvas.offsetHeight;
+
 canvas.width = width;
 canvas.height = height;
+
+//default canvas stuff
 const startBackground = "white";
 let draw_color = "black";
 let draw_withd = 50;
@@ -16,58 +17,43 @@ const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0, 0, canvas.width, canvas.height);
 let canvasPosition = canvas.getBoundingClientRect();
-let undoarray = [];
-let undoindex = -1;
-const serverurl = document.location.origin;
-const socket = io(serverurl);
+
+//picture upload
+const pictureLocation = document.getElementById("picture location");
+const uploadInput = document.getElementById("uploadInput");
+const imgheightButton =document.getElementById("Imgheight");
+const imgwithdButton = document.getElementById("Imgwithd");
+
+//start position of picture
 let imgX = 0;
 let imgY = 0;
 
+
+//undo array
+let undoarray = [];
+let undoindex = -1;
+
+//sockets
+const serverurl = document.location.origin;
+const socket = io(serverurl);
+
+//mouse object
 const mouse = {
     x: 0,
     y: 0
 };
 
+//event listeners
 clear.addEventListener("click", clearCanvas);
 undoB.addEventListener("click", undo);
 pictureLocation.addEventListener("click",choseLocation);
 
 uploadInput.addEventListener("change", uploadePicture);
-
-
-function uploadePicture(){
-    var img = new Image();
-    img.src = URL.createObjectURL(this.files[0]);
-    img.onload = function(){
-        if(imgheightButton.value>= canvas.height || imgwithdButton.value>= canvas.width){
-            img.width = canvas.width;
-            img.height = canvas.height;  
-        }else if(imgheightButton.value>= canvas.height){
-            img.height = canvas.height;
-            img.width = imgwithdButton.value;
-        }else if(imgwithdButton.value>= canvas.width){
-            img.width = canvas.width;
-            img.height = imgheightButton.value;
-        }else{
-            img.height = imgheightButton.value;
-            img.width = imgwithdButton.value;
-        }
-        context.drawImage(img, imgX, imgY, img.width, img.height);
-    }
-    img.onerror = function(){
-        console.log("img load fail");
-    }
-};
-
+window.addEventListener("resize", rezize);
 canvas.addEventListener("pointerdown", pointerDown);
 
-function choseLocation(){
-    canvas.removeEventListener("pointermove", onMouseMove);
-    canvas.removeEventListener("pointerdown", pointerDown);
-    canvas.removeEventListener("pointerup", removeMouseMove);
-    canvas.addEventListener("pointerdown", ChoseCanvasLocation);
-}
 
+//functions
 
 function ChoseCanvasLocation(event) {
     imgX = event.clientX - canvasPosition.left;
@@ -76,7 +62,12 @@ function ChoseCanvasLocation(event) {
     canvas.addEventListener("pointerdown", pointerDown);
 }
 
-
+function choseLocation(){
+    canvas.removeEventListener("pointermove", onMouseMove);
+    canvas.removeEventListener("pointerdown", pointerDown);
+    canvas.removeEventListener("pointerup", removeMouseMove);
+    canvas.addEventListener("pointerdown", ChoseCanvasLocation);
+}
 
 function pointerDown(event){
     canvas.removeEventListener("pointerdown", ChoseCanvasLocation);
@@ -143,19 +134,16 @@ function clearCanvas() {
 }
 
 function undo() {
-    //if the undoarrays index is 0 or less then we might as well clear canvas.
     if (undoindex <= 0) {
         clearCanvas();
     } else {
-        //else we just want to go one back therefore remove the top layer of the stack
         undoindex -= 1;
         undoarray.pop();
-        //here we wanty to insert the last saved in the undo into the canvas.
         context.putImageData(undoarray[undoindex], 0, 0);
     }
 }
 
-window.addEventListener("resize", function () {
+function rezize () {
     width = canvas.offsetWidth;
     height = canvas.offsetHeight;
 
@@ -166,11 +154,37 @@ window.addEventListener("resize", function () {
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.putImageData(undoarray[undoindex], 0, 0);
     canvasPosition = canvas.getBoundingClientRect();
-});
+};
 
 function changeColor(element) {
     draw_color = element.style.backgroundColor;
 }
+
+function uploadePicture(){
+    var img = new Image();
+    img.src = URL.createObjectURL(this.files[0]);
+    img.onload = function(){
+        if(imgheightButton.value>= canvas.height || imgwithdButton.value>= canvas.width){
+            img.width = canvas.width;
+            img.height = canvas.height;  
+        }else if(imgheightButton.value>= canvas.height){
+            img.height = canvas.height;
+            img.width = imgwithdButton.value;
+        }else if(imgwithdButton.value>= canvas.width){
+            img.width = canvas.width;
+            img.height = imgheightButton.value;
+        }else{
+            img.height = imgheightButton.value;
+            img.width = imgwithdButton.value;
+        }
+        context.drawImage(img, imgX, imgY, img.width, img.height);
+    }
+    img.onerror = function(){
+        console.log("img load fail");
+    }
+};
+
+//sockets
 
 socket.on("draw", function (data) {
     context.moveTo(data.x, data.y);
