@@ -1,13 +1,18 @@
-function loadLanguages() {
-    return new Promise((resolve, reject) => {
-        // Fetch the JSON file
-        fetch("/javascripts/code_editor/languages.json")
-            .then(response => response.json())
-            .then(data => resolve(data.languages))
-            .catch(error => reject(error));
-    });
+async function loadLanguages() {
+    try {
+        const response = await fetch("/api/loadLanguages");
+        // if (!response.ok) {
+        //     throw new Error(HTTP error! status: ${response.status});
+        // }
+        const data = await response.json();
+        // Use the data to display your quiz
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching quiz data:", error);
+        return null; // Return null or handle the error as needed
+    }
 }
-
 const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
     lineNumbers: true,
     autoCloseBrackets: true,
@@ -16,9 +21,9 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 });
 
 loadLanguages()
-    .then(languages => {
+    .then(data => {
         const languageDropdown = document.getElementById("language");
-        languages.forEach(lang => {
+        data.languages.forEach(lang => {
             const option = document.createElement("option");
             option.value = lang.mode;
             option.textContent = lang.name;
