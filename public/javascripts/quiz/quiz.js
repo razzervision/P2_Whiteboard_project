@@ -298,6 +298,9 @@ async function getQuestionAndAnswers(){
     
     //Clear questions and their answers after creating a question.
     clearQuizzes();
+
+    // Search for all quizzes to append it.
+    searchQuizzes(null);
 }
 
 
@@ -647,7 +650,6 @@ function groupAnswersByUser(data) {
         } else {
             groupedAnswers[data.userId].answers.push(data.isCorrect);
         }
-        
     });
     
     return groupedAnswers;
