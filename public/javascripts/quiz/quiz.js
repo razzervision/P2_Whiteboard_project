@@ -40,9 +40,9 @@ function errorMessage(message,placement){
 }
 
 //this function return all the data from the quiz.json file.
-async function fetchAllQuizData() {
+async function fetchGetQuizData(link) {
     try {
-        const response = await fetch("/api/Getquizzes");
+        const response = await fetch(link);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -122,7 +122,7 @@ homeScreenButton.addEventListener("click", () => {
 //Check if the quiz name already exist
 async function IsQuizNameUnique(name){
     let result = false;
-    const data = await fetchAllQuizData();
+    const data = await fetchGetQuizData("/api/Getquizzes");
     if(!data){return;}
     data.quizzes.forEach(q => {
         if(q.quizName === name){
@@ -134,13 +134,16 @@ async function IsQuizNameUnique(name){
 
 const creatQuiz = document.getElementById("create_quiz_button");
 creatQuiz.addEventListener("click", async() => {
-    const name = document.getElementById("create_quiz_text").value;
-    if(await IsQuizNameUnique(name)){
-        errorMessage("Already created",creatQuiz);
+    const name = document.getElementById("create_quiz_text");
+    const nameValue = name.value;
+    if (nameValue === ""){
+        errorMessage("Please insert a name",name);
+    } else if(await IsQuizNameUnique(nameValue)){
+        errorMessage("Already created",name);
     } else {
         hideDivs("createQuiz");
         const quizName = document.getElementById("quiz_name");
-        quizName.textContent = name; 
+        quizName.textContent = nameValue; 
     }
 });
 
@@ -325,7 +328,7 @@ searchQuizInput.addEventListener("input", () => {
 
 //Find all unique quizzes
 async function searchQuizzes(input){
-    const data = await fetchAllQuizData();
+    const data = await fetchGetQuizData("/api/Getquizzes");
     if(!data){return;}
     const table = document.getElementById("search_quiz_table");
     //reset the table
@@ -469,10 +472,12 @@ function userQuizResponse(questionElement,isCorrectList){
     questionElement.forEach((question,questionIndex) => {
         const answersValue = question.querySelectorAll("#quiz_output .answer_checkbox_class");
         answersValue.forEach((answer,answerIndex) => {
-            if(isCorrectList[questionIndex][answerIndex]){
+            if(!isCorrectList[questionIndex][answerIndex] && !answer.checked){
                 answer.previousElementSibling.style.backgroundColor = "green";
-            } else {
+            } else if(!isCorrectList[questionIndex][answerIndex] && answer.checked){
                 answer.previousElementSibling.style.backgroundColor = "red";
+            } else if (isCorrectList[questionIndex][answerIndex] && answer.checked){
+                answer.previousElementSibling.style.backgroundColor = "green";
             }
         });
     });
@@ -481,32 +486,26 @@ function userQuizResponse(questionElement,isCorrectList){
 
 function totalScore(isCorrectList){
     const question = document.querySelectorAll("#quiz_output .q_container");
-    let totalSum = 0;
-    let totalAnswers = 0;
     let totalQuestionSum = 0;
     question.forEach((question,questionIndex) => {
         // find sum of a boolean list
         const answersSum = isCorrectList[questionIndex].length;
         const questionSum = isCorrectList[questionIndex].filter(Boolean).length;
 
-        const questionResultText = questionSum +"/"+answersSum + "correct";
-        const questionResult = createAllElement("h3","questionResult"+questionIndex,"questionResult",questionResultText);
-        
-        question.appendChild(questionResult);
-        totalSum += questionSum;
-        totalAnswers += answersSum;
+        let result = "Incorrect";
         if(questionSum === answersSum){
-            totalQuestionSum += 1;
+            totalQuestionSum++;
+            result = "Correct";
         }
+        const questionResult = createAllElement("h3","questionResult"+questionIndex,"questionResult",result);
+        question.appendChild(questionResult);
+
     });
-    const totalResultText = "Total Answers) " + totalSum +"/"+totalAnswers + " correct";
-    const totalResult = createAllElement("h2","totalResult","totalResult",totalResultText);
-    
-    const totalQuestionText = "Total Questions) " + totalQuestionSum +"/"+question.length + " correct";
+
+    const totalQuestionText = "Total) " + totalQuestionSum +"/"+question.length + " Correct";
     const totalQuestionResult = createAllElement("h2","totalQuestionResult","totalQuestionResult",totalQuestionText);
 
     const submitButton = document.getElementById("submitId");
-    submitButton.parentNode.appendChild(totalResult); 
     submitButton.parentNode.appendChild(totalQuestionResult); 
     submitButton.remove();
 }
@@ -531,33 +530,37 @@ async function quizSessionResultHtml(sessionName){
 
     const sessionCode = createAllElement("h3","sessionCodeId","sessionCodeId","Code: " + sessionName);
 
-    const copyButton = createAllElement("button","copyQuizSession","copyQuizSession","Copy");
+    const copyButton = createAllElement("button","copyQuizSession","copyQuizSession","Copy code");
     copyButton.addEventListener("click", () => {
         navigator.clipboard.writeText(sessionName);
     });
 
-    const reloadData = createAllElement("button","quizReloadResult","quizReloadResult","Reload");
+    const reloadData = createAllElement("button","quizReloadResult","quizReloadResult","Reload data");
     reloadData.addEventListener("click", teacherOverview);
 
     const endSession = createAllElement("button","endSessionButton","endSessionButton","End Session");
     endSession.addEventListener("click", endSessionFunction);
 
+    sessionCode.appendChild(copyButton);
     quizDiv.appendChild(sessionCode);
-    quizDiv.appendChild(copyButton);
     quizDiv.appendChild(reloadData);
     quizDiv.appendChild(endSession);
 }
 
 function endSessionFunction(){
+    const startDiv = document.getElementById("quiz_home_screen");
+    const sessionName = localStorage.getItem("sessionId");
+
     localStorage.removeItem("sessionId");
     document.getElementById("sessionCodeId").remove();
     hideDivs("start");
+    errorMessage("Your session has been successfully ended",startDiv);
 }
 
 async function startQuizSession(quizId){
-    // Make the session name current time in milliseconds + the quiz id number
-    const currentTimeInMilliseconds = Date.now();
-    const sessionName = currentTimeInMilliseconds + "q" + quizId;
+    let sessionName = await fetchGetQuizData("/api/GetQuizSessions");
+    sessionName = (sessionName.lastQuizSession.id + 1) + "q" + quizId;
+
     localStorage.setItem("sessionId",sessionName);
     const sessionNameJson = {
         sessionName: sessionName,
@@ -567,7 +570,6 @@ async function startQuizSession(quizId){
 
     quizSessionResultHtml(sessionName);
 }
-
 
 const joinSession = document.getElementById("join_quiz_session_button");
 joinSession.addEventListener("click",joinSessionResult);
@@ -593,7 +595,7 @@ async function teacherOverview(){
     const sessionJSON = {session:session};
     const data = await fetchPostQuizData("/api/userResponsData",sessionJSON);
     if(!data.quizData){
-        errorMessage("No data yet",div);
+        errorMessage("No players have completed the quiz at this time.",div);
         return;
     }
 
