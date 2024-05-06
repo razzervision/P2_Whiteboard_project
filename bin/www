@@ -113,3 +113,5 @@ io.on("connection", (socket) => {
     });
 });
 
+// timezone
+process.env.TZ = "Europe/Copenhagen";
