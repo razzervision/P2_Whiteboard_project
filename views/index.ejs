@@ -153,12 +153,15 @@
 <!--- calDIV -->
 <div id="calcProgram" class="calculatorMain"> 
   <div class="dropdownCalc">
-    <button class="dropDownLinAlg" onclick="dropdownMenu()" >SwitchToLin</button>
-    <div id="dropdown" class="dropdown-content">
-      <a href="#" onclick="switchToLinearAlgebra()">Linear Algebra</a>
-      <!-- tilføj flere her-->
+    
+    <select name="mathType" id="mathType">
+    <option value="calcKeys">Calc</option>
+    <option value="linalg">Linear Algebra</option>
+    <!-- tilføj flere her-->
+    </select>
+  <input type="submit" value="Submit">
+      
     </div>
-  </div>  
 
 <!--- CALC -->
   <div class="calcKeys">
@@ -195,11 +198,10 @@
     </div>
 
     <!--- Linear algebra -->
-    <div class="linearAlgebra" style="display: none;">
+    <div class="linearAlgebra">
       <h2>Linear Algebra</h2>
       <p>This is the linear algebra section.</p>
     </div>
-
   </div>
 </div>
 
