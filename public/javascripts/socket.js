@@ -7,9 +7,12 @@
         if (checkbox.checked) {
             socket.connect();
             console.log("connected");
+            localStorage.setItem("sessionName","TEST");
         } else {
             socket.disconnect();
             console.log("disconnected");
+            localStorage.setItem("sessionName",null);
         }
     });
 })();
+

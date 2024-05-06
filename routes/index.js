@@ -6,6 +6,8 @@ const router = express.Router();
 const sequelize = require("../database/database");
 const User = require("../database/user");
 const Quiz = require("../database/database_quiz");
+const Pauses = require("../database/database_pauses.js");
+const Pause = require("../database/database_pauses.js");
 
 
 /* GET home page. */
@@ -48,14 +50,16 @@ router.post("/resetAllQuizData", async (req, res) => {
             await Quiz.Answer.drop();
             await Quiz.UserAnswer.drop();
             await Quiz.Session.drop();
+            // Reset pause data
+            await Pauses.drop();
             res.status(201).json({ data: "Succesfully deleted" });
         } else {
             res.status(201).json({data: "Wrong Key"});
         }
         
     } catch (error) {
-        console.error("Error creating quiz", error);
-        res.status(400).send("Error creating quiz");
+        console.error("Error resetting database", error);
+        res.status(400).send("Error resetting database");
     }
 });
 
@@ -117,10 +121,11 @@ router.get("/api/GetQuizSessions", async (req, res) => {
     try {
         // Fetch all quizzes with their associated questions and answers
         const lastQuizSession = await Quiz.Session.findOne({
-            order: [['id', 'DESC']] // Order by ID in descending order to get the highest ID
+            order: [["id", "DESC"]] // Order by ID in descending order to get the highest ID
         });             
-        
         res.status(200).json({ lastQuizSession });
+
+        
     } catch (error) {
         console.error("Error fetching quizzes", error);
         res.status(500).send("Error fetching quizzes");
@@ -323,7 +328,25 @@ router.post("/api/endSession", async (req, res) => {
         res.status(500).send("Error fetching quiz");
     }
 });
-
+// --------------------------------------------------------------------------------------------Pauses
+router.post("/api/InsertPauseData", async (req, res) => {
+    try {
+        console.log(req.body);
+        const { session, lastTimePauseOccurred , websiteActivity, leftWebsite, averageTimeLeftWebsite } = req.body;
+        const data = await Pauses.create({
+            session: session,
+            lastTimePauseOccurred: lastTimePauseOccurred,
+            websiteActivity: websiteActivity,
+            leftWebsite: leftWebsite,
+            averageTimeLeftWebsite: averageTimeLeftWebsite
+        });
+        
+        res.status(200).json({ data });
+    } catch (error) {
+        console.error("Error uploading pauseData", error);
+        res.status(500).send("Error uploading pauseData");
+    }
+});
 
 
 module.exports = router;

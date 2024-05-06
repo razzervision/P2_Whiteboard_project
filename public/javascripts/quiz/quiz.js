@@ -549,9 +549,9 @@ async function quizSessionResultHtml(sessionName){
 
 function endSessionFunction(){
     const startDiv = document.getElementById("quiz_home_screen");
-    const sessionName = localStorage.getItem("sessionId");
+    const sessionName = localStorage.getItem("quizSessionId");
 
-    localStorage.removeItem("sessionId");
+    localStorage.removeItem("quizSessionId");
     document.getElementById("sessionCodeId").remove();
     hideDivs("start");
     errorMessage("Your session has been successfully ended",startDiv);
@@ -559,9 +559,13 @@ function endSessionFunction(){
 
 async function startQuizSession(quizId){
     let sessionName = await fetchGetQuizData("/api/GetQuizSessions");
-    sessionName = (sessionName.lastQuizSession.id + 1) + "q" + quizId;
+    if (sessionName.lastQuizSession) {
+        sessionName = (sessionName.lastQuizSession.id + 1) + "q" + quizId;
+    } else {
+        sessionName = "0q" + quizId;
+    }
 
-    localStorage.setItem("sessionId",sessionName);
+    localStorage.setItem("quizSessionId",sessionName);
     const sessionNameJson = {
         sessionName: sessionName,
         quizId: quizId
@@ -590,7 +594,7 @@ async function teacherOverview(){
     const resultDiv = createAllElement("div","resultDiv","resultDiv",null);
     div.appendChild(resultDiv);
 
-    const session = localStorage.getItem("sessionId");
+    const session = localStorage.getItem("quizSessionId");
     
     const sessionJSON = {session:session};
     const data = await fetchPostQuizData("/api/userResponsData",sessionJSON);
