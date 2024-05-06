@@ -182,6 +182,7 @@ function uploadePicture(){
     img.onerror = function(){
         console.log("img load fail");
     }
+
 };
 
 //sockets
