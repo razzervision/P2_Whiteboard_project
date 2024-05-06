@@ -472,10 +472,12 @@ function userQuizResponse(questionElement,isCorrectList){
     questionElement.forEach((question,questionIndex) => {
         const answersValue = question.querySelectorAll("#quiz_output .answer_checkbox_class");
         answersValue.forEach((answer,answerIndex) => {
-            if(isCorrectList[questionIndex][answerIndex]){
+            if(!isCorrectList[questionIndex][answerIndex] && !answer.checked){
                 answer.previousElementSibling.style.backgroundColor = "green";
-            } else {
+            } else if(!isCorrectList[questionIndex][answerIndex] && answer.checked){
                 answer.previousElementSibling.style.backgroundColor = "red";
+            } else if (isCorrectList[questionIndex][answerIndex] && answer.checked){
+                answer.previousElementSibling.style.backgroundColor = "green";
             }
         });
     });
@@ -484,32 +486,26 @@ function userQuizResponse(questionElement,isCorrectList){
 
 function totalScore(isCorrectList){
     const question = document.querySelectorAll("#quiz_output .q_container");
-    let totalSum = 0;
-    let totalAnswers = 0;
     let totalQuestionSum = 0;
     question.forEach((question,questionIndex) => {
         // find sum of a boolean list
         const answersSum = isCorrectList[questionIndex].length;
         const questionSum = isCorrectList[questionIndex].filter(Boolean).length;
 
-        const questionResultText = questionSum +"/"+answersSum + "correct";
-        const questionResult = createAllElement("h3","questionResult"+questionIndex,"questionResult",questionResultText);
-        
-        question.appendChild(questionResult);
-        totalSum += questionSum;
-        totalAnswers += answersSum;
+        let result = "Incorrect";
         if(questionSum === answersSum){
-            totalQuestionSum += 1;
+            totalQuestionSum++;
+            result = "Correct";
         }
+        const questionResult = createAllElement("h3","questionResult"+questionIndex,"questionResult",result);
+        question.appendChild(questionResult);
+
     });
-    const totalResultText = "Total Answers) " + totalSum +"/"+totalAnswers + " correct";
-    const totalResult = createAllElement("h2","totalResult","totalResult",totalResultText);
-    
-    const totalQuestionText = "Total Questions) " + totalQuestionSum +"/"+question.length + " correct";
+
+    const totalQuestionText = "Total) " + totalQuestionSum +"/"+question.length + " Correct";
     const totalQuestionResult = createAllElement("h2","totalQuestionResult","totalQuestionResult",totalQuestionText);
 
     const submitButton = document.getElementById("submitId");
-    submitButton.parentNode.appendChild(totalResult); 
     submitButton.parentNode.appendChild(totalQuestionResult); 
     submitButton.remove();
 }
@@ -552,13 +548,12 @@ async function quizSessionResultHtml(sessionName){
 }
 
 function endSessionFunction(){
-    let startDiv = document.getElementById("quiz_home_screen");
+    const startDiv = document.getElementById("quiz_home_screen");
     const sessionName = localStorage.getItem("sessionId");
-    console.log(sessionName);
 
     localStorage.removeItem("sessionId");
     document.getElementById("sessionCodeId").remove();
-    hideDivs("start")
+    hideDivs("start");
     errorMessage("Your session has been successfully ended",startDiv);
 }
 
