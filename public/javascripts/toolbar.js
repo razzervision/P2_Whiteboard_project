@@ -7,7 +7,7 @@ const timerElement = document.querySelector("#timerElement");
 const toolbar = document.getElementById("toolbar");
 
 const primaryDropzone = document.querySelector("#primaryDropzone");
-const drawArea = document.querySelector("#drawArea");
+// const drawArea = document.querySelector("#drawArea");
 
 const paintProgramId = document.querySelector("#paintProgram");
 const codeProgramId = document.querySelector("#codeProgram");
@@ -81,16 +81,15 @@ function drag(e) {
         draggedElement.style.top = (e.clientY - offsetY) + "px";
 
         const elementToDisplay = divConverter(draggedElement);
-        if (e.clientX < (document.querySelector("#drawArea").offsetWidth)/2 && e.clientY < (primaryDropzoneHeight/2)) {
+        if (e.clientX < (document.querySelector("#primaryDropzone").offsetWidth)/2 && e.clientY < (primaryDropzoneHeight/2)) {
             sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 1);
-        } else if (e.clientX > (document.querySelector("#drawArea").offsetWidth)/2 && e.clientY < (primaryDropzoneHeight/2)) {
+        } else if (e.clientX > (document.querySelector("#primaryDropzone").offsetWidth)/2 && e.clientY < (primaryDropzoneHeight/2)) {
             sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 2);
-        } else if (e.clientX < (document.querySelector("#drawArea").offsetWidth)/2 && e.clientY > (primaryDropzoneHeight/2)) {
+        } else if (e.clientX < (document.querySelector("#primaryDropzone").offsetWidth)/2 && e.clientY > (primaryDropzoneHeight/2)) {
             sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 3);
-        } else if (e.clientX > (document.querySelector("#drawArea").offsetWidth)/2 && e.clientY > (primaryDropzoneHeight/2)) {
+        } else if (e.clientX > (document.querySelector("#primaryDropzone").offsetWidth)/2 && e.clientY > (primaryDropzoneHeight/2)) {
             sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 4);
         }
-        primaryDropzone.appendChild(elementToDisplay);
         draggedElementX = (e.clientX - offsetX) + "px";
         draggedElementY = (e.clientY - offsetY) + "px";
     }
@@ -131,56 +130,77 @@ function checkActiveProgramsList () {
     return i;
 }
 
-
 // place = 1,2,3,4   1 topleft, 2 topright, 3 bottomleft, 4 bottomright
+let run = false;
+const secondRow = document.createElement("div");
 function sizeElement (element, activePrograms, activeProgramsList, place) {
-    if (activePrograms == 1) {
+    let leftORright;
+
+    if (activePrograms === 1) {
         const str = "#" + activeProgramsList[0].value;
         const activeProgram = document.querySelector(str);
 
-        if (place == 1 || place == 3) {
-            element.style.left = "0%";
-            activeProgram.style.left = "30%";
-        } else {
-            element.style.left = "70%";
-            activeProgram.style.left = "0%";
-        }
+        primaryDropzone.removeChild(activeProgram);
 
-        element.style.width = "30%";
+        primaryDropzone.style.display = "grid";
+        primaryDropzone.style.gridGap = "10px";
+        element.style.width = "100%";
         element.style.height = "100%";
-        element.style.top = "8.3%";
+        activeProgram.style.width = "100%";
+        activeProgram.style.height = "100%";
         element.style.display = "block";
 
-        activeProgram.style.width = "70%";
-        activeProgram.style.height = "100%";
-        activeProgram.style.top = "8.3%";
+        if (place === 2 || place === 4) {
+            primaryDropzone.appendChild(activeProgram);
+            primaryDropzone.appendChild(element);
+            primaryDropzone.style.gridTemplateColumns = "70% 30%";
+            leftORright = 1;
+        } else {
+            primaryDropzone.appendChild(element);
+            primaryDropzone.appendChild(activeProgram);
+            primaryDropzone.style.gridTemplateColumns = "30% 70%";
+            leftORright = 2;
+        }
     }
 
-    if (activePrograms == 2) {
-        activeProgramsList.forEach(element => {
-            const str = "#" + element.value;
+    if (activePrograms === 2) {
+
+        if (leftORright === 1) {
+            primaryDropzone.style.gridTemplateColumns = "70% 30%";
+        } else {
+            primaryDropzone.style.gridTemplateColumns = "30% 70%";   
+        }
+
+        if (!run) {      
+            secondRow.style.gridColumnStart = "span 2";
+
+            secondRow.appendChild(element);
+            primaryDropzone.appendChild(secondRow);
+            run = true;
+        }
+        element.style.display = "block";
+
+        const newList = [];
+        activeProgramsList.forEach(elem => {
+            const str = "#" + elem.value;
             const activeProgram = document.querySelector(str);
-
-            if (place == 1 || place == 2) {
-                activeProgram.style.top = "38.3%";
-            } else {
-                activeProgram.style.top = "8.3%";
-
-            }
-            activeProgram.style.height = "70%";
+            newList.push(activeProgram);
+            primaryDropzone.removeChild(activeProgram);
         });
 
-        if (place == 1 || place == 2) {
-            element.style.top = "8.3%";
+        if (place === 1 || place === 2) {
+            primaryDropzone.style.gridTemplateRows = "22%";
+
+            primaryDropzone.appendChild(secondRow);
+            primaryDropzone.appendChild(newList[1]);
+            primaryDropzone.appendChild(newList[0]);
         } else {
-            element.style.top = "70%";
+            primaryDropzone.style.gridTemplateRows = "70%";
+
+            primaryDropzone.appendChild(newList[1]);
+            primaryDropzone.appendChild(newList[0]);
+            primaryDropzone.appendChild(secondRow);
+
         }
-        element.style.width = "100%";
-        element.style.height = "30%";
-        element.style.left = "0%";
-        element.style.display = "block";
     }
 }
-
-
-// # ændring
