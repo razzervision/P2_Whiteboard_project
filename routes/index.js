@@ -22,9 +22,7 @@ router.post("/users", (req, res) => {
     });
 });
 
-router.get("/:room", function(req, res, next) {
-    res.render("index", { room: req.params.room, title: "Together Paint"});
-});
+
 //------------------------------------------------------------------------------------- code editor
 router.get("/api/loadLanguages", (req, res) => {
     try {
@@ -117,7 +115,7 @@ router.get("/api/GetQuizSessions", async (req, res) => {
     try {
         // Fetch all quizzes with their associated questions and answers
         const lastQuizSession = await Quiz.Session.findOne({
-            order: [['id', 'DESC']] // Order by ID in descending order to get the highest ID
+            order: [["id", "DESC"]] // Order by ID in descending order to get the highest ID
         });             
         
         res.status(200).json({ lastQuizSession });
@@ -323,7 +321,6 @@ router.post("/api/endSession", async (req, res) => {
         res.status(500).send("Error fetching quiz");
     }
 });
-
 
 
 module.exports = router;
