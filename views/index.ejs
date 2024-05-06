@@ -59,6 +59,7 @@
         <div class = "toolbarElement" id = "codeEditorElement" data-value="codeProgram" draggable="true">Code Editor</div>
         <div class = "toolbarElement" id = "quizElement" data-value="quizProgram" draggable="true">Quiz</div>
         <div class = "toolbarElement" id = "calculatorElement" data-value="calcProgram" draggable="true">Calc</div>
+        <div><input type="checkbox" id="connectSocket"> <label for="connectSocket">connect to group</label></div>
       </menu>
     </nav>
   </div>
@@ -120,11 +121,14 @@
 
   <div id="paintProgram" class="paint">
     <canvas id = "canvas"></canvas>
+    <canvas id = "canvas1"></canvas>
     <div class="nav">
             <div class ="options">
                 <input type="file" id="uploadInput" accept="image/*">
                 <input type="number" id="Imgheight">
                 <input type="number" id="Imgwithd">
+                <button id ="changeCanvas" type="button">Change Canvas</button>
+                <button id ="changeCanvas1" type="button">Change Canvas</button>
                 <button id="picture location">Click to chose picture location</button>
                 <button id = "clearCanvas">Clear canvas</button>
                 <input oninput="draw_color = this.value" id = "colorpick" type = "color" class="colorpick">
@@ -153,12 +157,15 @@
 <!--- calDIV -->
 <div id="calcProgram" class="calculatorMain"> 
   <div class="dropdownCalc">
-    <button class="dropDownLinAlg" onclick="dropdownMenu()" >SwitchToLin</button>
-    <div id="dropdown" class="dropdown-content">
-      <a href="#" onclick="switchToLinearAlgebra()">Linear Algebra</a>
-      <!-- tilføj flere her-->
+    
+    <select name="mathType" id="mathType">
+    <option value="calcKeys">Calc</option>
+    <option value="linalg">Linear Algebra</option>
+    <!-- tilføj flere her-->
+    </select>
+  <input type="submit" value="Submit">
+      
     </div>
-  </div>  
 
 <!--- CALC -->
   <div class="calcKeys">
@@ -195,11 +202,10 @@
     </div>
 
     <!--- Linear algebra -->
-    <div class="linearAlgebra" style="display: none;">
+    <div class="linearAlgebra">
       <h2>Linear Algebra</h2>
       <p>This is the linear algebra section.</p>
     </div>
-
   </div>
 </div>
 
