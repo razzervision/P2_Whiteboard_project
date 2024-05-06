@@ -354,6 +354,9 @@ router.post("/api/InsertPauseData", async (req, res) => {
                 session: session
             }
         });
+        if(!session){
+            res.status(200).send(false);
+        }
 
         const data = await Pauses.Pause.create({
             PauseSessionId: findSession.id,
@@ -426,6 +429,7 @@ const { Op } = require("sequelize");
 router.post("/api/checkForPause", async (req, res) => {
     try {
         const { session } = req.body;
+        console.log(session);
         const fiveMinutes = 5 * 60 * 1000;
         const fiveMinutesAgo = new Date(Date.now() - fiveMinutes); 
 
@@ -444,8 +448,7 @@ router.post("/api/checkForPause", async (req, res) => {
         });
         
         const holdPause = await doPause(data);
-        res.status(200).json(data);
-        // res.status(200).send(holdPause);
+        res.status(200).send(holdPause);
     } catch (error) {
         console.error("Error finding pauseData", error);
         res.status(500).send("Error finding pauseData");

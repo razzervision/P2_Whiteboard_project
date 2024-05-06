@@ -233,6 +233,11 @@ async function fetchPostPauseData(link,postData) {
 async function recursiveClicks(){
     const counterResult = leavePageCounter === reconPageCounter ? leavePageCounter : (leavePageCounter - 1);
     const session = localStorage.getItem("sessionName");
+    console.log(session);
+    if(session !== "null" ||!session){
+        console.log("close");
+        return;
+    }
     const data = {
         session: session,
         websiteActivity:(mouseClicks + keyStrokes),
@@ -290,8 +295,11 @@ IsInSession.addEventListener("change",startLogging);
 
 function startLogging(){
     if(!IsInSession.checked){
+        localStorage.setItem("sessionName",null);
         return;
     }
+    localStorage.setItem("sessionName","TEST");
+
     clickTracker();
     recursiveClicks();
     timeAwayFromPage();
