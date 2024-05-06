@@ -1,3 +1,9 @@
+document.getElementById("display").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        calculate();
+    }
+});
+
 function addToResult(value) {
     document.getElementById('display').value += value; //updates for every digit clicked to 'display', which is textarea
     //document.getElementById('classHistory').value += value; //updates for every digit clicked to 'classHistory', which is textarea
@@ -20,10 +26,14 @@ function calculate() {
             let facResult = fac(expression);
             append(expression, facResult);
             check = false;
-        }
-        else if (expression[i] == "^"){
+        } else if (expression[i] == "^"){
             let powResult = powerOf(expression);
             append(expression, powResult);
+            check = false;
+        } else if (expression[i] == "l" && expression[i+1] == "o"){
+            console.log("elsifvirker");
+            let logResult = logarithm2(expression);
+            append(expression, logResult);
             check = false;
         }
     }
@@ -52,14 +62,26 @@ function fac(num) {
     let result = 1;
     num = parseInt(num);
     for (let i = 1; i <= num; i++) {
-        result*= i;
+        result *= i;
     }
     return result;
 }
-function logarithm2(expression){
-    let result = 1;
-    let base = 2;
-    expression = parseInt(expression);
+function logarithm2(x){
+    console.log(x);
+    let extract = x.match(/\((\d+)\)/);
+    console.log(extract);
+    let number = parseInt(extract[1]); // Extracted number from the first capturing group
+    let result = Math.log(number) / Math.log(2);
+    return result; 
+}
 
+//////////////////////////////////////////////////// linear algebra
 
+function dropdownMenu() {
+    document.getElementById("dropdown").classList.toggle("show");
+}
+  
+function switchToLinearAlgebra() {
+    document.getElementById("calcKeys").style.display = "none"; 
+    document.querySelector("linearAlgebra").style.display = "block";
 }

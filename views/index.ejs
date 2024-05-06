@@ -151,45 +151,60 @@
 </div>
 
 
-<!--- CALC -->
+<!--- calDIV -->
 <div id="calcProgram" class="calculatorMain"> 
+  <div class="dropdownCalc">
+    <button class="dropDownLinAlg" onclick="dropdownMenu()" >SwitchToLin</button>
+    <div id="dropdown" class="dropdown-content">
+      <a href="#" onclick="switchToLinearAlgebra()">Linear Algebra</a>
+      <!-- tilføj flere her-->
+    </div>
+  </div>  
+
+<!--- CALC -->
   <div class="calcKeys">
     <div class="expressions">
       <input type="text" id="display" class="display"> 
-
-
       <button class="calcbuttonDelete" id="C" onclick="clearDisplay()">C</button> 
       <button class="calcbuttonCalc" id="+/-" onclick="negative('-')">+/-</button>
       <button class="calcbuttonCalc" id="()" onclick="addToResult('()')">( )</button>
-      <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button>
+      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> 
+      <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button> <br>
       <button class="calcbuttonKey" id="1" onclick="addToResult('1')">1</button>
       <button class="calcbuttonKey" id="2" onclick="addToResult('2')">2</button>
       <button class="calcbuttonKey" id="3" onclick="addToResult('3')">3</button>
       <button class="calcbuttonCalc" id="^" onclick="addToResult('^')">^</button>
+      <button class="calcbuttonCalc" id="log" onclick="addToResult('log()')">log2</button> <br>
       <button class="calcbuttonKey" id="4" onclick="addToResult('4')">4</button>
       <button class="calcbuttonKey" id="5" onclick="addToResult('5')">5</button>
       <button class="calcbuttonKey" id="6" onclick="addToResult('6')">6</button> 
-      <button class="calcbuttonCalc" id="-" onclick="addToResult('-')">-</button> 
+      <button class="calcbuttonCalc" id="-" onclick="addToResult('-')">-</button> <br>
       <button class="calcbuttonKey" id="7" onclick="addToResult('7')">7</button>
       <button class="calcbuttonKey" id="8" onclick="addToResult('8')">8</button>
       <button class="calcbuttonKey" id="9" onclick="addToResult('9')">9</button>
-      <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button>
+      <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button> <br>
       <button class="calcbuttonKey" id="0" onclick="addToResult('0')">0</button>
       <button class="calcbuttonCalc" id="%" onclick="addToResult('%')">%</button>
       <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> 
-      <button class="calcbuttonCalc" id="!" onclick="addToResult('!')">!</button>
+      <button class="calcbuttonCalc" id="!" onclick="addToResult('!')">!</button> <br>
       <button class="calcbuttonSubmit" id="submit" onclick="calculate()">Submit</button> 
-      
     </div>
 
     <div class="calcHistory">
       <textarea id="classHistory" class="classHistory" cols="40" rows="5"></textarea> <br>
-        <button id="clearHistoryButton" class="clearHistoryButton" onclick="clearHistory()">CLEAR ALL HISTORY</button> 
-
-        <input type="text" id="test" class="test">
+      <button id="clearHistoryButton" class="clearHistoryButton" onclick="clearHistory()">CLEAR ALL HISTORY</button> 
     </div>
+
+    <!--- Linear algebra -->
+    <div class="linearAlgebra" style="display: none;">
+      <h2>Linear Algebra</h2>
+      <p>This is the linear algebra section.</p>
+    </div>
+
   </div>
 </div>
+
+
 
 
 
