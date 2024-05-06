@@ -187,6 +187,7 @@ let leavingTime;
 let leftPageTime;
 let leftPageTimeAverage = 0;
 let keyStrokes = 0;
+const lastTimePauseOccurred = 0;
 
 
 function calcAverageActivity(leftPageTime, leftPageTimeOld) {
@@ -213,9 +214,11 @@ function clickTracker(){
 function recursiveClicks(){
     const counterResult = leavePageCounter === reconPageCounter ? leavePageCounter : (leavePageCounter - 1);
     const data = {
-        pageActivity:(mouseClicks + keyStrokes),
-        leavePageCounter: counterResult,
-        averageLeftPageTime: leftPageTimeAverage
+        session: "TEST",
+        lastTimePauseOccurred:  lastTimePauseOccurred,
+        websiteActivity:(mouseClicks + keyStrokes),
+        leftWebsite: counterResult,
+        averageTimeLeftWebsite: leftPageTimeAverage
     };
 
     console.log(data);
