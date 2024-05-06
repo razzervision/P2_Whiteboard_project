@@ -413,11 +413,13 @@ async function doPause(data){
     // Force a pause after 2 hours
     if(!lastPause && sessionCreated > (twoHours)){
         startPause(data.PauseSession);
+        console.log("arbejdet over 2 timer");
         return true;
     } 
-    // Check if its 2 hours since last pause
+    // Check if low activity
     if(averageWebsiteActivity <= 10 || averageTimeLeft >= 45000){
         startPause(data.PauseSession);
+        console.log("lav aktivt, tag en pause ");
         return true;
     }
 

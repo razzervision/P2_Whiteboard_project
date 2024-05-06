@@ -233,9 +233,7 @@ async function fetchPostPauseData(link,postData) {
 async function recursiveClicks(){
     const counterResult = leavePageCounter === reconPageCounter ? leavePageCounter : (leavePageCounter - 1);
     const session = localStorage.getItem("sessionName");
-    console.log(session);
-    if(session !== "null" ||!session){
-        console.log("close");
+    if(!session){
         return;
     }
     const data = {
@@ -281,10 +279,7 @@ function timeAwayFromPage(){
         const currentTime = Date.now();
 
         leftPageTime = currentTime - leavingTime; 
-        console.log(leftPageTime, leftPageTimeAverage);
         leftPageTimeAverage = calcAverageActivity(leftPageTime, leftPageTimeAverage);
-
-        console.log(leftPageTimeAverage);
         reconPageCounter++;
     });
 }
