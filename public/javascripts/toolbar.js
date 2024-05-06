@@ -101,7 +101,6 @@ function dragEnd() {
     const program = programs.find(program => program.value === dataValue);
     program.isActive = true;
     draggedElement = null;
-    console.log(checkActiveProgramsList());
 }
 
 function divConverter (draggedElement) {
@@ -123,7 +122,7 @@ function checkActivePrograms () {
 }
 
 function checkActiveProgramsList () {
-    let i = [];
+    const i = [];
     programs.forEach(program => {
         if (program.isActive === true) {
             i.push(program);
@@ -136,8 +135,8 @@ function checkActiveProgramsList () {
 // place = 1,2,3,4   1 topleft, 2 topright, 3 bottomleft, 4 bottomright
 function sizeElement (element, activePrograms, activeProgramsList, place) {
     if (activePrograms == 1) {
-        let str = "#" + activeProgramsList[0].value;
-        let activeProgram = document.querySelector(str);
+        const str = "#" + activeProgramsList[0].value;
+        const activeProgram = document.querySelector(str);
 
         if (place == 1 || place == 3) {
             element.style.left = "0%";
@@ -159,8 +158,8 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
 
     if (activePrograms == 2) {
         activeProgramsList.forEach(element => {
-            let str = "#" + element.value;
-            let activeProgram = document.querySelector(str);
+            const str = "#" + element.value;
+            const activeProgram = document.querySelector(str);
 
             if (place == 1 || place == 2) {
                 activeProgram.style.top = "38.3%";
@@ -181,6 +180,7 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
         element.style.left = "0%";
         element.style.display = "block";
     }
-
-
 }
+
+
+// # ændring
