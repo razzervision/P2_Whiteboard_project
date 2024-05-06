@@ -355,7 +355,7 @@ canvas.height = height;
 //default canvas stuff
 const startBackground = "white";
 let draw_color = "black";
-let draw_withd = 50;
+const draw_withd = 50;
 const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0, 0, canvas.width, canvas.height);
@@ -378,7 +378,7 @@ let undoindex = -1;
 
 //sockets
 const serverurl = document.location.origin;
-const socket = io(serverurl);
+const socket = io(serverurl, { autoConnect: false });
 
 //mouse object
 const mouse = {
@@ -414,19 +414,19 @@ function choseLocation(){
 
 function pointerDown(event){
     canvas.removeEventListener("pointerdown", ChoseCanvasLocation);
-        event.preventDefault();
-        mouse.x = event.clientX - canvasPosition.left;
-        mouse.y = event.clientY - canvasPosition.top;
-        dot(event);
-        canvas.addEventListener("pointermove", onMouseMove);
-        canvas.addEventListener("pointerup", removeMouseMove);
-        socket.emit("draw", {
-            x: mouse.x,
-            y: mouse.y,
-            color: draw_color,
-            width: draw_withd
-        });
-};
+    event.preventDefault();
+    mouse.x = event.clientX - canvasPosition.left;
+    mouse.y = event.clientY - canvasPosition.top;
+    dot(event);
+    canvas.addEventListener("pointermove", onMouseMove);
+    canvas.addEventListener("pointerup", removeMouseMove);
+    socket.emit("draw", {
+        x: mouse.x,
+        y: mouse.y,
+        color: draw_color,
+        width: draw_withd
+    });
+}
 
 
 function onMouseMove(event) {
@@ -497,14 +497,14 @@ function rezize () {
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.putImageData(undoarray[undoindex], 0, 0);
     canvasPosition = canvas.getBoundingClientRect();
-};
+}
 
 function changeColor(element) {
     draw_color = element.style.backgroundColor;
 }
 
 function uploadePicture(){
-    var img = new Image();
+    const img = new Image();
     img.src = URL.createObjectURL(this.files[0]);
     img.onload = function(){
         if(imgheightButton.value>= canvas.height || imgwithdButton.value>= canvas.width){
@@ -521,12 +521,12 @@ function uploadePicture(){
             img.width = imgwithdButton.value;
         }
         context.drawImage(img, imgX, imgY, img.width, img.height);
-    }
+    };
     img.onerror = function(){
         console.log("img load fail");
-    }
+    };
 
-};
+}
 
 //sockets
 
