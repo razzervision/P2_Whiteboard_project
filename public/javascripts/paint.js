@@ -7,8 +7,6 @@ const options = document.getElementById("optionsForPaint");
 const canvasPlace = document.getElementById("canvasPlace");
 //canvas setup
 const canvas0 = document.getElementById("canvas0");
-//context
-const context = canvas0.getContext("2d");
 //set width and height
 let width = canvas0.offsetWidth;
 let height = canvas0.offsetHeight;
@@ -35,7 +33,7 @@ let currentcanvasPosition = currentCanvas.getBoundingClientRect();
 //default canvas stuff
 const startBackground = "white";
 let drawColor = "black";
-const draw_withd = 50;
+const drawWithd = 50;
 //make background white
 currentContext.fillStyle = startBackground;
 currentContext.fillRect(0, 0, canvas0.width, canvas0.height);
@@ -178,7 +176,7 @@ function removeMouseMove() {
 }
 function draw() {
     currentContext.strokeStyle = drawColor;
-    currentContext.lineWidth = draw_withd;
+    currentContext.lineWidth = drawWithd;
     currentContext.lineCap = "round";
     currentContext.lineJoin = "round";
     currentContext.lineTo(mouse.x, mouse.y);
@@ -257,7 +255,7 @@ function uploadePicture(){
     const img = new Image();
     img.src = URL.createObjectURL(this.files[0]);
     img.onload = function(){
-        if(imgheightButton.value>= currentCanvas.height || imgwithdButton.value>= currentCanvas.width){
+        if(imgheightButton.value>= currentCanvas.height && imgwithdButton.value>= currentCanvas.width){
             img.width = currentCanvas.width;
             img.height = currentCanvas.height;  
         }else if(imgheightButton.value>= currentCanvas.height){
@@ -293,7 +291,7 @@ canvas.height = height;
 //default canvas stuff
 const startBackground = "white";
 let drawColor = "black";
-const draw_withd = 50;
+const drawWithd = 50;
 const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
 context.fillRect(0, 0, canvas.width, canvas.height);
@@ -362,7 +360,7 @@ function pointerDown(event){
         x: mouse.x,
         y: mouse.y,
         color: drawColor,
-        width: draw_withd
+        width: drawWithd
     });
 }
 
@@ -375,7 +373,7 @@ function onMouseMove(event) {
         x: mouse.x,
         y: mouse.y,
         color: drawColor,
-        width: draw_withd
+        width: drawWithd
     });
 }
 
@@ -397,7 +395,7 @@ function dot(input) {
 
 function draw() {
     context.strokeStyle = drawColor;
-    context.lineWidth = draw_withd;
+    context.lineWidth = drawWithd;
     context.lineCap = "round";
     context.lineJoin = "round";
     context.lineTo(mouse.x, mouse.y);
