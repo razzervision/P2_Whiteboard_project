@@ -157,23 +157,22 @@
 <!--- calDIV -->
 <div id="calcProgram" class="calculatorMain"> 
   <div class="dropdownCalc">
-    
     <select name="mathType" id="mathType">
-    <option value="calcKeys">Calc</option>
-    <option value="linalg">Linear Algebra</option>
+    <option value="calculator">Calc</option>
+    <option value="matricesMath">Matrices</option>
     <!-- tilføj flere her-->
     </select>
-  <input type="submit" value="Submit">
-      
+    <div class="minimizeCalc">
+      <button class="minimizeCalcButton">-</button>
     </div>
+  </div>
 
 <!--- CALC -->
-  <div class="calcKeys">
+  <div class="calculator">
     <div class="expressions">
-      <input type="text" id="display" class="display"> 
+      <input type="text" id="display" class="display"> <br>
       <button class="calcbuttonDelete" id="C" onclick="clearDisplay()">C</button> 
       <button class="calcbuttonCalc" id="+/-" onclick="negative('-')">+/-</button>
-      <button class="calcbuttonCalc" id="()" onclick="addToResult('()')">( )</button>
       <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> 
       <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button> <br>
       <button class="calcbuttonKey" id="1" onclick="addToResult('1')">1</button>
@@ -197,15 +196,21 @@
     </div>
 
     <div class="calcHistory">
-      <textarea id="classHistory" class="classHistory" cols="40" rows="5"></textarea> <br>
+      <textarea id="classHistory" class="classHistory" cols="40" rows="10"></textarea> <br>
       <button id="clearHistoryButton" class="clearHistoryButton" onclick="clearHistory()">CLEAR ALL HISTORY</button> 
     </div>
 
-    <!--- Linear algebra -->
-    <div class="linearAlgebra">
-      <h2>Linear Algebra</h2>
-      <p>This is the linear algebra section.</p>
-    </div>
+    
+  </div>
+  <!--- Matrice calculation--->
+  <div class="matrices">
+      <p class="matriceTxtStyle">Please enter the dimensions of the matrices: Rows: </p>
+      <input type="text" id="xMatrice" class="xMatrice">
+      <p class="matriceTxtStyle">Columns:</p> 
+      <input type="text" id="yMatrice" class="yMatrice">
+      
+
+
   </div>
 </div>
 

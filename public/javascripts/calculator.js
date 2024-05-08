@@ -79,11 +79,16 @@ function logarithm2(x){
 
 document.getElementById("mathType").addEventListener("change", function() {
     let selectedOption = this.value;
-    if (selectedOption === "calcKeys") {
-        document.getElementById(".calcKeys").style.display = "block";
-        document.getElementById(".linearAlgebra").style.display = "none";
-    } else if (selectedOption === "linalg") {
-        document.getElementById(".calcKeys").style.display = "none";
-        document.getElementById(".linearAlgebra").style.display = "block";
+    if (selectedOption === "calculator") {
+        document.querySelector(".calculator").style.display = "block";
+        document.querySelector(".matrices").style.display = "none";
+    } else if (selectedOption === "matricesMath") {
+        document.querySelector(".calculator").style.display = "none";
+        document.querySelector(".matrices").style.display = "block";
     }
 });
+
+
+function matrices(){
+    
+}
