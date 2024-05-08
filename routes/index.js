@@ -7,7 +7,6 @@ const sequelize = require("../database/database");
 const User = require("../database/user");
 const Quiz = require("../database/database_quiz");
 const Pauses = require("../database/database_pauses.js");
-const Pause = require("../database/database_pauses.js");
 
 
 /* GET home page. */
@@ -51,7 +50,8 @@ router.post("/resetAllQuizData", async (req, res) => {
             await Quiz.UserAnswer.drop();
             await Quiz.Session.drop();
             // Reset pause data
-            await Pauses.drop();
+            await Pauses.Pause.drop();
+            await Pauses.PauseSession.drop();
             res.status(201).json({ data: "Succesfully deleted" });
         } else {
             res.status(201).json({data: "Wrong Key"});
@@ -280,7 +280,7 @@ router.post("/api/findQuestionScore", async (req, res) => {
                         QuestionId: questionId
                     },
                     required: true,
-                    include: [
+                    include: [ //Overvej slet
                     ]
                 }
             ]
@@ -329,13 +329,37 @@ router.post("/api/endSession", async (req, res) => {
     }
 });
 // --------------------------------------------------------------------------------------------Pauses
+router.post("/api/StartPauseSession", async (req, res) =>{
+    try {
+        const { session } = req.body;
+
+        const data = await Pauses.PauseSession.create({
+            session: session,
+            isActive: true,
+            lastPause: null
+        });   
+        res.status(200).json(data);
+    } catch (error) {
+        console.error("Error finding pauseData", error);
+        res.status(500).send("Error finding pauseData");
+    }
+});
+
 router.post("/api/InsertPauseData", async (req, res) => {
     try {
-        console.log(req.body);
-        const { session, lastTimePauseOccurred , websiteActivity, leftWebsite, averageTimeLeftWebsite } = req.body;
-        const data = await Pauses.create({
-            session: session,
-            lastTimePauseOccurred: lastTimePauseOccurred,
+        const { session , websiteActivity, leftWebsite, averageTimeLeftWebsite } = req.body;
+
+        const findSession = await Pauses.PauseSession.findOne({
+            where: {
+                session: session
+            }
+        });
+        if(!session){
+            res.status(200).send(false);
+        }
+
+        const data = await Pauses.Pause.create({
+            PauseSessionId: findSession.id,
             websiteActivity: websiteActivity,
             leftWebsite: leftWebsite,
             averageTimeLeftWebsite: averageTimeLeftWebsite
@@ -347,6 +371,90 @@ router.post("/api/InsertPauseData", async (req, res) => {
         res.status(500).send("Error uploading pauseData");
     }
 });
+async function startPause(sessionData){
+    await Pauses.PauseSession.update(
+        { lastPause: new Date() },
+        {
+            where: {
+                id: sessionData.id
+            }
+        }
+    );
+    
+}
 
+async function doPause(data){
+    let averageWebsiteActivity = 0;
+    let averagePageLeft = 0;
+    let averageTimeLeft = 0;
+
+    data.forEach(userdata =>{
+        averageWebsiteActivity = (averageWebsiteActivity + userdata.websiteActivity) / 2;
+        averagePageLeft = userdata.leftWebsite;
+        averageTimeLeft = userdata.averageTimeLeftWebsite;
+    });
+    // const sessionStarted = data[0].createdAt;
+    const twoHours = 2 * 60 * 60 * 1000;
+    const halfHour = 30 * 60 * 1000;
+
+    data = data[0];
+    const lastPause = data.PauseSession.lastPause;
+    const sessionCreated = data.PauseSession.createdAt;
+
+    // Ignore pauses withing half an hour
+    if (!lastPause || lastPause < (halfHour)){
+        return false;
+    }
+    // Ignore that the site is ignores
+    if (averageWebsiteActivity === 0){
+        return false;
+    }
+
+    // Force a pause after 2 hours
+    if(!lastPause && sessionCreated > (twoHours)){
+        startPause(data.PauseSession);
+        console.log("arbejdet over 2 timer");
+        return true;
+    } 
+    // Check if low activity
+    if(averageWebsiteActivity <= 10 || averageTimeLeft >= 45000){
+        startPause(data.PauseSession);
+        console.log("lav aktivt, tag en pause ");
+        return true;
+    }
+
+    return false;
+}
+
+
+const { Op } = require("sequelize");
+router.post("/api/checkForPause", async (req, res) => {
+    try {
+        const { session } = req.body;
+        console.log(session);
+        const fiveMinutes = 5 * 60 * 1000;
+        const fiveMinutesAgo = new Date(Date.now() - fiveMinutes); 
+
+        const data = await Pauses.Pause.findAll({
+            include: [{
+                model: Pauses.PauseSession,
+                where: {
+                    session: session
+                }
+            }],
+            where: {
+                createdAt: {
+                    [Op.gt]: fiveMinutesAgo // Greater than five minutes ago
+                }
+            }
+        });
+        
+        const holdPause = await doPause(data);
+        res.status(200).send(holdPause);
+    } catch (error) {
+        console.error("Error finding pauseData", error);
+        res.status(500).send("Error finding pauseData");
+    }
+});
 
 module.exports = router;

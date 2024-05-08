@@ -4,14 +4,6 @@ const sequelize = require("./database");
 class Pause extends Model {}
 
 Pause.init({
-    session: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    lastTimePauseOccurred: {
-        type: DataTypes.DATE,
-        allowNull: true
-    },
     websiteActivity: {
         type: DataTypes.INTEGER,
         allowNull: false
@@ -29,5 +21,28 @@ Pause.init({
     modelName: "Pause"
 });
 
+class PauseSession extends Model {}
 
-module.exports = Pause;
+PauseSession.init({
+    session: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    },
+    lastPause: {
+        type: DataTypes.DATE,
+        allowNull: true
+    }
+}, {
+    sequelize,
+    modelName: "PauseSession"
+});
+
+// Define associations
+PauseSession.hasMany(Pause);
+Pause.belongsTo(PauseSession);
+
+module.exports = { Pause, PauseSession};

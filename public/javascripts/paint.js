@@ -2,51 +2,43 @@
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
 const changeCanvasButton = document.getElementById("changeCanvas");
-const changeCanvasButton1 = document.getElementById("changeCanvas1");
+const addCanvasButton = document.getElementById("addCanvas");
+const options = document.getElementById("optionsForPaint");
+const canvasPlace = document.getElementById("canvasPlace");
 //canvas setup
-const canvas = document.getElementById("canvas");
-const canvas1 = document.getElementById("canvas1");
+const canvas0 = document.getElementById("canvas0");
 //context
-const context = canvas.getContext("2d");
-const context1 = canvas1.getContext("2d");
+const context = canvas0.getContext("2d");
 //set width and height
-let width = canvas.offsetWidth;
-let height = canvas.offsetHeight;
+let width = canvas0.offsetWidth;
+let height = canvas0.offsetHeight;
 
 
 //start display
-canvas1.style.display = 'none';
-canvas.style.display = 'block';
-canvas.style.width = '100%';
-canvas.style.height = '77.5%';
+canvas0.style.display = "block";
+canvas0.style.width = "100%";
+canvas0.style.height = "77.5%";
+changeCanvasButton.style.backgroundColor = "blue";
 
-
-
-canvas.width = width;
-canvas.height = height;
-
-canvas1.width = width;
-canvas1.height = height;
+canvas0.width = width;
+canvas0.height = height;
 
 //global canvas array
 
-let globalCanvas = [];
-globalCanvas.push(canvas,canvas1);
+const globalCanvas = [canvas0];
+let globalCanvasIndex = 0;
+
 console.log(globalCanvas);
-let currentCanvas = canvas;
+let currentCanvas = canvas0;
+let currentContext= currentCanvas.getContext("2d");
+let currentcanvasPosition = currentCanvas.getBoundingClientRect();
 //default canvas stuff
 const startBackground = "white";
-let draw_color = "black";
-let draw_withd = 50;
+let drawColor = "black";
+const draw_withd = 50;
 //make background white
-context.fillStyle = startBackground;
-context.fillRect(0, 0, canvas.width, canvas.height);
-context1.fillStyle = "green";
-context1.fillRect(0, 0, canvas1.width, canvas1.height);
-//canvasNumber
-let canvasNumber = 1;
-let canvasPosition = canvas.getBoundingClientRect();
-let canvasPosition1 = canvas1.getBoundingClientRect();
+currentContext.fillStyle = startBackground;
+currentContext.fillRect(0, 0, canvas0.width, canvas0.height);
 
 //picture upload
 const pictureLocation = document.getElementById("picture location");
@@ -55,16 +47,16 @@ const imgheightButton = document.getElementById("Imgheight");
 const imgwithdButton = document.getElementById("Imgwithd");
 
 //undo array
-let undoarray = [];
-let undoindex = -1;
+const undoarray = [[]];
 
-let undoarray1 = [];
-let undoindex1 = -1;
 
 //start position of picture
 let imgX = 0;
 let imgY = 0;
 
+// max canvases
+const maxCanvas = 9;
+let canvasCounter = 1;
 
 
 //mouse object
@@ -72,29 +64,63 @@ const mouse = {
     x: 0,
     y: 0
 };
+
+
+addCanvasButton.addEventListener("click",addCanvas);
+
 //undo
 undoB.addEventListener("click", undo);
 //rezize
 window.addEventListener("resize", rezize);
 //
-changeCanvasButton1.addEventListener("click",() => {
-    changeCanvas(canvas1);
-});
+
 changeCanvasButton.addEventListener("click",() =>{
-    changeCanvas(canvas);
+    changeCanvas(canvas0,changeCanvasButton);
 });
 //event listeners
-clear.addEventListener("click", () =>
-{canvasNumber == 1 ? clearCanvas() : clearCanvas1();}
-);
+clear.addEventListener("click", clearCanvas);
 
 //canvas listners in beginning
-canvas.addEventListener("pointerdown", pointerDown);
-canvas.addEventListener("pointerout", removeMouseMove);
+currentCanvas.addEventListener("pointerdown", pointerDown);
+currentCanvas.addEventListener("pointerout",stopDraw);
 
 //picture
 pictureLocation.addEventListener("click",choseLocation);
 uploadInput.addEventListener("change", uploadePicture);
+
+function stopDraw(){
+    currentCanvas.removeEventListener("pointermove", onMouseMove);
+    currentContext.closePath();
+}
+
+function addCanvas(){
+    if(canvasCounter <= maxCanvas){
+        const totalCanvasLenght = globalCanvas.length;
+        const canvasButton = document.createElement("button");
+        canvasButton.id = "canvasButton" + totalCanvasLenght;
+        canvasButton.className ="canvasButton";
+        canvasButton.textContent ="C"+ totalCanvasLenght;
+    
+        const canvas = document.createElement("canvas");
+        canvas.id = "canvas" + totalCanvasLenght;
+        console.log(canvas);
+        canvasPlace.appendChild(canvas);
+
+        undoarray.push([]);
+
+        globalCanvas.push(canvas);
+        canvas.width = width;
+        canvas.height = height;
+    
+        canvasButton.addEventListener("click", () =>{
+            changeCanvas(canvas,canvasButton);
+        });
+    
+        changeCanvas(canvas,canvasButton);
+        options.appendChild(canvasButton);
+        canvasCounter++;
+    }
+}
 
 
 //functions
@@ -113,128 +139,122 @@ function choseLocation(){
 }
 
 function undo() {
-    if(canvasNumber == 1){
-        if (undoindex <= 0) {
-            clearCanvas();
-        } else {
-            undoindex -= 1;
-            undoarray.pop();
-            context.putImageData(undoarray[undoindex], 0, 0);
-        } 
-    }else{
-        if(undoindex1 <= 0){
-            clearCanvas1();
-        }else{
-            undoindex1 = -1;
-            undoarray1.pop();
-            context1.putImageData(undoarray1[undoindex1], 0, 0);
-        }
-
-    }
+    console.log(undoarray[globalCanvasIndex].length);
+    if (undoarray[globalCanvasIndex].length === 1) {
+        console.log("hej med dig");
+        clearCanvas();
+    } else {
+        undoarray[globalCanvasIndex].pop();
+        const Alenght = undoarray[globalCanvasIndex].length - 1;
+        currentContext.putImageData(undoarray[globalCanvasIndex][Alenght], 0, 0);
+    } 
 }
 
 function pointerDown(event){
-    canvas.removeEventListener("pointerdown", ChoseCanvasLocation);
-        event.preventDefault();
-        mouse.x = event.clientX - canvasPosition.left;
-        mouse.y = event.clientY - canvasPosition.top;
-        dot(event);
-        canvas.addEventListener("pointermove", onMouseMove);
-        canvas.addEventListener("pointerup", removeMouseMove);
-};
+    currentCanvas.removeEventListener("pointerdown", ChoseCanvasLocation);
+    event.preventDefault();
+    mouse.x = event.clientX - currentcanvasPosition.left;
+    mouse.y = event.clientY - currentcanvasPosition.top;
+    dot(event);
+    currentCanvas.addEventListener("pointermove", onMouseMove);
+    currentCanvas.addEventListener("pointerup", removeMouseMove);
+}
 
-function dot(input) {
-    context.beginPath();
-    context.moveTo(mouse.x, mouse.y);
+function dot() {
+    currentContext.beginPath();
+    currentContext.moveTo(mouse.x, mouse.y);
     console.log(mouse.x, mouse.y);
     draw();
 }
 function onMouseMove(event) {
-    mouse.x = event.clientX - canvasPosition.left;
-    mouse.y = event.clientY - canvasPosition.top;
+    mouse.x = event.clientX - currentcanvasPosition.left;
+    mouse.y = event.clientY - currentcanvasPosition.top;
     draw();
 }
 function removeMouseMove() {
-    undoarray.push(context.getImageData(0, 0, canvas.width, canvas.height));
-    undoindex += 1;
-    canvas.removeEventListener("pointermove", onMouseMove);
-    context.closePath();
+    undoarray[globalCanvasIndex].push(currentContext.getImageData(0, 0, currentCanvas.width, currentCanvas.height));
+    currentCanvas.removeEventListener("pointermove", onMouseMove);
+    currentContext.closePath();
 }
 function draw() {
-    context.strokeStyle = draw_color;
-    context.lineWidth = draw_withd;
-    context.lineCap = "round";
-    context.lineJoin = "round";
-    context.lineTo(mouse.x, mouse.y);
+    currentContext.strokeStyle = drawColor;
+    currentContext.lineWidth = draw_withd;
+    currentContext.lineCap = "round";
+    currentContext.lineJoin = "round";
+    currentContext.lineTo(mouse.x, mouse.y);
     
-    context.stroke();
+    currentContext.stroke();
 }
 
 
 function clearCanvas() {
-    context.fillStyle = startBackground;
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    undoarray = [];
-    undoindex = -1;
+    currentContext.fillStyle = startBackground;
+    currentContext.clearRect(0, 0, currentCanvas.width, currentCanvas.height);
+    currentContext.fillRect(0, 0, currentCanvas.width, currentCanvas.height);
+    console.log(undoarray);
+    const currentLenght= undoarray[globalCanvasIndex].length - 1;
+    console.log(currentLenght);
+    const saveData= undoarray[globalCanvasIndex][currentLenght];
+    undoarray[globalCanvasIndex] = [];
+    undoarray[globalCanvasIndex][0] = saveData;
+    undoarray[globalCanvasIndex][1] = saveData;
+    console.log(undoarray);
 }
 
-
-function changeCanvas(canvasT){
+function changeCanvas(canvasT,canvasButton){
 
     globalCanvas.forEach(C => {
-        C.style.display = 'none';
-        C.style.width = '0%'
-        C.style.height = '0%';
-        C.removeEventListener("pointerdown",pointerDown1);
-        C.removeEventListener("pointerout", removeMouseMove1);
-        C.removeEventListener("pointermove", onMouseMove1);
+        C.style.display = "none";
+        C.style.width = "0%";
+        C.style.height = "0%";
+        C.removeEventListener("pointerdown",pointerDown);
+        C.removeEventListener("pointermove", onMouseMove);
+        C.removeEventListener("pointerout",stopDraw);
     });
-        canvasT.style.display = 'block';
-        canvasT.style.width = '100%';
-        canvasT.style.height = '77.5%';
-        canvasT.addEventListener("pointerdown",pointerDown1);
-        canvasT.addEventListener("pointerout", removeMouseMove1);
+    const allButtons = document.querySelectorAll(".canvasButton");
+    allButtons.forEach(b => {
+        b.style.backgroundColor = "white";
+    });
+
+    const canvasId = canvasT.id;
+    globalCanvasIndex = canvasId[6];
+
+
+    canvasButton.style.backgroundColor = "blue";
+    canvasT.style.display = "block";
+    canvasT.style.width = "100%";
+    canvasT.style.height = "77.5%";
+    canvasT.addEventListener("pointerdown",pointerDown);
+    canvasT.addEventListener("pointerout",stopDraw);
     
-        currentCanvas = canvasT;
+    currentCanvas = canvasT;
+    console.log(currentCanvas);
+    currentContext = currentCanvas.getContext("2d");
+    currentcanvasPosition = currentCanvas.getBoundingClientRect();
+
 }
     
     
-    function rezize () {
-        if(canvasNumber == 1){
-            width = canvas.offsetWidth;
-            height = canvas.offsetHeight;
-        
-            canvas.width = width;
-            canvas.height = height;
-            console.log(width, height);
-            context.fillStyle = startBackground;
-            context.fillRect(0, 0, canvas.width, canvas.height);
-            context.putImageData(undoarray[undoindex], 0, 0);
-            canvasPosition = canvas.getBoundingClientRect(); 
-        }else{
-            width = canvas1.offsetWidth;
-            height = canvas1.offsetHeight;
-        
-            canvas1.width = width;
-            canvas1.height = height;
-            console.log(width, height);
-            context1.fillStyle = startBackground;
-            context1.fillRect(0, 0, canvas1.width, canvas1.height);
-            context1.putImageData(undoarray1[undoindex1], 0, 0);
-            canvasPosition1 = canvas1.getBoundingClientRect();
-        }
-    };
-
+function rezize () {
+    width = currentCanvas.offsetWidth;
+    height = currentCanvas.offsetHeight;
+    
+    currentCanvas.width = width;
+    currentCanvas.height = height;
+    console.log(width, height);
+    //context.fillStyle = startBackground;
+    //context.fillRect(0, 0, canvas.width, canvas.height);
+    //context.putImageData(undoarray[undoindex], 0, 0);
+    //canvasPosition = canvas.getBoundingClientRect(); 
+}
 
 
 function changeColor(element) {
-    draw_color = element.style.backgroundColor;
+    drawColor = element.style.backgroundColor;
 }
 
 function uploadePicture(){
-    var img = new Image();
+    const img = new Image();
     img.src = URL.createObjectURL(this.files[0]);
     img.onload = function(){
         if(imgheightButton.value>= canvas.height || imgwithdButton.value>= canvas.width){
@@ -251,95 +271,11 @@ function uploadePicture(){
             img.width = imgwithdButton.value;
         }
         context.drawImage(img, imgX, imgY, img.width, img.height);
-    }
+    };
     img.onerror = function(){
         console.log("img load fail");
-    }
-};
-
-//canvas 1:
-function pointerDown1(event){
-        event.preventDefault();
-        mouse.x = event.clientX - canvasPosition1.left;
-        mouse.y = event.clientY - canvasPosition1.top;
-        dot1(event);
-        canvas1.addEventListener("pointermove", onMouseMove1);
-        canvas1.addEventListener("pointerup", removeMouseMove1);
-};
-function dot1(input) {
-    context1.beginPath();
-    context1.moveTo(mouse.x, mouse.y);
-    console.log(mouse.x, mouse.y);
-    draw1();
+    };
 }
-function onMouseMove1(event) {
-    mouse.x = event.clientX - canvasPosition1.left;
-    mouse.y = event.clientY - canvasPosition1.top;
-    draw1();
-}
-function removeMouseMove1() {
-    undoarray.push(context1.getImageData(0, 0, canvas1.width, canvas1.height));
-    undoindex1 += 1;
-    canvas1.removeEventListener("pointermove", onMouseMove1);
-    context1.closePath();
-}
-function draw1() {
-    context1.strokeStyle = draw_color;
-    context1.lineWidth = draw_withd;
-    context1.lineCap = "round";
-    context1.lineJoin = "round";
-    context1.lineTo(mouse.x, mouse.y);
-    context1.fillStyle = "rgba("+(mouse.x % 255)+","+(mouse.y % 255)+","+((mouse.x % 255) + (mouse.y % 255))+",1)";
-    context1.fillRect(0, 0, canvas1.width, canvas1.height);
-    context1.stroke();
-}
-function clearCanvas1() {
-    console.log("hej med dig");
-    context1.fillStyle = startBackground;
-    context1.clearRect(0, 0, canvas1.width, canvas1.height);
-    context1.fillRect(0, 0, canvas1.width, canvas1.height);
-
-    undoarray1 = [];
-    undoindex1 = -1;
-}
-
-
-module.exports = rezize;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*
@@ -356,7 +292,7 @@ canvas.height = height;
 
 //default canvas stuff
 const startBackground = "white";
-let draw_color = "black";
+let drawColor = "black";
 const draw_withd = 50;
 const context = canvas.getContext("2d");
 context.fillStyle = startBackground;
@@ -425,7 +361,7 @@ function pointerDown(event){
     socket.emit("draw", {
         x: mouse.x,
         y: mouse.y,
-        color: draw_color,
+        color: drawColor,
         width: draw_withd
     });
 }
@@ -438,7 +374,7 @@ function onMouseMove(event) {
     socket.emit("draw", {
         x: mouse.x,
         y: mouse.y,
-        color: draw_color,
+        color: drawColor,
         width: draw_withd
     });
 }
@@ -460,7 +396,7 @@ function dot(input) {
 }
 
 function draw() {
-    context.strokeStyle = draw_color;
+    context.strokeStyle = drawColor;
     context.lineWidth = draw_withd;
     context.lineCap = "round";
     context.lineJoin = "round";
@@ -502,7 +438,7 @@ function rezize () {
 }
 
 function changeColor(element) {
-    draw_color = element.style.backgroundColor;
+    drawColor = element.style.backgroundColor;
 }
 
 function uploadePicture(){
