@@ -235,7 +235,7 @@ function changeCanvas(canvasT,canvasButton){
 }
     
     
-function rezize () {
+export function rezize () {
     width = currentCanvas.offsetWidth;
     height = currentCanvas.offsetHeight;
     
@@ -247,6 +247,7 @@ function rezize () {
     //context.putImageData(undoarray[undoindex], 0, 0);
     //canvasPosition = canvas.getBoundingClientRect(); 
 }
+
 
 
 function changeColor(element) {
