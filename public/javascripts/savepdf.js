@@ -13,4 +13,4 @@ function convertHTMLtoPDF() {
         .catch(error => {
             console.error("Error generating PDF:", error);
         });
-} 
+}
