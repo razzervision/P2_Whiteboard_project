@@ -304,6 +304,8 @@ function clearCanvas1() {
 }
 
 
+module.exports = rezize;
+
 
 
 
@@ -545,3 +547,4 @@ socket.on("clearCanvas", function () {
 });
 
 */
+
