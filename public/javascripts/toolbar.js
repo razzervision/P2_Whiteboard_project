@@ -1,4 +1,4 @@
-const rezize = require('./paint.js');
+// const rezize = require('./paint.js');
 
 const paintElement = document.querySelector("#paintElement");
 const codeEditorElement = document.querySelector("#codeEditorElement");
