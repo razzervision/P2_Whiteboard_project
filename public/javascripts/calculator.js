@@ -78,12 +78,12 @@ function logarithm2(x){
 //////////////////////////////////////////////////// linear algebra
 
 document.getElementById("mathType").addEventListener("change", function() {
-    var selectedOption = this.value;
+    let selectedOption = this.value;
     if (selectedOption === "calcKeys") {
-        document.querySelector(".calcKeys").style.display = "block";
-        document.querySelector(".linearAlgebra").style.display = "none";
+        document.getElementById(".calcKeys").style.display = "block";
+        document.getElementById(".linearAlgebra").style.display = "none";
     } else if (selectedOption === "linalg") {
-        document.querySelector(".calcKeys").style.display = "none";
-        document.querySelector(".linearAlgebra").style.display = "block";
+        document.getElementById(".calcKeys").style.display = "none";
+        document.getElementById(".linearAlgebra").style.display = "block";
     }
 });
