@@ -25,7 +25,7 @@
           <script defer src="/javascripts/paint.js"></script>
           <script src="/javascripts/pausefish.js"></script>
 
-          <script src="/javascripts/savepdf.js"></script>
+          <script defer src="/javascripts/savepdf.js"></script>
           <!-- QUIZ -->
           <script defer src="/javascripts/quiz/quiz.js"></script>
           <!-- <script defer src="/javascripts/quiz/test.js"></script> -->
@@ -47,10 +47,16 @@
           <script defer src="/javascripts/code_editor/codemirror/mode/ruby/ruby.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/addon/edit/closebrackets.js"></script>
           <script defer src="/javascripts/code_editor/WCE.js"></script>
-
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         </head>
 
 <body>
+<div>
+  <button type="button" id="buttonPDF" onclick="convertHTMLtoPDF()">Click to download PDF</button>
+</div>
+
 <div id="webPage">
 
   <div class="toolbar" id="toolbar">
