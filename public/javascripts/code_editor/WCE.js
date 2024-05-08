@@ -1,3 +1,6 @@
+const serverURL = document.location.origin;
+const socket = io(serverURL, { autoConnect: false });
+
 async function loadLanguages() {
     try {
         const response = await fetch("/api/loadLanguages");
@@ -20,6 +23,14 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
     theme: "darcula"
 });
 
+editor.on("change", (cm, change) => {
+    console.log("in change");
+    if (change.origin !== "setValue") {
+        socket.emit("code", {input: cm.getValue()});
+        console.log("data sent to server in if", cm.getValue());
+    }
+});
+
 loadLanguages()
     .then(data => {
         const languageDropdown = document.getElementById("language");
@@ -35,6 +46,8 @@ loadLanguages()
 document.getElementById("language").addEventListener("change", function() {
     const mode = this.value; 
     editor.setOption("mode", mode);
+    socket.emit("language", mode);
+    console.log("data sent to server");
 });
 
 const themeDropdown = document.getElementById("theme");
@@ -49,3 +62,14 @@ function changeTheme(value){
 }
 changeTheme("solarized");
 changeTheme("darcula");
+
+socket.on("code", (data) => {
+    const currentContent = editor.getValue();
+    if (data.input !== currentContent) {
+        editor.setValue(data.input);
+    }
+});
+
+socket.on("language", (data) => {
+    editor.setOption("mode", data);
+});
