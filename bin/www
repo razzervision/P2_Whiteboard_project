@@ -100,9 +100,10 @@ function onListening() {
 // Socket.io connection
 io.on("connection", (socket) => {
     console.log("New user connected");
-
+    
     socket.on("draw", (data) => {
         socket.broadcast.emit("draw", data);
+        console.log("draw");
     });
 
     socket.on("clearCanvas", () => {
