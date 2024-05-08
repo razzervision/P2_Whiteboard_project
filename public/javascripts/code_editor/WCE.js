@@ -31,6 +31,17 @@ editor.on("change", (cm, change) => {
     }
 });
 
+socket.on("code", (data) => {
+    const currentContent = editor.getValue();
+    if (data.input !== currentContent) {
+        editor.setValue(data.input);
+    }
+});
+
+socket.on("language", (data) => {
+    editor.setOption("mode", data);
+});
+
 loadLanguages()
     .then(data => {
         const languageDropdown = document.getElementById("language");
@@ -63,13 +74,3 @@ function changeTheme(value){
 changeTheme("solarized");
 changeTheme("darcula");
 
-socket.on("code", (data) => {
-    const currentContent = editor.getValue();
-    if (data.input !== currentContent) {
-        editor.setValue(data.input);
-    }
-});
-
-socket.on("language", (data) => {
-    editor.setOption("mode", data);
-});
