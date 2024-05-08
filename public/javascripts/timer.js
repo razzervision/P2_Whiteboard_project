@@ -209,27 +209,56 @@ function clickTracker(){
     });
 }
 
+async function fetchPostPauseData(link,postData) {
+    try {
+        // Send the data to the server-side script
+        const response = await fetch(link, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postData)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching quiz data:", error);
+        return null; // Return null or handle the error as needed
+    }
+}
 
-function recursiveClicks(){
+async function recursiveClicks(){
     const counterResult = leavePageCounter === reconPageCounter ? leavePageCounter : (leavePageCounter - 1);
+    const session = localStorage.getItem("sessionName");
+    if(!session){
+        return;
+    }
     const data = {
-        pageActivity:(mouseClicks + keyStrokes),
-        leavePageCounter: counterResult,
-        averageLeftPageTime: leftPageTimeAverage
+        session: session,
+        websiteActivity:(mouseClicks + keyStrokes),
+        leftWebsite: counterResult,
+        averageTimeLeftWebsite: leftPageTimeAverage
     };
-
-    console.log(data);
-    
+    const fetchData = await fetchPostPauseData("/api/InsertPauseData",data);
+    console.log(fetchData);   
 
     leavePageCounter = leavePageCounter === reconPageCounter ? 0 : 1;
 
- 
+    const checkData = {session: session};
+    const doPause = await fetchPostPauseData("/api/checkForPause",checkData);
+    
+    if(doPause){
+        console.log("TAG DONE EN PAUSE IDIOT");
+    }
+
     reconPageCounter = 0;
     mouseClicks = 0;
     leftPageTimeAverage = 0;
     keyStrokes = 0;
     setTimeout(() => {
-        console.log("Big dick Rasmus");
         recursiveClicks();
     }, 60000);
 }
@@ -250,18 +279,22 @@ function timeAwayFromPage(){
         const currentTime = Date.now();
 
         leftPageTime = currentTime - leavingTime; 
-        console.log(leftPageTime, leftPageTimeAverage);
         leftPageTimeAverage = calcAverageActivity(leftPageTime, leftPageTimeAverage);
-
-        console.log(leftPageTimeAverage);
         reconPageCounter++;
     });
 }
 
+const IsInSession = document.getElementById("connectSocket");
+IsInSession.addEventListener("change",startLogging);
 
-startLogging();
 
 function startLogging(){
+    if(!IsInSession.checked){
+        localStorage.setItem("sessionName",null);
+        return;
+    }
+    localStorage.setItem("sessionName","TEST");
+
     clickTracker();
     recursiveClicks();
     timeAwayFromPage();

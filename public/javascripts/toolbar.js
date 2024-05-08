@@ -21,7 +21,7 @@ quizProgramId.style.display = "none";
 calcProgramId.style.display = "none";
 timerProgramId.style.display = "block";
 
-codeProgramId.style.position = "absolute";
+codeProgramId.style.position = "flex";
 
 class Program {
     constructor(name, value, width, height, top, left, isActive = false) {
@@ -99,6 +99,7 @@ function dragEnd() {
     const dataValue = draggedElement.getAttribute("data-value");
     const program = programs.find(program => program.value === dataValue);
     program.isActive = true;
+    draggedElement.style.display = "none";
     draggedElement = null;
 }
 
@@ -134,6 +135,7 @@ function checkActiveProgramsList () {
 let run = false;
 const secondRow = document.createElement("div");
 function sizeElement (element, activePrograms, activeProgramsList, place) {
+    element.style.position = "flex";
     let leftORright;
 
     if (activePrograms === 1) {

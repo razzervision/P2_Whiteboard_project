@@ -16,6 +16,10 @@ button:active {
   background-color: #39843a;
 }
 
+/* .codeProgram{
+  position: flex;
+} */
+
 .paint {
   position: flex;
   /* width: 100%;
@@ -27,7 +31,7 @@ button:active {
 canvas {
   width: 100%;
   left: 0%;
-  border: 2px SOLID Black;
+  border-bottom: 1px SOLID Black;
   height: 77.5%;
 }
 
