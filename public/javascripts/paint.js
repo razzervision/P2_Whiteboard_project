@@ -13,8 +13,8 @@ let height = canvas0.offsetHeight;
 
 //socket
 const serverurl = document.location.origin;
-const socketForPaint = io(serverurl);
-console.log(serverurl);
+const socketForPaint = io(serverurl, { autoConnect: false });
+
 
 //start display
 canvas0.style.display = "block";
@@ -180,12 +180,10 @@ function removeMouseMove() {
     socketForPaint.emit("draw", {
         undoarray: undoarray[globalCanvasIndex][undoarray[globalCanvasIndex].length - 1]
     });
-    console.log(undoarray[globalCanvasIndex][undoarray[globalCanvasIndex].length - 1]);
 }
 
 socketForPaint.on("draw", (data) => {
     currentContext.putImageData(data.undoarray, 0, 0);
-    console.log("data" + data.undoarray);
 });
 
 function draw() {
