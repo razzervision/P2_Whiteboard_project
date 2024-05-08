@@ -120,20 +120,22 @@
 </div>
 
   <div id="paintProgram" class="paint">
-    <canvas id = "canvas"></canvas>
-    <canvas id = "canvas1"></canvas>
+  <div id = "canvasPlace">  
+    <canvas id = "canvas0"></canvas>
+  </div>
+ 
     <div class="nav">
-            <div class ="options">
+            <div class ="options" id ="optionsForPaint">
                 <input type="file" id="uploadInput" accept="image/*">
                 <input type="number" id="Imgheight">
                 <input type="number" id="Imgwithd">
-                <button id ="changeCanvas" type="button">Change Canvas</button>
-                <button id ="changeCanvas1" type="button">Change Canvas</button>
+                <button id ="addCanvas" type="button">Add Canvas</button>
                 <button id="picture location">Click to chose picture location</button>
                 <button id = "clearCanvas">Clear canvas</button>
                 <input oninput="draw_color = this.value" id = "colorpick" type = "color" class="colorpick">
                 <input oninput="draw_withd = this.value" type="range" min="1" max="100" class="pen">
                 <button id ="undoB" type ="button">Undo</button>
+                <button id ="changeCanvas" type="button" class = "canvasButton">C0</button>
             </div>
     </div>
   </div>
