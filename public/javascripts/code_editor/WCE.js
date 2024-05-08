@@ -24,8 +24,10 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 });
 
 editor.on("change", (cm, change) => {
+    console.log("in change");
     if (change.origin !== "setValue") {
         socket.emit("code", {input: cm.getValue()});
+        console.log("data sent to server in if", cm.getValue());
     }
 });
 
@@ -45,6 +47,7 @@ document.getElementById("language").addEventListener("change", function() {
     const mode = this.value; 
     editor.setOption("mode", mode);
     socket.emit("language", mode);
+    console.log("data sent to server");
 });
 
 const themeDropdown = document.getElementById("theme");

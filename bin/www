@@ -110,10 +110,12 @@ io.on("connection", (socket) => {
     });
 
     socket.on("code", (data) => {
+        console.log("data received");
         socket.broadcast.emit("code", data);
     });
 
-    socket.on("language", () => {
+    socket.on("language", (data) => {
+        console.log("language received");
         socket.broadcast.emit("language", data);
     });
 
