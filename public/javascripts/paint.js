@@ -74,7 +74,11 @@ addCanvasButton.addEventListener("click", () => {
 });
 
 //undo
-undoB.addEventListener("click", undo);
+undoB.addEventListener("click", () => {
+    undo();
+    socketForPaint.emit("undo");
+});
+
 //rezize
 window.addEventListener("resize", rezize);
 //
@@ -303,6 +307,7 @@ function uploadePicture(){
 //sockets
 
 socketForPaint.on("draw", function (data) {
+    currentContext.beginPath();
     currentContext.moveTo(data.x, data.y);
     currentContext.strokeStyle = data.color;
     currentContext.lineWidth = data.width;
@@ -356,6 +361,10 @@ socketForPaint.on("changeCanvas", (data) =>{
 
 socketForPaint.on("removeMouse", () =>{
     removeMouseMove();
+});
+
+socketForPaint.on("undo", () =>{
+    undo();
 });
 
 

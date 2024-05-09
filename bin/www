@@ -122,6 +122,10 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("removeMouse");
     });
 
+    socket.on("undo", () => {
+        socket.broadcast.emit("undo");
+    });
+
     socket.on("code", (data) => {
         socket.broadcast.emit("code", data);
     });
