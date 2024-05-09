@@ -13,7 +13,7 @@ let height = canvas0.offsetHeight;
 
 //socket
 const serverurl = document.location.origin;
-const socketForPaint = io(serverurl, { autoConnect: false });
+const socketForPaint = io(serverurl);
 
 
 //start display
@@ -184,6 +184,7 @@ function removeMouseMove() {
 
 socketForPaint.on("draw", (data) => {
     currentContext.putImageData(data.undoarray, 0, 0);
+    console.log("draw");
 });
 
 function draw() {
@@ -257,7 +258,6 @@ export function rezize () {
     //context.putImageData(undoarray[undoindex], 0, 0);
     //canvasPosition = canvas.getBoundingClientRect(); 
 }
-
 
 
 function changeColor(element) {

@@ -1,5 +1,5 @@
 const serverURL = document.location.origin;
-const socket = io(serverURL, {autoConnect: false});
+const socket = io(serverURL);
 
 async function loadLanguages() {
     try {
