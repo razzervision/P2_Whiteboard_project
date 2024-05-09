@@ -178,12 +178,13 @@ function removeMouseMove() {
     currentCanvas.removeEventListener("pointermove", onMouseMove);
     currentContext.closePath();
     socketForPaint.emit("draw", {
-        undoarray: undoarray[globalCanvasIndex][undoarray[globalCanvasIndex].length - 1]
+        undoarray: undoarray[globalCanvasIndex][undoarray[globalCanvasIndex].length - 1],
+        context: currentContext.getImageData(0, 0, currentCanvas.width, currentCanvas.height)
     });
 }
 
 socketForPaint.on("draw", (data) => {
-    currentContext.putImageData(data.undoarray, 0, 0);
+    currentContext.putImageData(data.context, 0, 0);
     console.log("draw");
 });
 
