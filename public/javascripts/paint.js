@@ -81,10 +81,13 @@ window.addEventListener("resize", rezize);
 
 changeCanvasButton.addEventListener("click",() =>{
     changeCanvas(canvas0,changeCanvasButton);
-    socketForPaint.emit("changeCanvas", {canvas: canvas0, button: changeCanvasButton});
+    socketForPaint.emit("changeCanvas", {canvas: canvas0.id, canvasButton: changeCanvasButton.id});
 });
 //event listeners
-clear.addEventListener("click", clearCanvas);
+clear.addEventListener("click", ()=>{
+    clearCanvas();
+    socketForPaint.emit("clearCanvas");
+});
 
 //canvas listners in beginning
 currentCanvas.addEventListener("pointerdown", pointerDown);
@@ -120,7 +123,7 @@ function addCanvas(){
     
         canvasButton.addEventListener("click", () =>{
             changeCanvas(canvas,canvasButton);
-            socketForPaint.emit("changeCanvas", {canvas: canvas, button: canvasButton});
+            socketForPaint.emit("changeCanvas", {canvas: canvas.id, canvasButton: canvasButton.id});
         });
     
         changeCanvas(canvas,canvasButton);
@@ -165,7 +168,10 @@ function pointerDown(event){
     mouse.y = event.clientY - currentcanvasPosition.top;
     dot(event);
     currentCanvas.addEventListener("pointermove", onMouseMove);
-    currentCanvas.addEventListener("pointerup", removeMouseMove);
+    currentCanvas.addEventListener("pointerup", () => {
+        removeMouseMove();
+        socketForPaint.emit("removeMouse");
+    });
 }
 
 function dot() {
@@ -215,8 +221,6 @@ function clearCanvas() {
     undoarray[globalCanvasIndex][0] = saveData;
     undoarray[globalCanvasIndex][1] = saveData;
     console.log(undoarray);
-
-    socketForPaint.emit("clearCanvas");
 }
 
 function changeCanvas(canvasT,canvasButton){
@@ -317,8 +321,43 @@ socketForPaint.on("addCanvas", () =>{
 });
 
 socketForPaint.on("changeCanvas", (data) =>{
-    changeCanvas(data.canvas,data.button);
+    const canvasButton = document.getElementById(data.canvasButton);
+    const canvasT = document.getElementById(data.canvas);
+    globalCanvas.forEach(C => {
+        C.style.display = "none";
+        C.style.width = "0%";
+        C.style.height = "0%";
+        C.removeEventListener("pointerdown",pointerDown);
+        C.removeEventListener("pointermove", onMouseMove);
+        C.removeEventListener("pointerout",stopDraw);
+    });
+    const allButtons = document.querySelectorAll(".canvasButton");
+    allButtons.forEach(b => {
+        b.style.backgroundColor = "white";
+    });
+
+    const canvasId = data.canvas;
+    globalCanvasIndex = canvasId[6];
+
+
+    canvasButton.style.backgroundColor = "blue";
+    canvasT.style.display = "block";
+    canvasT.style.width = "100%";
+    canvasT.style.height = "77.5%";
+    canvasT.addEventListener("pointerdown",pointerDown);
+    canvasT.addEventListener("pointerout",stopDraw);
+    
+    currentCanvas = canvasT;
+    console.log(currentCanvas);
+    currentContext = currentCanvas.getContext("2d");
+    currentcanvasPosition = currentCanvas.getBoundingClientRect();
 });
+
+
+socketForPaint.on("removeMouse", () =>{
+    removeMouseMove();
+});
+
 
 /*
 //canvas setup

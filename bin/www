@@ -117,6 +117,10 @@ io.on("connection", (socket) => {
     socket.on("changeCanvas", (data) => {
         socket.broadcast.emit("changeCanvas", data);
     });
+    
+    socket.on("removeMouse", () => {
+        socket.broadcast.emit("removeMouse");
+    });
 
     socket.on("code", (data) => {
         socket.broadcast.emit("code", data);
