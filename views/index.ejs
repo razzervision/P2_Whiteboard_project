@@ -19,13 +19,12 @@
           <link rel="stylesheet" href="/stylesheets/quiz.css">
           <link rel="stylesheet" href="/stylesheets/toolbar.css">
           <link rel="stylesheet" href="/stylesheets/calc.css">
-          <script defer src="/javascripts/toolbar.js"></script>
+          <script type="module" defer src="/javascripts/toolbar.js"></script>
           <script src="/javascripts/users.js"></script>
           <script defer src="/javascripts/calculator.js"></script>
-          <script defer src="/javascripts/paint.js"></script>
+          <script type="module" defer src="/javascripts/paint.js"></script>
           <script src="/javascripts/pausefish.js"></script>
 
-          <script defer src="/javascripts/savepdf.js"></script>
           <!-- QUIZ -->
           <script defer src="/javascripts/quiz/quiz.js"></script>
           <!-- <script defer src="/javascripts/quiz/test.js"></script> -->
@@ -47,9 +46,10 @@
           <script defer src="/javascripts/code_editor/codemirror/mode/ruby/ruby.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/addon/edit/closebrackets.js"></script>
           <script defer src="/javascripts/code_editor/WCE.js"></script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-	        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+          <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+          <script defer src="/javascripts/savepdf.js"></script>
         </head>
 
 <body>
@@ -59,7 +59,7 @@
 
 <div id="webPage">
 
-  <div class="toolbar" id="toolbar">
+  <div class="toolbar" class="saveToPDF" id="toolbar">
     <nav>
       <menu id="toolbarMenu">
         <div class = "toolbarElement" id = "codeEditorElement" data-value="codeProgram" draggable="true">Code Editor</div>
@@ -78,7 +78,7 @@
 
 
 
-<div id="quizProgram" class="quiz_container">
+<div id="quizProgram" class="saveToPDF" class="quiz_container">
   <button id="quiz_home_screen">HOME</button>
   <div class="quiz_index" id="quiz_index">
     <label for="create_quiz_text">Quiz name</label>
@@ -125,7 +125,7 @@
 
 </div>
 
-  <div id="paintProgram" class="paint">
+  <div id="paintProgram" class="saveToPDF" class="paint">
   <div id = "canvasPlace">  
     <canvas id = "canvas0"></canvas>
   </div>
@@ -148,7 +148,7 @@
 
 
   <!-- JONS code editor -->
-  <div id="codeProgram" class="code_editor">
+  <div id="codeProgram" class="saveToPDF" class="code_editor">
   <textarea id="code"></textarea>
   <select id="language">
   </select>
@@ -163,7 +163,7 @@
 
 
 <!--- calDIV -->
-<div id="calcProgram" class="calculatorMain"> 
+<div id="calcProgram" class="saveToPDF" class="calculatorMain"> 
   <div class="dropdownCalc">
     <select name="mathType" id="mathType">
     <option value="calculator">Calc</option>
@@ -227,7 +227,7 @@
 
 
 <!--- TIMER -->
-<div id="timerProgram">
+<div class="saveToPDF" id="timerProgram">
   <!--This is the trigger for the modal-->       
   <div class="stickymodal"> 
     <button id="pauses"> Click here for pause options </button>
@@ -283,8 +283,7 @@
 
 
 <script src="/javascripts/timer.js"></script>
-<script src="https://cdn.socket.io/4.2.0/socket.io.min.js"></script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script src="/javascripts/socket.js"></script>
 </body>
-
 </html>

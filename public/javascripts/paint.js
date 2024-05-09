@@ -12,6 +12,10 @@ const canvas0 = document.getElementById("canvas0");
 let width = canvas0.offsetWidth;
 let height = canvas0.offsetHeight;
 
+//socket
+const serverurl = document.location.origin;
+const socketForPaint = io(serverurl);
+
 
 //start display
 canvas0.style.display = "block";
@@ -173,7 +177,17 @@ function removeMouseMove() {
     undoarray[globalCanvasIndex].push(currentContext.getImageData(0, 0, currentCanvas.width, currentCanvas.height));
     currentCanvas.removeEventListener("pointermove", onMouseMove);
     currentContext.closePath();
+    socketForPaint.emit("draw", {
+        undoarray: undoarray[globalCanvasIndex][undoarray[globalCanvasIndex].length - 1],
+        context: currentContext.getImageData(0, 0, currentCanvas.width, currentCanvas.height)
+    });
 }
+
+socketForPaint.on("draw", (data) => {
+    currentContext.putImageData(data.context, 0, 0);
+    console.log("draw");
+});
+
 function draw() {
     currentContext.strokeStyle = drawColor;
     currentContext.lineWidth = drawWithd;
@@ -233,7 +247,7 @@ function changeCanvas(canvasT,canvasButton){
 }
     
     
-function rezize () {
+export function rezize () {
     width = currentCanvas.offsetWidth;
     height = currentCanvas.offsetHeight;
     

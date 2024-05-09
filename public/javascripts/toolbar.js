@@ -1,4 +1,5 @@
-// const rezize = require('./paint.js');
+import { rezize } from './paint.js';
+
 
 const paintElement = document.querySelector("#paintElement");
 const codeEditorElement = document.querySelector("#codeEditorElement");
@@ -91,14 +92,14 @@ function drag(e) {
             sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 1);
             pos = 1;
         } else if (e.clientX > (primaryDropzoneWidth / 4) * 3) {
-            sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 2);
-            pos = 2;
-        } else if (e.clientX > primaryDropzoneWidth / 4 && e.clientX < (primaryDropzoneWidth / 4) * 3 && e.clientY > primaryDropzoneHeight / 2) {
             sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 3);
             pos = 3;
-        } else if (e.clientX > primaryDropzoneWidth / 4 && e.clientX < (primaryDropzoneWidth / 4) * 3 && e.clientY < primaryDropzoneHeight / 2) {
+        } else if (e.clientX > primaryDropzoneWidth / 4 && e.clientX < (primaryDropzoneWidth / 4) * 3 && e.clientY > primaryDropzoneHeight / 2) {
             sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 4);
             pos = 4;
+        } else if (e.clientX > primaryDropzoneWidth / 4 && e.clientX < (primaryDropzoneWidth / 4) * 3 && e.clientY < primaryDropzoneHeight / 2) {
+            sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 2);
+            pos = 2;
         }
 
         if (!runOrder) {
@@ -128,49 +129,63 @@ function dragEnd() {
     const dataValue = draggedElement.getAttribute("data-value");
     const program = programs.find(program => program.value === dataValue);
     program.isActive = true;
+    // clearScreen(divConverter(draggedElement));
     draggedElement.style.display = "none";
     draggedElement = null;
+
+
 }
-
-function splitScreen (units, percentL, percentMid, percentHalf) {
+let str2Columns = "";
+let str2Rows = "";
+function splitScreen (units, percentLeft, percentMiddle, percentVerticalHalf) {
+    primaryDropzone.style.gridTemplateColumns = "";
+    primaryDropzone.style.gridTemplateRows = "";
     // console.log(units, percentL, percentMid, percentHalf);
-    let percentR = 100 - percentL - percentMid + "%";
-    percentL += "%";
-    percentMidBool = percentMid;
-    percentMid += "%";
-    totalStringRL = percentL + " " + percentR;
-    totalStringHalf = 100 - percentHalf + "%";
-
+    let percentRight = 100 - percentLeft - percentMiddle;
+    let percentTop = 100 - percentVerticalHalf;
     primaryDropzone.style.display = "grid";
     primaryDropzone.style.gridGap = "10px";
 
     if (units === 2) {
-        if (percentHalf > 0) {
-            primaryDropzone.style.gridTemplateRows = totalStringHalf;
-        } else {
-            primaryDropzone.style.gridTemplateColumns = totalStringRL;
+        // place left / right
+        if (percentVerticalHalf === 0) {
+            str2Columns = percentLeft + "% " + percentRight + "%";
+            primaryDropzone.style.gridTemplateColumns = str2Columns;
+        // place middle    
+        } else if (percentVerticalHalf > 0) {
+            str2Rows = percentVerticalHalf + "% " + percentTop + "%";
+            primaryDropzone.style.gridTemplateRows = str2Rows;
         }
+
     } else if (units === 3) {
-        if (percentMidBool > 0) {
-            totalStringRL = percentL + " " + percentMid + " " + percentR;
-            primaryDropzone.style.gridTemplateColumns = totalStringRL;
-        } else {
-            primaryDropzone.style.gridTemplateRows = totalStringHalf;
+        // const newBox = document.createElement("div");
+        // 3 besides eachother
+        console.log(percentMiddle);
+        if (percentMiddle > 0) {
+            console.log("1");
+            let str = percentLeft + "% " + percentMiddle + "% " + percentRight + "%";
+            primaryDropzone.style.gridTemplateColumns = str;
+        } else {   
+            console.log("2");
+            let str = percentLeft + "% " + percentRight + "%";
+            primaryDropzone.style.gridTemplateColumns = str;
+            primaryDropzone.style.gridTemplateRows = str2Rows;
         }
+
+
     } 
 }
 
 // place = 1,2,3,4   1 left, 2 top-center, 3 right, 4 bottom-center
 let run = false;
+let ontop = false;
 function sizeElement (element, activePrograms, activeProgramsList, place) {
     element.style.position = "flex";
     element.style.display = "block";
-    let leftORright;
 
     if (activePrograms === 1) {
         const str = "#" + activeProgramsList[0].value;
         const activeProgram = document.querySelector(str);
-        primaryDropzone.removeChild(activeProgram);
 
         primaryDropzone.style.display = "grid";
         primaryDropzone.style.gridGap = "10px";
@@ -180,87 +195,70 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
         activeProgram.style.height = "100%";
 
         if (place === 1) {
-            primaryDropzone.appendChild(element);
-            primaryDropzone.appendChild(activeProgram);
-            splitScreen(2, 70, 0, 0);
-        } else if (place === 3) {
-            primaryDropzone.appendChild(activeProgram);
-            primaryDropzone.appendChild(element);
+            ontop = false;
             splitScreen(2, 30, 0, 0);
+            primaryDropzone.appendChild(element);
+            primaryDropzone.appendChild(activeProgram);
+        } else if (place === 3) {
+            ontop = false;
+            splitScreen(2, 70, 0, 0);
+            primaryDropzone.appendChild(activeProgram);
+            primaryDropzone.appendChild(element);
         } else if (place === 2) {
-            primaryDropzone.appendChild(element);
-            primaryDropzone.appendChild(activeProgram);
+            ontop = true;
             splitScreen(2, 0, 0, 30);
+            primaryDropzone.appendChild(element);
+            primaryDropzone.appendChild(activeProgram);
         } else if (place === 4) {
+            ontop = true;
+            splitScreen(2, 0, 0, 70);
             primaryDropzone.appendChild(activeProgram);
             primaryDropzone.appendChild(element);
-            splitScreen(2, 0, 0, 70);
         }
     }
 
     if (activePrograms === 2) {
-        primaryDropzone.innerHTML = "";
         if (place === 1) {
-            splitScreen(3, 20, 50, 0);
-            primaryDropzone.appendChild(element);
-            elementOrder.forEach(element => {
+            console.log(ontop);
+            if (!ontop) {
+                splitScreen(3, 20, 50, 0);
                 primaryDropzone.appendChild(element);
-            });
+                elementOrder.forEach(element => {
+                    primaryDropzone.appendChild(element);
+                });
+            } else {
+                splitScreen(3, 30, 0, 0);
+                primaryDropzone.appendChild(element);
+                element.style.gridRow = "-1 / 1";
+                elementOrder.forEach(element => {
+                    primaryDropzone.appendChild(element);
+                });
+                
+
+            }
             
         } else if (place === 3) {
+            if (!ontop) {
+                splitScreen(3, 20, 50, 0);
+                elementOrder.forEach(element => {
+                    primaryDropzone.appendChild(element);
+                });
+                primaryDropzone.appendChild(element);
+            } else {
+                splitScreen(3, 70, 0, 0);
+                elementOrder.forEach(element => {
+                    primaryDropzone.appendChild(element);
+                });
+                primaryDropzone.appendChild(element);
+                element.style.gridColumn = "-2 / 2";
 
-        } else {
+            }
+        } else if (place === 2) {
+
+ 
+        } else if (place === 4) {
 
         }
-
-
-        // splitScreen(3, 20, 0, 50);
-        // element.style.gridColumnStart = "span 2";
-        // primaryDropzone.appendChild(element);
-
-
-        // primaryDropzone.appendChild();
-
-        // if (leftORright === 1) {
-        //     // primaryDropzone.style.gridTemplateColumns = "70% 30%";
-        //     splitScreen(2, 70, 0);
-        // } else {
-        //     // primaryDropzone.style.gridTemplateColumns = "30% 70%";   
-        //     splitScreen(2, 30, 0);
-
-        // }
-
-        // if (!run) {      
-        //     secondRow.style.gridColumnStart = "span 2";
-
-        //     secondRow.appendChild(element);
-        //     primaryDropzone.appendChild(secondRow);
-        //     run = true;
-        // }
-        // element.style.display = "block";
-
-        // const newList = [];
-        // activeProgramsList.forEach(elem => {
-        //     const str = "#" + elem.value;
-        //     const activeProgram = document.querySelector(str);
-        //     newList.push(activeProgram);
-        //     primaryDropzone.removeChild(activeProgram);
-        // });
-
-        // if (place === 1 || place === 2) {
-        //     primaryDropzone.style.gridTemplateRows = "40%";
-
-        //     primaryDropzone.appendChild(secondRow);
-        //     primaryDropzone.appendChild(newList[1]);
-        //     primaryDropzone.appendChild(newList[0]);
-        // } else {
-        //     primaryDropzone.style.gridTemplateRows = "60%";
-
-        //     primaryDropzone.appendChild(newList[1]);
-        //     primaryDropzone.appendChild(newList[0]);
-        //     primaryDropzone.appendChild(secondRow);
-
-        // }
     }
 }
 
@@ -291,4 +289,20 @@ function checkActiveProgramsList () {
         }
     });
     return i;
+}
+
+function clearScreen (addedElement) {
+    primaryDropzone.removeChild(paintProgramId);
+    for (let i = 0; i < elementOrder.length; i++) {
+        if (!addedElement === elementOrder[i]) {
+            primaryDropzone.removeChild(elementOrder[i]);
+        }
+    }
+
+    console.log(elementOrder);
+
+    // elementOrder.forEach(element => {
+    //     console.log(element);
+    //     // primaryDropzone.removeChild(element);
+    // });
 }
