@@ -101,7 +101,7 @@
     float: right;
 }
 
-/*´MATRICES */
+/* MATRICES */
 .matrices {
     display: hide;
 }
@@ -118,6 +118,8 @@
     display: inline;
     font-size: 14px;
     padding: 2px;
-   
+}
 
+.matriceInput{
+    width: 5%;
 }

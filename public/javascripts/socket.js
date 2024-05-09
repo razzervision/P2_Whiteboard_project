@@ -1,7 +1,8 @@
 (function() {
     const checkbox = document.getElementById("connectSocket");
     const serverurl = document.location.origin;
-    const socket = io(serverurl, {autoConnect: false});
+    const socket = io(serverurl
+    );
 
     checkbox.addEventListener("change", () => {
         if (checkbox.checked) {
