@@ -103,10 +103,19 @@ io.on("connection", (socket) => {
     
     socket.on("draw", (data) => {
         socket.broadcast.emit("draw", data);
+        console.log("data sent");
     });
 
     socket.on("clearCanvas", () => {
         socket.broadcast.emit("clearCanvas");
+    });
+
+    socket.on("addCanvas", (data) => {
+        socket.broadcast.emit("addCanvas", data);
+    });
+
+    socket.on("changeCanvas", (data) => {
+        socket.broadcast.emit("changeCanvas", data);
     });
 
     socket.on("code", (data) => {

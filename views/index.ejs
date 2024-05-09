@@ -25,7 +25,6 @@
           <script type="module" defer src="/javascripts/paint.js"></script>
           <script src="/javascripts/pausefish.js"></script>
 
-          <script defer src="/javascripts/savepdf.js"></script>
           <!-- QUIZ -->
           <script defer src="/javascripts/quiz/quiz.js"></script>
           <!-- <script defer src="/javascripts/quiz/test.js"></script> -->
@@ -47,9 +46,10 @@
           <script defer src="/javascripts/code_editor/codemirror/mode/ruby/ruby.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/addon/edit/closebrackets.js"></script>
           <script defer src="/javascripts/code_editor/WCE.js"></script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-	        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+          <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+          <script defer src="/javascripts/savepdf.js"></script>
         </head>
 
 <body>
@@ -138,8 +138,8 @@
                 <button id ="addCanvas" type="button">Add Canvas</button>
                 <button id="picture location">Click to chose picture location</button>
                 <button id = "clearCanvas">Clear canvas</button>
-                <input oninput="draw_color = this.value" id = "colorpick" type = "color" class="colorpick">
-                <input oninput="draw_withd = this.value" type="range" min="1" max="100" class="pen">
+                <input oninput="drawColor = this.value" id = "colorpick" type = "color" class="colorpick">
+                <input oninput="drawWithd = this.value" type="range" min="1" max="100" class="pen">
                 <button id ="undoB" type ="button">Undo</button>
                 <button id ="changeCanvas" type="button" class = "canvasButton">C0</button>
             </div>
