@@ -68,7 +68,10 @@ const mouse = {
 };
 
 
-addCanvasButton.addEventListener("click",addCanvas);
+addCanvasButton.addEventListener("click", () => {
+    addCanvas();
+    socketForPaint.emit("addCanvas");
+});
 
 //undo
 undoB.addEventListener("click", undo);
@@ -78,6 +81,7 @@ window.addEventListener("resize", rezize);
 
 changeCanvasButton.addEventListener("click",() =>{
     changeCanvas(canvas0,changeCanvasButton);
+    socketForPaint.emit("changeCanvas", {canvas: canvas0, button: changeCanvasButton});
 });
 //event listeners
 clear.addEventListener("click", clearCanvas);
@@ -116,11 +120,13 @@ function addCanvas(){
     
         canvasButton.addEventListener("click", () =>{
             changeCanvas(canvas,canvasButton);
+            socketForPaint.emit("changeCanvas", {canvas: canvas, button: canvasButton});
         });
     
         changeCanvas(canvas,canvasButton);
         options.appendChild(canvasButton);
         canvasCounter++;
+        
     }
 }
 
@@ -177,16 +183,7 @@ function removeMouseMove() {
     undoarray[globalCanvasIndex].push(currentContext.getImageData(0, 0, currentCanvas.width, currentCanvas.height));
     currentCanvas.removeEventListener("pointermove", onMouseMove);
     currentContext.closePath();
-    socketForPaint.emit("draw", {
-        undoarray: undoarray[globalCanvasIndex][undoarray[globalCanvasIndex].length - 1],
-        context: currentContext.getImageData(0, 0, currentCanvas.width, currentCanvas.height)
-    });
 }
-
-socketForPaint.on("draw", (data) => {
-    currentContext.putImageData(data.context, 0, 0);
-    console.log("draw");
-});
 
 function draw() {
     currentContext.strokeStyle = drawColor;
@@ -196,6 +193,13 @@ function draw() {
     currentContext.lineTo(mouse.x, mouse.y);
     
     currentContext.stroke();
+
+    socketForPaint.emit("draw", {
+        x: mouse.x,
+        y: mouse.y,
+        color: drawColor,
+        width: drawWithd
+    });
 }
 
 
@@ -211,6 +215,8 @@ function clearCanvas() {
     undoarray[globalCanvasIndex][0] = saveData;
     undoarray[globalCanvasIndex][1] = saveData;
     console.log(undoarray);
+
+    socketForPaint.emit("clearCanvas");
 }
 
 function changeCanvas(canvasT,canvasButton){
@@ -289,6 +295,30 @@ function uploadePicture(){
     };
 }
 
+
+//sockets
+
+socketForPaint.on("draw", function (data) {
+    currentContext.moveTo(data.x, data.y);
+    currentContext.strokeStyle = data.color;
+    currentContext.lineWidth = data.width;
+    currentContext.lineCap = "round";
+    currentContext.lineJoin = "round";
+    currentContext.lineTo(data.x, data.y);
+    currentContext.stroke();
+});
+
+socketForPaint.on("clearCanvas", function () {
+    clearCanvas();
+});
+
+socketForPaint.on("addCanvas", () =>{
+    addCanvas();
+});
+
+socketForPaint.on("changeCanvas", (data) =>{
+    changeCanvas(data.canvas,data.button);
+});
 
 /*
 //canvas setup

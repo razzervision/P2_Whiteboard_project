@@ -110,6 +110,14 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("clearCanvas");
     });
 
+    socket.on("addCanvas", (data) => {
+        socket.broadcast.emit("addCanvas", data);
+    });
+
+    socket.on("changeCanvas", (data) => {
+        socket.broadcast.emit("changeCanvas", data);
+    });
+
     socket.on("code", (data) => {
         socket.broadcast.emit("code", data);
     });
