@@ -1,3 +1,4 @@
+
 //buttons setup
 const clear = document.querySelector("#clearCanvas");
 const undoB = document.querySelector("#undoB");
@@ -46,7 +47,6 @@ const imgwithdButton = document.getElementById("Imgwithd");
 
 //undo array
 const undoarray = [[]];
-
 
 //start position of picture
 let imgX = 0;
