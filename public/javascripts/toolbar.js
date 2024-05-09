@@ -1,6 +1,3 @@
-import { rezize } from './paint.js';
-
-
 const paintElement = document.querySelector("#paintElement");
 const codeEditorElement = document.querySelector("#codeEditorElement");
 const quizElement = document.querySelector("#quizElement");
@@ -79,14 +76,16 @@ function dragStart(e) {
     offsetY = e.clientY - draggedElement.getBoundingClientRect().top;
 }
 
+let pos;
+let elementToDisplay;
 function drag(e) {
-    let pos;
+
     if (draggedElement !== null) {
         draggedElement.style.position = "absolute";
         draggedElement.style.left = (e.clientX - offsetX) + "px";
         draggedElement.style.top = (e.clientY - offsetY) + "px";
 
-        const elementToDisplay = divConverter(draggedElement);
+        elementToDisplay = divConverter(draggedElement);
 
         if (e.clientX < primaryDropzoneWidth / 4) {
             sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 1);
@@ -102,23 +101,7 @@ function drag(e) {
             pos = 2;
         }
 
-        if (!runOrder) {
-            switch (pos) {
-                case 1:
-                    elementOrder.unshift(elementToDisplay);
-                    break; 
-                case 2:
-                    elementOrder.unshift(elementToDisplay);
-                    break; 
-                case 3:
-                    elementOrder.push(elementToDisplay);
-                    break;
-                case 4:   
-                    elementOrder.push(elementToDisplay);
-                    break; 
-            }
-            runOrder = true;
-        }
+        
 
         draggedElementX = (e.clientX - offsetX) + "px";
         draggedElementY = (e.clientY - offsetY) + "px";
@@ -129,12 +112,31 @@ function dragEnd() {
     const dataValue = draggedElement.getAttribute("data-value");
     const program = programs.find(program => program.value === dataValue);
     program.isActive = true;
-    // clearScreen(divConverter(draggedElement));
+
     draggedElement.style.display = "none";
     draggedElement = null;
 
+    if (!runOrder) {
+        switch (pos) {
+            case 1:
+                elementOrder.unshift(elementToDisplay);
+                break; 
+            case 2:
+                elementOrder.unshift(elementToDisplay);
+                break; 
+            case 3:
+                elementOrder.push(elementToDisplay);
+                break;
+            case 4:   
+                elementOrder.push(elementToDisplay);
+                break; 
+        }
+        runOrder = true;
+    }
+
 
 }
+
 let str2Columns = "";
 let str2Rows = "";
 function splitScreen (units, percentLeft, percentMiddle, percentVerticalHalf) {
@@ -160,20 +162,24 @@ function splitScreen (units, percentLeft, percentMiddle, percentVerticalHalf) {
     } else if (units === 3) {
         // const newBox = document.createElement("div");
         // 3 besides eachother
-        console.log(percentMiddle);
         if (percentMiddle > 0) {
-            console.log("1");
             let str = percentLeft + "% " + percentMiddle + "% " + percentRight + "%";
             primaryDropzone.style.gridTemplateColumns = str;
-        } else {   
-            console.log("2");
+        } else if (percentLeft > 0) {   
             let str = percentLeft + "% " + percentRight + "%";
             primaryDropzone.style.gridTemplateColumns = str;
             primaryDropzone.style.gridTemplateRows = str2Rows;
+        } else {
+            let str = percentVerticalHalf + "% " + percentTop + "%";
+            primaryDropzone.style.gridTemplateColumns = str2Columns;
+            primaryDropzone.style.gridTemplateRows = str;
         }
+    } else if (units === 3) {
+
+        
 
 
-    } 
+    }
 }
 
 // place = 1,2,3,4   1 left, 2 top-center, 3 right, 4 bottom-center
@@ -194,21 +200,25 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
         activeProgram.style.width = "100%";
         activeProgram.style.height = "100%";
 
+        // LEFT
         if (place === 1) {
             ontop = false;
             splitScreen(2, 30, 0, 0);
             primaryDropzone.appendChild(element);
             primaryDropzone.appendChild(activeProgram);
+        // RIGHT    
         } else if (place === 3) {
             ontop = false;
             splitScreen(2, 70, 0, 0);
             primaryDropzone.appendChild(activeProgram);
             primaryDropzone.appendChild(element);
+        // TOP MID
         } else if (place === 2) {
             ontop = true;
             splitScreen(2, 0, 0, 30);
             primaryDropzone.appendChild(element);
             primaryDropzone.appendChild(activeProgram);
+        // BOTTOM MID
         } else if (place === 4) {
             ontop = true;
             splitScreen(2, 0, 0, 70);
@@ -217,51 +227,69 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
         }
     }
 
+
     if (activePrograms === 2) {
+        if (!ontop) {
+            element.style.gridRow = "";
+            element.style.gridColumn = "";
+            element.style.gridArea = "";
+        }
+        
+
         if (place === 1) {
-            console.log(ontop);
             if (!ontop) {
-                splitScreen(3, 20, 50, 0);
+                console.log("1");
+                splitScreen(3, 20, 60, 0);
                 primaryDropzone.appendChild(element);
-                elementOrder.forEach(element => {
-                    primaryDropzone.appendChild(element);
-                });
+                addElements();
+
             } else {
+                element.style.gridRow = "";
+                element.style.gridColumn = "";
+                element.style.gridArea = "";
                 splitScreen(3, 30, 0, 0);
                 primaryDropzone.appendChild(element);
                 element.style.gridRow = "-1 / 1";
-                elementOrder.forEach(element => {
-                    primaryDropzone.appendChild(element);
-                });
-                
-
+                addElements();
             }
-            
+
         } else if (place === 3) {
             if (!ontop) {
-                splitScreen(3, 20, 50, 0);
-                elementOrder.forEach(element => {
-                    primaryDropzone.appendChild(element);
-                });
+                console.log("3");
+                splitScreen(3, 20, 60, 0);
+                addElements();
                 primaryDropzone.appendChild(element);
+
             } else {
                 splitScreen(3, 70, 0, 0);
-                elementOrder.forEach(element => {
-                    primaryDropzone.appendChild(element);
-                });
-                primaryDropzone.appendChild(element);
+                addElements();
                 element.style.gridColumn = "-2 / 2";
-
+                primaryDropzone.appendChild(element);
+                
             }
-        } else if (place === 2) {
 
+        } else if (place === 2) {
+            if (!ontop) {
+                console.log("5");
+                splitScreen(3, 0, 0, 30);
+                element.style.gridColumn = "-1 / 1";
+            }
  
         } else if (place === 4) {
-
+            if (!ontop) {
+                console.log("6");
+                splitScreen(3, 0, 0, 70);
+                element.style.gridColumn = "-1 / 1";
+            }
         }
     }
 }
 
+function addElements () {
+    elementOrder.forEach(element => {
+        primaryDropzone.appendChild(element);
+    });
+}
 
 function divConverter (draggedElement) {
     if (draggedElement !== null) {
@@ -291,18 +319,12 @@ function checkActiveProgramsList () {
     return i;
 }
 
-function clearScreen (addedElement) {
-    primaryDropzone.removeChild(paintProgramId);
-    for (let i = 0; i < elementOrder.length; i++) {
-        if (!addedElement === elementOrder[i]) {
-            primaryDropzone.removeChild(elementOrder[i]);
-        }
-    }
-
-    console.log(elementOrder);
-
-    // elementOrder.forEach(element => {
-    //     console.log(element);
-    //     // primaryDropzone.removeChild(element);
-    // });
-}
+// function clearScreen (addedElement) {
+//     primaryDropzone.removeChild(paintProgramId);
+//     for (let i = 0; i < elementOrder.length; i++) {
+//         if (!addedElement === elementOrder[i]) {
+//             primaryDropzone.removeChild(elementOrder[i]);
+//         }
+//     }
+//     console.log(elementOrder);
+// }

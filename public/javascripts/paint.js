@@ -245,7 +245,7 @@ function changeCanvas(canvasT,canvasButton){
 }
     
     
-export function rezize () {
+function rezize () {
     width = currentCanvas.offsetWidth;
     height = currentCanvas.offsetHeight;
     
