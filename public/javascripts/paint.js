@@ -35,6 +35,7 @@ console.log(globalCanvas);
 let currentCanvas = canvas0;
 let currentContext= currentCanvas.getContext("2d");
 let currentcanvasPosition = currentCanvas.getBoundingClientRect();
+rezize();
 //default canvas stuff
 const startBackground = "white";
 let drawColor = "black";
