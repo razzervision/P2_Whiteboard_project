@@ -25,6 +25,7 @@ codeProgramId.style.position = "flex";
 codeProgramId.style.height = "100%";
 codeProgramId.style.width = "100%";
 
+
 class Program {
     constructor(value, isActive = false) {
         this.value = value;
@@ -65,7 +66,7 @@ let offsetX = 0;
 let offsetY = 0;
 let runOrder;
 
-let elementOrder = [];
+const elementOrder = [];
 elementOrder.push(paintProgramId);
 function dragStart(e) {
     runOrder = false;
@@ -100,7 +101,6 @@ function drag(e) {
             sizeElement(elementToDisplay, checkActivePrograms(), checkActiveProgramsList(), 2);
             pos = 2;
         }
-
         
 
         draggedElementX = (e.clientX - offsetX) + "px";
@@ -118,18 +118,18 @@ function dragEnd() {
 
     if (!runOrder) {
         switch (pos) {
-            case 1:
-                elementOrder.unshift(elementToDisplay);
-                break; 
-            case 2:
-                elementOrder.unshift(elementToDisplay);
-                break; 
-            case 3:
-                elementOrder.push(elementToDisplay);
-                break;
-            case 4:   
-                elementOrder.push(elementToDisplay);
-                break; 
+        case 1:
+            elementOrder.unshift(elementToDisplay);
+            break; 
+        case 2:
+            elementOrder.unshift(elementToDisplay);
+            break; 
+        case 3:
+            elementOrder.push(elementToDisplay);
+            break;
+        case 4:   
+            elementOrder.push(elementToDisplay);
+            break; 
         }
         runOrder = true;
     }
@@ -143,8 +143,8 @@ function splitScreen (units, percentLeft, percentMiddle, percentVerticalHalf) {
     primaryDropzone.style.gridTemplateColumns = "";
     primaryDropzone.style.gridTemplateRows = "";
     // console.log(units, percentL, percentMid, percentHalf);
-    let percentRight = 100 - percentLeft - percentMiddle;
-    let percentTop = 100 - percentVerticalHalf;
+    const percentRight = 100 - percentLeft - percentMiddle;
+    const percentTop = 100 - percentVerticalHalf;
     primaryDropzone.style.display = "grid";
     primaryDropzone.style.gridGap = "10px";
 
@@ -163,27 +163,25 @@ function splitScreen (units, percentLeft, percentMiddle, percentVerticalHalf) {
         // const newBox = document.createElement("div");
         // 3 besides eachother
         if (percentMiddle > 0) {
-            let str = percentLeft + "% " + percentMiddle + "% " + percentRight + "%";
+            const str = percentLeft + "% " + percentMiddle + "% " + percentRight + "%";
             primaryDropzone.style.gridTemplateColumns = str;
         } else if (percentLeft > 0) {   
-            let str = percentLeft + "% " + percentRight + "%";
+            const str = percentLeft + "% " + percentRight + "%";
             primaryDropzone.style.gridTemplateColumns = str;
             primaryDropzone.style.gridTemplateRows = str2Rows;
         } else {
-            let str = percentVerticalHalf + "% " + percentTop + "%";
+            const str = percentVerticalHalf + "% " + percentTop + "%";
             primaryDropzone.style.gridTemplateColumns = str2Columns;
             primaryDropzone.style.gridTemplateRows = str;
         }
     } else if (units === 3) {
-
-        
 
 
     }
 }
 
 // place = 1,2,3,4   1 left, 2 top-center, 3 right, 4 bottom-center
-let run = false;
+const run = false;
 let ontop = false;
 function sizeElement (element, activePrograms, activeProgramsList, place) {
     element.style.position = "flex";

@@ -4,7 +4,7 @@
     background-size: 200% 100%;
     /* border-radius: 10px; */
     display: flex;
-    position: flex;
+    position: relative;
     box-sizing: border-box;
     height: 100%;
     width: 100%;
@@ -102,9 +102,9 @@
 }
 
 /* MATRICES */
-.matrices {
+/* .matrices {
     display: hide;
-}
+} */
 
 .xMatrice {
     width: 5%;

@@ -26,12 +26,11 @@
 
           <!-- QUIZ -->
           <script defer src="/javascripts/quiz/quiz.js"></script>
-          <!-- <script defer src="/javascripts/quiz/test.js"></script> -->
+          <script defer src="/javascripts/quiz/test.js"></script>
 
           <script src="/javascripts/server.js"></script>
           <script src="/javascripts/phone.js"></script>
           
-
           <script defer src="/javascripts/code_editor/codemirror/lib/codemirror.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/javascript/javascript.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/python/python.js"></script>
@@ -49,7 +48,7 @@
 	        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 	        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
           <script defer src="/javascripts/savepdf.js"></script>
-        </head>
+</head>
 
 <body>
 <!-- <div>
@@ -58,7 +57,8 @@
 
 <div id="webPage">
 
-  <div class="toolbar" class="saveToPDF" id="toolbar">
+  <div class="toolbar saveToPDF" id="toolbar">
+
     <nav>
       <menu id="toolbarMenu">
         <div class = "toolbarElement" id = "codeEditorElement" data-value="codeProgram" draggable="true">Code Editor</div>
@@ -77,7 +77,8 @@
 
 
 
-<div id="quizProgram" class="saveToPDF" class="quiz_container">
+<div id="quizProgram" class="quiz_container saveToPDF">
+
   <button id="quiz_home_screen">HOME</button>
   <div class="quiz_index" id="quiz_index">
     <label for="create_quiz_text">Quiz name</label>
@@ -124,7 +125,7 @@
 
 </div>
 
-  <div id="paintProgram" class="saveToPDF" class="paint">
+  <div id="paintProgram" class="paint saveToPDF">
   <div id = "canvasPlace">  
     <canvas id = "canvas0"></canvas>
   </div>
@@ -147,7 +148,7 @@
 
 
   <!-- JONS code editor -->
-  <div id="codeProgram" class="saveToPDF" class="code_editor">
+  <div id="codeProgram" class="code_editor saveToPDF">
   <textarea id="code"></textarea>
   <select id="language">
   </select>
@@ -162,7 +163,7 @@
 
 
 <!--- calDIV -->
-<div id="calcProgram" class="saveToPDF" class="calculatorMain"> 
+<div id="calcProgram" class="calculatorMain saveToPDF"> 
   <div class="dropdownCalc">
     <select name="mathType" id="mathType">
     <option value="calculator">Calc</option>

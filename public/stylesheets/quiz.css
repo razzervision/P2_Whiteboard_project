@@ -6,7 +6,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   overflow: auto; 
-  position: flex;
+  position: relative;
   padding: 20px;
   margin-bottom: 5px;
   width: 100%;
@@ -19,6 +19,7 @@
 display: flex; 
 align-items: center; 
 margin-top: 5%;
+margin-bottom: 10px;
 }
 
 
@@ -57,10 +58,6 @@ margin-bottom: 5px;
 }
 
 .creat_quiz_div input[type="text"] {
-margin-bottom: 10px;
-}
-
-.answer_container {
 margin-bottom: 10px;
 }
 
