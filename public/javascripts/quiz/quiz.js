@@ -3,6 +3,10 @@
 //Maximum answer the user can insert. 
 const maxAnswers = 5;
 
+//socket.io
+const serverURLForSocket = document.location.origin;
+const socketForQuiz = io(serverURLForSocket);
+
 //---------------------------------------------------------------------------------------Helping funktions
 
 //Check if the element is created
