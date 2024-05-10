@@ -1,23 +1,35 @@
 #toolbarMenu {
+    border: 1px solid rgb(138, 161, 179);
+    border-radius: 5px;
     list-style-type: none;
-    background-color: hsl(0, 0%, 25%);
+    background-color: white;
+    background-size: 200% 100%; /* Animate gradient movement */
+    background-image: linear-gradient(to bottom right, #ddd 0%, #eee 25%, rgb(192, 201, 199) 50%, #eee 75%, #ddd 100%);
+
     padding: 0px;
     margin: 0px;
     overflow: hidden;
     height: 75px;
     width: 100%;
+    margin-bottom: 10px;
 }
 
 .toolbarElement {
     color: white;
-    padding: 25px;
-    display: block;
+    padding: 8px;
+    display: flex;
     text-align: center;
     float: left;
     cursor: pointer;
     height: 50px;
     width: 50px;
-    border: 1px solid black;
+    border: 1px solid #ddd;
+    background-color: #007bff;
+    font-weight: bold;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    margin: 3px;
 }
 
 li:hover{
@@ -29,10 +41,5 @@ li:hover{
     height: 100%;
     width: 100%;
     border: 1px solid black;
-}
-
-#draw_area {
-    position: fixed;
-    height: 100%;
-    width: 100%;
+    flex-direction: column;
 }

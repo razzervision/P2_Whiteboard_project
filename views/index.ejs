@@ -10,30 +10,27 @@
   <link rel="stylesheet" href="stylesheets/timer.css">
 
   <title>
-    <%= title %>
+    <!-- <%= title %> -->
   </title>
           
           <link rel="stylesheet" href="/stylesheets/WCE.css">
           <link rel="stylesheet" href="/stylesheets/style.css">
-
           <link rel="stylesheet" href="/stylesheets/quiz.css">
           <link rel="stylesheet" href="/stylesheets/toolbar.css">
           <link rel="stylesheet" href="/stylesheets/calc.css">
           <script defer src="/javascripts/toolbar.js"></script>
           <script src="/javascripts/users.js"></script>
-          <script src="/javascripts/calculator.js"></script>
+          <script defer src="/javascripts/calculator.js"></script>
           <script defer src="/javascripts/paint.js"></script>
           <script src="/javascripts/pausefish.js"></script>
 
-          <script src="/javascripts/savepdf.js"></script>
           <!-- QUIZ -->
           <script defer src="/javascripts/quiz/quiz.js"></script>
-          <!-- <script defer src="/javascripts/quiz/test.js"></script> -->
+          <script defer src="/javascripts/quiz/test.js"></script>
 
           <script src="/javascripts/server.js"></script>
           <script src="/javascripts/phone.js"></script>
           
-
           <script defer src="/javascripts/code_editor/codemirror/lib/codemirror.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/javascript/javascript.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/python/python.js"></script>
@@ -47,32 +44,41 @@
           <script defer src="/javascripts/code_editor/codemirror/mode/ruby/ruby.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/addon/edit/closebrackets.js"></script>
           <script defer src="/javascripts/code_editor/WCE.js"></script>
-
-        </head>
+          <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+          <script defer src="/javascripts/savepdf.js"></script>
+</head>
 
 <body>
+<!-- <div>
+  <button type="button" id="buttonPDF" onclick="convertHTMLtoPDF()">Click to download PDF</button>
+</div> -->
 
-  <div class="toolbar" id="toolbar">
+<div id="webPage">
+
+  <div class="toolbar saveToPDF" id="toolbar">
+
     <nav>
       <menu id="toolbarMenu">
-        <div class = "toolbarElement" id = "paintElement" data-value="paintProgram" draggable="true">Paint</div>
         <div class = "toolbarElement" id = "codeEditorElement" data-value="codeProgram" draggable="true">Code Editor</div>
         <div class = "toolbarElement" id = "quizElement" data-value="quizProgram" draggable="true">Quiz</div>
         <div class = "toolbarElement" id = "calculatorElement" data-value="calcProgram" draggable="true">Calc</div>
-        <div class = "toolbarElement" id = "timerElement">Timer</div>
+        <div><input type="checkbox" id="connectSocket"> <label for="connectSocket">connect to group</label></div>
       </menu>
     </nav>
   </div>
 
   <div id="primaryDropzone">
-    <div id="drawArea">
+    <!-- <div id="drawArea">
       
-    </div>
+    </div> -->
   </div>
 
 
 
-<div id="quizProgram" class="quiz_container">
+<div id="quizProgram" class="quiz_container saveToPDF">
+
   <button id="quiz_home_screen">HOME</button>
   <div class="quiz_index" id="quiz_index">
     <label for="create_quiz_text">Quiz name</label>
@@ -119,26 +125,30 @@
 
 </div>
 
-  <div id="paintProgram" class="paint">
-    <canvas id = "canvas"></canvas>
-    <canvas id = "canvas1"></canvas>
+  <div id="paintProgram" class="paint saveToPDF">
+  <div id = "canvasPlace">  
+    <canvas id = "canvas0"></canvas>
+  </div>
+ 
     <div class="nav">
-            <div class ="options">
+            <div class ="options" id ="optionsForPaint">
                 <input type="file" id="uploadInput" accept="image/*">
                 <input type="number" id="Imgheight">
                 <input type="number" id="Imgwithd">
+                <button id ="addCanvas" type="button">Add Canvas</button>
                 <button id="picture location">Click to chose picture location</button>
                 <button id = "clearCanvas">Clear canvas</button>
-                <input oninput="draw_color = this.value" id = "colorpick" type = "color" class="colorpick">
-                <input oninput="draw_withd = this.value" type="range" min="1" max="100" class="pen">
+                <input oninput="drawColor = this.value" id = "colorpick" type = "color" class="colorpick">
+                <input oninput="drawWithd = this.value" type="range" min="1" max="100" class="pen">
                 <button id ="undoB" type ="button">Undo</button>
+                <button id ="changeCanvas" type="button" class = "canvasButton">C0</button>
             </div>
     </div>
   </div>
 
 
   <!-- JONS code editor -->
-  <div id="codeProgram" class="code_editor">
+  <div id="codeProgram" class="code_editor saveToPDF">
   <textarea id="code"></textarea>
   <select id="language">
   </select>
@@ -152,49 +162,87 @@
 </div>
 
 
+<!--- calDIV -->
+<div id="calcProgram" class="calculatorMain saveToPDF"> 
+  <div class="dropdownCalc">
+    <select name="mathType" id="mathType">
+    <option value="calculator">Calc</option>
+    <option value="matricesMath">Matrices</option>
+    <!-- tilføj flere her-->
+    </select>
+    <div class="minimizeCalc">
+      <button class="minimizeCalcButton">-</button>
+    </div>
+  </div>
+
 <!--- CALC -->
-<div id="calcProgram" class="calculatorMain"> 
-  <div class="calcKeys">
+  <div class="calculator">
     <div class="expressions">
-      <input type="text" id="display" class="display"> 
-
-
+      <input type="text" id="display" class="display"> <br>
       <button class="calcbuttonDelete" id="C" onclick="clearDisplay()">C</button> 
-      
       <button class="calcbuttonCalc" id="+/-" onclick="negative('-')">+/-</button>
-      <button class="calcbuttonCalc" id="()" onclick="addToResult('()')">( )</button>
-      <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button>
+      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> 
+      <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button> <br>
       <button class="calcbuttonKey" id="1" onclick="addToResult('1')">1</button>
       <button class="calcbuttonKey" id="2" onclick="addToResult('2')">2</button>
       <button class="calcbuttonKey" id="3" onclick="addToResult('3')">3</button>
       <button class="calcbuttonCalc" id="^" onclick="addToResult('^')">^</button>
+      <button class="calcbuttonCalc" id="log" onclick="addToResult('log()')">log2</button> <br>
       <button class="calcbuttonKey" id="4" onclick="addToResult('4')">4</button>
       <button class="calcbuttonKey" id="5" onclick="addToResult('5')">5</button>
       <button class="calcbuttonKey" id="6" onclick="addToResult('6')">6</button> 
-      <button class="calcbuttonCalc" id="-" onclick="addToResult('-')">-</button> 
+      <button class="calcbuttonCalc" id="-" onclick="addToResult('-')">-</button> <br>
       <button class="calcbuttonKey" id="7" onclick="addToResult('7')">7</button>
       <button class="calcbuttonKey" id="8" onclick="addToResult('8')">8</button>
       <button class="calcbuttonKey" id="9" onclick="addToResult('9')">9</button>
-      <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button>
+      <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button> <br>
       <button class="calcbuttonKey" id="0" onclick="addToResult('0')">0</button>
       <button class="calcbuttonCalc" id="%" onclick="addToResult('%')">%</button>
       <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> 
-      <button class="calcbuttonCalc" id="!" onclick="addToResult('!')">!</button>
-      <button class="calcbuttonSubmit" id="submit" onclick="calculate()">Submit</button> <br><br>
-      
+      <button class="calcbuttonCalc" id="!" onclick="addToResult('!')">!</button> <br>
+      <button class="calcbuttonSubmit" id="submit" onclick="calculate()">Submit</button> 
     </div>
 
     <div class="calcHistory">
-      <textarea id="classHistory" class="classHistory" cols="40" rows="5"></textarea> <br>
-        <button id="clearHistoryButton" class="clearHistoryButton" onclick="clearHistory()">CLEAR ALL HISTORY</button>  
+      <textarea id="classHistory" class="classHistory" cols="40" rows="10"></textarea> <br>
+      <button id="clearHistoryButton" class="clearHistoryButton" onclick="clearHistory()">CLEAR ALL HISTORY</button> 
     </div>
+
+    
+  </div>
+  <!--- Matrice calculation--->
+  <div class="matrices">
+      <p class="matriceTxtStyle">Please enter the dimensions of the matrices: Rows: </p>
+      <input type="text" id="xMatrice" class="xMatrice">
+      <p class="matriceTxtStyle">Columns:</p> 
+      <input type="text" id="yMatrice" class="yMatrice">
+      <button class="submitDimensions" onclick="createDimension()">add matrice</button>
+      <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
+        <div class="matriceCalculation0">
+
+        </div>
+
+        <div class="matriceOperator">
+          <select name="matriceOp" id="matriceOp" class="matriceOp">
+            <option value="plus">+</option>
+            <option value="minus">-</option>
+            <option value="times">×</option>
+            <option value="divide">/</option>
+          </select>
+        </div>
+        <div class="matriceCalculation1">
+
+          
+        </div>
   </div>
 </div>
 
 
 
+
+
 <!--- TIMER -->
-<div id="timerProgram">
+<div class="saveToPDF" id="timerProgram">
   <!--This is the trigger for the modal-->       
   <div class="stickymodal"> 
     <button id="pauses"> Click here for pause options </button>
@@ -246,8 +294,11 @@
     </div>
      </div>
 
-<script src="/javascripts/timer.js"></script>
-<script src="https://cdn.socket.io/4.2.0/socket.io.min.js"></script>
-</body>
+    </div>
 
+
+<script src="/javascripts/timer.js"></script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="/javascripts/socket.js"></script>
+</body>
 </html>
