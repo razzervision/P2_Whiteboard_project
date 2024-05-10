@@ -468,8 +468,13 @@ async function checkAnswers(quizId,sessionName){
 
     userQuizResponse(userDataQuestion,isCorrectList);
 
+    socketForQuiz.emit("quizPing");
+
 }
 
+socketForQuiz.on("quizPing", () => {
+    teacherOverview();
+});
 
 //---------------------------------------------------------------------------------------Verify input
 function userQuizResponse(questionElement,isCorrectList){

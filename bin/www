@@ -134,6 +134,10 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("language", data);
     });
 
+    socket.on("quizPing", () => {
+        socket.broadcast.emit("quizPing");
+    });
+
     socket.on("disconnect", () => {
         console.log("User disconnected");
     });
