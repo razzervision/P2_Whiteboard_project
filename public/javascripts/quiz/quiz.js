@@ -134,16 +134,14 @@ async function IsQuizNameUnique(name){
 
 const creatQuiz = document.getElementById("create_quiz_button");
 creatQuiz.addEventListener("click", async() => {
-    const name = document.getElementById("create_quiz_text");
-    const nameValue = name.value;
-    if (nameValue === ""){
+    const name = document.getElementById("create_quiz_text").value;
+    if (name === ""){
         errorMessage("Please insert a name",name);
-    } else if(await IsQuizNameUnique(nameValue)){
+    } else if(await IsQuizNameUnique(name)){
         errorMessage("Already created",name);
     } else {
         hideDivs("createQuiz");
-        const quizName = document.getElementById("quiz_name");
-        quizName.textContent = nameValue; 
+        document.getElementById("quiz_name").textContent = name;
     }
 });
 
@@ -255,7 +253,7 @@ async function getQuestionAndAnswers(){
     const correctAnswersList = [];
     let quit = false;
     const numberOfQuestions = document.querySelectorAll(".question_DIV");
-    numberOfQuestions.forEach((q, index) =>{
+    numberOfQuestions.forEach(q =>{
         const question = q.querySelector(".question_txt_field_class").value;
         // If the question is = ""
         if(!question){
@@ -663,21 +661,3 @@ function groupAnswersByUser(data) {
 
 //---------------------------------------------------------------------------------------tests
 
-
-//Default questions for test
-function autofill(){
-    const name = document.getElementById("quiz_name");
-    name.value="CS2";
-
-    const question = document.getElementById("question_txt_field");
-    question.value="Hvem er bedst til CS?";
-
-    const answer0 = document.getElementById("answer0");
-    answer0.value= "Rantzau";
-
-    const answer0Checked = document.getElementById("checkbox0");
-    
-    answer0Checked.checked = "true";
-
-}
-// autofill();
