@@ -10,7 +10,6 @@ async function loadLanguages() {
         // }
         const data = await response.json();
         // Use the data to display your quiz
-        console.log(data);
         return data;
     } catch (error) {
         console.error("Error fetching quiz data:", error);
@@ -25,7 +24,6 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 });
 
 editor.on("change", (cm, change) => {
-    console.log("in change");
     if (change.origin !== "setValue") {
         socket.emit("code", {input: cm.getValue()});
     }

@@ -30,7 +30,6 @@ router.get("/:room", function(req, res, next) {
 router.get("/api/loadLanguages", (req, res) => {
     try {
         const data = fs.readFileSync(path.join(__dirname, "../database/languages.json"), "utf8");
-        console.log(data);
         res.json(JSON.parse(data));
     } catch (error) {
         console.error("Error fetching quiz data:", error);
