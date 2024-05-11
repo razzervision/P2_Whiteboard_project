@@ -174,14 +174,15 @@ function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
         elementThatTriggeredEvent.removeEventListener("input", eventListenerHandler);
     }
     //Get the last element in the current div e.g <div class="answer_container" id="answer_container4">
-    const lastElementInCurrentDiv = DivThatTriggeredEvent.lastElementChild;
-
+    let lastElementInCurrentDiv = DivThatTriggeredEvent.querySelectorAll(".answer_container");
+    lastElementInCurrentDiv = lastElementInCurrentDiv[lastElementInCurrentDiv.length - 1];
     //Start id with -1 because if there is none answer then i should generate the first one and the next step is to increase the ID.
     let id = -1;
     //If there already is answer options then get the latest id. and the last input is the ID id="answer_container4"
-    if(lastElementInCurrentDiv.className === "answer_container"){
+    if(lastElementInCurrentDiv){
+        console.log(lastElementInCurrentDiv);
         id = lastElementInCurrentDiv.id[16];
-    }
+    } 
     //Ensure there is a limit of answers and the last . 
     if(id >= maxAnswers -1){
         //If theres is too many answers make an error message.
@@ -746,6 +747,7 @@ async function createQuestions(){
             result = false;
         }
         const input = questionDiv.querySelector(".question_txt_field_class");
+        input.value = "Question"+i;
         if(!input){
             console.log("No input box");
             result = false;
@@ -755,7 +757,7 @@ async function createQuestions(){
             console.log("No input box");
             result = false;
         }
-        const randomIntAnswer = Math.floor(Math.random() * 6) + 1;
+        const randomIntAnswer = Math.floor(Math.random() * 10) + 1;
         for(let j = 0; j < randomIntAnswer; j++){
             const answerInput = questionDiv.querySelectorAll(".answer_text_class");
             const lastElement = answerInput[answerInput.length - 1];
@@ -764,6 +766,7 @@ async function createQuestions(){
             if(newanswerDiv === "tooMany" && lastElement.id[6] >= maxAnswers){
                 console.log("Too many answered added");
                 result = false;
+                return;
             }
             if(j === 0){
                 const isCorrect = newanswerDiv.querySelector(".answer_checkbox_class");
