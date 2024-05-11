@@ -136,18 +136,27 @@ async function IsQuizNameUnique(name){
     return result;
 }
 
-const creatQuiz = document.getElementById("create_quiz_button");
-creatQuiz.addEventListener("click", async() => {
+const creatQuizButton = document.getElementById("create_quiz_button");
+creatQuizButton.addEventListener("click", () => {
     const name = document.getElementById("create_quiz_text").value;
-    if (name === ""){
-        errorMessage("Please insert a name",name);
-    } else if(await IsQuizNameUnique(name)){
-        errorMessage("Already created",name);
-    } else {
-        hideDivs("createQuiz");
-        document.getElementById("quiz_name").textContent = name;
-    }
+    createQuizFunction(name)
 });
+
+async function createQuizFunction(name){
+    nameElement = document.getElementById("create_quiz_text");
+    if (name === ""){
+        errorMessage("Please insert a name",nameElement);
+        return "noName";
+    } else if(await IsQuizNameUnique(name)){
+        errorMessage("Already created",nameElement);
+        return "dublicate";
+    } 
+    hideDivs("createQuiz");
+    const quizNameLabel = document.getElementById("quiz_name");
+    quizNameLabel.textContent = name;
+    return quizNameLabel;
+}
+    
 
 //Generate a new answers input when typing on the first answer text input. 
 function eventListenerHandler(event) {
@@ -165,19 +174,20 @@ function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
         elementThatTriggeredEvent.removeEventListener("input", eventListenerHandler);
     }
     //Get the last element in the current div e.g <div class="answer_container" id="answer_container4">
-    const lastElementInCurrentDiv = DivThatTriggeredEvent.lastElementChild;
-
+    let lastElementInCurrentDiv = DivThatTriggeredEvent.querySelectorAll(".answer_container");
+    lastElementInCurrentDiv = lastElementInCurrentDiv[lastElementInCurrentDiv.length - 1];
     //Start id with -1 because if there is none answer then i should generate the first one and the next step is to increase the ID.
     let id = -1;
     //If there already is answer options then get the latest id. and the last input is the ID id="answer_container4"
-    if(lastElementInCurrentDiv.className === "answer_container"){
+    if(lastElementInCurrentDiv){
+        console.log(lastElementInCurrentDiv);
         id = lastElementInCurrentDiv.id[16];
-    }
+    } 
     //Ensure there is a limit of answers and the last . 
     if(id >= maxAnswers -1){
         //If theres is too many answers make an error message.
         errorMessage("You can max insert " + maxAnswers + " answers", lastElementInCurrentDiv);
-        return;
+        return "tooMany";
     }
     //Increase the ID with one to make the ID unique.
     id++;
@@ -202,6 +212,8 @@ function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
     questionDiv.appendChild(answerCheckbox);
     
     DivThatTriggeredEvent.appendChild(questionDiv); 
+
+    return questionDiv;
 }
 
 //Generate template for a new question
@@ -243,6 +255,8 @@ function createNewQuestion(){
 
     //make the answer options
     createNewAnswerBox(null,questionDiv);
+
+    return questionDiv;
 
 }
 
@@ -669,4 +683,133 @@ function groupAnswersByUser(data) {
 }
 
 //---------------------------------------------------------------------------------------tests
+quizUnitTests();
+async function quizUnitTests(){
+    let pass = [];
+    let passCounter = 0;    
+    let fail = [];
+    let failCounter = 0;
 
+    await createQuizTest() ? (passCounter++, pass.push("createQuiz")) : (failCounter++, fail.push("createQuiz"));
+
+    await createQuestions() ? (passCounter++, pass.push("createQuestion")) : (failCounter++, fail.push("createQuestion"));
+
+
+    console.log("total Passed Test: " , passCounter);
+    console.log("Passed Tests: " , pass);
+    console.log("total Failed Test: " , failCounter);
+    console.log("Failed Tests: " , fail);
+    console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
+}
+
+
+
+async function createQuizTest(){
+    let result = true;
+    const noName = await createQuizFunction("");
+    if(noName !== "noName"){
+        console.log("failed noName");
+        result = false;
+    }
+    const uniqueName = "TEST";
+    const makeQuiz = await createQuizFunction(uniqueName);
+    if(makeQuiz.textContent !== uniqueName){
+        console.log("failed creating Quiz");
+        result = false;
+    }
+    const alreadyCreated = "test";
+    const dublicate = await createQuizFunction(alreadyCreated);
+    if(dublicate !== "dublicate"){
+        console.log("failed dublicate");
+        result =  false;
+    }
+    return result;
+}
+
+async function createQuestions(){
+    let result = true;
+
+    let randomInt = Math.floor(Math.random() * 10) + 1;
+    for(let i = 1; i < randomInt; i++){
+        const questionDiv = createNewQuestion();
+        const expectedID = "question_DIV"+i; 
+        if(questionDiv.id !== expectedID){
+            console.log("Wrong ID");
+            result = false;
+        }
+        if(!questionDiv){
+            console.log("No question created");
+            result = false;
+        }
+        const label = questionDiv.querySelector(".questionLabelClass");
+        if(!label){
+            console.log("No label");
+            result = false;
+        }
+        const input = questionDiv.querySelector(".question_txt_field_class");
+        input.value = "Question"+i;
+        if(!input){
+            console.log("No input box");
+            result = false;
+        }
+        const answerdiv = questionDiv.querySelector(".answer_container");
+        if(!answerdiv){
+            console.log("No input box");
+            result = false;
+        }
+        const randomIntAnswer = Math.floor(Math.random() * 10) + 1;
+        for(let j = 0; j < randomIntAnswer; j++){
+            const answerInput = questionDiv.querySelectorAll(".answer_text_class");
+            const lastElement = answerInput[answerInput.length - 1];
+            lastElement.value = "TEST"+(j+1);
+            const newanswerDiv = createNewAnswerBox(lastElement,questionDiv);
+            if(newanswerDiv === "tooMany" && lastElement.id[6] >= maxAnswers){
+                console.log("Too many answered added");
+                result = false;
+                return;
+            }
+            if(j === 0){
+                const isCorrect = newanswerDiv.querySelector(".answer_checkbox_class");
+                isCorrect.checked = "true";
+            }
+
+
+        }
+        const numberOfAnswers = questionDiv.querySelectorAll(".answer_container").length - 1;
+        // Minus one because the first one is created by the create question function
+        if(numberOfAnswers !== randomIntAnswer){
+            console.log("Wrong amount of answers",numberOfAnswers,randomIntAnswer);
+            result = false;
+        }
+
+    }
+
+    const allDiv = document.querySelectorAll(".question_DIV");
+    if(allDiv.length !== randomInt){
+        console.log("wrong number of div");
+        result = false;
+    }
+
+    allDiv.forEach((div, index) => {
+        if(index === 0){
+            return;
+        }
+        let numberOfCorrectAnswers = 0;
+
+        const checkBoxDiv = div.querySelectorAll(".answer_checkbox_class");
+        checkBoxDiv.forEach(checkBox => {
+            if(checkBox.checked){
+                numberOfCorrectAnswers++;
+            }
+        });
+        if(numberOfCorrectAnswers !== 1){
+            console.log("Wrong amount of correct answers",numberOfCorrectAnswers);
+            result = false;
+        }
+    });
+ 
+    
+
+
+    return result;
+}

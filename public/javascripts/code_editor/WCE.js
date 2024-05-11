@@ -1,3 +1,4 @@
+const languageDropdown = document.getElementById("language");
 const serverURL = document.location.origin;
 const socket = io(serverURL);
 
@@ -9,7 +10,6 @@ async function loadLanguages() {
         // }
         const data = await response.json();
         // Use the data to display your quiz
-        console.log(data);
         return data;
     } catch (error) {
         console.error("Error fetching quiz data:", error);
@@ -24,7 +24,6 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 });
 
 editor.on("change", (cm, change) => {
-    console.log("in change");
     if (change.origin !== "setValue") {
         socket.emit("code", {input: cm.getValue()});
     }
@@ -38,12 +37,12 @@ socket.on("code", (data) => {
 });
 
 socket.on("language", (data) => {
+    languageDropdown.value = data;
     editor.setOption("mode", data);
 });
 
 loadLanguages()
     .then(data => {
-        const languageDropdown = document.getElementById("language");
         data.languages.forEach(lang => {
             const option = document.createElement("option");
             option.value = lang.mode;
@@ -53,7 +52,7 @@ loadLanguages()
     })
     .catch(error => console.error("Error loading languages:", error));
 
-document.getElementById("language").addEventListener("change", function() {
+languageDropdown.addEventListener("change", function() {
     const mode = this.value; 
     editor.setOption("mode", mode);
     socket.emit("language", mode);
