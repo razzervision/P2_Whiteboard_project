@@ -25,7 +25,6 @@ codeProgramId.style.position = "flex";
 codeProgramId.style.height = "100%";
 codeProgramId.style.width = "100%";
 
-
 class Program {
     constructor(value, isActive = false) {
         this.value = value;
@@ -72,7 +71,6 @@ function dragStart(e) {
     runOrder = false;
 
     draggedElement = this;
-    // elementOrder.push(divConverter(draggedElement));
     offsetX = e.clientX - draggedElement.getBoundingClientRect().left;
     offsetY = e.clientY - draggedElement.getBoundingClientRect().top;
 }
@@ -133,8 +131,6 @@ function dragEnd() {
         }
         runOrder = true;
     }
-
-
 }
 
 let str2Columns = "";
@@ -142,7 +138,6 @@ let str2Rows = "";
 function splitScreen (units, percentLeft, percentMiddle, percentVerticalHalf) {
     primaryDropzone.style.gridTemplateColumns = "";
     primaryDropzone.style.gridTemplateRows = "";
-    // console.log(units, percentL, percentMid, percentHalf);
     const percentRight = 100 - percentLeft - percentMiddle;
     const percentTop = 100 - percentVerticalHalf;
     primaryDropzone.style.display = "grid";
@@ -174,15 +169,16 @@ function splitScreen (units, percentLeft, percentMiddle, percentVerticalHalf) {
             primaryDropzone.style.gridTemplateColumns = str2Columns;
             primaryDropzone.style.gridTemplateRows = str;
         }
-    } else if (units === 3) {
-
 
     }
 }
 
 // place = 1,2,3,4   1 left, 2 top-center, 3 right, 4 bottom-center
 const run = false;
+let hasRun = false;
+
 let ontop = false;
+let place3;
 function sizeElement (element, activePrograms, activeProgramsList, place) {
     element.style.position = "flex";
     element.style.display = "block";
@@ -236,11 +232,10 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
 
         if (place === 1) {
             if (!ontop) {
-                console.log("1");
                 splitScreen(3, 20, 60, 0);
                 primaryDropzone.appendChild(element);
                 addElements();
-
+                place3 = 1;
             } else {
                 element.style.gridRow = "";
                 element.style.gridColumn = "";
@@ -249,36 +244,69 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
                 primaryDropzone.appendChild(element);
                 element.style.gridRow = "-1 / 1";
                 addElements();
+                place3 = 2;
             }
 
         } else if (place === 3) {
             if (!ontop) {
-                console.log("3");
                 splitScreen(3, 20, 60, 0);
                 addElements();
                 primaryDropzone.appendChild(element);
-
+                place3 = 3;
             } else {
                 splitScreen(3, 70, 0, 0);
                 addElements();
                 element.style.gridColumn = "-2 / 2";
                 primaryDropzone.appendChild(element);
-                
+                place3 = 4;
             }
 
         } else if (place === 2) {
             if (!ontop) {
-                console.log("5");
                 splitScreen(3, 0, 0, 30);
                 element.style.gridColumn = "-1 / 1";
+                place3 = 5;
             }
  
         } else if (place === 4) {
             if (!ontop) {
-                console.log("6");
                 splitScreen(3, 0, 0, 70);
                 element.style.gridColumn = "-1 / 1";
+                place3 = 6;
             }
+        }
+
+    } else if (activePrograms === 3) {
+        if (place3 === 1 || place3 === 3) {
+            element.style.gridColumn = "1 / span 3"; 
+            if (place === 2) {
+                primaryDropzone.appendChild(element);
+                addElements();
+            } else if (place === 4) {
+                primaryDropzone.appendChild(element);
+            }
+        } else if (place3 === 2) {
+            elementOrder[0].style.gridArea = "2";
+            primaryDropzone.appendChild(element);
+            addElements();
+        } else if (place3 === 4) {
+            elementOrder[2].style.gridArea = "";
+            if (!hasRun) {
+                const lastElement = elementOrder.pop();
+                const secondLastElement = elementOrder.pop();
+                elementOrder.push(lastElement);
+                elementOrder.push(secondLastElement);
+                hasRun = true;
+            }
+            addElements();
+            primaryDropzone.appendChild(element);
+        } else if (place3 === 5) {
+            elementOrder[0].style.gridColumn = "";
+            primaryDropzone.appendChild(element);
+            addElements();
+        } else if (place3 === 6) {
+            elementOrder[2].style.gridArea = "";
+            primaryDropzone.appendChild(element);
         }
     }
 }
@@ -316,13 +344,3 @@ function checkActiveProgramsList () {
     });
     return i;
 }
-
-// function clearScreen (addedElement) {
-//     primaryDropzone.removeChild(paintProgramId);
-//     for (let i = 0; i < elementOrder.length; i++) {
-//         if (!addedElement === elementOrder[i]) {
-//             primaryDropzone.removeChild(elementOrder[i]);
-//         }
-//     }
-//     console.log(elementOrder);
-// }
