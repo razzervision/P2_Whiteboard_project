@@ -458,11 +458,13 @@ router.post("/api/checkForPause", async (req, res) => {
 
 router.post("/api/postPicture", async (req, res) => {
     try {
-        const { xPosition, yPosition, picture } = req.body;
+        const { xPosition, yPosition, pictureWidth, pictureHeight, picture } = req.body;
 
         const data = await paint.create({
             xPosition: xPosition,
             yPosition: yPosition,
+            pictureWidth: pictureWidth,
+            pictureHeight: pictureHeight,
             picture: picture
         });
         res.status(200).json({ data });

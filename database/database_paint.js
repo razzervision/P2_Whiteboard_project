@@ -14,6 +14,16 @@ User.init({
         allowNull: false
     },
 
+    pictureWidth: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+
+    pictureHeight: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+
     picture: {
         type: DataTypes.BLOB,
         allowNull: false

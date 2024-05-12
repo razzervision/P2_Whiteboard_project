@@ -100,7 +100,9 @@ currentCanvas.addEventListener("pointerout",stopDraw);
 
 //picture
 pictureLocation.addEventListener("click",choseLocation);
-uploadInput.addEventListener("change", uploadePicture);
+uploadInput.addEventListener("change", () => {
+    uploadePicture();
+});
 
 function stopDraw(){
     currentCanvas.removeEventListener("pointermove", onMouseMove);
@@ -297,13 +299,38 @@ function uploadePicture(){
             img.height = imgheightButton.value;
             img.width = imgwithdButton.value;
         }
+        try{
+            const response = fetch("/api/postPicture", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    picture: img,
+                    xPosition: imgX,
+                    yPosition: imgY,
+                    pictureWidth: img.width,
+                    pictureHeight: img.height
+                })
+            });
+            console.log("picture uploaded");
+            response.then((res) => {
+                if (res.status === 200) {
+                    socketForPaint.emit("uploadePicture");
+                } else {
+                    console.log("error in uploading picture");
+                }
+            });
+        } catch(err){
+            console.log(err);
+        }
+
         currentContext.drawImage(img, imgX, imgY, img.width, img.height);
     };
     img.onerror = function(){
         console.log("img load fail");
     };
 }
-
 
 //sockets
 
@@ -366,6 +393,13 @@ socketForPaint.on("removeMouse", () =>{
 
 socketForPaint.on("undo", () =>{
     undo();
+});
+
+socketForPaint.on("uploadePicture", () =>{
+    const response = fetch("/api/getPicture");
+    const data = response.json();
+    console.log(data);
+    currentContext.drawImage(data.picture, data.xPosition, data.yPosition, data.pictureWidth, data.pictureHeight);
 });
 
 
