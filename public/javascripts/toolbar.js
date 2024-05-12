@@ -354,11 +354,12 @@ const socketDiv = document.querySelector("#socketDiv");
 
 function minimizeProgram (target) {
     console.log(place3);
-
-    const targetToolbarElement = document.querySelector(".toolbarElement[data-value='calcProgram']");
     const targetDValue = target.getAttribute("data-value");
-    const str = "#" + targetDValue;
+    let str = "#" + targetDValue;
     const programToRemove = document.querySelector(str);
+    str = ".toolbarElement[data-value='" + targetDValue + "']";
+    // const targetToolbarElement = document.querySelector(".toolbarElement[data-value='calcProgram']");
+    const targetToolbarElement = document.querySelector(str);
     programToRemove.style.display = "none";
 
     elementOrder = elementOrder.filter(element => element.getAttribute("id") !== targetDValue);
@@ -375,6 +376,10 @@ function minimizeProgram (target) {
 
     primaryDropzone.style.gridTemplateColumns = primaryStyleColumn;
     primaryDropzone.style.gridTemplateRows = primaryStyleRow;
+
+    if (checkActivePrograms() === 1) {
+        primaryDropzone.style.gridTemplateColumns = "100%";
+    }
 
     if (checkActivePrograms() > 2) {
         if (place3 === 1 || place3 === 3) {
