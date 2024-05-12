@@ -7,7 +7,7 @@ const sequelize = require("../database/database");
 const User = require("../database/user");
 const Quiz = require("../database/database_quiz");
 const Pauses = require("../database/database_pauses.js");
-
+const paint = require("../database/database_paint.js");
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
@@ -455,5 +455,32 @@ router.post("/api/checkForPause", async (req, res) => {
         res.status(500).send("Error finding pauseData");
     }
 });
+
+router.post("/api/postPicture", async (req, res) => {
+    try {
+        const { xPosition, yPosition, picture } = req.body;
+
+        const data = await paint.create({
+            xPosition: xPosition,
+            yPosition: yPosition,
+            picture: picture
+        });
+        res.status(200).json({ data });
+    } catch (error) {
+        console.error("Error uploading picture", error);
+        res.status(500).send("Error uploading picture");
+    }
+});
+
+router.get("/api/getPicture", async (req, res) => {
+    try {
+        const data = await paint.findByPk(-1);
+        res.status(200).json({ data });
+    } catch (error) {
+        console.error("Error fetching picture", error);
+        res.status(500).send("Error fetching picture");
+    }
+});
+        
 
 module.exports = router;
