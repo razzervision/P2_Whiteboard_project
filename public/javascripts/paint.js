@@ -399,7 +399,13 @@ socketForPaint.on("uploadePicture", () =>{
     const response = fetch("/api/getPicture");
     const data = response.json();
     console.log(data);
-    currentContext.drawImage(data.picture, data.xPosition, data.yPosition, data.pictureWidth, data.pictureHeight);
+
+    const img = new Image();
+    img.src = data.picture;
+    img.onload = function(){
+    
+        currentContext.drawImage(img, data.xPosition, data.yPosition, data.pictureWidth, data.pictureHeight);
+    };
 });
 
 
