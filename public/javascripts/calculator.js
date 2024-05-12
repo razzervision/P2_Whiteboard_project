@@ -95,6 +95,8 @@ function createDimension() {
     let rows = parseInt(document.getElementById('yMatrice').value);
     let columns = parseInt(document.getElementById('xMatrice').value);
 
+    let mads123;
+
     let matricesContainer = document.querySelector('.matricesContainer');
     let newMatriceContainer = document.createElement('div');
     newMatriceContainer.classList.add(`matrice${amountOfMatrices}`);
