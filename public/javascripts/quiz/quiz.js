@@ -283,22 +283,28 @@ async function getQuestionAndAnswers(){
         const answers = [];
         const correctAnswers = [];
         const answersValue = q.querySelectorAll(".answer_container");
+        let emptyAnswers = 0;
         answersValue.forEach(a => {
             const answerText = a.querySelector(".answer_text_class").value;
             // Dont push if the answer is = ""
             if(!answerText){
+                emptyAnswers++;
                 return;
             }
             answers.push(answerText);
             const answerCheckbox = a.querySelector(".answer_checkbox_class").checked;
             correctAnswers.push(answerCheckbox);
         });
+        if(emptyAnswers === answersValue.length){
+            quit = true;
+            return
+        }
 
         answersList.push(answers);
         correctAnswersList.push(correctAnswers);
     });   
     if(quit){
-        return "noquestion";
+        return "quit";
     }
     const data = {
         quizName: quizName,
@@ -319,6 +325,8 @@ async function getQuestionAndAnswers(){
 
     // Search for all quizzes to append it.
     searchQuizzes(null);
+
+    return true;
 }
 
 
@@ -689,10 +697,11 @@ async function quizUnitTests(){
     const fail = [];
     let failCounter = 0;
 
-    await createQuizTest() ? (passCounter++, pass.push("createQuiz")) : (failCounter++, fail.push("createQuiz"));
+    await createQuizTest() ? (passCounter++, pass.push("create Quiz")) : (failCounter++, fail.push("create Quiz"));
 
-    await createQuestions() ? (passCounter++, pass.push("createQuestion")) : (failCounter++, fail.push("createQuestion"));
+    await createQuestions() ? (passCounter++, pass.push("create Question")) : (failCounter++, fail.push("create Question"));
 
+    await publicQuiz() ? (passCounter++, pass.push("public Quiz")) : (failCounter++, fail.push("create Question"));
 
 
     console.log("total Passed Test: " , passCounter);
@@ -705,12 +714,29 @@ async function quizUnitTests(){
 async function publicQuiz(){
     let result = true;
 
-    const quizDataNoQuestion = getQuestionAndAnswers();
-    if(quizDataNoQuestion !== "noquestion"){
+    const quizDataNoQuestion = await getQuestionAndAnswers();
+    if(quizDataNoQuestion !== "quit"){
         console.log("ignored no question text");
         result = false;
     }
-    const hej = getQuestionAndAnswers();
+    const missingQuestionDiv = document.getElementById("question_DIV0");
+    const missingQuestion = missingQuestionDiv.querySelector("#question_txt_field0");
+    missingQuestion.value = "TEST1";
+
+    const quizDataNoAnswers = await getQuestionAndAnswers();
+    if(quizDataNoAnswers !== "quit"){
+        console.log("ignored no answer text for a question");
+        result = false;
+    }
+    const missingAnswer = missingQuestionDiv.querySelector("#answer0");
+    missingAnswer.value = "ANSWER1";
+
+    const succesQuiz = await getQuestionAndAnswers();
+    if(!succesQuiz){
+
+    }
+
+    return result;
 
 
 
@@ -723,7 +749,7 @@ async function createQuizTest(){
         console.log("failed noName");
         result = false;
     }
-    const uniqueName = "TEST";
+    const uniqueName = "TESTT";
     const makeQuiz = await createQuizFunction(uniqueName);
     if(makeQuiz.textContent !== uniqueName){
         console.log("failed creating Quiz");
