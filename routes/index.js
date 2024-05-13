@@ -108,6 +108,9 @@ router.get("/api/Getquizzes", async (req, res) => {
                 }
             ]
         });
+        if(!quizzes){
+            res.status(200).send(false);
+        }
         res.status(200).json({ quizzes });
     } catch (error) {
         console.error("Error fetching quizzes", error);
