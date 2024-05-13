@@ -4,8 +4,8 @@
 const maxAnswers = 5;
 
 //socket.io
-const serverURLForSocket = document.location.origin;
-const socketForQuiz = io(serverURLForSocket);
+// const serverURLForSocket = document.location.origin;
+// const window.socket = io(serverURLForSocket, {autoConnect: false});
 
 //---------------------------------------------------------------------------------------Helping funktions
 
@@ -139,7 +139,7 @@ async function IsQuizNameUnique(name){
 const creatQuizButton = document.getElementById("create_quiz_button");
 creatQuizButton.addEventListener("click", () => {
     const name = document.getElementById("create_quiz_text").value;
-    createQuizFunction(name)
+    createQuizFunction(name);
 });
 
 async function createQuizFunction(name){
@@ -180,17 +180,16 @@ function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
     let id = -1;
     //If there already is answer options then get the latest id. and the last input is the ID id="answer_container4"
     if(lastElementInCurrentDiv){
-        console.log(lastElementInCurrentDiv);
         id = lastElementInCurrentDiv.id[16];
     } 
+    id++;
     //Ensure there is a limit of answers and the last . 
-    if(id >= maxAnswers -1){
+    if(id >= maxAnswers){
         //If theres is too many answers make an error message.
         errorMessage("You can max insert " + maxAnswers + " answers", lastElementInCurrentDiv);
         return "tooMany";
     }
     //Increase the ID with one to make the ID unique.
-    id++;
 
     //Create all the elements needed for an extra answers
     const questionDiv = createAllElement("div","answer_container"+id,"answer_container",null);
@@ -299,7 +298,7 @@ async function getQuestionAndAnswers(){
         correctAnswersList.push(correctAnswers);
     });   
     if(quit){
-        return;
+        return "noquestion";
     }
     const data = {
         quizName: quizName,
@@ -480,11 +479,11 @@ async function checkAnswers(quizId,sessionName){
 
     userQuizResponse(userDataQuestion,isCorrectList);
 
-    socketForQuiz.emit("quizPing");
+    window.socket.emit("quizPing");
 
 }
 
-socketForQuiz.on("quizPing", () => {
+window.socket.on("quizPing", () => {
     teacherOverview();
 });
 
@@ -685,14 +684,15 @@ function groupAnswersByUser(data) {
 //---------------------------------------------------------------------------------------tests
 quizUnitTests();
 async function quizUnitTests(){
-    let pass = [];
+    const pass = [];
     let passCounter = 0;    
-    let fail = [];
+    const fail = [];
     let failCounter = 0;
 
     await createQuizTest() ? (passCounter++, pass.push("createQuiz")) : (failCounter++, fail.push("createQuiz"));
 
     await createQuestions() ? (passCounter++, pass.push("createQuestion")) : (failCounter++, fail.push("createQuestion"));
+
 
 
     console.log("total Passed Test: " , passCounter);
@@ -702,7 +702,19 @@ async function quizUnitTests(){
     console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
 }
 
+async function publicQuiz(){
+    let result = true;
 
+    const quizDataNoQuestion = getQuestionAndAnswers();
+    if(quizDataNoQuestion !== "noquestion"){
+        console.log("ignored no question text");
+        result = false;
+    }
+    const hej = getQuestionAndAnswers();
+
+
+
+}
 
 async function createQuizTest(){
     let result = true;
@@ -721,7 +733,7 @@ async function createQuizTest(){
     const dublicate = await createQuizFunction(alreadyCreated);
     if(dublicate !== "dublicate"){
         console.log("failed dublicate");
-        result =  false;
+        result = false;
     }
     return result;
 }
@@ -729,7 +741,7 @@ async function createQuizTest(){
 async function createQuestions(){
     let result = true;
 
-    let randomInt = Math.floor(Math.random() * 10) + 1;
+    const randomInt = Math.floor(Math.random() * 10) + 1;
     for(let i = 1; i < randomInt; i++){
         const questionDiv = createNewQuestion();
         const expectedID = "question_DIV"+i; 
@@ -758,16 +770,20 @@ async function createQuestions(){
             result = false;
         }
         const randomIntAnswer = Math.floor(Math.random() * 10) + 1;
-        for(let j = 0; j < randomIntAnswer; j++){
+        let createdAnswerCounter = 0;
+        for(let j = 0; j < 10; j++){
             const answerInput = questionDiv.querySelectorAll(".answer_text_class");
             const lastElement = answerInput[answerInput.length - 1];
-            lastElement.value = "TEST"+(j+1);
+            lastElement.value = "TEST";
             const newanswerDiv = createNewAnswerBox(lastElement,questionDiv);
             if(newanswerDiv === "tooMany" && lastElement.id[6] >= maxAnswers){
                 console.log("Too many answered added");
                 result = false;
                 return;
-            }
+            } 
+            if(newanswerDiv !== "tooMany"){
+                createdAnswerCounter++;
+            } 
             if(j === 0){
                 const isCorrect = newanswerDiv.querySelector(".answer_checkbox_class");
                 isCorrect.checked = "true";
@@ -777,8 +793,8 @@ async function createQuestions(){
         }
         const numberOfAnswers = questionDiv.querySelectorAll(".answer_container").length - 1;
         // Minus one because the first one is created by the create question function
-        if(numberOfAnswers !== randomIntAnswer){
-            console.log("Wrong amount of answers",numberOfAnswers,randomIntAnswer);
+        if(numberOfAnswers !== createdAnswerCounter){
+            console.log("Wrong amount of answers",numberOfAnswers,createdAnswerCounter);
             result = false;
         }
 
@@ -807,9 +823,8 @@ async function createQuestions(){
             result = false;
         }
     });
- 
-    
-
-
     return result;
 }
+
+
+

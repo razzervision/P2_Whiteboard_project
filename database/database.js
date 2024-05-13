@@ -6,5 +6,4 @@ const sequelize = new Sequelize("whiteboardDB", "root", "root", {
     logging: false
 });
 
-
 module.exports = sequelize;

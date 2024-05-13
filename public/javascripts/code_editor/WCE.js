@@ -1,6 +1,6 @@
 const languageDropdown = document.getElementById("language");
-const serverURL = document.location.origin;
-const socket = io(serverURL);
+// const serverURL = document.location.origin;
+// const window.socket = io(serverURL, {autoConnect: false});
 
 async function loadLanguages() {
     try {
@@ -25,18 +25,18 @@ const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 
 editor.on("change", (cm, change) => {
     if (change.origin !== "setValue") {
-        socket.emit("code", {input: cm.getValue()});
+        window.socket.emit("code", {input: cm.getValue()});
     }
 });
 
-socket.on("code", (data) => {
+window.socket.on("code", (data) => {
     const currentContent = editor.getValue();
     if (data.input !== currentContent) {
         editor.setValue(data.input);
     }
 });
 
-socket.on("language", (data) => {
+window.socket.on("language", (data) => {
     languageDropdown.value = data;
     editor.setOption("mode", data);
 });
@@ -55,7 +55,7 @@ loadLanguages()
 languageDropdown.addEventListener("change", function() {
     const mode = this.value; 
     editor.setOption("mode", mode);
-    socket.emit("language", mode);
+    window.socket.emit("language", mode);
 });
 
 const themeDropdown = document.getElementById("theme");
