@@ -456,6 +456,29 @@ router.post("/api/checkForPause", async (req, res) => {
     }
 });
 
+router.post("/api/pauseSessionExist", async (req, res) => {
+    try {
+        const { session } = req.body;
+
+        const data = await Pauses.PauseSession.findOne({
+            where: {
+                session: session
+            }
+        });
+        if(data){
+            res.status(200).send(true);
+        } else {
+            res.status(200).send(false);
+        }
+    } catch (error) {
+        console.error("Error finding pauseData", error);
+        res.status(500).send("Error finding pauseData");
+    }
+});
+
+
+// WHITEBOARD---------------------------------------------------------------------------
+
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });

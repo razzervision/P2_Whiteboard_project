@@ -6,7 +6,6 @@ document.getElementById("display").addEventListener("keydown", function(event) {
 
 function addToResult(value) {
     document.getElementById('display').value += value; //updates for every digit clicked to 'display', which is textarea
-    //document.getElementById('classHistory').value += value; //updates for every digit clicked to 'classHistory', which is textarea
 }
 
 function append(expression, result){
@@ -88,60 +87,113 @@ document.getElementById("mathType").addEventListener("change", function() {
     }
 });
 
-/*
-Example of 3x3 matrice
-rc_00, rc_01, rc_02,
-rc_10, rc_11, rc_12,
-rc_20, rc_21, rc_22
 
-increment is before to ensure the correct calculation order
-*/ 
-    let incrementMatrice = 0;
+let amountOfMatrices = 0;
+
 function createDimension() {
     let rows = parseInt(document.getElementById('yMatrice').value);
     let columns = parseInt(document.getElementById('xMatrice').value);
-    let container = document.querySelector(`.matriceCalculation${incrementMatrice}`);
-    console.log(incrementMatrice);
 
-    if (!container) {
-        console.error(`Container with class "matriceCalculation${incrementMatrice}" not found.`);
-        return;
-    }
+    let matricesContainer = document.querySelector('.matricesContainer');
+    let newMatriceContainer = document.createElement('div');
+    newMatriceContainer.classList.add(`matrice${amountOfMatrices}`);
+    matricesContainer.appendChild(newMatriceContainer);
+
+    let container = document.querySelector(`.matrice${amountOfMatrices}`);
+
+    let matriceValues = [];
 
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x < columns; x++) {
             let input = document.createElement('input');
             input.type = 'text';
-            input.id = incrementMatrice + 'rc' + y + x;
+            input.id = `rc${y}${x}_${amountOfMatrices}`;
+            matriceValues.id = `matrice${amountOfMatrices}`
             input.classList.add('matriceInput');
             container.appendChild(input);
+
+            
+            matriceValues.push(input.id);
         }
         container.appendChild(document.createElement('br'));
     }
 
-    container.appendChild(document.querySelector('.matriceOp'));
+    console.log(matriceValues.id, matriceValues);
 
-    // Create a new container for the next matrix calculation
-    let newContainer = document.createElement('div');
-    newContainer.classList.add(`matriceCalculation${incrementMatrice + 1}`);
-    document.querySelector('.matrices').appendChild(newContainer);
+    let newOperatorContainer = document.createElement('div');
+    newOperatorContainer.classList.add(`matriceOperator${amountOfMatrices}`);
+    matricesContainer.appendChild(newOperatorContainer);
+
+    let selectElement = document.querySelector('.matriceOperator').cloneNode(true);
+    selectElement.style.display = 'block';
+    selectElement.classList.add(`matriceOperator${amountOfMatrices}`);
+    document.querySelector(`.matriceOperator${amountOfMatrices}`).appendChild(selectElement);
+
+    amountOfMatrices++;
 
     
-    incrementMatrice += incrementMatrice; 
-    
+}
+
+function calcMatrice() {
+    let matrices = [];
+
+    for (let i = 0; i < amountOfMatrices; i++) {
+        let matrix = [];
+        for (let y = 0; y < rows; y++) {
+            let row = [];
+            for (let x = 0; x < columns; x++) {
+                let inputValue = parseInt(document.getElementById(`rc${y}${x}_${i}`).value) || 0;
+                row.push(inputValue);
+            }
+            matrix.push(row);
+        }
+        matrices.push(matrix);
+    }
+
+    let sumMatrix = [];
+    let minusMatrix = [];
+    let selectedOp = document.querySelector('.matriceOp').value;
+
+    for (let y = 0; y < rows; y++) {
+        let sumRow = [];
+        let minusRow = [];
+        for (let x = 0; x < columns; x++) {
+            let sum = 0;
+            let minus = 0;
+            for (let i = 0; i < amountOfMatrices; i++) {
+                sum += matrices[i][y][x];
+                minus -= matrices[i][y][x];
+            }
+            sumRow.push(sum);
+            minusRow.push(minus);
+        }
+        sumMatrix.push(sumRow);
+        minusMatrix.push(minusRow);
+    }
+
+    console.log(sumMatrix);
+    console.log(minusMatrix);
+
+    // Print the result matrices based on the selected operation
+    if (selectedOp === "plus") {
+        printResultMatrix(sumMatrix, 'resultContainer', rows, columns);
+    } else if (selectedOp === "minus") {
+        printResultMatrix(minusMatrix, 'resultContainer', rows, columns);
+    }
+}
+
+const mikkel =1;
+// Determine the selected operation
+if (selectedOp === "plus" && selectedOp === "none") {
+    printResultMatrix(sumMatrix, 'resultContainer', rows, columns);
+} else if (selectedOp === "minus" && selectedOp === "none") {
+    printResultMatrix(minusMatrix, 'resultContainer', rows, columns);
 }
 
 
 
-function removeDimension() {
-    
-}
-
-function restartDimension(){
-    let container = document.getElementsByClassName('matriceCalculation')[0]; // Assuming there's only one .matrices element
-    container.innerHTML = '';
-}
-
-function calculateMatrice(){
-
+function restartDimension() {
+    let matricesContainer = document.querySelector('.matricesContainer');
+    matricesContainer.innerHTML = '';
+    amountOfMatrices = 0;
 }

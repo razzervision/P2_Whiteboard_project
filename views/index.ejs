@@ -211,29 +211,31 @@
   </div>
   <!--- Matrice calculation--->
   <div class="matrices">
-      <p class="matriceTxtStyle">Please enter the dimensions of the matrices: Rows: </p>
-      <input type="text" id="xMatrice" class="xMatrice">
-      <p class="matriceTxtStyle">Columns:</p> 
-      <input type="text" id="yMatrice" class="yMatrice">
-      <button class="submitDimensions" onclick="createDimension()">add matrice</button>
-      <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
-        <div class="matriceCalculation0">
+    <div class="matriceMenu">
+        <p class="matriceTxtStyle">Please enter the dimensions of the matrices: Rows: </p>
+        <input type="text" id="xMatrice" class="xMatrice">
+        <p class="matriceTxtStyle">Columns:</p> 
+        <input type="text" id="yMatrice" class="yMatrice">
+        <button class="submitDimensions" onclick="createDimension()">Add Matrix</button>
+        <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
+        <button class="submit" onclick="calcMatrice()">Calculate Dimensions</button> <br>
+    </div>
 
-        </div>
+    <div class="matricesContainer">
+        <!-- Matrices will be dynamically added here -->
+    </div>
+</div>
 
-        <div class="matriceOperator">
-          <select name="matriceOp" id="matriceOp" class="matriceOp">
-            <option value="plus">+</option>
-            <option value="minus">-</option>
-            <option value="times">×</option>
-            <option value="divide">/</option>
-          </select>
-        </div>
-        <div class="matriceCalculation1">
+<div class="matriceOperator" style="display: none;">
+    <select name="matriceOp" class="matriceOp">
+        <option value="plus">+</option>
+        <option value="minus">-</option>
+        <option value="times">×</option>
+        <option value="divide">/</option>
+        <option value="none">=</option>
+    </select>
+</div>
 
-          
-        </div>
-  </div>
 </div>
 
 
