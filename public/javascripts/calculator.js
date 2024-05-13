@@ -182,7 +182,7 @@ function calcMatrice() {
     }
 }
 
-
+const mikkel =1;
 // Determine the selected operation
 if (selectedOp === "plus" && selectedOp === "none") {
     printResultMatrix(sumMatrix, 'resultContainer', rows, columns);
