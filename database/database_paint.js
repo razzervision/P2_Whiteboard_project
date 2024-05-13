@@ -1,9 +1,9 @@
 const {Model, DataTypes} = require("sequelize");
 const sequelize = require("./database");
 
-class User extends Model {}
+class Paint extends Model {}
 
-User.init({
+Paint.init({
     // Model attributes are defined here
     xPosition: {
         type: DataTypes.INTEGER,
@@ -32,7 +32,7 @@ User.init({
 }, {
     // Other model options go here
     sequelize, // We need to pass the connection instance
-    modelName: "paint" // We need to choose the model name
+    modelName: "Paint" // We need to choose the model name
 });
 
-module.exports = User;
+module.exports = Paint;

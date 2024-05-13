@@ -408,7 +408,7 @@ socketForPaint.on("uploadePicture", async () => {
         console.log(data);
 
         const img = new Image();
-        img.src = data.picture;
+        img.src = `data:image/jpeg;base64,${data.picture}`;
         img.onload = function() {
             currentContext.drawImage(img, data.xPosition, data.yPosition, data.pictureWidth, data.pictureHeight);
         };

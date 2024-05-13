@@ -457,20 +457,21 @@ router.post("/api/checkForPause", async (req, res) => {
 });
 
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" }); // This will save files to the 'uploads' folder
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 router.post("/api/postPicture", upload.single("picture"), async (req, res) => {
     try {
         const { xPosition, yPosition, pictureWidth, pictureHeight } = req.body;
-        const picture = req.file; // 'file' because multer stores file data here
-        console.log(req.body); // Logs text fields
-        console.log(req.file); // Logs file info
+        const picture = req.file.buffer;
+        console.log(req.body);
+        console.log(picture);
         const data = await paint.create({
             xPosition: xPosition,
             yPosition: yPosition,
             pictureWidth: pictureWidth,
             pictureHeight: pictureHeight,
-            picture: picture.path // Assuming you want to store the file path
+            picture: picture
         });
         res.status(200).json({ data });
     } catch (error) {
@@ -483,7 +484,13 @@ router.post("/api/postPicture", upload.single("picture"), async (req, res) => {
 router.get("/api/getPicture", async (req, res) => {
     try {
         const data = await paint.findOne({ order: [["id", "DESC"]] });
-        res.status(200).json({ data });
+        res.status(200).json({ 
+            xPosition: data.xPosition,
+            yPosition: data.yPosition,
+            pictureWidth: data.pictureWidth,
+            pictureHeight: data.pictureHeight,
+            picture: data.picture.toString("base64")
+        });
     } catch (error) {
         console.error("Error fetching picture", error);
         res.status(500).send("Error fetching picture");
