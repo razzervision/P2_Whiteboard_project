@@ -4,8 +4,8 @@
 const maxAnswers = 5;
 
 //socket.io
-const serverURLForSocket = document.location.origin;
-const socketForQuiz = io(serverURLForSocket);
+// const serverURLForSocket = document.location.origin;
+// const window.socket = io(serverURLForSocket, {autoConnect: false});
 
 //---------------------------------------------------------------------------------------Helping funktions
 
@@ -139,7 +139,7 @@ async function IsQuizNameUnique(name){
 const creatQuizButton = document.getElementById("create_quiz_button");
 creatQuizButton.addEventListener("click", () => {
     const name = document.getElementById("create_quiz_text").value;
-    createQuizFunction(name)
+    createQuizFunction(name);
 });
 
 async function createQuizFunction(name){
@@ -479,11 +479,11 @@ async function checkAnswers(quizId,sessionName){
 
     userQuizResponse(userDataQuestion,isCorrectList);
 
-    socketForQuiz.emit("quizPing");
+    window.socket.emit("quizPing");
 
 }
 
-socketForQuiz.on("quizPing", () => {
+window.socket.on("quizPing", () => {
     teacherOverview();
 });
 
@@ -684,9 +684,9 @@ function groupAnswersByUser(data) {
 //---------------------------------------------------------------------------------------tests
 quizUnitTests();
 async function quizUnitTests(){
-    let pass = [];
+    const pass = [];
     let passCounter = 0;    
-    let fail = [];
+    const fail = [];
     let failCounter = 0;
 
     await createQuizTest() ? (passCounter++, pass.push("createQuiz")) : (failCounter++, fail.push("createQuiz"));
@@ -700,7 +700,6 @@ async function quizUnitTests(){
     console.log("Failed Tests: " , fail);
     console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
 }
-
 
 
 async function createQuizTest(){
@@ -720,7 +719,7 @@ async function createQuizTest(){
     const dublicate = await createQuizFunction(alreadyCreated);
     if(dublicate !== "dublicate"){
         console.log("failed dublicate");
-        result =  false;
+        result = false;
     }
     return result;
 }
@@ -728,7 +727,7 @@ async function createQuizTest(){
 async function createQuestions(){
     let result = true;
 
-    let randomInt = Math.floor(Math.random() * 10) + 1;
+    const randomInt = Math.floor(Math.random() * 10) + 1;
     for(let i = 1; i < randomInt; i++){
         const questionDiv = createNewQuestion();
         const expectedID = "question_DIV"+i; 

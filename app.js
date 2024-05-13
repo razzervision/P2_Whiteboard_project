@@ -4,10 +4,9 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const indexRouter = require("./routes/index");
-const fs = require("fs");
 const sequelize = require("./database/database");
 const app = express();
-sequelize.sync({ alter: true }); // This will drop the table and recreate it
+sequelize.sync({ alter: true }); // This will alter the tables and recreate it
 
 
 // view engine setup
