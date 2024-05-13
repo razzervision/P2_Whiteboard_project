@@ -1,3 +1,4 @@
+
 let leavePageCounter = 0;
 let reconPageCounter = 0;
 let mouseClicks = 0;
@@ -105,25 +106,17 @@ function timeAwayFromPage(){
 const IsInSession = document.getElementById("connectSocket");
 IsInSession.addEventListener("change",startLogging);
 
-
-async function startLogging(){
+function startLogging(){
     if(!IsInSession.checked){
         localStorage.setItem("sessionName",null);
         return;
     }
-    const sessionName = "TEST";
-    localStorage.setItem("sessionName",sessionName);
-    const sessionNameJSON = {session: sessionName};
-    const sessionExist = await fetchPostPauseData("/api/pauseSessionExist",sessionNameJSON);
-    if(sessionExist){
-        console.log("session already created:",sessionExist);
-    } else {
-        const startSession = await fetchPostPauseData("/api/StartPauseSession",sessionNameJSON);
-        console.log(startSession);
-    }
+    localStorage.setItem("sessionName","TEST");
+
     clickTracker();
     recursiveClicks();
     timeAwayFromPage();
+
 }
 
 // const data = {

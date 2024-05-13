@@ -409,6 +409,7 @@ async function doPause(data){
     //     return false;
     // }
     // Ignore that the site is ignores
+
     if (averageWebsiteActivity === 0){
         console.log("web activity = 0");
         return false;
@@ -422,7 +423,7 @@ async function doPause(data){
         return true;
     } 
     // Check if low activity
-    if(averageWebsiteActivity <= 10 || averageTimeLeft >= 45000){
+    if(averageWebsiteActivity <= 50 || averageTimeLeft >= 45000 * 5){
         startPause(data.PauseSession);
         console.log("lav aktivt, tag en pause ");
         return true;
