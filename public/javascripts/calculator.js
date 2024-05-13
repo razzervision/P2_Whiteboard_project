@@ -96,7 +96,8 @@ function createDimension() {
 
     let matricesContainer = document.querySelector('.matricesContainer');
     let newMatriceContainer = document.createElement('div');
-    newMatriceContainer.classList.add(`matrice${amountOfMatrices}`);
+    newMatriceContainer.className = `matrice${amountOfMatrices}`;
+    //newMatriceContainer.classList.add(`matrice${amountOfMatrices}`);
     matricesContainer.appendChild(newMatriceContainer);
 
     let container = document.querySelector(`.matrice${amountOfMatrices}`);
@@ -109,33 +110,23 @@ function createDimension() {
             input.type = 'text';
             input.id = `rc${y}${x}_${amountOfMatrices}`;
             matriceValues.id = `matrice${amountOfMatrices}`
-            input.classList.add('matriceInput');
+            input.className = "matriceInput";
+           // input.classList.add('matriceInput');
             container.appendChild(input);
-
-            
             matriceValues.push(input.id);
         }
         container.appendChild(document.createElement('br'));
     }
 
-    console.log(matriceValues.id, matriceValues);
-
-    let newOperatorContainer = document.createElement('div');
-    newOperatorContainer.classList.add(`matriceOperator${amountOfMatrices}`);
-    matricesContainer.appendChild(newOperatorContainer);
-
-    let selectElement = document.querySelector('.matriceOperator').cloneNode(true);
-    selectElement.style.display = 'block';
-    selectElement.classList.add(`matriceOperator${amountOfMatrices}`);
-    document.querySelector(`.matriceOperator${amountOfMatrices}`).appendChild(selectElement);
+    //console.log(matriceValues.id, matriceValues);
 
     amountOfMatrices++;
-
-    
 }
 
 function calcMatrice() {
     let matrices = [];
+    let rows = parseInt(document.getElementById('yMatrice').value);
+    let columns = parseInt(document.getElementById('xMatrice').value);
 
     for (let i = 0; i < amountOfMatrices; i++) {
         let matrix = [];
@@ -152,7 +143,7 @@ function calcMatrice() {
 
     let sumMatrix = [];
     let minusMatrix = [];
-    let selectedOp = document.querySelector('.matriceOp').value;
+    //let selectedOp = document.querySelector('.matriceOp').value;
 
     for (let y = 0; y < rows; y++) {
         let sumRow = [];
@@ -170,27 +161,9 @@ function calcMatrice() {
         sumMatrix.push(sumRow);
         minusMatrix.push(minusRow);
     }
-
     console.log(sumMatrix);
     console.log(minusMatrix);
-
-    // Print the result matrices based on the selected operation
-    if (selectedOp === "plus") {
-        printResultMatrix(sumMatrix, 'resultContainer', rows, columns);
-    } else if (selectedOp === "minus") {
-        printResultMatrix(minusMatrix, 'resultContainer', rows, columns);
-    }
 }
-
-const mikkel =1;
-// Determine the selected operation
-if (selectedOp === "plus" && selectedOp === "none") {
-    printResultMatrix(sumMatrix, 'resultContainer', rows, columns);
-} else if (selectedOp === "minus" && selectedOp === "none") {
-    printResultMatrix(minusMatrix, 'resultContainer', rows, columns);
-}
-
-
 
 function restartDimension() {
     let matricesContainer = document.querySelector('.matricesContainer');
