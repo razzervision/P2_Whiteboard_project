@@ -43,3 +43,32 @@ li:hover{
     border: 1px solid black;
     flex-direction: column;
 }
+
+.toolbarDivForCheckbox {
+    color: white;
+    padding: 8px;
+    display: flex;
+    text-align: center;
+    float: right;
+    height: 50px;
+    width:  auto;
+    border: 1px solid #ddd;
+    background-color: #007bff;
+    font-weight: bold;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    margin: 3px;
+}
+
+.toolbarCheckboxInput {
+    margin: 10px;
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+}
+
+.toolbarLabelForCheckbox {
+    margin: 10px;
+}
+
