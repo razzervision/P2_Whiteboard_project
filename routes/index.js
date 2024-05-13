@@ -330,10 +330,13 @@ router.post("/api/endSession", async (req, res) => {
 // --------------------------------------------------------------------------------------------Pauses
 router.post("/api/StartPauseSession", async (req, res) =>{
     try {
+        
         const { session } = req.body;
+        console.log(session, "jon");
 
         const data = await Pauses.PauseSession.create({
-            session: session,
+            //session: session,
+            session: "TEST",
             isActive: true,
             lastPause: null
         });   
@@ -388,9 +391,10 @@ async function doPause(data){
     let averageTimeLeft = 0;
 
     data.forEach(userdata =>{
-        averageWebsiteActivity = (averageWebsiteActivity + userdata.websiteActivity) / 2;
+        averageWebsiteActivity = userdata.websiteActivity;
         averagePageLeft = userdata.leftWebsite;
         averageTimeLeft = userdata.averageTimeLeftWebsite;
+
     });
     // const sessionStarted = data[0].createdAt;
     const twoHours = 2 * 60 * 60 * 1000;
@@ -401,11 +405,12 @@ async function doPause(data){
     const sessionCreated = data.PauseSession.createdAt;
 
     // Ignore pauses withing half an hour
-    if (!lastPause || lastPause < (halfHour)){
-        return false;
-    }
+    // if (!lastPause || lastPause < (halfHour)){
+    //     return false;
+    // }
     // Ignore that the site is ignores
     if (averageWebsiteActivity === 0){
+        console.log("web activity = 0");
         return false;
     }
 
@@ -413,6 +418,7 @@ async function doPause(data){
     if(!lastPause && sessionCreated > (twoHours)){
         startPause(data.PauseSession);
         console.log("arbejdet over 2 timer");
+
         return true;
     } 
     // Check if low activity
@@ -449,7 +455,10 @@ router.post("/api/checkForPause", async (req, res) => {
         });
         
         const holdPause = await doPause(data);
-        res.status(200).send(holdPause);
+        //res.status(200).send(holdPause);
+        console.log(holdPause);
+        res.status(200).json(data);
+        
     } catch (error) {
         console.error("Error finding pauseData", error);
         res.status(500).send("Error finding pauseData");
