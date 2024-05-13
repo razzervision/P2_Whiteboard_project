@@ -298,7 +298,7 @@ async function getQuestionAndAnswers(){
         correctAnswersList.push(correctAnswers);
     });   
     if(quit){
-        return;
+        return "noquestion";
     }
     const data = {
         quizName: quizName,
@@ -694,6 +694,7 @@ async function quizUnitTests(){
     await createQuestions() ? (passCounter++, pass.push("createQuestion")) : (failCounter++, fail.push("createQuestion"));
 
 
+
     console.log("total Passed Test: " , passCounter);
     console.log("Passed Tests: " , pass);
     console.log("total Failed Test: " , failCounter);
@@ -701,6 +702,19 @@ async function quizUnitTests(){
     console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
 }
 
+async function publicQuiz(){
+    let result = true;
+
+    const quizDataNoQuestion = getQuestionAndAnswers();
+    if(quizDataNoQuestion !== "noquestion"){
+        console.log("ignored no question text");
+        result = false;
+    }
+    const hej = getQuestionAndAnswers();
+
+
+
+}
 
 
 async function createQuizTest(){
@@ -812,3 +826,6 @@ async function createQuestions(){
     });
     return result;
 }
+
+
+
