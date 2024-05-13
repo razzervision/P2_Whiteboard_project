@@ -137,6 +137,10 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("quizPing");
     });
 
+    socket.on("uploadePicture", () => {
+        socket.broadcast.emit("uploadePicture");
+    });
+
     socket.on("disconnect", () => {
         console.log("User disconnected");
     });

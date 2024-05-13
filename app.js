@@ -7,6 +7,7 @@ const indexRouter = require("./routes/index");
 const fs = require("fs");
 const sequelize = require("./database/database");
 const app = express();
+sequelize.sync({ alter: true }); // This will drop the table and recreate it
 
 
 // view engine setup

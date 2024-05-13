@@ -100,7 +100,9 @@ currentCanvas.addEventListener("pointerout",stopDraw);
 
 //picture
 pictureLocation.addEventListener("click",choseLocation);
-uploadInput.addEventListener("change", uploadePicture);
+uploadInput.addEventListener("change", () => {
+    uploadePicture();
+});
 
 function stopDraw(){
     currentCanvas.removeEventListener("pointermove", onMouseMove);
@@ -282,7 +284,8 @@ function changeColor(element) {
 
 function uploadePicture(){
     const img = new Image();
-    img.src = URL.createObjectURL(this.files[0]);
+    const pictureUpload = document.getElementById("uploadInput");
+    img.src = URL.createObjectURL(pictureUpload.files[0]);
     img.onload = function(){
         if(imgheightButton.value>= currentCanvas.height && imgwithdButton.value>= currentCanvas.width){
             img.width = currentCanvas.width;
@@ -297,13 +300,40 @@ function uploadePicture(){
             img.height = imgheightButton.value;
             img.width = imgwithdButton.value;
         }
+        
+        const formData = new FormData();
+        formData.append("xPosition", imgX);
+        formData.append("yPosition", imgY);
+        formData.append("pictureWidth", img.width);
+        formData.append("pictureHeight", img.height);
+        formData.append("picture", pictureUpload.files[0]);
+        console.log(formData.get("xPosition"));
+        console.log(formData.get("yPosition"));
+        console.log(formData.get("pictureWidth"));
+        console.log(formData.get("pictureHeight"));
+        console.log(formData.get("picture"));
+
+        fetch("/api/postPicture", {
+            method: "POST",
+            body: formData
+        }).then(response => {
+            if (response.status === 200) {
+                console.log("picture uploaded");
+                socketForPaint.emit("uploadePicture");
+            } else {
+                console.log("error in uploading picture");
+                console.error("Server responded with status:", response.status);
+            }
+        }).catch(err => {
+            console.error("Failed to upload picture:", err);
+        });
+
         currentContext.drawImage(img, imgX, imgY, img.width, img.height);
     };
     img.onerror = function(){
         console.log("img load fail");
     };
 }
-
 
 //sockets
 
@@ -366,6 +396,28 @@ socketForPaint.on("removeMouse", () =>{
 
 socketForPaint.on("undo", () =>{
     undo();
+});
+
+socketForPaint.on("uploadePicture", async () => {
+    try {
+        const response = await fetch("/api/getPicture");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+
+        const img = new Image();
+        img.src = `data:image/jpeg;base64,${data.picture}`;
+        img.onload = function() {
+            currentContext.drawImage(img, data.xPosition, data.yPosition, data.pictureWidth, data.pictureHeight);
+        };
+        img.onerror = function() {
+            console.error("Error loading image.");
+        };
+    } catch (error) {
+        console.error("Failed to fetch and display picture:", error);
+    }
 });
 
 
