@@ -13,8 +13,8 @@ let width = canvas0.offsetWidth;
 let height = canvas0.offsetHeight;
 
 //socket
-const serverurl = document.location.origin;
-const socketForPaint = io(serverurl);
+// const serverurl = document.location.origin;
+// const window.socket = io(serverurl, { autoConnect: false });
 
 
 //start display
@@ -71,13 +71,13 @@ const mouse = {
 
 addCanvasButton.addEventListener("click", () => {
     addCanvas();
-    socketForPaint.emit("addCanvas");
+    window.socket.emit("addCanvas");
 });
 
 //undo
 undoB.addEventListener("click", () => {
     undo();
-    socketForPaint.emit("undo");
+    window.socket.emit("undo");
 });
 
 //rezize
@@ -86,12 +86,12 @@ window.addEventListener("resize", rezize);
 
 changeCanvasButton.addEventListener("click",() =>{
     changeCanvas(canvas0,changeCanvasButton);
-    socketForPaint.emit("changeCanvas", {canvas: canvas0.id, canvasButton: changeCanvasButton.id});
+    window.socket.emit("changeCanvas", {canvas: canvas0.id, canvasButton: changeCanvasButton.id});
 });
 //event listeners
 clear.addEventListener("click", ()=>{
     clearCanvas();
-    socketForPaint.emit("clearCanvas");
+    window.socket.emit("clearCanvas");
 });
 
 //canvas listners in beginning
@@ -130,7 +130,7 @@ function addCanvas(){
     
         canvasButton.addEventListener("click", () =>{
             changeCanvas(canvas,canvasButton);
-            socketForPaint.emit("changeCanvas", {canvas: canvas.id, canvasButton: canvasButton.id});
+            window.socket.emit("changeCanvas", {canvas: canvas.id, canvasButton: canvasButton.id});
         });
     
         changeCanvas(canvas,canvasButton);
@@ -177,7 +177,7 @@ function pointerDown(event){
     currentCanvas.addEventListener("pointermove", onMouseMove);
     currentCanvas.addEventListener("pointerup", () => {
         removeMouseMove();
-        socketForPaint.emit("removeMouse");
+        window.socket.emit("removeMouse");
     });
 }
 
@@ -206,8 +206,7 @@ function draw() {
     currentContext.lineTo(mouse.x, mouse.y);
     
     currentContext.stroke();
-
-    socketForPaint.emit("draw", {
+    window.socket.emit("draw", {
         x: mouse.x,
         y: mouse.y,
         color: drawColor,
@@ -319,7 +318,7 @@ function uploadePicture(){
         }).then(response => {
             if (response.status === 200) {
                 console.log("picture uploaded");
-                socketForPaint.emit("uploadePicture");
+                window.socket.emit("uploadePicture");
             } else {
                 console.log("error in uploading picture");
                 console.error("Server responded with status:", response.status);
@@ -337,7 +336,7 @@ function uploadePicture(){
 
 //sockets
 
-socketForPaint.on("draw", function (data) {
+window.socket.on("draw", function (data) {
     currentContext.beginPath();
     currentContext.moveTo(data.x, data.y);
     currentContext.strokeStyle = data.color;
@@ -348,15 +347,15 @@ socketForPaint.on("draw", function (data) {
     currentContext.stroke();
 });
 
-socketForPaint.on("clearCanvas", function () {
+window.socket.on("clearCanvas", function () {
     clearCanvas();
 });
 
-socketForPaint.on("addCanvas", () =>{
+window.socket.on("addCanvas", () =>{
     addCanvas();
 });
 
-socketForPaint.on("changeCanvas", (data) =>{
+window.socket.on("changeCanvas", (data) =>{
     const canvasButton = document.getElementById(data.canvasButton);
     const canvasT = document.getElementById(data.canvas);
     globalCanvas.forEach(C => {
@@ -390,15 +389,15 @@ socketForPaint.on("changeCanvas", (data) =>{
 });
 
 
-socketForPaint.on("removeMouse", () =>{
+window.socket.on("removeMouse", () =>{
     removeMouseMove();
 });
 
-socketForPaint.on("undo", () =>{
+window.socket.on("undo", () =>{
     undo();
 });
 
-socketForPaint.on("uploadePicture", async () => {
+window.socket.on("uploadePicture", async () => {
     try {
         const response = await fetch("/api/getPicture");
         if (!response.ok) {
