@@ -13,8 +13,8 @@ let width = canvas0.offsetWidth;
 let height = canvas0.offsetHeight;
 
 //socket
-const serverurl = document.location.origin;
-const socketForPaint = io(serverurl);
+// const serverurl = document.location.origin;
+// const window.socket = io(serverurl, { autoConnect: false });
 
 
 //start display
@@ -71,13 +71,13 @@ const mouse = {
 
 addCanvasButton.addEventListener("click", () => {
     addCanvas();
-    socketForPaint.emit("addCanvas");
+    window.socket.emit("addCanvas");
 });
 
 //undo
 undoB.addEventListener("click", () => {
     undo();
-    socketForPaint.emit("undo");
+    window.socket.emit("undo");
 });
 
 //rezize
@@ -86,12 +86,12 @@ window.addEventListener("resize", rezize);
 
 changeCanvasButton.addEventListener("click",() =>{
     changeCanvas(canvas0,changeCanvasButton);
-    socketForPaint.emit("changeCanvas", {canvas: canvas0.id, canvasButton: changeCanvasButton.id});
+    window.socket.emit("changeCanvas", {canvas: canvas0.id, canvasButton: changeCanvasButton.id});
 });
 //event listeners
 clear.addEventListener("click", ()=>{
     clearCanvas();
-    socketForPaint.emit("clearCanvas");
+    window.socket.emit("clearCanvas");
 });
 
 //canvas listners in beginning
@@ -100,7 +100,9 @@ currentCanvas.addEventListener("pointerout",stopDraw);
 
 //picture
 pictureLocation.addEventListener("click",choseLocation);
-uploadInput.addEventListener("change", uploadePicture);
+uploadInput.addEventListener("change", () => {
+    uploadePicture();
+});
 
 function stopDraw(){
     currentCanvas.removeEventListener("pointermove", onMouseMove);
@@ -128,7 +130,7 @@ function addCanvas(){
     
         canvasButton.addEventListener("click", () =>{
             changeCanvas(canvas,canvasButton);
-            socketForPaint.emit("changeCanvas", {canvas: canvas.id, canvasButton: canvasButton.id});
+            window.socket.emit("changeCanvas", {canvas: canvas.id, canvasButton: canvasButton.id});
         });
     
         changeCanvas(canvas,canvasButton);
@@ -175,7 +177,7 @@ function pointerDown(event){
     currentCanvas.addEventListener("pointermove", onMouseMove);
     currentCanvas.addEventListener("pointerup", () => {
         removeMouseMove();
-        socketForPaint.emit("removeMouse");
+        window.socket.emit("removeMouse");
     });
 }
 
@@ -204,8 +206,7 @@ function draw() {
     currentContext.lineTo(mouse.x, mouse.y);
     
     currentContext.stroke();
-
-    socketForPaint.emit("draw", {
+    window.socket.emit("draw", {
         x: mouse.x,
         y: mouse.y,
         color: drawColor,
@@ -282,7 +283,8 @@ function changeColor(element) {
 
 function uploadePicture(){
     const img = new Image();
-    img.src = URL.createObjectURL(this.files[0]);
+    const pictureUpload = document.getElementById("uploadInput");
+    img.src = URL.createObjectURL(pictureUpload.files[0]);
     img.onload = function(){
         if(imgheightButton.value>= currentCanvas.height && imgwithdButton.value>= currentCanvas.width){
             img.width = currentCanvas.width;
@@ -297,6 +299,34 @@ function uploadePicture(){
             img.height = imgheightButton.value;
             img.width = imgwithdButton.value;
         }
+        
+        const formData = new FormData();
+        formData.append("xPosition", imgX);
+        formData.append("yPosition", imgY);
+        formData.append("pictureWidth", img.width);
+        formData.append("pictureHeight", img.height);
+        formData.append("picture", pictureUpload.files[0]);
+        console.log(formData.get("xPosition"));
+        console.log(formData.get("yPosition"));
+        console.log(formData.get("pictureWidth"));
+        console.log(formData.get("pictureHeight"));
+        console.log(formData.get("picture"));
+
+        fetch("/api/postPicture", {
+            method: "POST",
+            body: formData
+        }).then(response => {
+            if (response.status === 200) {
+                console.log("picture uploaded");
+                window.socket.emit("uploadePicture");
+            } else {
+                console.log("error in uploading picture");
+                console.error("Server responded with status:", response.status);
+            }
+        }).catch(err => {
+            console.error("Failed to upload picture:", err);
+        });
+
         currentContext.drawImage(img, imgX, imgY, img.width, img.height);
     };
     img.onerror = function(){
@@ -304,10 +334,9 @@ function uploadePicture(){
     };
 }
 
-
 //sockets
 
-socketForPaint.on("draw", function (data) {
+window.socket.on("draw", function (data) {
     currentContext.beginPath();
     currentContext.moveTo(data.x, data.y);
     currentContext.strokeStyle = data.color;
@@ -318,15 +347,15 @@ socketForPaint.on("draw", function (data) {
     currentContext.stroke();
 });
 
-socketForPaint.on("clearCanvas", function () {
+window.socket.on("clearCanvas", function () {
     clearCanvas();
 });
 
-socketForPaint.on("addCanvas", () =>{
+window.socket.on("addCanvas", () =>{
     addCanvas();
 });
 
-socketForPaint.on("changeCanvas", (data) =>{
+window.socket.on("changeCanvas", (data) =>{
     const canvasButton = document.getElementById(data.canvasButton);
     const canvasT = document.getElementById(data.canvas);
     globalCanvas.forEach(C => {
@@ -360,12 +389,34 @@ socketForPaint.on("changeCanvas", (data) =>{
 });
 
 
-socketForPaint.on("removeMouse", () =>{
+window.socket.on("removeMouse", () =>{
     removeMouseMove();
 });
 
-socketForPaint.on("undo", () =>{
+window.socket.on("undo", () =>{
     undo();
+});
+
+window.socket.on("uploadePicture", async () => {
+    try {
+        const response = await fetch("/api/getPicture");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+
+        const img = new Image();
+        img.src = `data:image/jpeg;base64,${data.picture}`;
+        img.onload = function() {
+            currentContext.drawImage(img, data.xPosition, data.yPosition, data.pictureWidth, data.pictureHeight);
+        };
+        img.onerror = function() {
+            console.error("Error loading image.");
+        };
+    } catch (error) {
+        console.error("Failed to fetch and display picture:", error);
+    }
 });
 
 

@@ -7,7 +7,7 @@ const sequelize = require("../database/database");
 const User = require("../database/user");
 const Quiz = require("../database/database_quiz");
 const Pauses = require("../database/database_pauses.js");
-
+const paint = require("../database/database_paint.js");
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
@@ -30,7 +30,6 @@ router.get("/:room", function(req, res, next) {
 router.get("/api/loadLanguages", (req, res) => {
     try {
         const data = fs.readFileSync(path.join(__dirname, "../database/languages.json"), "utf8");
-        console.log(data);
         res.json(JSON.parse(data));
     } catch (error) {
         console.error("Error fetching quiz data:", error);
@@ -109,6 +108,9 @@ router.get("/api/Getquizzes", async (req, res) => {
                 }
             ]
         });
+        if(!quizzes){
+            res.status(200).send(false);
+        }
         res.status(200).json({ quizzes });
     } catch (error) {
         console.error("Error fetching quizzes", error);
@@ -331,10 +333,13 @@ router.post("/api/endSession", async (req, res) => {
 // --------------------------------------------------------------------------------------------Pauses
 router.post("/api/StartPauseSession", async (req, res) =>{
     try {
+        
         const { session } = req.body;
+        console.log(session, "jon");
 
         const data = await Pauses.PauseSession.create({
-            session: session,
+            //session: session,
+            session: "TEST",
             isActive: true,
             lastPause: null
         });   
@@ -387,11 +392,22 @@ async function doPause(data){
     let averageWebsiteActivity = 0;
     let averagePageLeft = 0;
     let averageTimeLeft = 0;
+    let highestData = [data[0], data[1]];
+
+    for (let index = 0; index < data.length; index++) {
+        if(data[index].websiteActivity > highestData[0].websiteActivity ){
+            highestData[1] = highestData[0];
+            highestData[0] = data[index];
+        }else if(data[index].websiteActivity > highestData[1].websiteActivity) {
+            highestData[1] = highestData[index];
+        }
+    }
 
     data.forEach(userdata =>{
-        averageWebsiteActivity = (averageWebsiteActivity + userdata.websiteActivity) / 2;
+        averageWebsiteActivity = userdata.websiteActivity;
         averagePageLeft = userdata.leftWebsite;
         averageTimeLeft = userdata.averageTimeLeftWebsite;
+
     });
     // const sessionStarted = data[0].createdAt;
     const twoHours = 2 * 60 * 60 * 1000;
@@ -402,11 +418,13 @@ async function doPause(data){
     const sessionCreated = data.PauseSession.createdAt;
 
     // Ignore pauses withing half an hour
-    if (!lastPause || lastPause < (halfHour)){
-        return false;
-    }
+    // if (!lastPause || lastPause < (halfHour)){
+    //     return false;
+    // }
     // Ignore that the site is ignores
+
     if (averageWebsiteActivity === 0){
+        console.log("web activity = 0");
         return false;
     }
 
@@ -414,10 +432,11 @@ async function doPause(data){
     if(!lastPause && sessionCreated > (twoHours)){
         startPause(data.PauseSession);
         console.log("arbejdet over 2 timer");
+
         return true;
     } 
     // Check if low activity
-    if(averageWebsiteActivity <= 10 || averageTimeLeft >= 45000){
+    if(averageWebsiteActivity <= 50 || averageTimeLeft >= 45000 * 5){
         startPause(data.PauseSession);
         console.log("lav aktivt, tag en pause ");
         return true;
@@ -450,11 +469,79 @@ router.post("/api/checkForPause", async (req, res) => {
         });
         
         const holdPause = await doPause(data);
-        res.status(200).send(holdPause);
+        //res.status(200).send(holdPause);
+        console.log(holdPause);
+        res.status(200).json(data);
+        
     } catch (error) {
         console.error("Error finding pauseData", error);
         res.status(500).send("Error finding pauseData");
     }
 });
+
+router.post("/api/pauseSessionExist", async (req, res) => {
+    try {
+        const { session } = req.body;
+
+        const data = await Pauses.PauseSession.findOne({
+            where: {
+                session: session
+            }
+        });
+        if(data){
+            res.status(200).send(true);
+        } else {
+            res.status(200).send(false);
+        }
+    } catch (error) {
+        console.error("Error finding pauseData", error);
+        res.status(500).send("Error finding pauseData");
+    }
+});
+
+
+// WHITEBOARD---------------------------------------------------------------------------
+
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+router.post("/api/postPicture", upload.single("picture"), async (req, res) => {
+    try {
+        const { xPosition, yPosition, pictureWidth, pictureHeight } = req.body;
+        const picture = req.file.buffer;
+        console.log(req.body);
+        console.log(picture);
+        const data = await paint.create({
+            xPosition: xPosition,
+            yPosition: yPosition,
+            pictureWidth: pictureWidth,
+            pictureHeight: pictureHeight,
+            picture: picture
+        });
+        res.status(200).json({ data });
+    } catch (error) {
+        console.error("Error uploading picture", error);
+        res.status(500).send("Error uploading picture");
+    }
+});
+
+
+router.get("/api/getPicture", async (req, res) => {
+    try {
+        const data = await paint.findOne({ order: [["id", "DESC"]] });
+        res.status(200).json({ 
+            xPosition: data.xPosition,
+            yPosition: data.yPosition,
+            pictureWidth: data.pictureWidth,
+            pictureHeight: data.pictureHeight,
+            picture: data.picture.toString("base64")
+        });
+    } catch (error) {
+        console.error("Error fetching picture", error);
+        res.status(500).send("Error fetching picture");
+    }
+});
+        
 
 module.exports = router;

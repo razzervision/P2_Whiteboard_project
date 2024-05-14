@@ -4,8 +4,8 @@
 const maxAnswers = 5;
 
 //socket.io
-const serverURLForSocket = document.location.origin;
-const socketForQuiz = io(serverURLForSocket);
+// const serverURLForSocket = document.location.origin;
+// const window.socket = io(serverURLForSocket, {autoConnect: false});
 
 //---------------------------------------------------------------------------------------Helping funktions
 
@@ -136,18 +136,27 @@ async function IsQuizNameUnique(name){
     return result;
 }
 
-const creatQuiz = document.getElementById("create_quiz_button");
-creatQuiz.addEventListener("click", async() => {
+const creatQuizButton = document.getElementById("create_quiz_button");
+creatQuizButton.addEventListener("click", () => {
     const name = document.getElementById("create_quiz_text").value;
-    if (name === ""){
-        errorMessage("Please insert a name",name);
-    } else if(await IsQuizNameUnique(name)){
-        errorMessage("Already created",name);
-    } else {
-        hideDivs("createQuiz");
-        document.getElementById("quiz_name").textContent = name;
-    }
+    createQuizFunction(name);
 });
+
+async function createQuizFunction(name){
+    nameElement = document.getElementById("create_quiz_text");
+    if (name === ""){
+        errorMessage("Please insert a name",nameElement);
+        return "noName";
+    } else if(await IsQuizNameUnique(name)){
+        errorMessage("Already created",nameElement);
+        return "dublicate";
+    } 
+    hideDivs("createQuiz");
+    const quizNameLabel = document.getElementById("quiz_name");
+    quizNameLabel.textContent = name;
+    return quizNameLabel;
+}
+    
 
 //Generate a new answers input when typing on the first answer text input. 
 function eventListenerHandler(event) {
@@ -165,22 +174,22 @@ function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
         elementThatTriggeredEvent.removeEventListener("input", eventListenerHandler);
     }
     //Get the last element in the current div e.g <div class="answer_container" id="answer_container4">
-    const lastElementInCurrentDiv = DivThatTriggeredEvent.lastElementChild;
-
+    let lastElementInCurrentDiv = DivThatTriggeredEvent.querySelectorAll(".answer_container");
+    lastElementInCurrentDiv = lastElementInCurrentDiv[lastElementInCurrentDiv.length - 1];
     //Start id with -1 because if there is none answer then i should generate the first one and the next step is to increase the ID.
     let id = -1;
     //If there already is answer options then get the latest id. and the last input is the ID id="answer_container4"
-    if(lastElementInCurrentDiv.className === "answer_container"){
+    if(lastElementInCurrentDiv){
         id = lastElementInCurrentDiv.id[16];
-    }
+    } 
+    id++;
     //Ensure there is a limit of answers and the last . 
-    if(id >= maxAnswers -1){
+    if(id >= maxAnswers){
         //If theres is too many answers make an error message.
         errorMessage("You can max insert " + maxAnswers + " answers", lastElementInCurrentDiv);
-        return;
+        return "tooMany";
     }
     //Increase the ID with one to make the ID unique.
-    id++;
 
     //Create all the elements needed for an extra answers
     const questionDiv = createAllElement("div","answer_container"+id,"answer_container",null);
@@ -202,6 +211,8 @@ function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
     questionDiv.appendChild(answerCheckbox);
     
     DivThatTriggeredEvent.appendChild(questionDiv); 
+
+    return questionDiv;
 }
 
 //Generate template for a new question
@@ -244,6 +255,8 @@ function createNewQuestion(){
     //make the answer options
     createNewAnswerBox(null,questionDiv);
 
+    return questionDiv;
+
 }
 
 
@@ -270,22 +283,33 @@ async function getQuestionAndAnswers(){
         const answers = [];
         const correctAnswers = [];
         const answersValue = q.querySelectorAll(".answer_container");
+        let emptyAnswers = 0;
         answersValue.forEach(a => {
             const answerText = a.querySelector(".answer_text_class").value;
             // Dont push if the answer is = ""
             if(!answerText){
+                emptyAnswers++;
                 return;
             }
             answers.push(answerText);
             const answerCheckbox = a.querySelector(".answer_checkbox_class").checked;
             correctAnswers.push(answerCheckbox);
         });
+        if(emptyAnswers === answersValue.length){
+            errorMessage("Please add at least one answer option",q);
+            quit = true;
+            return
+        }
 
         answersList.push(answers);
         correctAnswersList.push(correctAnswers);
     });   
     if(quit){
-        return;
+        return "quit";
+    }
+    console.log(answersList.length, !quizName, questionList.length);
+    if(answersList.length < 2 || !quizName || questionList.length < 1){
+        return "noData";
     }
     const data = {
         quizName: quizName,
@@ -296,16 +320,24 @@ async function getQuestionAndAnswers(){
 
     const uploadQuiz = await fetchPostQuizData("/uploadQuiz",data);
 
-    hideDivs("start");
     if(uploadQuiz){
         alert("quiz is succesfully made");  
+
+        hideDivs("start");
+
+        //Clear questions and their answers after creating a question.
+        clearQuizzes();
+
+        // Search for all quizzes to append it.
+        searchQuizzes(null);
+
+        return true;
+    } else {
+        alert("Failed to public quiz");
+        return false;
     }
     
-    //Clear questions and their answers after creating a question.
-    clearQuizzes();
-
-    // Search for all quizzes to append it.
-    searchQuizzes(null);
+    
 }
 
 
@@ -331,7 +363,9 @@ searchQuizInput.addEventListener("input", () => {
 //Find all unique quizzes
 async function searchQuizzes(input){
     const data = await fetchGetQuizData("/api/Getquizzes");
-    if(!data){return;}
+    if(!data){
+        return "noData";
+    }
     const table = document.getElementById("search_quiz_table");
     //reset the table
     table.textContent = "";
@@ -354,6 +388,7 @@ async function searchQuizzes(input){
         } 
 
     });
+    return table.rows.length;
 }
 searchQuizzes();
 
@@ -466,11 +501,11 @@ async function checkAnswers(quizId,sessionName){
 
     userQuizResponse(userDataQuestion,isCorrectList);
 
-    socketForQuiz.emit("quizPing");
+    window.socket.emit("quizPing");
 
 }
 
-socketForQuiz.on("quizPing", () => {
+window.socket.on("quizPing", () => {
     teacherOverview();
 });
 
@@ -669,4 +704,197 @@ function groupAnswersByUser(data) {
 }
 
 //---------------------------------------------------------------------------------------tests
+quizUnitTests();
+async function quizUnitTests(){
+    const pass = [];
+    let passCounter = 0;    
+    const fail = [];
+    let failCounter = 0;
+
+    await createQuizTest() ? (passCounter++, pass.push("create Quiz")) : (failCounter++, fail.push("create Quiz"));
+
+    await createQuestions() ? (passCounter++, pass.push("create Question")) : (failCounter++, fail.push("create Question"));
+
+    await publicQuiz() ? (passCounter++, pass.push("public Quiz")) : (failCounter++, fail.push("public Quiz"));
+
+    await searchQuizTest() ? (passCounter++, pass.push("Search Quiz")) : (failCounter++, fail.push("Search Quiz"));
+
+
+    console.log("total Passed Test: " , passCounter);
+    console.log("Passed Tests: " , pass);
+    console.log("total Failed Test: " , failCounter);
+    console.log("Failed Tests: " , fail);
+    console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
+}
+
+async function searchQuizTest(){
+    let result = true;
+
+    const noQuiz = await searchQuizzes("ASDASDASDASDASDASDASDASDASDASDASDASDASDASDASD");
+    if(noQuiz !== 0){
+        console.log("Failed searching quizzes");
+        result = false;
+    }
+
+    const multipleQuiz = await searchQuizzes("2024");
+    if(multipleQuiz < 2){
+        console.log("Potentialle fail, check how many quizzes with 2024 that are made");
+        result = false;
+    }
+
+    const oneQuiz = await searchQuizzes("test");
+    if(oneQuiz !== 1){
+        console.log("Potentialle fail, check how many quizzes with only test",oneQuiz);
+        result = false;
+    }
+    searchQuizzes();
+
+
+    return result;
+
+}
+
+async function publicQuiz(){
+    let result = true;
+
+    const quizDataNoQuestion = await getQuestionAndAnswers();
+    if(quizDataNoQuestion !== "quit"){
+        console.log("ignored no question text");
+        result = false;
+    }
+    const missingQuestionDiv = document.getElementById("question_DIV0");
+    const missingQuestion = missingQuestionDiv.querySelector("#question_txt_field0");
+    missingQuestion.value = "TEST1";
+
+    const quizDataNoAnswers = await getQuestionAndAnswers();
+    if(quizDataNoAnswers !== "quit"){
+        console.log("ignored no answer text for a question");
+        result = false;
+    }
+    const missingAnswer = missingQuestionDiv.querySelector("#answer0");
+    missingAnswer.value = "ANSWER1";
+
+    const noData = await getQuestionAndAnswers();
+    if(!noData || noData === "noData"){
+        console.log("Not enough data to make quiz");
+        result = false;
+    }
+
+    return result;
+
+
+
+}
+
+async function createQuizTest(){
+    let result = true;
+    const noName = await createQuizFunction("");
+    if(noName !== "noName"){
+        console.log("failed noName");
+        result = false;
+    }
+    const uniqueName = new Date().toISOString();
+    const makeQuiz = await createQuizFunction(uniqueName);
+    if(makeQuiz.textContent !== uniqueName){
+        console.log("failed creating Quiz");
+        result = false;
+    }
+    const alreadyCreated = "test";
+    const dublicate = await createQuizFunction(alreadyCreated);
+    if(dublicate !== "dublicate"){
+        console.log("failed dublicate");
+        result = false;
+    }
+    return result;
+}
+
+async function createQuestions(){
+    let result = true;
+
+    const randomInt = Math.floor(Math.random() * 10) + 1;
+    for(let i = 1; i < randomInt; i++){
+        const questionDiv = createNewQuestion();
+        const expectedID = "question_DIV"+i; 
+        if(questionDiv.id !== expectedID){
+            console.log("Wrong ID");
+            result = false;
+        }
+        if(!questionDiv){
+            console.log("No question created");
+            result = false;
+        }
+        const label = questionDiv.querySelector(".questionLabelClass");
+        if(!label){
+            console.log("No label");
+            result = false;
+        }
+        const input = questionDiv.querySelector(".question_txt_field_class");
+        input.value = "Question"+i;
+        if(!input){
+            console.log("No input box");
+            result = false;
+        }
+        const answerdiv = questionDiv.querySelector(".answer_container");
+        if(!answerdiv){
+            console.log("No input box");
+            result = false;
+        }
+        const randomIntAnswer = Math.floor(Math.random() * 10) + 1;
+        let createdAnswerCounter = 0;
+        for(let j = 0; j < 10; j++){
+            const answerInput = questionDiv.querySelectorAll(".answer_text_class");
+            const lastElement = answerInput[answerInput.length - 1];
+            lastElement.value = "TEST";
+            const newanswerDiv = createNewAnswerBox(lastElement,questionDiv);
+            if(newanswerDiv === "tooMany" && lastElement.id[6] >= maxAnswers){
+                console.log("Too many answered added");
+                result = false;
+                return;
+            } 
+            if(newanswerDiv !== "tooMany"){
+                createdAnswerCounter++;
+            } 
+            if(j === 0){
+                const isCorrect = newanswerDiv.querySelector(".answer_checkbox_class");
+                isCorrect.checked = "true";
+            }
+
+
+        }
+        const numberOfAnswers = questionDiv.querySelectorAll(".answer_container").length - 1;
+        // Minus one because the first one is created by the create question function
+        if(numberOfAnswers !== createdAnswerCounter){
+            console.log("Wrong amount of answers",numberOfAnswers,createdAnswerCounter);
+            result = false;
+        }
+
+    }
+
+    const allDiv = document.querySelectorAll(".question_DIV");
+    if(allDiv.length !== randomInt){
+        console.log("wrong number of div");
+        result = false;
+    }
+
+    allDiv.forEach((div, index) => {
+        if(index === 0){
+            return;
+        }
+        let numberOfCorrectAnswers = 0;
+
+        const checkBoxDiv = div.querySelectorAll(".answer_checkbox_class");
+        checkBoxDiv.forEach(checkBox => {
+            if(checkBox.checked){
+                numberOfCorrectAnswers++;
+            }
+        });
+        if(numberOfCorrectAnswers !== 1){
+            console.log("Wrong amount of correct answers",numberOfCorrectAnswers);
+            result = false;
+        }
+    });
+    return result;
+}
+
+
 
