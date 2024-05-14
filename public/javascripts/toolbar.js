@@ -363,7 +363,6 @@ function minimizeProgram (target) {
     let str = "#" + targetDValue;
     const programToRemove = document.querySelector(str);
     str = ".toolbarElement[data-value='" + targetDValue + "']";
-    // const targetToolbarElement = document.querySelector(".toolbarElement[data-value='calcProgram']");
     const targetToolbarElement = document.querySelector(str);
     programToRemove.style.display = "none";
 
@@ -402,14 +401,14 @@ function minimizeProgram (target) {
     toolbar.appendChild(socketDiv);
 
     saveDataSocket();
+    removing = null;
 }
+
 
 let primaryDropzoneValues;
 let elementsArray;
 let elementsValues;
-
 function saveDataSocket () {
-    console.log(removing);
     primaryDropzoneValues = [];
     elementsArray = [];
     elementsValues = [];
@@ -434,23 +433,21 @@ function saveDataSocket () {
 }
 
 
-
 window.socket.on("saveDataSocket", function(data) {
-    console.log(data.removing);
+    console.log(data.primaryDropzoneValues, data.elementsArray, data.elementsValues);
+
+    primaryDropzone.style.display = "grid";
+    primaryDropzone.style.gap = "10px";
+
+    primaryDropzone.style.gridTemplateColumns = data.primaryDropzoneValues[0];
+    primaryDropzone.style.gridTemplateRows = data.primaryDropzoneValues[1];
+
     if (data.removing == null) {
-
-        console.log(data.primaryDropzoneValues, data.elementsArray, data.elementsValues);
-
-        primaryDropzone.style.display = "grid";
-        primaryDropzone.style.gap = "10px";
-
-        primaryDropzone.style.gridTemplateColumns = data.primaryDropzoneValues[0];
-        primaryDropzone.style.gridTemplateRows = data.primaryDropzoneValues[1];
-
         data.elementsArray.forEach((element, i) => {
             let str = "#" + element;
             const elementToChange = document.querySelector(str);
             let newArr = data.elementsValues[i];
+            console.log(elementToChange);
 
             elementToChange.style.gridArea = newArr[0];
             elementToChange.style.gridColumn = newArr[1];
@@ -458,14 +455,20 @@ window.socket.on("saveDataSocket", function(data) {
 
             primaryDropzone.appendChild(elementToChange);
             elementToChange.style.display = "block";
+
         });
 
     } else {
         let str = "#" + data.removing;
         const elementToDelete = document.querySelector(str);
-        console.log(str);
-        console.log(elementToDelete);
         webPage.appendChild(elementToDelete);
         elementToDelete.style.display = "none";
+
+        // for (let i = 0; i < elementOrder.length; i++) {
+        //     if (elementOrder[i] === elementToDelete) {
+        //         elementOrder.splice(i);
+        //     }
+            
+        // }
     }
 });
