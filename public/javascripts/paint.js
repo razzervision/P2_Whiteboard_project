@@ -24,9 +24,6 @@ const pdfButtonTotalHeight = pdfButton.offsetHeight+ parseInt(window.getComputed
 const toolBarTotalHeight =toolBar.offsetHeight+ parseInt(window.getComputedStyle(toolBar).marginTop)+parseInt(window.getComputedStyle(toolBar).marginBottom);
 const navTotalHeight =nav.offsetHeight+ parseInt(window.getComputedStyle(nav).marginTop)+parseInt(window.getComputedStyle(nav).marginBottom);
 const otherHeight = (pdfButtonTotalHeight+toolBarTotalHeight+navTotalHeight + 30);
-console.log(pdfButton.offsetHeight+ parseInt(window.getComputedStyle(pdfButton).marginTop)+parseInt(window.getComputedStyle(pdfButton).marginBottom));
-console.log(toolBar.offsetHeight+ parseInt(window.getComputedStyle(toolBar).marginTop)+parseInt(window.getComputedStyle(toolBar).marginBottom));
-console.log(nav.offsetHeight+ parseInt(window.getComputedStyle(nav).marginTop)+parseInt(window.getComputedStyle(nav).marginBottom));
 //start display
 changeCanvasButton.style.backgroundColor = "blue";
 //global canvas array
