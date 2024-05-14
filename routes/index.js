@@ -389,6 +389,16 @@ async function doPause(data){
     let averageWebsiteActivity = 0;
     let averagePageLeft = 0;
     let averageTimeLeft = 0;
+    let highestData = [data[0], data[1]];
+
+    for (let index = 0; index < data.length; index++) {
+        if(data[index].websiteActivity > highestData[0].websiteActivity ){
+            highestData[1] = highestData[0];
+            highestData[0] = data[index];
+        }else if(data[index].websiteActivity > highestData[1].websiteActivity) {
+            highestData[1] = highestData[index];
+        }
+    }
 
     data.forEach(userdata =>{
         averageWebsiteActivity = userdata.websiteActivity;
