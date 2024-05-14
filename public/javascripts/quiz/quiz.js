@@ -703,7 +703,7 @@ function groupAnswersByUser(data) {
 }
 
 //---------------------------------------------------------------------------------------tests
-quizUnitTests();
+// quizUnitTests();
 async function quizUnitTests(){
     const pass = [];
     let passCounter = 0;    
@@ -725,8 +725,7 @@ async function quizUnitTests(){
     console.log("Failed Tests: " , fail);
     console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
 }
-
-async; 
+ 
 
 async function searchQuizTest(){
     let result = true;

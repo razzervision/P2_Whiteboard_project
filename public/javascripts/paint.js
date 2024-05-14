@@ -6,26 +6,26 @@ const changeCanvasButton = document.getElementById("changeCanvas");
 const addCanvasButton = document.getElementById("addCanvas");
 const options = document.getElementById("optionsForPaint");
 const canvasPlace = document.getElementById("canvasPlace");
+const dropzone = document.querySelector("#primaryDropzone");
 //canvas setup
 const canvas0 = document.getElementById("canvas0");
 //set width and height
-let width = canvas0.offsetWidth;
-let height = canvas0.offsetHeight;
-
+const documentWidth = document.documentElement.clientWidth;
+const documentHeight = document.documentElement.clientHeight;
 //socket
 // const serverurl = document.location.origin;
 // const window.socket = io(serverurl, { autoConnect: false });
 
+const pdfButton = document.getElementById("buttonPDF");
+const toolBar = document.getElementById("toolbar");
+const nav = document.getElementById("optionsForPaint");
 
+const pdfButtonTotalHeight = pdfButton.offsetHeight+ parseInt(window.getComputedStyle(pdfButton).marginTop)+parseInt(window.getComputedStyle(pdfButton).marginBottom);
+const toolBarTotalHeight =toolBar.offsetHeight+ parseInt(window.getComputedStyle(toolBar).marginTop)+parseInt(window.getComputedStyle(toolBar).marginBottom);
+const navTotalHeight =nav.offsetHeight+ parseInt(window.getComputedStyle(nav).marginTop)+parseInt(window.getComputedStyle(nav).marginBottom);
+const otherHeight = (pdfButtonTotalHeight+toolBarTotalHeight+navTotalHeight + 30);
 //start display
-canvas0.style.display = "block";
-canvas0.style.width = "100%";
-canvas0.style.height = "77.5%";
 changeCanvasButton.style.backgroundColor = "blue";
-
-canvas0.width = width;
-canvas0.height = height;
-
 //global canvas array
 
 const globalCanvas = [canvas0];
@@ -35,7 +35,20 @@ console.log(globalCanvas);
 let currentCanvas = canvas0;
 let currentContext= currentCanvas.getContext("2d");
 let currentcanvasPosition = currentCanvas.getBoundingClientRect();
-rezize();
+
+const procent = (75 / document.documentElement.clientHeight) * 100;
+dropzone.style.height = (100 - procent) + "%";
+dropzone.style.width = "100%";
+
+currentCanvas.style.display = "block";
+currentCanvas.style.width = "100%";
+currentCanvas.style.height = (document.documentElement.clientHeight - otherHeight + "px");
+const width = documentWidth;
+const height = documentHeight;
+
+currentCanvas.width = currentCanvas.clientWidth;
+currentCanvas.height = currentCanvas.clientHeight;
+
 //default canvas stuff
 const startBackground = "white";
 let drawColor = "black";
@@ -61,6 +74,7 @@ let imgY = 0;
 const maxCanvas = 9;
 let canvasCounter = 1;
 
+let singleSave = null; //wwwwwwwwwwwwwwwait
 
 //mouse object
 const mouse = {
@@ -68,6 +82,9 @@ const mouse = {
     y: 0
 };
 
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+};
 
 addCanvasButton.addEventListener("click", () => {
     addCanvas();
@@ -83,6 +100,7 @@ undoB.addEventListener("click", () => {
 //rezize
 window.addEventListener("resize", rezize);
 //
+window.addEventListener("scroll",rezize);
 
 changeCanvasButton.addEventListener("click",() =>{
     changeCanvas(canvas0,changeCanvasButton);
@@ -125,8 +143,8 @@ function addCanvas(){
         undoarray.push([]);
 
         globalCanvas.push(canvas);
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = currentCanvas.width;
+        canvas.height = currentCanvas.height;
     
         canvasButton.addEventListener("click", () =>{
             changeCanvas(canvas,canvasButton);
@@ -143,8 +161,8 @@ function addCanvas(){
 
 //functions
 function ChoseCanvasLocation(event) {
-    imgX = event.clientX - currentcanvasPosition.left;
-    imgY = event.clientY - currentcanvasPosition.top;
+    imgX = window.scrollX + event.clientX - currentcanvasPosition.left;
+    imgY = window.scrollY + event.clientY - currentcanvasPosition.top;
     console.log(imgX, " & ", imgY);
     currentCanvas.addEventListener("pointerdown", pointerDown);
 }
@@ -171,8 +189,8 @@ function undo() {
 function pointerDown(event){
     currentCanvas.removeEventListener("pointerdown", ChoseCanvasLocation);
     event.preventDefault();
-    mouse.x = event.clientX - currentcanvasPosition.left;
-    mouse.y = event.clientY - currentcanvasPosition.top;
+    mouse.x = window.scrollX + event.clientX - currentcanvasPosition.left;
+    mouse.y = window.scrollY + event.clientY - currentcanvasPosition.top;
     dot(event);
     currentCanvas.addEventListener("pointermove", onMouseMove);
     currentCanvas.addEventListener("pointerup", () => {
@@ -188,8 +206,8 @@ function dot() {
     draw();
 }
 function onMouseMove(event) {
-    mouse.x = event.clientX - currentcanvasPosition.left;
-    mouse.y = event.clientY - currentcanvasPosition.top;
+    mouse.x = window.scrollX + event.clientX - currentcanvasPosition.left;
+    mouse.y = window.scrollY + event.clientY - currentcanvasPosition.top;
     draw();
 }
 function removeMouseMove() {
@@ -247,14 +265,16 @@ function changeCanvas(canvasT,canvasButton){
     const canvasId = canvasT.id;
     globalCanvasIndex = canvasId[6];
 
-
     canvasButton.style.backgroundColor = "blue";
     canvasT.style.display = "block";
     canvasT.style.width = "100%";
-    canvasT.style.height = "77.5%";
+    canvasT.style.height = (document.documentElement.clientHeight - otherHeight+"px");
     canvasT.addEventListener("pointerdown",pointerDown);
     canvasT.addEventListener("pointerout",stopDraw);
-    
+    singleSave = currentContext.getImageData(0, 0, currentCanvas.width, currentCanvas.height);/////wait
+    canvasT.width = canvasT.clientWidth;
+    canvasT.height = canvasT.clientHeight;
+
     currentCanvas = canvasT;
     console.log(currentCanvas);
     currentContext = currentCanvas.getContext("2d");
@@ -264,16 +284,26 @@ function changeCanvas(canvasT,canvasButton){
     
     
 function rezize () {
-    width = currentCanvas.offsetWidth;
-    height = currentCanvas.offsetHeight;
+    const procent = (75 / document.documentElement.clientHeight) * 100;
+    console.log(procent);
+    dropzone.style.height = (100 - procent) + "%";
+    dropzone.style.width = "100%";
+
+    currentCanvas.style.display = "block";
+    currentCanvas.style.width = "100%";
+    currentCanvas.style.height = (document.documentElement.clientHeight - otherHeight+"px");
+    console.log(document.documentElement.clientHeight * (1-(75 / document.documentElement.clientHeight))+"px");
+
+    currentCanvas.width = currentCanvas.clientWidth;
+    currentCanvas.height = currentCanvas.clientHeight;
     
-    currentCanvas.width = width;
-    currentCanvas.height = height;
     console.log(width, height);
-    //context.fillStyle = startBackground;
-    //context.fillRect(0, 0, canvas.width, canvas.height);
-    //context.putImageData(undoarray[undoindex], 0, 0);
-    //canvasPosition = canvas.getBoundingClientRect(); 
+    /*
+    currentContext.fillStyle = startBackground;
+    currentContext.fillRect(0, 0, currentCanvas.width, currentCanvas.height);
+    currentContext.putImageData(undoarray[globalCanvasIndex].length, 0, 0);
+    currentcanvasPosition = currentCanvas.getBoundingClientRect(); 
+    */
 }
 
 
@@ -378,7 +408,7 @@ window.socket.on("changeCanvas", (data) =>{
     canvasButton.style.backgroundColor = "blue";
     canvasT.style.display = "block";
     canvasT.style.width = "100%";
-    canvasT.style.height = "77.5%";
+    canvasT.style.height = (document.documentElement.clientHeight - otherHeight+"px");
     canvasT.addEventListener("pointerdown",pointerDown);
     canvasT.addEventListener("pointerout",stopDraw);
     
