@@ -143,7 +143,7 @@ creatQuizButton.addEventListener("click", () => {
 });
 
 async function createQuizFunction(name){
-    nameElement = document.getElementById("create_quiz_text");
+    const nameElement = document.getElementById("create_quiz_text");
     if (name === ""){
         errorMessage("Please insert a name",nameElement);
         return "noName";
@@ -307,7 +307,6 @@ async function getQuestionAndAnswers(){
     if(quit){
         return "quit";
     }
-    console.log(answersList.length, !quizName, questionList.length);
     if(answersList.length < 2 || !quizName || questionList.length < 1){
         return "noData";
     }
@@ -464,6 +463,7 @@ async function startQuiz(){
     submitAnswersButton.addEventListener("click", () => {
         checkAnswers(quizId,sessionName);
     });
+    return data;
 }
 
 
@@ -703,7 +703,7 @@ function groupAnswersByUser(data) {
 }
 
 //---------------------------------------------------------------------------------------tests
-// quizUnitTests();
+quizUnitTests();
 async function quizUnitTests(){
     const pass = [];
     let passCounter = 0;    
@@ -725,6 +725,8 @@ async function quizUnitTests(){
     console.log("Failed Tests: " , fail);
     console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
 }
+
+async; 
 
 async function searchQuizTest(){
     let result = true;
