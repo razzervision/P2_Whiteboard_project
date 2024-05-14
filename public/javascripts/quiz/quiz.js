@@ -298,7 +298,7 @@ async function getQuestionAndAnswers(){
         if(emptyAnswers === answersValue.length){
             errorMessage("Please add at least one answer option",q);
             quit = true;
-            return
+            return;
         }
 
         answersList.push(answers);
@@ -332,10 +332,9 @@ async function getQuestionAndAnswers(){
         searchQuizzes(null);
 
         return true;
-    } else {
-        alert("Failed to public quiz");
-        return false;
-    }
+    } 
+    alert("Failed to public quiz");
+    return false;
     
     
 }
@@ -704,7 +703,7 @@ function groupAnswersByUser(data) {
 }
 
 //---------------------------------------------------------------------------------------tests
-quizUnitTests();
+// quizUnitTests();
 async function quizUnitTests(){
     const pass = [];
     let passCounter = 0;    
@@ -781,7 +780,6 @@ async function publicQuiz(){
     }
 
     return result;
-
 
 
 }
@@ -895,6 +893,4 @@ async function createQuestions(){
     });
     return result;
 }
-
-
 
