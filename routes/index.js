@@ -390,9 +390,9 @@ async function startPause(sessionData){
 
 async function doPause(data){
     let averageWebsiteActivity = 0;
-    let averagePageLeft = 0;
+    const averagePageLeft = 0;
     let averageTimeLeft = 0;
-    let highestData = [data[0], data[1]];
+    const highestData = [data[0], data[1]];
 
     for (let index = 0; index < data.length; index++) {
         if(data[index].websiteActivity > highestData[0].websiteActivity ){
@@ -402,8 +402,8 @@ async function doPause(data){
             highestData[1] = highestData[index];
         }
     }
+    
 
-    console.log(highestData);
     averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
     averageTimeLeft = (highestData[0].averageTimeLeft + highestData[1].averageTimeLeft) / 2;
     // const sessionStarted = data[0].createdAt;
@@ -428,6 +428,7 @@ async function doPause(data){
     // Force a pause after 2 hours
     if(!lastPause && sessionCreated > (twoHours)){
         startPause(data.PauseSession);
+        alert("Arbejdet over to timer");
         console.log("arbejdet over 2 timer");
 
         return true;
@@ -464,11 +465,15 @@ router.post("/api/checkForPause", async (req, res) => {
                 }
             }
         });
-        
-        const holdPause = await doPause(data);
+        if(data.length <= 1){
+            console.log("EH");
+            res.status(200).send(false);
+        } else {
+            const holdPause = await doPause(data);
+            console.log(holdPause);
+            res.status(200).json(data);
+        }
         //res.status(200).send(holdPause);
-        console.log(holdPause);
-        res.status(200).json(data);
         
     } catch (error) {
         console.error("Error finding pauseData", error);
