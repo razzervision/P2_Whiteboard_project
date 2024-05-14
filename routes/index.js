@@ -430,7 +430,6 @@ async function doPause(data){
     // Force a pause after 2 hours
     if(!lastPause && sessionCreated > (twoHours)){
         startPause(data.PauseSession);
-        alert("Arbejdet over to timer");
         console.log("arbejdet over 2 timer");
 
         return true;
