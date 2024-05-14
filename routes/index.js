@@ -403,12 +403,9 @@ async function doPause(data){
         }
     }
 
-    data.forEach(userdata =>{
-        averageWebsiteActivity = userdata.websiteActivity;
-        averagePageLeft = userdata.leftWebsite;
-        averageTimeLeft = userdata.averageTimeLeftWebsite;
-
-    });
+    console.log(highestData);
+    averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
+    averageTimeLeft = (highestData[0].averageTimeLeft + highestData[1].averageTimeLeft) / 2;
     // const sessionStarted = data[0].createdAt;
     const twoHours = 2 * 60 * 60 * 1000;
     const halfHour = 30 * 60 * 1000;
