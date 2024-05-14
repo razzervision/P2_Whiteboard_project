@@ -141,6 +141,10 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("uploadePicture");
     });
 
+    socket.on("dragEnd", (data) => {
+        socket.broadcast.emit("dragEnd", data);
+    });
+
     socket.on("disconnect", () => {
         console.log("User disconnected");
     });

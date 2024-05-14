@@ -64,9 +64,9 @@ elementOrder.push(paintProgramId);
 
 primaryDropzone.style.gridTemplateColumns = "100%";
 
-let elemStyleColumn = "";
-let elemStyleRow = "";
-let elemStyleArea = "";
+const elemStyleColumn = "";
+const elemStyleRow = "";
+const elemStyleArea = "";
 let primaryStyleColumn = "100%";
 let primaryStyleRow = "";
 
@@ -143,7 +143,17 @@ function dragEnd(e) {
         }
         runOrder = true;
     }
+
+    window.socket.emit("dragEnd", {elementOrder: elementOrder, elementToDisplay: elementToDisplay.getAttribute("id")});
 }
+
+window.socket.on("dragEnd", function(data) {
+    elementOrder = data.elementOrder;
+    const elementToDisplay = document.querySelector("#" + data.elementToDisplay);
+    elementOrder.forEach(element => {
+        primaryDropzone.appendChild(element);
+    });
+});
 
 let str2Columns = "";
 let str2Rows = "";
@@ -363,7 +373,7 @@ function minimizeProgram (target) {
     programToRemove.style.display = "none";
 
     elementOrder = elementOrder.filter(element => element.getAttribute("id") !== targetDValue);
-    let program = programs.find(program => program.value === targetDValue);
+    const program = programs.find(program => program.value === targetDValue);
     if (program) {
         program.isActive = false;
     }
