@@ -79,8 +79,7 @@ async function recursiveClicks(){
     keyStrokes = 0;
     setTimeout(() => {
         recursiveClicks();
-    // }, 60000 * 5);
-    }, 10000);
+    }, 60000 * 5);
 
 }
 

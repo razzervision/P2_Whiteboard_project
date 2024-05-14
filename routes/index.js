@@ -403,9 +403,9 @@ async function doPause(data){
         }
     }
     
-    console.log("averageTimeLeftHighestData", highestData[0].averageTimeLeft);
+    console.log("averageTimeLeftHighestData", highestData[0].averageTimeLeftWebsite);
     averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
-    averageTimeLeft = (highestData[0].averageTimeLeft + highestData[1].averageTimeLeft) / 2;
+    averageTimeLeft = (highestData[0].averageTimeLeftWebsite + highestData[1].averageTimeLeftWebsite) / 2;
     console.log("averageWebsiteActivity:", averageWebsiteActivity);
     console.log("averageTimeLeft: ", averageTimeLeft);
     // const sessionStarted = data[0].createdAt;
