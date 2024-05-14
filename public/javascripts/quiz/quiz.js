@@ -296,6 +296,7 @@ async function getQuestionAndAnswers(){
             correctAnswers.push(answerCheckbox);
         });
         if(emptyAnswers === answersValue.length){
+            errorMessage("Please add at least one answer option",q);
             quit = true;
             return
         }
@@ -306,6 +307,10 @@ async function getQuestionAndAnswers(){
     if(quit){
         return "quit";
     }
+    console.log(answersList.length, !quizName, questionList.length);
+    if(answersList.length < 2 || !quizName || questionList.length < 1){
+        return "noData";
+    }
     const data = {
         quizName: quizName,
         questionList: questionList,
@@ -315,18 +320,24 @@ async function getQuestionAndAnswers(){
 
     const uploadQuiz = await fetchPostQuizData("/uploadQuiz",data);
 
-    hideDivs("start");
     if(uploadQuiz){
         alert("quiz is succesfully made");  
+
+        hideDivs("start");
+
+        //Clear questions and their answers after creating a question.
+        clearQuizzes();
+
+        // Search for all quizzes to append it.
+        searchQuizzes(null);
+
+        return true;
+    } else {
+        alert("Failed to public quiz");
+        return false;
     }
     
-    //Clear questions and their answers after creating a question.
-    clearQuizzes();
-
-    // Search for all quizzes to append it.
-    searchQuizzes(null);
-
-    return true;
+    
 }
 
 
@@ -352,7 +363,9 @@ searchQuizInput.addEventListener("input", () => {
 //Find all unique quizzes
 async function searchQuizzes(input){
     const data = await fetchGetQuizData("/api/Getquizzes");
-    if(!data){return;}
+    if(!data){
+        return "noData";
+    }
     const table = document.getElementById("search_quiz_table");
     //reset the table
     table.textContent = "";
@@ -375,6 +388,7 @@ async function searchQuizzes(input){
         } 
 
     });
+    return table.rows.length;
 }
 searchQuizzes();
 
@@ -701,7 +715,9 @@ async function quizUnitTests(){
 
     await createQuestions() ? (passCounter++, pass.push("create Question")) : (failCounter++, fail.push("create Question"));
 
-    await publicQuiz() ? (passCounter++, pass.push("public Quiz")) : (failCounter++, fail.push("create Question"));
+    await publicQuiz() ? (passCounter++, pass.push("public Quiz")) : (failCounter++, fail.push("public Quiz"));
+
+    await searchQuizTest() ? (passCounter++, pass.push("Search Quiz")) : (failCounter++, fail.push("Search Quiz"));
 
 
     console.log("total Passed Test: " , passCounter);
@@ -709,6 +725,33 @@ async function quizUnitTests(){
     console.log("total Failed Test: " , failCounter);
     console.log("Failed Tests: " , fail);
     console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
+}
+
+async function searchQuizTest(){
+    let result = true;
+
+    const noQuiz = await searchQuizzes("ASDASDASDASDASDASDASDASDASDASDASDASDASDASDASD");
+    if(noQuiz !== 0){
+        console.log("Failed searching quizzes");
+        result = false;
+    }
+
+    const multipleQuiz = await searchQuizzes("2024");
+    if(multipleQuiz < 2){
+        console.log("Potentialle fail, check how many quizzes with 2024 that are made");
+        result = false;
+    }
+
+    const oneQuiz = await searchQuizzes("test");
+    if(oneQuiz !== 1){
+        console.log("Potentialle fail, check how many quizzes with only test",oneQuiz);
+        result = false;
+    }
+    searchQuizzes();
+
+
+    return result;
+
 }
 
 async function publicQuiz(){
@@ -731,9 +774,10 @@ async function publicQuiz(){
     const missingAnswer = missingQuestionDiv.querySelector("#answer0");
     missingAnswer.value = "ANSWER1";
 
-    const succesQuiz = await getQuestionAndAnswers();
-    if(!succesQuiz){
-
+    const noData = await getQuestionAndAnswers();
+    if(!noData || noData === "noData"){
+        console.log("Not enough data to make quiz");
+        result = false;
     }
 
     return result;
@@ -749,7 +793,7 @@ async function createQuizTest(){
         console.log("failed noName");
         result = false;
     }
-    const uniqueName = "TESTT";
+    const uniqueName = new Date().toISOString();
     const makeQuiz = await createQuizFunction(uniqueName);
     if(makeQuiz.textContent !== uniqueName){
         console.log("failed creating Quiz");
