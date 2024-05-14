@@ -143,17 +143,9 @@ function dragEnd(e) {
         }
         runOrder = true;
     }
-
-    window.socket.emit("dragEnd", {elementOrder: elementOrder, elementToDisplay: elementToDisplay.getAttribute("id")});
+    saveDataSocket();
 }
 
-window.socket.on("dragEnd", function(data) {
-    elementOrder = data.elementOrder;
-    const elementToDisplay = document.querySelector("#" + data.elementToDisplay);
-    elementOrder.forEach(element => {
-        primaryDropzone.appendChild(element);
-    });
-});
 
 let str2Columns = "";
 let str2Rows = "";
@@ -361,10 +353,13 @@ function checkActiveProgramsList () {
 const webPage = document.querySelector("#webPage");
 const toolbar = document.querySelector("#toolbarMenu");
 const socketDiv = document.querySelector("#socketDiv");
+let removing;
 
 function minimizeProgram (target) {
     console.log(place3);
     const targetDValue = target.getAttribute("data-value");
+    removing = targetDValue;
+    console.log(targetDValue);
     let str = "#" + targetDValue;
     const programToRemove = document.querySelector(str);
     str = ".toolbarElement[data-value='" + targetDValue + "']";
@@ -405,4 +400,72 @@ function minimizeProgram (target) {
 
     toolbar.appendChild(targetToolbarElement);
     toolbar.appendChild(socketDiv);
+
+    saveDataSocket();
 }
+
+let primaryDropzoneValues;
+let elementsArray;
+let elementsValues;
+
+function saveDataSocket () {
+    console.log(removing);
+    primaryDropzoneValues = [];
+    elementsArray = [];
+    elementsValues = [];
+
+    primaryDropzoneValues.push(primaryDropzone.style.gridTemplateColumns, primaryDropzone.style.gridTemplateRows);
+
+    console.log(elementOrder);
+
+    elementOrder.forEach((element, i) => {
+        elementsValues.push([]);
+        elementsArray.push(element.getAttribute("id"));
+        elementsValues[i].push(element.style.gridArea, element.style.gridColumn, element.style.gridRow);
+        i++;
+    });
+
+    window.socket.emit("saveDataSocket", {
+        primaryDropzoneValues: primaryDropzoneValues, 
+        elementsArray: elementsArray, 
+        elementsValues : elementsValues,
+        removing : removing
+    });
+}
+
+
+
+window.socket.on("saveDataSocket", function(data) {
+    console.log(data.removing);
+    if (data.removing == null) {
+
+        console.log(data.primaryDropzoneValues, data.elementsArray, data.elementsValues);
+
+        primaryDropzone.style.display = "grid";
+        primaryDropzone.style.gap = "10px";
+
+        primaryDropzone.style.gridTemplateColumns = data.primaryDropzoneValues[0];
+        primaryDropzone.style.gridTemplateRows = data.primaryDropzoneValues[1];
+
+        data.elementsArray.forEach((element, i) => {
+            let str = "#" + element;
+            const elementToChange = document.querySelector(str);
+            let newArr = data.elementsValues[i];
+
+            elementToChange.style.gridArea = newArr[0];
+            elementToChange.style.gridColumn = newArr[1];
+            elementToChange.style.gridRow = newArr[2];
+
+            primaryDropzone.appendChild(elementToChange);
+            elementToChange.style.display = "block";
+        });
+
+    } else {
+        let str = "#" + data.removing;
+        const elementToDelete = document.querySelector(str);
+        console.log(str);
+        console.log(elementToDelete);
+        webPage.appendChild(elementToDelete);
+        elementToDelete.style.display = "none";
+    }
+});
