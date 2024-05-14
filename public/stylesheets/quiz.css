@@ -106,8 +106,8 @@ margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 10px 20px;
-  cursor: pointer; /* Indicates clickable element */
-  transition: background-color 0.2s ease-in-out; /* Smooth hover effect */
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .quiz_container button:hover {
@@ -136,7 +136,33 @@ margin-bottom: 10px;
   transition: background-color 0.2s ease-in-out;
 }
 
+/* .quiz_container input[type="button"], .quiz_container input[type="input"] {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+} */
+
 .quiz_container input[type="button"]:hover,
 .quiz_container input[type="submit"]:hover {
   background-color: #eee;
+}
+
+#quiz_min_button {
+  color: white;
+  float: right;
+  background-color: white;
+  color: black;
 }

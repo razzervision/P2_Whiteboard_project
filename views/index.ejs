@@ -77,22 +77,22 @@
 
 <div id="quizProgram" class="quiz_container saveToPDF">
 
-  <button id="quiz_home_screen">HOME</button>
-  <button class="minimizeButton" data-value="quizProgram">--</button>
+  <button class="quiz_container_button" id="quiz_home_screen">HOME</button>
+  <button id = "quiz_min_button" class="minimizeButton" data-value="quizProgram">--</button>
   <div class="quiz_index" id="quiz_index">
     <label for="create_quiz_text">Quiz name</label>
     <input type="text" id="create_quiz_text" placeholder="e.g Mergesort">
-    <button id="create_quiz_button">Create quiz</button>
+    <button class="quiz_container_button" id="create_quiz_button">Create quiz</button>
     <br>
     <label for="join_quiz_text">Join Quiz</label>
     <input type="text" id="join_quiz_text" placeholder="e.g 111q2">
-    <button id="join_quiz_button">Join quiz</button>
+    <button class="quiz_container_button" id="join_quiz_button">Join quiz</button>
     <br> 
      
     <br>  
     <label for="join_quiz_session">Insert session</label>
     <input type="text" id="join_quiz_session" placeholder="e.g 111q2">
-    <button id="join_quiz_session_button">Join session results</button>
+    <button class="quiz_container_button" id="join_quiz_session_button">Join session results</button>
     <br>  
     <label for="search_quiz_text">Search quizzes</label> 
     <input type="text" id="search_quiz_text" placeholder="e.g Mergesort">
@@ -148,6 +148,9 @@
 
   <!-- JONS code editor -->
   <div id="codeProgram" class="code_editor saveToPDF">
+    <div id="codeProgramBar">
+      <button class="minimizeButton" data-value="codeProgram">--</button>
+    </div>
   <textarea id="code"></textarea>
   <select id="language">
   </select>
