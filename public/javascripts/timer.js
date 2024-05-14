@@ -106,17 +106,24 @@ function timeAwayFromPage(){
 const IsInSession = document.getElementById("connectSocket");
 IsInSession.addEventListener("change",startLogging);
 
-function startLogging(){
+async function startLogging(){
     if(!IsInSession.checked){
         localStorage.setItem("sessionName",null);
         return;
     }
-    localStorage.setItem("sessionName","TEST");
-
+    const sessionName = "TEST";
+    localStorage.setItem("sessionName",sessionName);
+    const sessionNameJSON = {session: sessionName};
+    const sessionExist = await fetchPostPauseData("/api/pauseSessionExist",sessionNameJSON);
+    if(sessionExist){
+        console.log("session already created:",sessionExist);
+    } else {
+        const startSession = await fetchPostPauseData("/api/StartPauseSession",sessionNameJSON);
+        console.log(startSession);
+    }
     clickTracker();
     recursiveClicks();
     timeAwayFromPage();
-
 }
 
 // const data = {
