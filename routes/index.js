@@ -381,7 +381,7 @@ async function doPause(data){
     let averageTimeLeft = 0;
     const highestData = [data[0], data[1]];
 
-    for (let index = 0; index < data.length; index++) {
+    for (let index = data.length - 1; index >= 0; index--) {
         if(data[index].websiteActivity > highestData[0].websiteActivity ){
             highestData[1] = highestData[0];
             highestData[0] = data[index];

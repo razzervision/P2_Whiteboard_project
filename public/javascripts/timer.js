@@ -92,7 +92,6 @@ function timeAwayFromPage(){
     });
     window.addEventListener("focus", () => {
     
-    
         if (leavePageCounter === 0) {
             return 0;
         }
