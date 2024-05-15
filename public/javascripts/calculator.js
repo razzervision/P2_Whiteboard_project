@@ -56,15 +56,46 @@ function clearHistory() {
     document.getElementById("classHistory").value = ""; //function used to clear history textarea with ---> '' <--- which is nothing 
     document.getElementById("display").value ="";
 }
-
+/*
 function powerOf(expression) {
     const powerIndex = expression.indexOf("^");
+    console.log(powerIndex);
     if (powerIndex !== -1) {
         const base = parseInt(expression.slice(0, powerIndex));
         const exponent = parseInt(expression.slice(powerIndex + 1)); 
         const result = Math.pow(base, exponent);
         return result;
     }
+}
+*/
+function powerOf(expression) {
+    const powerIndices = [];
+    let result = 0;
+    
+    // Collect all indices of the "^" character
+    for (let i = 0; i < expression.length; i++) {
+        if (expression[i] === "^") {
+            powerIndices.push(i);
+        }
+    }
+    
+    // Evaluate the expression from right to left
+    if (powerIndices.length > 0) {
+        const lastIndex = powerIndices.length - 1;
+        let base = parseInt(expression.slice(0, powerIndices[0]));
+        let exponent = parseInt(expression.slice(powerIndices[0] + 1, powerIndices[1] || expression.length));
+        result = Math.pow(base, exponent);
+        
+        for (let i = 1; i <= lastIndex; i++) {
+            base = result;
+            exponent = parseInt(expression.slice(powerIndices[i] + 1, powerIndices[i + 1] || expression.length));
+            result = Math.pow(base, exponent);
+        }
+    } else {
+        result = parseInt(expression);
+    }
+    
+    return result;
 }
 
 function fac(num) {
