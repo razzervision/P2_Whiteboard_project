@@ -40,7 +40,7 @@ function errorMessage(message,placement){
     // Remove it again after 3 seconds
     setTimeout(function() {
         error.remove();
-    }, 5000);
+    }, 3000);
 }
 
 //this function return all the data from the quiz.json file.
@@ -589,8 +589,7 @@ async function quizSessionResultHtml(sessionName){
     const isSession = await fetchPostQuizData("/api/checkIfSessionIsOpened",sessionNameJSON);  
     
     const quizDiv = document.getElementById("quiz_output_results");
-    const quizResult = document.getElementById("quiz_output_results");
-    hideDivs(quizResult);
+    hideDivs(quizDiv);
     if(isIdCreated("sessionCodeId")){
         errorMessage("You already have a session opened",quizDiv);
         return "alreadyCreated";
@@ -622,13 +621,13 @@ async function quizSessionResultHtml(sessionName){
 
 function endSessionFunction(){
     const startDiv = document.getElementById("quiz_home_screen");
-    const sessionName = localStorage.getItem("quizSessionId");
-
     localStorage.removeItem("quizSessionId");
     document.getElementById("sessionCodeId").remove();
     const start = document.getElementById("quiz_index");
     hideDivs(start);
     errorMessage("Your session has been successfully ended",startDiv);
+    const sessionDiv = document.getElementById("quiz_output_results");
+    sessionDiv.innerHTML = "";
 }
 
 async function startQuizSession(quizId){
