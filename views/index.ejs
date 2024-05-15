@@ -76,31 +76,36 @@
 
   <button class="quiz_container_button" id="quiz_home_screen">HOME</button>
   <button id = "quiz_min_button" class="minimizeButton" data-value="quizProgram">--</button>
+  
   <div class="quiz_index" id="quiz_index">
+    <button id="createQuizIndex">Create Quiz</button>
+    <br>
+    <button id="joinQuizIndex">Join Quiz</button>
+    <br>
+    <button id="searchQuizIndex">Search Existing Quiz</button>
+  </div>
+
     <div id="createQuizDiv" style="display: none;">
       <label for="create_quiz_text">Quiz name</label>
       <input type="text" id="create_quiz_text" placeholder="e.g Mergesort">
-    </div>
     <button id="create_quiz_button">Create quiz</button>
-    <br>
-    
+    </div>
+
     <div id="joinQuizDiv" style="display: none;">
       <label for="join_quiz_text">Join Quiz</label>
       <input type="text" id="join_quiz_text" placeholder="e.g 111q2">
+      <label for="quizUsername">Join Quiz</label>
+      <input type="text" id="quizUsername" placeholder="John Johnsen">
+      <button id="join_quiz_button">Join quiz</button>
     </div>
-
-    <button id="join_quiz_button">Join quiz</button>
-    <br> 
-       
-    <div id="joinQuizSession">
-
- 
+    
+    <!-- Removed because it should not be possible for everyone to see everyones score -->
+    <!-- <div id="joinQuizSession">
       <label for="join_quiz_session">Insert session</label>
       <input type="text" id="join_quiz_session" placeholder="e.g 111q2">
       <button id="join_quiz_session_button">Join session results</button>
-    </div>
-    <br>  
-    <div id="searchQuizDiv">
+    </div> -->
+    <div id="searchQuizDiv" style="display: none;">
       <label for="search_quiz_text">Search quizzes</label> 
       <input type="text" id="search_quiz_text" placeholder="e.g Mergesort">
   
@@ -111,11 +116,6 @@
         </tr>
       </table>
     </div>
-    
-
- 
-    
-  </div>
 
   <div class="creat_quiz_div" id="creat_quiz_div" style="display: none;">
     <label for="quiz_name">Quiz Name:</label>
