@@ -679,45 +679,128 @@ async function teacherOverview(){
     let totalQuestionCorrect = 0;
 
     const questions = data.quizData.QuizName.Questions;
-    for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {        
+    const table = document.createElement("table");
+    table.id = "teacherOverviewTable";
+    
+    // Create table header row
+    const headerRow = document.createElement("tr");
+    table.appendChild(headerRow);
+
+    const questionRow = document.createElement("th");
+    questionRow.textContent = "Question";
+
+
+
+    
+    // Loop through each question
+    for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {     
         const question = questions[questionIndex];
-        const questionText = createAllElement("h1","questionText"+questionIndex,"questionText",question.questionText + ":");
-        resultDiv.appendChild(questionText);
-        const JSON = {
+        const tableRow = document.createElement("tr");
+        const th = document.createElement("th");
+        th.textContent = question.questionText;
+        tableRow.appendChild(th);
+
+        const requestData = {
             session: data.quizData.id,
             questionId: question.id
         };
-        const answerSum = await fetchPostQuizData("/api/findQuestionScore", JSON);
-        const sortedAnswerList = groupAnswersByUser(answerSum.answers);
+        
+        // Store each fetch promise in an array
+        const fetchPromises = [];
+        const answerSum = fetchPostQuizData("/api/findQuestionScore", requestData);
+        fetchPromises.push(answerSum);
+    
+        // Wait for all fetch requests to finish
+        const fetchResults = await Promise.all(fetchPromises);
 
-        let questionsCorrect = 0;
-        let questionCounter = 0;
-        Object.entries(sortedAnswerList).forEach(([name, { answers }]) => {
-            let result = "Wrong";
-            let color = "red";
-            if(answers.every(answer => answer === true)){
-                result = "Correct";
-                color = "green";
-                questionsCorrect++;
+
+        let currentName ="";
+
+        fetchResults.forEach(answerSum => {
+            const sortedAnswerList = groupAnswersByUser(answerSum.answers);
+    
+            let questionsCorrect = 0;
+            let questionCounter = 0;
+            Object.entries(sortedAnswerList).forEach(([name, { answers }]) => {
+                currentName = name;
+                let result = "Wrong";
+                let color = "red";
+                if (answers.every(answer => answer === true)) {
+                    result = "Correct";
+                    color = "green";
+                    questionsCorrect++;
+                }
+                questionCounter++;
+                const questionResult = name;
+                const td = document.createElement("td");
+                td.textContent = questionResult;
+                td.style.color = color;
+                tableRow.appendChild(td);
+            });  
+            const questionResultTD = document.createElement("td");
+            questionResultTD.textContent = questionsCorrect + "/" + questionCounter;
+            if (questionsCorrect === questionCounter) {
+                totalQuestionCorrect++;
+                questionResultTD.style.color = "green";
             }
-            questionCounter++;
-            const questionResult = name + " Answered " + result;
-            const questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
-            questionLabel.style.color=color;
-            resultDiv.appendChild(questionLabel);
+            tableRow.appendChild(questionResultTD);
         });
+        const headerRowUser = document.createElement("th");
+        headerRowUser.textContent = currentName;
+        headerRow.appendChild(headerRowUser); 
 
-        const totalQuestionLabelText = questionsCorrect + "/" + questionCounter + " Correct";
-        const totalQuestionLabel = createAllElement("h2","totalQuestionLabel","totalQuestionLabel",totalQuestionLabelText);
-        resultDiv.appendChild(totalQuestionLabel);
-        if(questionsCorrect === questionCounter){
-            totalQuestionCorrect++;
-        }
-    }  
+        table.appendChild(tableRow);
+    }
+    const totalScoreRow = document.createElement("th");
+    totalScoreRow.textContent = "Total Score";
+    headerRow.appendChild(totalScoreRow);
+    resultDiv.appendChild(table);
+    
+    console.log(table);
 
-    const totalResultText = "Total: " + totalQuestionCorrect + "/" + questions.length + " Correct";
-    const totalResultElement = createAllElement("h1","totalResultElement","totalResultElement",totalResultText);
-    resultDiv.appendChild(totalResultElement);
+    // const totalResultText = "Total: " + totalQuestionCorrect + "/" + questions.length + " Correct";
+    // const totalResultElement = createAllElement("h1","totalResultElement","totalResultElement",totalResultText);
+    // resultDiv.appendChild(totalResultElement);
+
+    // for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {        
+    //     const question = questions[questionIndex];
+    //     const questionText = createAllElement("h1","questionText"+questionIndex,"questionText",question.questionText + ":");
+    //     resultDiv.appendChild(questionText);
+    //     const JSON = {
+    //         session: data.quizData.id,
+    //         questionId: question.id
+    //     };
+    //     const answerSum = await fetchPostQuizData("/api/findQuestionScore", JSON);
+    //     const sortedAnswerList = groupAnswersByUser(answerSum.answers);
+
+    //     let questionsCorrect = 0;
+    //     let questionCounter = 0;
+    //     Object.entries(sortedAnswerList).forEach(([name, { answers }]) => {
+    //         let result = "Wrong";
+    //         let color = "red";
+    //         if(answers.every(answer => answer === true)){
+    //             result = "Correct";
+    //             color = "green";
+    //             questionsCorrect++;
+    //         }
+    //         questionCounter++;
+    //         const questionResult = name + " Answered " + result;
+    //         const questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
+    //         questionLabel.style.color=color;
+    //         resultDiv.appendChild(questionLabel);
+    //     });
+
+    //     const totalQuestionLabelText = questionsCorrect + "/" + questionCounter + " Correct";
+    //     const totalQuestionLabel = createAllElement("h2","totalQuestionLabel","totalQuestionLabel",totalQuestionLabelText);
+    //     resultDiv.appendChild(totalQuestionLabel);
+    //     if(questionsCorrect === questionCounter){
+    //         totalQuestionCorrect++;
+    //     }
+    // }  
+
+    // const totalResultText = "Total: " + totalQuestionCorrect + "/" + questions.length + " Correct";
+    // const totalResultElement = createAllElement("h1","totalResultElement","totalResultElement",totalResultText);
+    // resultDiv.appendChild(totalResultElement);
 } 
 
 function groupAnswersByUser(data) {

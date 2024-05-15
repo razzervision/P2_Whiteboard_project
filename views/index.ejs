@@ -255,59 +255,10 @@
 
 
 <!--- TIMER -->
-<div class="saveToPDF" id="timerProgram">
-  <!--This is the trigger for the modal-->       
-  <div class="stickymodal"> 
-    <button id="pauses"> Click here for pause options </button>
-  </div>
+<div class="saveToPDF" id="timerProgram"></div>
+ 
 
-  <!--this is the modal-->        
-  <div id="myModalforPauses" class="modal"> 
-
-  <!--this is the modal content-->
-
-     <div class="modal-content"> 
-          <span class="close">&times;</span>
-             <p><ul>
-             <li><button id="longwork" class="timer" onclick="timer(1,30,0)" >Long work, long break </button></li> 
-             <li><button id="shortwork" class="timer" onclick="timer(0,45,0)" >Short work, short break </button></li>
-             <li><button id="chore" class="timer" onclick="timer(0,0,5);PauseTimerArgument(0,0,9)">Finish a chore! </button></li>
-             <li><button id="relax" class="timer" onclick="timer(0, 0, 5)" onclick="ClaireDeLune(0,0,5)" onclick>Relax break</button></li>
-             <li><button id="other" class="timer" onclick="timer(5)" >other</button></li>
-             </ul></p>
-      </div>
-   </div>
-
-
-    <!--Moved a </div> from here to under the calc, since it does not pertain to this code-->
-     
-    <!--This is the trigger for the modal-->
-    <div id="sc" class="stickyclock"> 
-      <div class="clock"> 
-        <button id="clockbutton"> 
-        <span id="hrs">00</span>
-        <span>:</span>
-        <span id="min">00</span>
-        <span>:</span>
-        <span id="sec">00</span>
-        </button>
-      </div> 
-     </div> 
-
-      <!--This is the second modal-->
-    <div id="Modalforclockbutton" class="modal">
-
-      <!--This is the modal content-->
-      <div class="modal-content"> 
-        <span class="close">&times;</span>
-           <p><ul>
-           <li><button id="longwork" onclick="timer()" >Continue</button></li> 
-           <li><button id="shortwork" onclick="timer()" >Reset</button></li>
-           </ul></p>
-    </div>
-     </div>
-
-    </div>
+ 
 
 
 <script src="/javascripts/timer.js"></script>
