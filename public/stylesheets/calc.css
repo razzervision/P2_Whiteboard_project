@@ -9,6 +9,7 @@
     height: 100%;
     width: 100%;
     overflow: auto; 
+    padding: 5% 5% 0% 5%;
 
 }
 
@@ -73,7 +74,7 @@
     width: auto;
     height: auto;
     padding: 5px;
-    margin: 5px;
+    margin: 0px;
     /* height: 170px; */
     border-radius: 4px;
     border: 1px black;
@@ -97,12 +98,24 @@
     display: hide;
 } */
 
+.matrices{
+    padding: 5%;
+}
+
+.matricesContainer{
+    padding: 5%;
+}
+
 .xMatrice {
     width: 5%;
 }
 
 .yMatrice {
     width: 5%;
+}
+
+.matriceMenu{
+    display: none;
 }
 
 .matriceTxtStyle{
@@ -115,8 +128,44 @@
     width: 5%;
 }
 
+/*
+.matriceOp {
+    display: none;
+}
+
+*/
+
+.matriceOperator{
+    display: none;
+    padding: 5%;
+}
 .resultInput {
     width: 5%;
     background-color: green;
-    
+
+}
+
+.resultContainer{
+    padding: 5%;
+}
+
+/*ERROR MESSAGES + BUTTON*/
+
+.errorOK{
+    display: none;
+}
+.errorMessage0 {
+    display: none;
+}
+
+.errorMessage1 {
+    display: none;
+}
+
+.errorMessage2 {
+    display: none;
+}
+
+.errorMessage3 {
+    display: none;
 }
