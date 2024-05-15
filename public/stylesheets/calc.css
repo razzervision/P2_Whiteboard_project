@@ -114,3 +114,9 @@
 .matriceInput{
     width: 5%;
 }
+
+.resultInput {
+    width: 5%;
+    background-color: green;
+    
+}

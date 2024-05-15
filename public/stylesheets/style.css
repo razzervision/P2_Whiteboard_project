@@ -51,3 +51,7 @@ canvas {
   height: 50px;
   width: 100px;
 }
+
+#paintProgram .canvasButton{
+  color: black;
+}

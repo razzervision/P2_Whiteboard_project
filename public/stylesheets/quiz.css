@@ -38,14 +38,14 @@ margin-bottom: 10px;
 }
 
 /* Search quiz table */
-#search_quiz_table {
+.quiz_container table{
 width: 100%;
 border-collapse: collapse;
 margin-top: 10px;
 }
 
-#search_quiz_table th,
-#search_quiz_table td {
+.quiz_container th,
+.quiz_container td {
 border: 1px solid #ccc;
 padding: 8px;
 text-align: left;
@@ -123,4 +123,9 @@ margin-bottom: 10px;
 
 #quiz_home_screen{
   margin-bottom: 20%;
+}
+
+#teacherOverviewTable table td{
+  border: 1px solid white;
+  border-collapse: collapse;
 }

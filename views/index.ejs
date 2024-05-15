@@ -184,7 +184,7 @@
     <!-- tilføj flere her-->
     </select>
     <div class="minimizeCalc">
-      <button class="minimizeCalcButton">-</button>
+      <button class="minimizeButton" id="calcProgram" data-value="calcProgram">-</button>
     </div>
   </div>
 
@@ -194,13 +194,12 @@
       <input type="text" id="display" class="display"> <br>
       <button class="calcbuttonDelete" id="C" onclick="clearDisplay()">C</button> 
       <button class="calcbuttonCalc" id="+/-" onclick="negative('-')">+/-</button>
-      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> 
+      <button class="calcbuttonCalc" id="^" onclick="addToResult('^')">^</button> 
       <button class="calcbuttonCalc" id="+" onclick="addToResult('+')">+</button> <br>
       <button class="calcbuttonKey" id="1" onclick="addToResult('1')">1</button>
       <button class="calcbuttonKey" id="2" onclick="addToResult('2')">2</button>
       <button class="calcbuttonKey" id="3" onclick="addToResult('3')">3</button>
-      <button class="calcbuttonCalc" id="^" onclick="addToResult('^')">^</button>
-      <button class="calcbuttonCalc" id="log" onclick="addToResult('log()')">log2</button> <br>
+      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> <br>
       <button class="calcbuttonKey" id="4" onclick="addToResult('4')">4</button>
       <button class="calcbuttonKey" id="5" onclick="addToResult('5')">5</button>
       <button class="calcbuttonKey" id="6" onclick="addToResult('6')">6</button> 
@@ -211,7 +210,7 @@
       <button class="calcbuttonCalc" id="/" onclick="addToResult('/')">/</button> <br>
       <button class="calcbuttonKey" id="0" onclick="addToResult('0')">0</button>
       <button class="calcbuttonCalc" id="%" onclick="addToResult('%')">%</button>
-      <button class="calcbuttonCalc" id="*" onclick="addToResult('*')">*</button> 
+      <button class="calcbuttonCalc" id="log" onclick="addToResult('log()')">log2</button> 
       <button class="calcbuttonCalc" id="!" onclick="addToResult('!')">!</button> <br>
       <button class="calcbuttonSubmit" id="submit" onclick="calculate()">Submit</button> 
     </div>
@@ -225,29 +224,30 @@
   </div>
   <!--- Matrice calculation--->
   <div class="matrices">
-      <p class="matriceTxtStyle">Please enter the dimensions of the matrices: Rows: </p>
-      <input type="text" id="xMatrice" class="xMatrice">
-      <p class="matriceTxtStyle">Columns:</p> 
-      <input type="text" id="yMatrice" class="yMatrice">
-      <button class="submitDimensions" onclick="createDimension()">add matrice</button>
-      <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
-        <div class="matriceCalculation0">
-
-        </div>
-
-        <div class="matriceOperator">
-          <select name="matriceOp" id="matriceOp" class="matriceOp">
-            <option value="plus">+</option>
-            <option value="minus">-</option>
-            <option value="times">×</option>
-            <option value="divide">/</option>
-          </select>
-        </div>
-        <div class="matriceCalculation1">
-
-          
-        </div>
+    <div class="matriceMenu">
+        <p class="matriceTxtStyle">Please enter the dimensions of the matrices: Rows: </p>
+        <input type="text" id="xMatrice" class="xMatrice">
+        <p class="matriceTxtStyle">Columns:</p> 
+        <input type="text" id="yMatrice" class="yMatrice">
+        <button class="submitDimensions" onclick="createDimension()">Add Matrix</button>
+        <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
+        <button class="submit" onclick="calcMatrice()">Calculate Dimensions</button> 
+    </div>
   </div>
+  <div class="matricesContainer", id="matricesContainer"></div>
+
+  <div class="matriceOperator">
+      <select name="matriceOp" class="matriceOp">
+        <option value="plus">+</option>
+        <option value="minus">-</option>
+        <option value="times">×</option>
+        <option value="divide">/</option>
+        <option value="none">=</option>
+      </select>
+  </div>
+
+  <div class="matriceResult", id="matriceResult"></div>
+
 </div>
 
 
@@ -255,59 +255,10 @@
 
 
 <!--- TIMER -->
-<div class="saveToPDF" id="timerProgram">
-  <!--This is the trigger for the modal-->       
-  <div class="stickymodal"> 
-    <button id="pauses"> Click here for pause options </button>
-  </div>
+<div class="saveToPDF" id="timerProgram"></div>
+ 
 
-  <!--this is the modal-->        
-  <div id="myModalforPauses" class="modal"> 
-
-  <!--this is the modal content-->
-
-     <div class="modal-content"> 
-          <span class="close">&times;</span>
-             <p><ul>
-             <li><button id="longwork" class="timer" onclick="timer(1,30,0)" >Long work, long break </button></li> 
-             <li><button id="shortwork" class="timer" onclick="timer(0,45,0)" >Short work, short break </button></li>
-             <li><button id="chore" class="timer" onclick="timer(0,0,5);PauseTimerArgument(0,0,9)">Finish a chore! </button></li>
-             <li><button id="relax" class="timer" onclick="timer(0, 0, 5)" onclick="ClaireDeLune(0,0,5)" onclick>Relax break</button></li>
-             <li><button id="other" class="timer" onclick="timer(5)" >other</button></li>
-             </ul></p>
-      </div>
-   </div>
-
-
-    <!--Moved a </div> from here to under the calc, since it does not pertain to this code-->
-     
-    <!--This is the trigger for the modal-->
-    <div id="sc" class="stickyclock"> 
-      <div class="clock"> 
-        <button id="clockbutton"> 
-        <span id="hrs">00</span>
-        <span>:</span>
-        <span id="min">00</span>
-        <span>:</span>
-        <span id="sec">00</span>
-        </button>
-      </div> 
-     </div> 
-
-      <!--This is the second modal-->
-    <div id="Modalforclockbutton" class="modal">
-
-      <!--This is the modal content-->
-      <div class="modal-content"> 
-        <span class="close">&times;</span>
-           <p><ul>
-           <li><button id="longwork" onclick="timer()" >Continue</button></li> 
-           <li><button id="shortwork" onclick="timer()" >Reset</button></li>
-           </ul></p>
-    </div>
-     </div>
-
-    </div>
+ 
 
 
 <script src="/javascripts/timer.js"></script>

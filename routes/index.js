@@ -153,7 +153,7 @@ router.post("/api/startQuizSession", async (req, res) => {
         res.status(200).json({ session });
     } catch (error) {
         console.error("Error fetching quiz", error);
-        res.status(500).send("Error fetching quiz");
+        res.status(200).send(false);
     }
 });
 
@@ -318,76 +318,80 @@ router.post("/api/endSession", async (req, res) => {
     }
 });
 // --------------------------------------------------------------------------------------------Pauses
-router.post("/api/StartPauseSession", async (req, res) =>{
+// API Endpoint to Start/Pause a Session
+router.post("/api/StartPauseSession", async (req, res) => {
     try {
-        
-        const { session } = req.body;
-        console.log(session, "jon");
-
+        // Extract session information from the request body
+        const { session } = req.body; 
+        console.log(session, "jon"); // (Likely for debugging)
+  
+        // Create a new PauseSession record in the database
+        // (Note: 'session' is hardcoded to "TEST" - this might need adjustment)
         const data = await Pauses.PauseSession.create({
-            //session: session,
-            session: "TEST",
-            isActive: true,
-            lastPause: null
-        });   
-        res.status(200).json(data);
+            session: "TEST", // Session identifier (replace with actual value)
+            isActive: true, // Session is currently active
+            lastPause: null // No pause has happened yet
+        });
+        res.status(200).json(data); // Send the created session data back to the client
     } catch (error) {
+        // Handle errors during session creation
         console.error("Error finding pauseData", error);
         res.status(500).send("Error finding pauseData");
     }
 });
-
+  
+// API Endpoint to Insert Pause Data
 router.post("/api/InsertPauseData", async (req, res) => {
     try {
-        const { session , websiteActivity, leftWebsite, averageTimeLeftWebsite } = req.body;
-
+        // Extract data from the request body
+        const { session, websiteActivity, leftWebsite, averageTimeLeftWebsite } = req.body;
+  
+        // Find the PauseSession associated with the given session
         const findSession = await Pauses.PauseSession.findOne({
-            where: {
-                session: session
-            }
+            where: { session: session }
         });
-        if(!session){
+        if (!session) { // Check if the session exists
             res.status(200).send(false);
         }
-
+  
+        // Create a new Pause record linked to the found PauseSession
         const data = await Pauses.Pause.create({
-            PauseSessionId: findSession.id,
-            websiteActivity: websiteActivity,
-            leftWebsite: leftWebsite,
-            averageTimeLeftWebsite: averageTimeLeftWebsite
+            PauseSessionId: findSession.id, // Link to the session
+            websiteActivity: websiteActivity, // Activity level
+            leftWebsite: leftWebsite, // Times left the website
+            averageTimeLeftWebsite: averageTimeLeftWebsite // Avg. time away from site
         });
-        
-        res.status(200).json({ data });
+  
+        res.status(200).json({ data }); // Send the created pause data back
     } catch (error) {
+        // Handle errors during data insertion
         console.error("Error uploading pauseData", error);
         res.status(500).send("Error uploading pauseData");
     }
 });
-async function startPause(sessionData){
+  
+// Function to Update PauseSession with Last Pause Time
+async function startPause(sessionData) {
     await Pauses.PauseSession.update(
-        { lastPause: new Date() },
-        {
-            where: {
-                id: sessionData.id
-            }
-        }
+        { lastPause: new Date() }, // Set the lastPause timestamp
+        { where: { id: sessionData.id } } // Find the session by ID
     );
-    
 }
 
 async function doPause(data){
     let averageWebsiteActivity = 0;
-    const averagePageLeft = 0;
     let averageTimeLeft = 0;
-    const highestData = [data[0], data[1]];
 
-    //TODO Sørg for først at køre loopet efter andet stykke data er kommet med.
-    for (let index = data.length - 1; index >= 0; index--) {
-        if(data[index].websiteActivity > highestData[0].websiteActivity ){
-            highestData[1] = highestData[0];
-            highestData[0] = data[index];
-        }else if(data[index].websiteActivity > highestData[1].websiteActivity) {
-            highestData[1] = data[index];
+    const highestData = data.slice(0, 2).sort((a, b) => b.websiteActivity - a.websiteActivity); // Start with top 2
+
+    for (let i = 2; i < data.length; i++) { // Start from 3rd element
+        const currentActivity = data[i].websiteActivity;
+
+        if (currentActivity > highestData[0].websiteActivity) {
+            highestData[1] = highestData[0]; // Shift down if new top
+            highestData[0] = data[i]; 
+        } else if (currentActivity > highestData[1].websiteActivity) {
+            highestData[1] = data[i]; // Replace second if needed
         }
     }
 
@@ -399,48 +403,65 @@ async function doPause(data){
         averageTimeLeft = highestData[0].averageTimeLeftWebsite;
     }
     
-    console.log("data0", data[0].websiteActivity);
-    console.log("data1", data[1].websiteActivity);
-    console.log("data2", data[2].websiteActivity);
-
-    console.log("websiteActivity0", highestData[0].websiteActivity);
-    console.log("websiteActivity1", highestData[1].websiteActivity);
-    console.log("averageWebsiteActivity:", averageWebsiteActivity);
-    console.log("averageTimeLeft: ", averageTimeLeft);
-    // const sessionStarted = data[0].createdAt;
+    const sessionStarted = data[0].createdAt;
     const twoHours = 2 * 60 * 60 * 1000;
-    const halfHour = 30 * 60 * 1000;
+    const halfHour = 5 * 60 * 1000; // ret til 30 min
 
     data = data[0];
     const lastPause = data.PauseSession.lastPause;
     const sessionCreated = data.PauseSession.createdAt;
+    const timeElapsed = Date.now() - sessionStarted; // Time since session start
+    const timeSinceLastPause = lastPause ? (Date.now() - lastPause) : 0;
+    console.log("------------------------------------------------------------------");
+    console.log("Time since last pause: ",timeSinceLastPause);
+    console.log("Time since session was created: ", sessionCreated);
+    console.log("Time elapsed since session was started: ", timeElapsed);
+    console.log("Last pause: ", lastPause);
 
-    // Ignore pauses withing half an hour
-    // if (!lastPause || lastPause < (halfHour)){
-    //     return false;
-    // }
-    // Ignore that the site is ignores
-
-    if (averageWebsiteActivity === 0){
-        console.log("web activity = 0");
+    if (!lastPause || timeSinceLastPause >= halfHour || timeElapsed >= halfHour){
+        if (((averageWebsiteActivity <= 50 || averageTimeLeft >= 45000 * 5)) || timeElapsed > twoHours){
+            if (averageWebsiteActivity === 0){
+                console.log("webActivity = 0");
+                return false;
+            }
+            console.log("Take a break");
+            startPause(data.PauseSession);
+            return true;
+        }
+    } else {
+        console.log("Du har lige holdt pause");
         return false;
     }
 
-    // Force a pause after 2 hours
-    if(!lastPause && sessionCreated > (twoHours)){
-        startPause(data.PauseSession);
-        console.log("arbejdet over 2 timer");
+    //     if (timeElapsed < halfHour) {
+    //         console.log("Session started less than 30 minutes ago");
+    //         return false;
+    //     }
+    
+    //     // Ignore pauses if too soon after the last pause
+    //     if (timeSinceLastPause < halfHour) {
+    //         console.log("hej");
+    //         return false;
+    //     }
+    //     // Ignore that the site is ignores
 
-        return true;
-    } 
-    // Check if low activity
-    if(averageWebsiteActivity <= 50 || averageTimeLeft >= 45000 * 5){
-        startPause(data.PauseSession);
-        console.log("lav aktivt, tag en pause ");
-        return true;
-    }
+    //     if (averageWebsiteActivity === 0){
+    //         return false;
+    //     }
 
-    return false;
+    //     // Force a pause after 2 hours
+    //     if(!lastPause && sessionCreated > (twoHours)){
+    //         startPause(data.PauseSession);
+    //         return true;
+    //     } 
+    //     // Check if low activity
+    //     if(averageWebsiteActivity <= 50 || averageTimeLeft >= 45000 * 5){
+    //         startPause(data.PauseSession);
+    //         return true;
+    //     }
+
+//     return false;
+// 
 }
 
 
@@ -466,14 +487,13 @@ router.post("/api/checkForPause", async (req, res) => {
             }
         });
         if(data.length <= 2){
-            console.log("EH");
             res.status(200).send(false);
         } else {
             const holdPause = await doPause(data);
             console.log(holdPause);
-            res.status(200).json(data);
+            res.status(200).send(holdPause);
         }
-        //res.status(200).send(holdPause);
+        
         
     } catch (error) {
         console.error("Error finding pauseData", error);
