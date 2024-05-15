@@ -67,21 +67,31 @@ primaryDropzone.style.gridTemplateColumns = "100%";
 const elemStyleColumn = "";
 const elemStyleRow = "";
 const elemStyleArea = "";
-let primaryStyleColumn = "100%";
-let primaryStyleRow = "";
+
+let primaryStyleColumn1 = "100%";
+let primaryStyleColumn2, primaryStyleColumn3;
+let primaryStyleRow1, primaryStyleRow2, primaryStyleRow3;
 
 document.querySelector("#canvasPlace").style.height = "91%";
 
 let lastElementDragged;
 
 function dragStart(e) {
-    let cropping = window.innerHeight / 9;
-    webPage.style.height = (window.innerHeight - cropping) + "px";
-
     draggedElement = this;
 
-    primaryStyleColumn = primaryDropzone.style.gridTemplateColumns;
-    primaryStyleRow = primaryDropzone.style.gridTemplateRows;
+    if (checkActivePrograms() === 1) {
+        primaryStyleColumn1 = primaryDropzone.style.gridTemplateColumns;
+        primaryStyleRow1 = primaryDropzone.style.gridTemplateRows;
+    } else if (checkActivePrograms() === 2) {
+        primaryStyleColumn2 = primaryDropzone.style.gridTemplateColumns;
+        primaryStyleRow2 = primaryDropzone.style.gridTemplateRows;
+        console.log(primaryStyleColumn2 + " - " + primaryStyleRow2);
+    } else if (checkActivePrograms() === 3) {
+        primaryStyleColumn3 = primaryDropzone.style.gridTemplateColumns;
+        primaryStyleRow3 = primaryDropzone.style.gridTemplateRows;
+    }
+
+
     
     // elemStyleColumn = divConverter(draggedElement).style.gridColumn;
     // elemStyleRow = divConverter(draggedElement).style.gridRow;
@@ -120,6 +130,9 @@ function drag(e) {
         draggedElementX = (e.clientX - offsetX) + "px";
         draggedElementY = (e.clientY - offsetY) + "px";
     }
+
+    let cropping = window.innerHeight / 9;
+    webPage.style.height = (window.innerHeight - cropping) + "px";
 }
 
 function dragEnd(e) {
@@ -153,6 +166,8 @@ function dragEnd(e) {
     }
     saveDataSocket();
     window.resizeCanvas();
+    let cropping = window.innerHeight / 9;
+    webPage.style.height = (window.innerHeight - cropping) + "px";
 }
 
 
@@ -393,28 +408,41 @@ function minimizeProgram (target) {
     targetToolbarElement.style.left = "";
     targetToolbarElement.style.top = "";
     targetToolbarElement.style.display = "";
-
-    primaryDropzone.style.gridTemplateColumns = primaryStyleColumn;
-    primaryDropzone.style.gridTemplateRows = primaryStyleRow;
-
-    if (checkActivePrograms() === 1) {
-        primaryDropzone.style.gridTemplateColumns = "100%";
-    }
-
-    if (checkActivePrograms() > 2) {
-        if (place3 === 1 || place3 === 3) {
-            primaryDropzone.style.gridTemplateColumns = "70% 30%";
-        } else if (place3 === 2 || place3 === 4) {
-            elementOrder[1].style.gridArea = "span 2";
-        } else if (place3 === 5) {
-            elementOrder[0].style.gridColumn = "span 2";
-        } else if (place3 === 6) {
-            elementOrder[0].style.gridColumn = "span 2";
-        }
-    }
-
     toolbar.appendChild(targetToolbarElement);
     toolbar.appendChild(socketDiv);
+
+
+    if (checkActivePrograms() === 1) {
+        primaryDropzone.style.gridTemplateColumns = primaryStyleColumn1;
+        primaryDropzone.style.gridTemplateRows = primaryStyleRow1;
+    } else if (checkActivePrograms() === 2) {
+        primaryDropzone.style.gridTemplateColumns = primaryStyleColumn2;
+        primaryDropzone.style.gridTemplateRows = primaryStyleRow2;
+    } else if (checkActivePrograms() === 3) {
+        primaryDropzone.style.gridTemplateColumns = primaryStyleColumn3;
+        primaryDropzone.style.gridTemplateRows = primaryStyleRow3;
+    }
+
+    // primaryDropzone.style.gridTemplateColumns = primaryStyleColumn;
+    // primaryDropzone.style.gridTemplateRows = primaryStyleRow;
+
+    // if (checkActivePrograms() === 1) {
+    //     primaryDropzone.style.gridTemplateColumns = "100%";
+    // }
+
+    // if (checkActivePrograms() > 2) {
+    //     if (place3 === 1 || place3 === 3) {
+    //         primaryDropzone.style.gridTemplateColumns = "70% 30%";
+    //     } else if (place3 === 2 || place3 === 4) {
+    //         elementOrder[1].style.gridArea = "span 2";
+    //     } else if (place3 === 5) {
+    //         elementOrder[0].style.gridColumn = "span 2";
+    //     } else if (place3 === 6) {
+    //         elementOrder[0].style.gridColumn = "span 2";
+    //     }
+    // }
+
+
 
     saveDataSocket();
     removing = null;
@@ -477,12 +505,5 @@ window.socket.on("saveDataSocket", function(data) {
         const elementToDelete = document.querySelector(str);
         webPage.appendChild(elementToDelete);
         elementToDelete.style.display = "none";
-
-        // for (let i = 0; i < elementOrder.length; i++) {
-        //     if (elementOrder[i] === elementToDelete) {
-        //         elementOrder.splice(i);
-        //     }
-            
-        // }
     }
 });
