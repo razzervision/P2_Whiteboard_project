@@ -327,6 +327,7 @@ function rezize () {
     */
 }
 
+window.resizeCanvas = rezize;
 
 function changeColor(element) {
     drawColor = element.style.backgroundColor;
@@ -357,11 +358,6 @@ function uploadePicture(){
         formData.append("pictureWidth", img.width);
         formData.append("pictureHeight", img.height);
         formData.append("picture", pictureUpload.files[0]);
-        console.log(formData.get("xPosition"));
-        console.log(formData.get("yPosition"));
-        console.log(formData.get("pictureWidth"));
-        console.log(formData.get("pictureHeight"));
-        console.log(formData.get("picture"));
 
         fetch("/api/postPicture", {
             method: "POST",
