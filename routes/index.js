@@ -393,11 +393,11 @@ async function doPause(data){
             }
             averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
             averageTimeLeft = (highestData[0].averageTimeLeftWebsite + highestData[1].averageTimeLeftWebsite) / 2;
-        }else {
-            for (let index = data.length - 1; index >= 0; index--) {
-                if(data[index].websiteActivity > highestData[0].websiteActivity ){
-                    highestData[0] = data[index];
-                }
+        }
+    } else {
+        for (let index = data.length - 1; index >= 0; index--) {
+            if(data[index].websiteActivity > highestData[0].websiteActivity ){
+                highestData[0] = data[index];
             }
         }
     }
