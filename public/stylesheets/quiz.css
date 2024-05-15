@@ -79,6 +79,11 @@ margin-right: 10px;
 button {
 margin-bottom: 10px;
 }
+#quiz_index button{
+  width: 100%;
+  margin-bottom: 30px;
+  left: 50px;
+}
 
 
 /* tyv stjålet fra CHATTEN */
@@ -89,13 +94,15 @@ margin-bottom: 10px;
 .quiz_container::after {
   background-image: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
 }
-
+.quiz_container label, input, button {
+  margin-bottom: 10px; 
+}
 
 /* Text Label */
 .quiz_container label {
   color: #333;
   margin-bottom: 2px;
-  display: block; 
+  display: inline-block;
 } 
 
 /* Input Text */
@@ -114,4 +121,6 @@ margin-bottom: 10px;
   color: black;
 }
 
-
+#quiz_home_screen{
+  margin-bottom: 20%;
+}
