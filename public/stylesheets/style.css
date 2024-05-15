@@ -1,16 +1,18 @@
 
+/* Button */
 button {
-  padding: 5px;
-  margin: 5px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 }
-
 
 button:hover {
-  background-color: #45a049;
-}
-
-button:active {
-  background-color: #39843a;
+  background-color: #0067cc;
 }
 
 /* .codeProgram{

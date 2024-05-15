@@ -390,14 +390,21 @@ async function doPause(data){
             highestData[1] = data[index];
         }
     }
+
+    if (highestData[0].websiteActivity > 0 && highestData[1].websiteActivity > 0){
+        averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
+        averageTimeLeft = (highestData[0].averageTimeLeftWebsite + highestData[1].averageTimeLeftWebsite) / 2;
+    } else {
+        averageWebsiteActivity = highestData[0].websiteActivity;
+        averageTimeLeft = highestData[0].averageTimeLeftWebsite;
+    }
+    
     console.log("data0", data[0].websiteActivity);
     console.log("data1", data[1].websiteActivity);
     console.log("data2", data[2].websiteActivity);
 
     console.log("websiteActivity0", highestData[0].websiteActivity);
     console.log("websiteActivity1", highestData[1].websiteActivity);
-    averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
-    averageTimeLeft = (highestData[0].averageTimeLeftWebsite + highestData[1].averageTimeLeftWebsite) / 2;
     console.log("averageWebsiteActivity:", averageWebsiteActivity);
     console.log("averageTimeLeft: ", averageTimeLeft);
     // const sessionStarted = data[0].createdAt;

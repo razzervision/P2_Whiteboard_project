@@ -95,74 +95,23 @@ margin-bottom: 10px;
 .quiz_container label {
   color: #333;
   margin-bottom: 2px;
-  display: block; /* Ensures label appears above input on a new line */
-}
-
-/* Button */
-.quiz_container button {
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.quiz_container button:hover {
-  background-color: #0067cc;
-}
+  display: block; 
+} 
 
 /* Input Text */
-.quiz_container input[type="text"],
-.quiz_container input[type="email"],
-.quiz_container input[type="password"] {
+.quiz_container input[type="text"]{
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 8px 10px;
 }
 
-/* Input Button */
-.quiz_container input[type="button"],
-.quiz_container input[type="submit"] {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-/* .quiz_container input[type="button"], .quiz_container input[type="input"] {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-} */
-
-.quiz_container input[type="button"]:hover,
-.quiz_container input[type="submit"]:hover {
-  background-color: #eee;
-}
-
+/* minimise button */
 #quiz_min_button {
   color: white;
   float: right;
   background-color: white;
   color: black;
 }
+
+

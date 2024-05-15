@@ -83,25 +83,22 @@ async function fetchPostQuizData(link,postData) {
 
 function hideDivs(show) {
     const start = document.getElementById("quiz_index");
+    const createQuizIndexDiv = document.getElementById("createQuizDiv");
     const createQuiz = document.getElementById("creat_quiz_div");
+    
+    const joinQuizIndexDiv = document.getElementById("joinQuizDiv");
+    const searchQuizIndexDiv = document.getElementById("searchQuizDiv");
+
     const quizOutput = document.getElementById("quiz_output");
     const quizResult = document.getElementById("quiz_output_results");
 
+
+    const list = [start,createQuizIndexDiv,createQuiz,joinQuizIndexDiv,searchQuizIndexDiv,quizOutput,quizResult];
     // Hide all elements first
-    start.style.display = "none";
-    createQuiz.style.display = "none";
-    quizOutput.style.display = "none";
-    quizResult.style.display = "none";
-    // Show the element based on the parameter
-    if (show === "start") {
-        start.style.display = "block";
-    } else if (show === "createQuiz") {
-        createQuiz.style.display = "block";
-    } else if (show === "quizOutput") {
-        quizOutput.style.display = "block";
-    } else if (show === "quizResult") {
-        quizResult.style.display = "block";
-    }
+    list.forEach(div => {
+        div.style.display = "none";
+    });
+    show.style.display = "block";
 }
 
 
@@ -116,10 +113,34 @@ function createAllElement(type,id,className,textContent){
 
 //---------------------------------------------------------------------------------------Home page
 //Home button
+const homeScreenDiv = document.getElementById("quiz_index");
 const homeScreenButton = document.getElementById("quiz_home_screen");
 homeScreenButton.addEventListener("click", () => {
-    hideDivs("start");
+    const start = document.getElementById("quiz_index");
+    hideDivs(homeScreenDiv);
 });
+
+const createQuizIndexDiv = document.getElementById("createQuizDiv");
+const createQuizIndexButton = document.getElementById("createQuizIndex");
+createQuizIndexButton.addEventListener("click", () => {
+    hideDivs(createQuizIndexDiv);
+});
+
+const joinQuizIndexDiv = document.getElementById("joinQuizDiv");
+const joinQuizIndexButton = document.getElementById("joinQuizIndex");
+joinQuizIndexButton.addEventListener("click", () => {
+    hideDivs(joinQuizIndexDiv);
+});
+
+const searchQuizIndexDiv = document.getElementById("searchQuizDiv");
+const searchQuizIndexButton = document.getElementById("searchQuizIndex");
+searchQuizIndexButton.addEventListener("click", () => {
+    hideDivs(searchQuizIndexDiv);
+});
+
+
+
+
 
 
 //---------------------------------------------------------------------------------------Create quiz
@@ -151,9 +172,11 @@ async function createQuizFunction(name){
         errorMessage("Already created",nameElement);
         return "dublicate";
     } 
-    hideDivs("createQuiz");
     const quizNameLabel = document.getElementById("quiz_name");
     quizNameLabel.textContent = name;
+    const createQuiz = document.getElementById("creat_quiz_div");
+    hideDivs(createQuiz);
+
     return quizNameLabel;
 }
     
@@ -305,9 +328,12 @@ async function getQuestionAndAnswers(){
         correctAnswersList.push(correctAnswers);
     });   
     if(quit){
+        console.log("error quittet");
         return "quit";
     }
-    if(answersList.length < 2 || !quizName || questionList.length < 1){
+    if(answersList.length < 1 || !quizName || questionList.length <= 0){
+        console.log(questionList.length);
+        console.log("Not enough data");
         return "noData";
     }
     const data = {
@@ -322,7 +348,6 @@ async function getQuestionAndAnswers(){
     if(uploadQuiz){
         alert("quiz is succesfully made");  
 
-        hideDivs("start");
 
         //Clear questions and their answers after creating a question.
         clearQuizzes();
@@ -330,6 +355,8 @@ async function getQuestionAndAnswers(){
         // Search for all quizzes to append it.
         searchQuizzes(null);
 
+        const start = document.getElementById("quiz_index");
+        hideDivs(start);
         return true;
     } 
     alert("Failed to public quiz");
@@ -397,15 +424,22 @@ joinQuiz.addEventListener("click", startQuiz);
 
 //Start the quiz
 async function startQuiz(){
+    
+    const userName = document.getElementById("quizUsername").value;
+    if(!userName){
+        errorMessage("No name inserted",joinQuiz);
+        return;
+    }
     const sessionName = document.getElementById("join_quiz_text").value;
     const sessionNameJSON = {sessionName: sessionName};
     const findSession = await fetchPostQuizData("/api/GetSpecificQuizSession",sessionNameJSON);
     
     if(!findSession.session){
         errorMessage("No sessions found",joinQuiz);
-        return 0;
+        return;
     }
-    hideDivs("quizOutput");
+    const quizOutput = document.getElementById("quiz_output");
+    hideDivs(quizOutput);
     const quizId = findSession.session.QuizNameId;
     const div = document.getElementById("quiz_output");
     div.style.display = "block";
@@ -414,14 +448,7 @@ async function startQuiz(){
     const data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
     const jsonDisplayDiv = document.getElementById("quiz_output");
 
-    // Username
-    const userIdLabel = createAllElement("label","userIdLabel","userIdLabel","Username");
-    userIdLabel.setAttribute("for", "quizUsername");
-    jsonDisplayDiv.appendChild(userIdLabel);
-
-    const userId = createAllElement("input","quizUsername","quizUsername",null);
-    userId.type = "text";
-    jsonDisplayDiv.appendChild(userId);
+    
 
     const quizNameLabel = createAllElement("h1","quizNameLabel","quizNameLabelClass","name) " + data.quiz.quizName);
     jsonDisplayDiv.appendChild(quizNameLabel);
@@ -470,6 +497,9 @@ async function startQuiz(){
 //---------------------------------------------------------------------------------------User input upload
 async function checkAnswers(quizId,sessionName){
     const userId = document.getElementById("quizUsername").value;
+    while(!userId){
+        errorMessage("")
+    }
     const quizIdJSON = {id: quizId};
     const data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
     const userDataAnswerList = [];
@@ -559,14 +589,16 @@ async function quizSessionResultHtml(sessionName){
     const isSession = await fetchPostQuizData("/api/checkIfSessionIsOpened",sessionNameJSON);  
     
     const quizDiv = document.getElementById("quiz_output_results");
-    hideDivs("quizResult");
+    const quizResult = document.getElementById("quiz_output_results");
+    hideDivs(quizResult);
     if(isIdCreated("sessionCodeId")){
         errorMessage("You already have a session opened",quizDiv);
-        return 0;
+        return "alreadyCreated";
     } else if(!isSession.isSession){
         errorMessage("No session found with your input, please start a new", quizDiv);
-        hideDivs("start");
-        return 0;
+        const start = document.getElementById("quiz_index");
+        hideDivs(start);
+        return "notFound";
     }
 
     const sessionCode = createAllElement("h3","sessionCodeId","sessionCodeId","Code: " + sessionName);
@@ -594,7 +626,8 @@ function endSessionFunction(){
 
     localStorage.removeItem("quizSessionId");
     document.getElementById("sessionCodeId").remove();
-    hideDivs("start");
+    const start = document.getElementById("quiz_index");
+    hideDivs(start);
     errorMessage("Your session has been successfully ended",startDiv);
 }
 
@@ -611,19 +644,18 @@ async function startQuizSession(quizId){
         sessionName: sessionName,
         quizId: quizId
     };
-    await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
+    const session = await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
+    
+    await quizSessionResultHtml(sessionName);
 
-    quizSessionResultHtml(sessionName);
+    return session;
 }
 
-const joinSession = document.getElementById("join_quiz_session_button");
-joinSession.addEventListener("click",joinSessionResult);
-
-function joinSessionResult(){
-    const sessionInput = document.getElementById("join_quiz_session").value;
-    quizSessionResultHtml(sessionInput);
-}
-
+// const joinSession = document.getElementById("join_quiz_session_button");
+// joinSession.addEventListener("click", () =>{
+//     const sessionInput = document.getElementById("join_quiz_session").value;
+//     quizSessionResultHtml(sessionInput);
+// });
 
 async function teacherOverview(){
     const div = document.getElementById("quiz_output_results");
@@ -639,6 +671,7 @@ async function teacherOverview(){
     
     const sessionJSON = {session:session};
     const data = await fetchPostQuizData("/api/userResponsData",sessionJSON);
+    console.log(data);
     if(!data.quizData){
         errorMessage("No players have completed the quiz at this time.",div);
         return;
@@ -718,14 +751,40 @@ async function quizUnitTests(){
 
     await searchQuizTest() ? (passCounter++, pass.push("Search Quiz")) : (failCounter++, fail.push("Search Quiz"));
 
+    await startSessionTest() ? (passCounter++, pass.push("Start Session")) : (failCounter++, fail.push("Start Session"));
 
-    console.log("total Passed Test: " , passCounter);
-    console.log("Passed Tests: " , pass);
-    console.log("total Failed Test: " , failCounter);
-    console.log("Failed Tests: " , fail);
+
+    console.log("Pass: " , pass," Counter: ",passCounter);
+    console.log("Fail: " , fail," Counter: ",failCounter);
     console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
 }
  
+async function startSessionTest(){
+    let result = true;
+
+    let numberOfQuizzes = await fetchGetQuizData("/api/Getquizzes");
+    numberOfQuizzes = numberOfQuizzes.quizzes.length;
+    result = await startSessionTestHelper(1,-2,numberOfQuizzes);
+    result = await startSessionTestHelper(22,-3,numberOfQuizzes);
+    result = await startSessionTestHelper(988887,-4,numberOfQuizzes);
+
+    return result;
+}
+async function startSessionTestHelper(id,slice,numberOfQuizzes){
+    const startQuiz = await startQuizSession(id);
+    if(id >= numberOfQuizzes && startQuiz){
+        console.log("Dont make a quiz without a valid quizId");
+        return false;
+    } else if(!startQuiz){
+        return true;
+    }
+    const sessionName = startQuiz.sessionName.slice(slice);
+    if(sessionName !== ("q"+id)){
+        console.log("Wrong sessionName",sessionName);
+        return false;
+    }
+    return true;
+} 
 
 async function searchQuizTest(){
     let result = true;
