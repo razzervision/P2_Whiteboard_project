@@ -562,11 +562,11 @@ async function quizSessionResultHtml(sessionName){
     hideDivs("quizResult");
     if(isIdCreated("sessionCodeId")){
         errorMessage("You already have a session opened",quizDiv);
-        return 0;
+        return "alreadyCreated";
     } else if(!isSession.isSession){
         errorMessage("No session found with your input, please start a new", quizDiv);
         hideDivs("start");
-        return 0;
+        return "notFound";
     }
 
     const sessionCode = createAllElement("h3","sessionCodeId","sessionCodeId","Code: " + sessionName);
@@ -611,9 +611,11 @@ async function startQuizSession(quizId){
         sessionName: sessionName,
         quizId: quizId
     };
-    await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
+    const session = await fetchPostQuizData("/api/startQuizSession",sessionNameJson);
+    
+    await quizSessionResultHtml(sessionName);
 
-    quizSessionResultHtml(sessionName);
+    return session;
 }
 
 const joinSession = document.getElementById("join_quiz_session_button");
@@ -718,14 +720,40 @@ async function quizUnitTests(){
 
     await searchQuizTest() ? (passCounter++, pass.push("Search Quiz")) : (failCounter++, fail.push("Search Quiz"));
 
+    await startSessionTest() ? (passCounter++, pass.push("Start Session")) : (failCounter++, fail.push("Start Session"));
 
-    console.log("total Passed Test: " , passCounter);
-    console.log("Passed Tests: " , pass);
-    console.log("total Failed Test: " , failCounter);
-    console.log("Failed Tests: " , fail);
+
+    console.log("Pass: " , pass," Counter: ",passCounter);
+    console.log("Fail: " , fail," Counter: ",failCounter);
     console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
 }
  
+async function startSessionTest(){
+    let result = true;
+
+    let numberOfQuizzes = await fetchGetQuizData("/api/Getquizzes");
+    numberOfQuizzes = numberOfQuizzes.quizzes.length;
+    result = await startSessionTestHelper(1,-2,numberOfQuizzes);
+    result = await startSessionTestHelper(22,-3,numberOfQuizzes);
+    result = await startSessionTestHelper(988887,-4,numberOfQuizzes);
+
+    return result;
+}
+async function startSessionTestHelper(id,slice,numberOfQuizzes){
+    const startQuiz = await startQuizSession(id);
+    if(id >= numberOfQuizzes && startQuiz){
+        console.log("Dont make a quiz without a valid quizId");
+        return false;
+    } else if(!startQuiz){
+        return true;
+    }
+    const sessionName = startQuiz.sessionName.slice(slice);
+    if(sessionName !== ("q"+id)){
+        console.log("Wrong sessionName",sessionName);
+        return false;
+    }
+    return true;
+} 
 
 async function searchQuizTest(){
     let result = true;
