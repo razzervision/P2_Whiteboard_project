@@ -187,7 +187,6 @@ let hasRun = false;
 let ontop = false;
 let place3;
 
-
 function sizeElement (element, activePrograms, activeProgramsList, place) {
     element.style.position = "flex";
     element.style.display = "block";
@@ -227,11 +226,9 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
 
     if (activePrograms === 2) {
         if (!ontop) {
-            element.style.gridRow = "";
-            element.style.gridColumn = "";
             element.style.gridArea = "";
         }
-        
+
         if (place === 1) {
             if (!ontop) {
                 splitScreen(3, 20, 60, 0);
@@ -239,11 +236,9 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
                 addElements();
                 place3 = 1;
             } else {
-                element.style.gridRow = "";
-                element.style.gridColumn = "";
-                element.style.gridArea = "";
                 splitScreen(3, 30, 0, 0);
                 primaryDropzone.appendChild(element);
+                element.style.gridArea = "";
                 element.style.gridRow = "-1 / 1";
                 addElements();
                 place3 = 2;
@@ -258,7 +253,9 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
             } else {
                 splitScreen(3, 70, 0, 0);
                 addElements();
-                element.style.gridColumn = "-2 / 2";
+                element.style.gridArea = "";
+                element.style.gridColumn = "2 / 3";
+                element.style.gridRow = "1 / 3";
                 primaryDropzone.appendChild(element);
                 place3 = 4;
             }
@@ -269,13 +266,24 @@ function sizeElement (element, activePrograms, activeProgramsList, place) {
                 element.style.gridColumn = "-1 / 1";
                 place3 = 5;
             }
- 
         } else if (place === 4) {
             if (!ontop) {
                 splitScreen(3, 0, 0, 70);
                 element.style.gridColumn = "-1 / 1";
                 place3 = 6;
             }
+
+        } else if (place === 5) {
+            if (!ontop) {
+                splitScreen(3, 0, 0, 30);
+                element.style.gridColumn = "-1 / 1";
+                primaryDropzone.appendChild(element);
+            }
+        } else if (place === 6) {
+            splitScreen(3, 0, 0, 70);
+            element.style.gridColumn = "-1 / 1";
+            addElements();
+            primaryDropzone.appendChild(element);
         }
 
     } else if (activePrograms === 3) {
@@ -360,7 +368,6 @@ function minimizeProgram (target) {
     console.log(place3);
     const targetDValue = target.getAttribute("data-value");
     removing = targetDValue;
-    console.log(targetDValue);
     let str = "#" + targetDValue;
     const programToRemove = document.querySelector(str);
     str = ".toolbarElement[data-value='" + targetDValue + "']";
@@ -415,8 +422,6 @@ function saveDataSocket () {
     elementsValues = [];
 
     primaryDropzoneValues.push(primaryDropzone.style.gridTemplateColumns, primaryDropzone.style.gridTemplateRows);
-
-    console.log(elementOrder);
 
     elementOrder.forEach((element, i) => {
         elementsValues.push([]);

@@ -1,4 +1,3 @@
-
 let leavePageCounter = 0;
 let reconPageCounter = 0;
 let mouseClicks = 0;
@@ -70,7 +69,7 @@ async function recursiveClicks(){
     const doPause = await fetchPostPauseData("/api/checkForPause",checkData);
     
     if(doPause){
-        console.log("TAG DONE EN PAUSE IDIOT");
+        alert("Hold en pause");
     }
 
     reconPageCounter = 0;
@@ -125,23 +124,3 @@ async function startLogging(){
     recursiveClicks();
     timeAwayFromPage();
 }
-
-// const data = {
-//     pageActivity:(mouseClicks + keyStrokes),
-//     leavePageCounter: counterResult,
-//     averageLeftPageTime: leftPageTimeAverage
-// };
-
-// let timeSinceLastBreak = 0;
-// let breakTime = 0;
-
-// function calculatePause({pageActivity, leavePageCounter, leftPageTimeAverage}){
-//     if(pageActivity <= 50 || leftPageTimeAverage >= 45000){
-//         return breakTime = timeSinceLastBreak / 3;
-//     }
-//     if(timeSinceLastBreak === 3.6e+6){
-//         return breakTime = timeSinceLastBreak / 3;
-//     }
-// }
-
-//OBS pageActivity skal være mindre eller lig 300 over 5 intervaller, intervallerne skal være 1 minut
