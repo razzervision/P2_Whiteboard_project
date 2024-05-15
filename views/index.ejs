@@ -184,7 +184,7 @@
     <!-- tilføj flere her-->
     </select>
     <div class="minimizeCalc">
-      <button class="minimizeCalcButton">-</button>
+      <button class="minimizeButton" id="calcProgram" data-value="calcProgram">-</button>
     </div>
   </div>
 
@@ -231,20 +231,22 @@
         <input type="text" id="yMatrice" class="yMatrice">
         <button class="submitDimensions" onclick="createDimension()">Add Matrix</button>
         <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
-        <button class="submit" onclick="calcMatrice()">Calculate Dimensions</button> <br>
+        <button class="submit" onclick="calcMatrice()">Calculate Dimensions</button> 
     </div>
+  </div>
+  <div class="matricesContainer", id="matricesContainer"></div>
 
-        </div>
-
-<div class="matriceOperator">
-    <select name="matriceOp" class="matriceOp">
+  <div class="matriceOperator">
+      <select name="matriceOp" class="matriceOp">
         <option value="plus">+</option>
         <option value="minus">-</option>
         <option value="times">×</option>
         <option value="divide">/</option>
         <option value="none">=</option>
-    </select>
-</div>
+      </select>
+  </div>
+
+  <div class="matriceResult", id="matriceResult"></div>
 
 </div>
 

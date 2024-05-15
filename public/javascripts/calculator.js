@@ -196,18 +196,20 @@ function sumMatrices(matrices, rows, columns) {
     return sumMatrix;
 }
 
-
+/*
 function minusMatrices(matrices, rows, columns) {
     const minusMatrix = [];
     const resultContainer = document.createElement("div");
     resultContainer.className = "resultContainer";
+    // Clear previous results
+    document.querySelector('.matriceResult').innerHTML = "";
 
     for (let y = 0; y < rows; y++) {
         const minusRows = [];
         for (let x = 0; x < columns; x++) {
-            let result = 0;
-            for (let i = 0; i < array.length; i++) {
-                result = matrices[i][y][x];
+            let result = matrices[0][y][x]; // Start with the first matrix
+            for (let i = 1; i < matrices.length; i++) {
+                result -= matrices[i][y][x]; // Subtract subsequent matrices
             }
             minusRows.push(result);
             const resultInput = document.createElement("input");
@@ -224,6 +226,7 @@ function minusMatrices(matrices, rows, columns) {
     return minusMatrix;
 }
 
+*/
 function restartDimension() {
     const matricesContainer = document.querySelector(".matricesContainer");
     matricesContainer.innerHTML = "";
