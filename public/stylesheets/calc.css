@@ -92,17 +92,6 @@
     font-size: 16px;
 }
 
-.minimizeCalcButton {
-    display: inline-block;
-    background-color: white;
-    color: darkblue;
-}
-
-.minimizeCalc{
-    color: white;
-    float: right;
-}
-
 /* MATRICES */
 /* .matrices {
     display: hide;

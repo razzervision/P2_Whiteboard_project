@@ -141,6 +141,10 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("uploadePicture");
     });
 
+    socket.on("saveDataSocket", (data) => {
+        socket.broadcast.emit("saveDataSocket", data);
+    });
+
     socket.on("disconnect", () => {
         console.log("User disconnected");
     });

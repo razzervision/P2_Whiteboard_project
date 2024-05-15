@@ -19,17 +19,12 @@
           <link rel="stylesheet" href="/stylesheets/toolbar.css">
           <link rel="stylesheet" href="/stylesheets/calc.css">
           <script defer src="/javascripts/toolbar.js"></script>
-          <script src="/javascripts/users.js"></script>
           <script defer src="/javascripts/calculator.js"></script>
           <script defer src="/javascripts/paint.js"></script>
-          <script src="/javascripts/pausefish.js"></script>
 
           <!-- QUIZ -->
           <script defer src="/javascripts/quiz/quiz.js"></script>
           <script defer src="/javascripts/quiz/test.js"></script>
-
-          <script src="/javascripts/server.js"></script>
-          <script src="/javascripts/phone.js"></script>
           
           <script defer src="/javascripts/code_editor/codemirror/lib/codemirror.js"></script>
           <script defer src="/javascripts/code_editor/codemirror/mode/javascript/javascript.js"></script>
@@ -64,7 +59,7 @@
         <div class = "toolbarElement" id = "codeEditorElement" data-value="codeProgram" draggable="true">Code Editor</div>
         <div class = "toolbarElement" id = "quizElement" data-value="quizProgram" draggable="true">Quiz</div>
         <div class = "toolbarElement" id = "calculatorElement" data-value="calcProgram" draggable="true">Calc</div>
-        <div><input type="checkbox" id="connectSocket"> <label for="connectSocket">connect to group</label></div>
+        <div class="toolbarDivForCheckbox" id="socketDiv"><input class="oolbarCheckboxInput" type="checkbox" id="connectSocket"> <label class="toolbarLabelForCheckbox" for="connectSocket">connect to group</label><t/div>
       </menu>
     </nav>
   </div>
@@ -79,7 +74,8 @@
 
 <div id="quizProgram" class="quiz_container saveToPDF">
 
-  <button id="quiz_home_screen">HOME</button>
+  <button class="quiz_container_button" id="quiz_home_screen">HOME</button>
+  <button id = "quiz_min_button" class="minimizeButton" data-value="quizProgram">--</button>
   <div class="quiz_index" id="quiz_index">
     <div id="createQuizDiv" style="display: none;">
       <label for="create_quiz_text">Quiz name</label>
@@ -142,7 +138,7 @@
     <canvas id = "canvas0"></canvas>
   </div>
  
-    <div class="nav">
+    <div id = "nav" class="nav">
             <div class ="options" id ="optionsForPaint">
                 <input type="file" id="uploadInput" accept="image/*">
                 <input type="number" id="Imgheight">
@@ -161,6 +157,9 @@
 
   <!-- JONS code editor -->
   <div id="codeProgram" class="code_editor saveToPDF">
+    <div id="codeProgramBar">
+      <button class="minimizeButton" data-value="codeProgram">--</button>
+    </div>
   <textarea id="code"></textarea>
   <select id="language">
   </select>

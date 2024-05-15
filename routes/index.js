@@ -4,7 +4,6 @@ const path = require("path");
 const express = require("express");
 const router = express.Router();
 const sequelize = require("../database/database");
-const User = require("../database/user");
 const Quiz = require("../database/database_quiz");
 const Pauses = require("../database/database_pauses.js");
 const paint = require("../database/database_paint.js");
@@ -14,18 +13,6 @@ router.get("/", function(req, res, next) {
     res.render("index", { title: "Mikkel er cool" });
 });
 
-router.post("/users", (req, res) => {
-    User.create(req.body).then((user) => {
-        res.status(201).json(user);
-    }).catch((error) => {
-        console.error(error);
-        res.status(400).send("Error creating user");
-    });
-});
-
-router.get("/:room", function(req, res, next) {
-    res.render("index", { room: req.params.room, title: "Together Paint"});
-});
 //------------------------------------------------------------------------------------- code editor
 router.get("/api/loadLanguages", (req, res) => {
     try {
@@ -395,18 +382,25 @@ async function doPause(data){
     let averageTimeLeft = 0;
     const highestData = [data[0], data[1]];
 
-    for (let index = 0; index < data.length; index++) {
+    //TODO Sørg for først at køre loopet efter andet stykke data er kommet med.
+    for (let index = data.length - 1; index >= 0; index--) {
         if(data[index].websiteActivity > highestData[0].websiteActivity ){
             highestData[1] = highestData[0];
             highestData[0] = data[index];
         }else if(data[index].websiteActivity > highestData[1].websiteActivity) {
-            highestData[1] = highestData[index];
+            highestData[1] = data[index];
         }
     }
+    console.log("data0", data[0].websiteActivity);
+    console.log("data1", data[1].websiteActivity);
+    console.log("data2", data[2].websiteActivity);
 
-    console.log(highestData);
+    console.log("websiteActivity0", highestData[0].websiteActivity);
+    console.log("websiteActivity1", highestData[1].websiteActivity);
     averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
-    averageTimeLeft = (highestData[0].averageTimeLeft + highestData[1].averageTimeLeft) / 2;
+    averageTimeLeft = (highestData[0].averageTimeLeftWebsite + highestData[1].averageTimeLeftWebsite) / 2;
+    console.log("averageWebsiteActivity:", averageWebsiteActivity);
+    console.log("averageTimeLeft: ", averageTimeLeft);
     // const sessionStarted = data[0].createdAt;
     const twoHours = 2 * 60 * 60 * 1000;
     const halfHour = 30 * 60 * 1000;
@@ -465,11 +459,15 @@ router.post("/api/checkForPause", async (req, res) => {
                 }
             }
         });
-        
-        const holdPause = await doPause(data);
+        if(data.length <= 2){
+            console.log("EH");
+            res.status(200).send(false);
+        } else {
+            const holdPause = await doPause(data);
+            console.log(holdPause);
+            res.status(200).json(data);
+        }
         //res.status(200).send(holdPause);
-        console.log(holdPause);
-        res.status(200).json(data);
         
     } catch (error) {
         console.error("Error finding pauseData", error);
