@@ -328,7 +328,6 @@ async function getQuestionAndAnswers(){
         correctAnswersList.push(correctAnswers);
     });   
     if(quit){
-        console.log("error quittet");
         return "quit";
     }
     if(answersList.length < 1 || !quizName || questionList.length <= 0){
@@ -688,9 +687,9 @@ async function teacherOverview(){
 
     const questionRow = document.createElement("th");
     questionRow.textContent = "Question";
+    headerRow.appendChild(questionRow);
 
-
-
+    let userNamesList = [];
     
     // Loop through each question
     for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {     
@@ -722,6 +721,9 @@ async function teacherOverview(){
             let questionsCorrect = 0;
             let questionCounter = 0;
             Object.entries(sortedAnswerList).forEach(([name, { answers }]) => {
+                if(!userNamesList.includes(name)){
+                    userNamesList.push(name);
+                }
                 currentName = name;
                 let result = "Wrong";
                 let color = "red";
@@ -745,62 +747,18 @@ async function teacherOverview(){
             }
             tableRow.appendChild(questionResultTD);
         });
-        const headerRowUser = document.createElement("th");
-        headerRowUser.textContent = currentName;
-        headerRow.appendChild(headerRowUser); 
-
         table.appendChild(tableRow);
     }
+    userNamesList.forEach(user =>{
+        const headerRowUser = document.createElement("th");
+        headerRowUser.textContent = user;
+        headerRow.appendChild(headerRowUser); 
+    });
+
     const totalScoreRow = document.createElement("th");
     totalScoreRow.textContent = "Total Score";
     headerRow.appendChild(totalScoreRow);
     resultDiv.appendChild(table);
-    
-    console.log(table);
-
-    // const totalResultText = "Total: " + totalQuestionCorrect + "/" + questions.length + " Correct";
-    // const totalResultElement = createAllElement("h1","totalResultElement","totalResultElement",totalResultText);
-    // resultDiv.appendChild(totalResultElement);
-
-    // for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {        
-    //     const question = questions[questionIndex];
-    //     const questionText = createAllElement("h1","questionText"+questionIndex,"questionText",question.questionText + ":");
-    //     resultDiv.appendChild(questionText);
-    //     const JSON = {
-    //         session: data.quizData.id,
-    //         questionId: question.id
-    //     };
-    //     const answerSum = await fetchPostQuizData("/api/findQuestionScore", JSON);
-    //     const sortedAnswerList = groupAnswersByUser(answerSum.answers);
-
-    //     let questionsCorrect = 0;
-    //     let questionCounter = 0;
-    //     Object.entries(sortedAnswerList).forEach(([name, { answers }]) => {
-    //         let result = "Wrong";
-    //         let color = "red";
-    //         if(answers.every(answer => answer === true)){
-    //             result = "Correct";
-    //             color = "green";
-    //             questionsCorrect++;
-    //         }
-    //         questionCounter++;
-    //         const questionResult = name + " Answered " + result;
-    //         const questionLabel = createAllElement("h3", "teacherOverview", "teacherOverview", questionResult);
-    //         questionLabel.style.color=color;
-    //         resultDiv.appendChild(questionLabel);
-    //     });
-
-    //     const totalQuestionLabelText = questionsCorrect + "/" + questionCounter + " Correct";
-    //     const totalQuestionLabel = createAllElement("h2","totalQuestionLabel","totalQuestionLabel",totalQuestionLabelText);
-    //     resultDiv.appendChild(totalQuestionLabel);
-    //     if(questionsCorrect === questionCounter){
-    //         totalQuestionCorrect++;
-    //     }
-    // }  
-
-    // const totalResultText = "Total: " + totalQuestionCorrect + "/" + questions.length + " Correct";
-    // const totalResultElement = createAllElement("h1","totalResultElement","totalResultElement",totalResultText);
-    // resultDiv.appendChild(totalResultElement);
 } 
 
 function groupAnswersByUser(data) {
@@ -857,10 +815,14 @@ async function startSessionTestHelper(id,slice,numberOfQuizzes){
     if(id >= numberOfQuizzes && startQuiz){
         console.log("Dont make a quiz without a valid quizId");
         return false;
-    } else if(!startQuiz){
+    } else if (id >= numberOfQuizzes && !startQuiz){
         return true;
     }
-    const sessionName = startQuiz.sessionName.slice(slice);
+    if(!startQuiz){
+        console.log("no data");
+        return false;
+    } 
+    const sessionName = startQuiz.session.sessionName.slice(slice);
     if(sessionName !== ("q"+id)){
         console.log("Wrong sessionName",sessionName);
         return false;

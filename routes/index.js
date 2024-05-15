@@ -153,7 +153,7 @@ router.post("/api/startQuizSession", async (req, res) => {
         res.status(200).json({ session });
     } catch (error) {
         console.error("Error fetching quiz", error);
-        res.status(500).send("Error fetching quiz");
+        res.status(200).send(false);
     }
 });
 
