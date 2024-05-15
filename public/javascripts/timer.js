@@ -79,7 +79,7 @@ async function recursiveClicks(){
     keyStrokes = 0;
     setTimeout(() => {
         recursiveClicks();
-    }, 60000 * 5);
+    }, 5 * 60 * 1000);
 
 }
 
@@ -91,7 +91,6 @@ function timeAwayFromPage(){
 
     });
     window.addEventListener("focus", () => {
-    
     
         if (leavePageCounter === 0) {
             return 0;

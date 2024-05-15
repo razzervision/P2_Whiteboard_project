@@ -141,8 +141,8 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("uploadePicture");
     });
 
-    socket.on("dragEnd", (data) => {
-        socket.broadcast.emit("dragEnd", data);
+    socket.on("saveDataSocket", (data) => {
+        socket.broadcast.emit("saveDataSocket", data);
     });
 
     socket.on("disconnect", () => {

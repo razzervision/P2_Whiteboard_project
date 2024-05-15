@@ -381,16 +381,21 @@ async function doPause(data){
     let averageTimeLeft = 0;
     const highestData = [data[0], data[1]];
 
-    for (let index = 0; index < data.length; index++) {
+    //TODO Sørg for først at køre loopet efter andet stykke data er kommet med.
+    for (let index = data.length - 1; index >= 0; index--) {
         if(data[index].websiteActivity > highestData[0].websiteActivity ){
             highestData[1] = highestData[0];
             highestData[0] = data[index];
         }else if(data[index].websiteActivity > highestData[1].websiteActivity) {
-            highestData[1] = highestData[index];
+            highestData[1] = data[index];
         }
     }
-    
-    console.log("averageTimeLeftHighestData", highestData[0].averageTimeLeftWebsite);
+    console.log("data0", data[0].websiteActivity);
+    console.log("data1", data[1].websiteActivity);
+    console.log("data2", data[2].websiteActivity);
+
+    console.log("websiteActivity0", highestData[0].websiteActivity);
+    console.log("websiteActivity1", highestData[1].websiteActivity);
     averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
     averageTimeLeft = (highestData[0].averageTimeLeftWebsite + highestData[1].averageTimeLeftWebsite) / 2;
     console.log("averageWebsiteActivity:", averageWebsiteActivity);
