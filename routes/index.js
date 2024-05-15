@@ -52,7 +52,6 @@ router.post("/resetAllQuizData", async (req, res) => {
 
 router.post("/uploadQuiz", async (req, res) => {
     try {
-        console.log(req.body);
         const { quizName, questionList, answersList, correctAnswersList } = req.body;
 
         // Create the quiz
@@ -143,17 +142,17 @@ router.post("/api/GetSpecificQuiz", async (req, res) => {
 
 router.post("/api/startQuizSession", async (req, res) => {
     const JSON = req.body;
-    console.log(JSON);
+    console.log(JSON.sessionName);
     try {
         const session = await Quiz.Session.create({ 
             sessionName: JSON.sessionName,
             sessionOpen: true,
             QuizNameId: JSON.quizId 
         });
-        res.status(200).json({ session });
+        res.status(200).json(session);
     } catch (error) {
         console.error("Error fetching quiz", error);
-        res.status(500).send("Error fetching quiz");
+        res.status(200).send(false);
     }
 });
 
@@ -165,6 +164,9 @@ router.post("/api/GetSpecificQuizSession", async (req, res) => {
         const session = await Quiz.Session.findOne({
             where: { sessionName: sessionName.sessionName }
         });
+        if(!session){
+            res.status(200).send(false);
+        }
         res.status(200).json({ session });
     } catch (error) {
         console.error("Error fetching quiz", error);
@@ -257,7 +259,6 @@ router.post("/api/userResponsData", async (req, res) => {
 router.post("/api/findQuestionScore", async (req, res) => {
     try {
         const { session, questionId } = req.body;
-        console.log(questionId,session);
         const answers = await Quiz.UserAnswer.findAll({
             where: {
                 SessionId: session

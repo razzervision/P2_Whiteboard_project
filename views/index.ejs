@@ -65,7 +65,9 @@
   </div>
 
   <div id="primaryDropzone">
-
+    <!-- <div id="drawArea">
+      
+    </div> -->
   </div>
 
 
@@ -75,29 +77,41 @@
   <button class="quiz_container_button" id="quiz_home_screen">HOME</button>
   <button id = "quiz_min_button" class="minimizeButton" data-value="quizProgram">--</button>
   <div class="quiz_index" id="quiz_index">
-    <label for="create_quiz_text">Quiz name</label>
-    <input type="text" id="create_quiz_text" placeholder="e.g Mergesort">
-    <button class="quiz_container_button" id="create_quiz_button">Create quiz</button>
+    <div id="createQuizDiv" style="display: none;">
+      <label for="create_quiz_text">Quiz name</label>
+      <input type="text" id="create_quiz_text" placeholder="e.g Mergesort">
+    </div>
+    <button id="create_quiz_button">Create quiz</button>
     <br>
-    <label for="join_quiz_text">Join Quiz</label>
-    <input type="text" id="join_quiz_text" placeholder="e.g 111q2">
-    <button class="quiz_container_button" id="join_quiz_button">Join quiz</button>
-    <br> 
-     
-    <br>  
-    <label for="join_quiz_session">Insert session</label>
-    <input type="text" id="join_quiz_session" placeholder="e.g 111q2">
-    <button class="quiz_container_button" id="join_quiz_session_button">Join session results</button>
-    <br>  
-    <label for="search_quiz_text">Search quizzes</label> 
-    <input type="text" id="search_quiz_text" placeholder="e.g Mergesort">
+    
+    <div id="joinQuizDiv" style="display: none;">
+      <label for="join_quiz_text">Join Quiz</label>
+      <input type="text" id="join_quiz_text" placeholder="e.g 111q2">
+    </div>
 
-    <table id="search_quiz_table">
-      <tr>
-        <th>Quiz name</th>
-        <th>Start Quiz</th>
-      </tr>
-    </table>
+    <button id="join_quiz_button">Join quiz</button>
+    <br> 
+       
+    <div id="joinQuizSession">
+
+ 
+      <label for="join_quiz_session">Insert session</label>
+      <input type="text" id="join_quiz_session" placeholder="e.g 111q2">
+      <button id="join_quiz_session_button">Join session results</button>
+    </div>
+    <br>  
+    <div id="searchQuizDiv">
+      <label for="search_quiz_text">Search quizzes</label> 
+      <input type="text" id="search_quiz_text" placeholder="e.g Mergesort">
+  
+      <table id="search_quiz_table">
+        <tr>
+          <th>Quiz name</th>
+          <th>Start Quiz</th>
+        </tr>
+      </table>
+    </div>
+    
 
  
     
@@ -168,7 +182,7 @@
     <!-- tilføj flere her-->
     </select>
     <div class="minimizeCalc">
-      <button class="minimizeButton" data-value="calcProgram">--</button>
+      <button class="minimizeCalcButton">-</button>
     </div>
   </div>
 
@@ -209,31 +223,29 @@
   </div>
   <!--- Matrice calculation--->
   <div class="matrices">
-    <div class="matriceMenu">
-        <p class="matriceTxtStyle">Please enter the dimensions of the matrices: Rows: </p>
-        <input type="text" id="xMatrice" class="xMatrice">
-        <p class="matriceTxtStyle">Columns:</p> 
-        <input type="text" id="yMatrice" class="yMatrice">
-        <button class="submitDimensions" onclick="createDimension()">Add Matrix</button>
-        <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
-        <button class="submit" onclick="calcMatrice()">Calculate Dimensions</button> <br>
-    </div>
+      <p class="matriceTxtStyle">Please enter the dimensions of the matrices: Rows: </p>
+      <input type="text" id="xMatrice" class="xMatrice">
+      <p class="matriceTxtStyle">Columns:</p> 
+      <input type="text" id="yMatrice" class="yMatrice">
+      <button class="submitDimensions" onclick="createDimension()">add matrice</button>
+      <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
+        <div class="matriceCalculation0">
 
-    <div class="matricesContainer">
-        <!-- Matrices will be dynamically added here -->
-    </div>
-</div>
+        </div>
 
-<div class="matriceOperator">
-    <select name="matriceOp" class="matriceOp">
-        <option value="plus">+</option>
-        <option value="minus">-</option>
-        <option value="times">×</option>
-        <option value="divide">/</option>
-        <option value="none">=</option>
-    </select>
-</div>
+        <div class="matriceOperator">
+          <select name="matriceOp" id="matriceOp" class="matriceOp">
+            <option value="plus">+</option>
+            <option value="minus">-</option>
+            <option value="times">×</option>
+            <option value="divide">/</option>
+          </select>
+        </div>
+        <div class="matriceCalculation1">
 
+          
+        </div>
+  </div>
 </div>
 
 
