@@ -144,6 +144,7 @@ function dragEnd(e) {
         runOrder = true;
     }
     saveDataSocket();
+    window.resizeCanvas();
 }
 
 
@@ -444,9 +445,9 @@ window.socket.on("saveDataSocket", function(data) {
 
     if (data.removing == null) {
         data.elementsArray.forEach((element, i) => {
-            let str = "#" + element;
+            const str = "#" + element;
             const elementToChange = document.querySelector(str);
-            let newArr = data.elementsValues[i];
+            const newArr = data.elementsValues[i];
             console.log(elementToChange);
 
             elementToChange.style.gridArea = newArr[0];
@@ -459,7 +460,7 @@ window.socket.on("saveDataSocket", function(data) {
         });
 
     } else {
-        let str = "#" + data.removing;
+        const str = "#" + data.removing;
         const elementToDelete = document.querySelector(str);
         webPage.appendChild(elementToDelete);
         elementToDelete.style.display = "none";

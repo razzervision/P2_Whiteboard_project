@@ -52,6 +52,7 @@ router.post("/resetAllQuizData", async (req, res) => {
 
 router.post("/uploadQuiz", async (req, res) => {
     try {
+        console.log(req.body);
         const { quizName, questionList, answersList, correctAnswersList } = req.body;
 
         // Create the quiz
@@ -142,17 +143,17 @@ router.post("/api/GetSpecificQuiz", async (req, res) => {
 
 router.post("/api/startQuizSession", async (req, res) => {
     const JSON = req.body;
-    console.log(JSON.sessionName);
+    console.log(JSON);
     try {
         const session = await Quiz.Session.create({ 
             sessionName: JSON.sessionName,
             sessionOpen: true,
             QuizNameId: JSON.quizId 
         });
-        res.status(200).json(session);
+        res.status(200).json({ session });
     } catch (error) {
         console.error("Error fetching quiz", error);
-        res.status(200).send(false);
+        res.status(500).send("Error fetching quiz");
     }
 });
 
@@ -164,9 +165,6 @@ router.post("/api/GetSpecificQuizSession", async (req, res) => {
         const session = await Quiz.Session.findOne({
             where: { sessionName: sessionName.sessionName }
         });
-        if(!session){
-            res.status(200).send(false);
-        }
         res.status(200).json({ session });
     } catch (error) {
         console.error("Error fetching quiz", error);
@@ -259,6 +257,7 @@ router.post("/api/userResponsData", async (req, res) => {
 router.post("/api/findQuestionScore", async (req, res) => {
     try {
         const { session, questionId } = req.body;
+        console.log(questionId,session);
         const answers = await Quiz.UserAnswer.findAll({
             where: {
                 SessionId: session
@@ -391,14 +390,21 @@ async function doPause(data){
             highestData[1] = data[index];
         }
     }
+
+    if (highestData[0].websiteActivity > 0 && highestData[1].websiteActivity > 0){
+        averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
+        averageTimeLeft = (highestData[0].averageTimeLeftWebsite + highestData[1].averageTimeLeftWebsite) / 2;
+    } else {
+        averageWebsiteActivity = highestData[0].websiteActivity;
+        averageTimeLeft = highestData[0].averageTimeLeftWebsite;
+    }
+    
     console.log("data0", data[0].websiteActivity);
     console.log("data1", data[1].websiteActivity);
     console.log("data2", data[2].websiteActivity);
 
     console.log("websiteActivity0", highestData[0].websiteActivity);
     console.log("websiteActivity1", highestData[1].websiteActivity);
-    averageWebsiteActivity = (highestData[0].websiteActivity + highestData[1].websiteActivity) / 2;
-    averageTimeLeft = (highestData[0].averageTimeLeftWebsite + highestData[1].averageTimeLeftWebsite) / 2;
     console.log("averageWebsiteActivity:", averageWebsiteActivity);
     console.log("averageTimeLeft: ", averageTimeLeft);
     // const sessionStarted = data[0].createdAt;
