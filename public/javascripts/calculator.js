@@ -5,7 +5,16 @@ document.getElementById("display").addEventListener("keydown", function(event) {
 });
 
 function addToResult(value) {
-    document.getElementById('display').value += value; //updates for every digit clicked to 'display', which is textarea
+    var display = document.getElementById('display');
+    display.value += value;
+
+    // Check if the value being added is "log()"
+    if (value === "log()") {
+        // Set focus on the display textarea
+        display.focus();
+        // Set the selection range between the parentheses
+        display.setSelectionRange(display.value.length - 1, display.value.length - 1);
+    }
 }
 
 function append(expression, result){
@@ -14,7 +23,7 @@ function append(expression, result){
 }
 
 function clearDisplay() {
-    document.getElementById('display').value = ''; //function used to clear calculator display with ---> '' <--- which is nothing 
+    document.getElementById('display').value = ""; //function used to clear calculator display with ---> '' <--- which is nothing 
 }
 
 function calculate() {
@@ -30,7 +39,7 @@ function calculate() {
             append(expression, powResult);
             check = false;
         } else if (expression[i] == "l" && expression[i+1] == "o"){
-            console.log("elsifvirker");
+            
             let logResult = logarithm2(expression);
             append(expression, logResult);
             check = false;
@@ -44,7 +53,8 @@ function calculate() {
 }
 
 function clearHistory() {
-    document.getElementById('classHistory').value = ''; //function used to clear history textarea with ---> '' <--- which is nothing 
+    document.getElementById('classHistory').value = ""; //function used to clear history textarea with ---> '' <--- which is nothing 
+    document.getElementById('display').value ="";
 }
 
 function powerOf(expression) {
@@ -87,52 +97,59 @@ document.getElementById("mathType").addEventListener("change", function() {
     }
 });
 
-
 let amountOfMatrices = 0;
 
 function createDimension() {
-    let rows = parseInt(document.getElementById('yMatrice').value);
-    let columns = parseInt(document.getElementById('xMatrice').value);
+    let columns = parseInt(document.getElementById('yMatrice').value);
+    let rows = parseInt(document.getElementById('xMatrice').value); 
+
+    if(amountOfMatrices > 1){
+        console.log("Only 2 matrices");
+        return;
+    }
+
+    if (columns > 10 || rows > 10){
+        resultContainer.appendChild(document.createElement(''));
+        return;
+    }
 
     let matricesContainer = document.querySelector('.matricesContainer');
     let newMatriceContainer = document.createElement('div');
     newMatriceContainer.className = `matrice${amountOfMatrices}`;
-    //newMatriceContainer.classList.add(`matrice${amountOfMatrices}`);
+
     matricesContainer.appendChild(newMatriceContainer);
 
     let container = document.querySelector(`.matrice${amountOfMatrices}`);
 
     let matriceValues = [];
 
-    for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < columns; x++) {
+    for (let y = 0; y < rows; y++) { 
+        for (let x = 0; x < columns; x++) { 
             let input = document.createElement('input');
             input.type = 'text';
             input.id = `rc${y}${x}_${amountOfMatrices}`;
-            matriceValues.id = `matrice${amountOfMatrices}`
+            matriceValues.id = `matrice${amountOfMatrices}`;
             input.className = "matriceInput";
-           // input.classList.add('matriceInput');
             container.appendChild(input);
             matriceValues.push(input.id);
         }
         container.appendChild(document.createElement('br'));
     }
-
-    //console.log(matriceValues.id, matriceValues);
-
+    container.appendChild(document.createElement('br'));
     amountOfMatrices++;
 }
 
+
 function calcMatrice() {
     let matrices = [];
-    let rows = parseInt(document.getElementById('yMatrice').value);
-    let columns = parseInt(document.getElementById('xMatrice').value);
+    let columns = parseInt(document.getElementById('yMatrice').value); // Rows as columns
+    let rows = parseInt(document.getElementById('xMatrice').value); // Columns as rows
 
     for (let i = 0; i < amountOfMatrices; i++) {
         let matrix = [];
-        for (let y = 0; y < rows; y++) {
+        for (let y = 0; y < rows; y++) { // Columns as rows
             let row = [];
-            for (let x = 0; x < columns; x++) {
+            for (let x = 0; x < columns; x++) { // Rows as columns
                 let inputValue = parseInt(document.getElementById(`rc${y}${x}_${i}`).value) || 0;
                 row.push(inputValue);
             }
@@ -141,32 +158,76 @@ function calcMatrice() {
         matrices.push(matrix);
     }
 
-    let sumMatrix = [];
-    let minusMatrix = [];
-    //let selectedOp = document.querySelector('.matriceOp').value;
+    let operator = document.querySelector('.matriceOp').value;
 
+    if (operator === "plus") {
+       sumMatrices(matrices, rows, columns);
+    } else if (operator === "minus") {
+       
+    }
+}
+
+function sumMatrices(matrices, rows, columns) {
+    let sumMatrix = [];
+    let resultContainer = document.createElement('div');
+    resultContainer.className = "resultContainer";
+    
     for (let y = 0; y < rows; y++) {
         let sumRow = [];
-        let minusRow = [];
         for (let x = 0; x < columns; x++) {
             let sum = 0;
-            let minus = 0;
-            for (let i = 0; i < amountOfMatrices; i++) {
+            for (let i = 0; i < matrices.length; i++) {
                 sum += matrices[i][y][x];
-                minus -= matrices[i][y][x];
             }
             sumRow.push(sum);
-            minusRow.push(minus);
+            
+            let resultInput = document.createElement('input');
+            resultInput.type = 'text';
+            resultInput.className = "resultInput";
+            resultInput.value = sum;
+            resultContainer.appendChild(resultInput);
         }
         sumMatrix.push(sumRow);
-        minusMatrix.push(minusRow);
+        resultContainer.appendChild(document.createElement('br'));
     }
-    console.log(sumMatrix);
-    console.log(minusMatrix);
+    
+    document.querySelector('.matriceResult').appendChild(resultContainer);
+
+    return sumMatrix;
+}
+
+
+function minusMatrices(matrices, rows, columns) {
+    let minusMatrix = [];
+    let resultContainer = document.createElement("div");
+    resultContainer.className = "resultContainer";
+
+    for (let y = 0; y < rows; y++) {
+        let minusRows = [];
+        for (let x = 0; x < columns; x++) {
+            let result = 0;
+            for (let i = 0; i < array.length; i++) {
+                result = matrices[i][y][x];
+            }
+            minusRows.push(result);
+            let resultInput = document.createElement('input');
+            resultInput.type = 'text';
+            resultInput.className = "resultInput";
+            resultInput.value = result;
+            resultContainer.appendChild(resultInput);
+            
+        }
+        minusMatrix.push(minusRows);
+        resultContainer.appendChild(document.createElement('br'));
+    }
+    document.querySelector('.matriceResult').appendChild(resultContainer);
+    return minusMatrix;
 }
 
 function restartDimension() {
     let matricesContainer = document.querySelector('.matricesContainer');
     matricesContainer.innerHTML = '';
+    let resetContainer = document.querySelector('.resultContainer');
+    resetContainer.innerHTML = "";
     amountOfMatrices = 0;
 }
