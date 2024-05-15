@@ -70,9 +70,14 @@ const elemStyleArea = "";
 let primaryStyleColumn = "100%";
 let primaryStyleRow = "";
 
+document.querySelector("#canvasPlace").style.height = "91%";
+
 let lastElementDragged;
 
 function dragStart(e) {
+    let cropping = window.innerHeight / 9;
+    webPage.style.height = (window.innerHeight - cropping) + "px";
+
     draggedElement = this;
 
     primaryStyleColumn = primaryDropzone.style.gridTemplateColumns;
@@ -118,6 +123,7 @@ function drag(e) {
 }
 
 function dragEnd(e) {
+
     if (e.target.classList.contains("minimizeButton")) {return;}
     const dataValue = draggedElement.getAttribute("data-value");
     const program = programs.find(program => program.value === dataValue);
@@ -129,9 +135,11 @@ function dragEnd(e) {
     if (!runOrder) {
         switch (pos) {
         case 1:
+            window.primDropColumns = primaryDropzone.style.gridTemplateColumns;
             elementOrder.unshift(elementToDisplay);
             break; 
         case 2:
+            window.primDropRows = primaryDropzone.style.gridTemplateRows;
             elementOrder.unshift(elementToDisplay);
             break; 
         case 3:
