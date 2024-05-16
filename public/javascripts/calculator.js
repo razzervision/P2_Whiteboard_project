@@ -300,7 +300,7 @@ function error(errorNumber){
 }
 
 function agreeError(){
-    let amountErrorMessages = 4;
+    let amountErrorMessages = 3;
     for (let i = 0; i < amountErrorMessages; i++) {
         //let givenError = document.getElementById(`errorMessage${i}`)
         if (document.getElementById(`errorMessage${i}`).style.display === "block"){
