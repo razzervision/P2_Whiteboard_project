@@ -16,7 +16,6 @@ function isIdCreated(id){
         return true;
     } 
     return false;
-    
 }
 
 function errorMessage(message,placement){
@@ -92,6 +91,10 @@ function hideDivs(show) {
     const quizOutput = document.getElementById("quiz_output");
     const quizResult = document.getElementById("quiz_output_results");
 
+    const newCreatedQuiz = document.getElementById("newCreatedQuiz");
+    if(newCreatedQuiz){
+        newCreatedQuiz.remove();
+    }
 
     const list = [start,createQuizIndexDiv,createQuiz,joinQuizIndexDiv,searchQuizIndexDiv,quizOutput,quizResult];
     // Hide all elements first
@@ -137,10 +140,6 @@ const searchQuizIndexButton = document.getElementById("searchQuizIndex");
 searchQuizIndexButton.addEventListener("click", () => {
     hideDivs(searchQuizIndexDiv);
 });
-
-
-
-
 
 
 //---------------------------------------------------------------------------------------Create quiz
@@ -343,7 +342,7 @@ async function getQuestionAndAnswers(){
     };
 
     const uploadQuiz = await fetchPostQuizData("/uploadQuiz",data);
-
+    console.log(uploadQuiz.quiz.id);
     if(uploadQuiz){
         alert("quiz is succesfully made");  
 
@@ -356,6 +355,14 @@ async function getQuestionAndAnswers(){
 
         const start = document.getElementById("quiz_index");
         hideDivs(start);
+
+        const newCreatedQuiz = createAllElement("button","newCreatedQuiz","newCreatedQuiz","Start your quiz: \"" + quizName + "\"");
+        newCreatedQuiz.style.backgroundColor = "red";        
+        newCreatedQuiz.addEventListener("click", () => {
+            startQuizSession(uploadQuiz.quiz.id);
+        });
+        start.appendChild(newCreatedQuiz);
+    
         return true;
     } 
     alert("Failed to public quiz");
@@ -446,7 +453,6 @@ async function startQuiz(){
     const quizIdJSON = {id: quizId};
     const data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
     const jsonDisplayDiv = document.getElementById("quiz_output");
-
     
 
     const quizNameLabel = createAllElement("h1","quizNameLabel","quizNameLabelClass","name) " + data.quiz.quizName);
@@ -497,7 +503,7 @@ async function startQuiz(){
 async function checkAnswers(quizId,sessionName){
     const userId = document.getElementById("quizUsername").value;
     while(!userId){
-        errorMessage("")
+        errorMessage("");
     }
     const quizIdJSON = {id: quizId};
     const data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
@@ -612,10 +618,33 @@ async function quizSessionResultHtml(sessionName){
     const endSession = createAllElement("button","endSessionButton","endSessionButton","End Session");
     endSession.addEventListener("click", endSessionFunction);
 
+    const guide = createAllElement("button","startGuide","startGuide","?");
+    guide.addEventListener("mouseenter", function() {
+        hoverGuide(quizDiv);
+    });
+    guide.addEventListener("mouseleave", function() {
+        hoverGuide(quizDiv);
+    });
+
+
     sessionCode.appendChild(copyButton);
+    sessionCode.appendChild(guide);
     quizDiv.appendChild(sessionCode);
     quizDiv.appendChild(reloadData);
     quizDiv.appendChild(endSession);
+}
+
+function hoverGuide(sessiondiv){
+    const checkDiv = document.getElementById("guideDiv");
+    if(checkDiv){
+        checkDiv.remove();
+        return;
+    }
+    const div = createAllElement("div","guideDiv","guideDiv","");
+    const guideText = "Please copy the code and send it to your friends. In the home menu they select \"Join Quiz\" and paste the code to access the quiz. When they submit their answers you will see there results in this page.";
+    const text = createAllElement("p","textGuide","textGuide",guideText);
+    div.appendChild(text);
+    sessiondiv.appendChild(div);
 }
 
 function endSessionFunction(){
@@ -689,7 +718,7 @@ async function teacherOverview(){
     questionRow.textContent = "Question";
     headerRow.appendChild(questionRow);
 
-    let userNamesList = [];
+    const userNamesList = [];
     
     // Loop through each question
     for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {     
@@ -712,9 +741,6 @@ async function teacherOverview(){
         // Wait for all fetch requests to finish
         const fetchResults = await Promise.all(fetchPromises);
 
-
-        let currentName ="";
-
         fetchResults.forEach(answerSum => {
             const sortedAnswerList = groupAnswersByUser(answerSum.answers);
     
@@ -724,7 +750,6 @@ async function teacherOverview(){
                 if(!userNamesList.includes(name)){
                     userNamesList.push(name);
                 }
-                currentName = name;
                 let result = "Wrong";
                 let color = "red";
                 if (answers.every(answer => answer === true)) {
