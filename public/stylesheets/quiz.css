@@ -129,3 +129,31 @@ margin-bottom: 10px;
   border: 1px solid white;
   border-collapse: collapse;
 }
+
+#startGuide {
+  width: 5;
+  background-color: grey;
+  color: black;
+  font-weight: bold;
+}
+#guideDiv{
+  position: relative;
+  width: 200px;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 10px;
+  padding-top: 5px;
+  margin: 50px;
+}
+#guideDiv::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid #fff;
+  top: -20px;
+  left: calc(50% - 20px);
+}
