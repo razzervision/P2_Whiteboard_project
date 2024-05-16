@@ -489,7 +489,7 @@ async function startQuiz(){
         });
         jsonDisplayDiv.appendChild(questionDiv);
     });                         
-
+    
     const submitAnswers = createAllElement("button","submitId","submitId","Submit Answers");
     submitAnswers.type = "submit";
     jsonDisplayDiv.appendChild(submitAnswers);
