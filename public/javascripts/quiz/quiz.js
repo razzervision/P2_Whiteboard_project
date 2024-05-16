@@ -9,7 +9,11 @@ const maxAnswers = 5;
 
 //---------------------------------------------------------------------------------------Helping funktions
 
-//Check if the element is created
+/**
+ * Checks if an HTML element with the specified ID exists in the document.
+ * @param {string} id - The ID of the element to check.
+ * @returns {boolean} - True if an element with the specified ID exists, otherwise false.
+ */
 function isIdCreated(id){
     const element = document.getElementById(id);
     if (element) {
@@ -18,6 +22,13 @@ function isIdCreated(id){
     return false;
 }
 
+/**
+ * Displays an error message on the webpage.
+ * If there is already an existing error message with the same content, it won't duplicate it.
+ * The error message is automatically removed after 3 seconds.
+ * @param {string} message - The error message to display.
+ * @param {HTMLElement} placement - The HTML element after which the error message should be placed.
+ */
 function errorMessage(message,placement){
     //Check if there already is a fail message
     if(isIdCreated("error_message")){
@@ -26,7 +37,6 @@ function errorMessage(message,placement){
             return;
         }
     }
-
     //Generate a error message for the user.
     const error = document.createElement("h4");
     error.id = "error_message";
@@ -42,7 +52,11 @@ function errorMessage(message,placement){
     }, 3000);
 }
 
-//this function return all the data from the quiz.json file.
+/**
+ * Fetches quiz data from a specified URL using the GET method.
+ * @param {string} link - The URL from which to fetch the quiz data.
+ * @returns {Promise<object|null>} - A promise that resolves with the quiz data if the request is successful, otherwise null.
+ */
 async function fetchGetQuizData(link) {
     try {
         const response = await fetch(link);
@@ -58,6 +72,12 @@ async function fetchGetQuizData(link) {
     }
 }
 
+/**
+ * Sends JSON-formatted quiz data to a specified URL using the POST method.
+ * @param {string} link - The URL to which to send the quiz data.
+ * @param {object} postData - The JSON-formatted data to be sent to the server-side script.
+ * @returns {Promise<object|null>} - A promise that resolves with the response data if the request is successful, otherwise null.
+ */
 async function fetchPostQuizData(link,postData) {
     try {
         // Send the data to the server-side script
@@ -79,7 +99,10 @@ async function fetchPostQuizData(link,postData) {
     }
 }
 
-
+/**
+ * Hides specified HTML div elements and displays the one provided.
+ * @param {HTMLElement} show - The HTML element to display.
+ */
 function hideDivs(show) {
     const start = document.getElementById("quiz_index");
     const createQuizIndexDiv = document.getElementById("createQuizDiv");
@@ -104,7 +127,14 @@ function hideDivs(show) {
     show.style.display = "block";
 }
 
-
+/**
+ * Creates an HTML element with specified attributes.
+ * @param {string} type - The type of HTML element to create (e.g., 'div', 'span', 'button').
+ * @param {string} id - The ID to assign to the created element.
+ * @param {string} className - The class name(s) to assign to the created element.
+ * @param {string} textContent - The text content to assign to the created element.
+ * @returns {HTMLElement} - The created HTML element.
+ */
 function createAllElement(type,id,className,textContent){
     const element = document.createElement(type);
     element.id = id;
@@ -115,7 +145,7 @@ function createAllElement(type,id,className,textContent){
 
 
 //---------------------------------------------------------------------------------------Home page
-//Home button
+//Add an event listener to create quiz, join quiz and search quiz.
 const homeScreenDiv = document.getElementById("quiz_index");
 const homeScreenButton = document.getElementById("quiz_home_screen");
 homeScreenButton.addEventListener("click", () => {
@@ -143,7 +173,11 @@ searchQuizIndexButton.addEventListener("click", () => {
 
 
 //---------------------------------------------------------------------------------------Create quiz
-//Check if the quiz name already exist
+/**
+ * Checks if a quiz name is unique by fetching existing quiz data from the server.
+ * @param {string} name - The name of the quiz to check for uniqueness.
+ * @returns {Promise<boolean>} - A promise that resolves with true if the quiz name is unique, otherwise false.
+ */
 async function IsQuizNameUnique(name){
     let result = false;
     const data = await fetchGetQuizData("/api/Getquizzes");
@@ -162,6 +196,7 @@ creatQuizButton.addEventListener("click", () => {
     createQuizFunction(name);
 });
 
+// Access the createQuiz div if the name is unique and valid. 
 async function createQuizFunction(name){
     const nameElement = document.getElementById("create_quiz_text");
     if (name === ""){
@@ -180,7 +215,10 @@ async function createQuizFunction(name){
 }
     
 
-//Generate a new answers input when typing on the first answer text input. 
+/**
+ * Event listener handler function for dynamically adding answer boxes to questions.
+ * @param {Event} event - The event object triggered by the input element.
+ */
 function eventListenerHandler(event) {
     //The input element that called this function
     const elementThatTriggeredEvent = event.target;
@@ -243,6 +281,8 @@ appendNewQuestion.addEventListener("click",createNewQuestion);
 
 // Call it the first time to make the first one.
 createNewQuestion();
+
+// Generate the elements for generate a new quiz.
 function createNewQuestion(){
     
     //Define the last created answer by taking the element afterward and use previousElementSibling to get the element before that e.g <div class="question_DIV" id="question_DIV0">
@@ -281,20 +321,22 @@ function createNewQuestion(){
 
 }
 
-
+// Public quiz button
 const uploadQuizButton = document.getElementById("upload_quiz_button");
 uploadQuizButton.addEventListener("click", getQuestionAndAnswers);
 
+// This function append all the quiz data to the database.
 async function getQuestionAndAnswers(){
     const quizName = document.getElementById("quiz_name").textContent;
     const questionList = [];
     const answersList = [];
     const correctAnswersList = [];
     let quit = false;
+    // Find all the questions dividers
     const numberOfQuestions = document.querySelectorAll(".question_DIV");
     numberOfQuestions.forEach(q =>{
         const question = q.querySelector(".question_txt_field_class").value;
-        // If the question is = ""
+        // If the question is = "" otherwise push it.
         if(!question){
             errorMessage("Please fill question",q);
             quit = true;
@@ -304,11 +346,12 @@ async function getQuestionAndAnswers(){
 
         const answers = [];
         const correctAnswers = [];
+        // Find all the answers in the current question divider.
         const answersValue = q.querySelectorAll(".answer_container");
         let emptyAnswers = 0;
         answersValue.forEach(a => {
             const answerText = a.querySelector(".answer_text_class").value;
-            // Dont push if the answer is = ""
+            // Dont push if the answer is = "" otherwise push it.
             if(!answerText){
                 emptyAnswers++;
                 return;
@@ -329,23 +372,23 @@ async function getQuestionAndAnswers(){
     if(quit){
         return "quit";
     }
+    // Check if their is enough data to make a quiz
     if(answersList.length < 1 || !quizName || questionList.length <= 0){
         console.log(questionList.length);
         console.log("Not enough data");
         return "noData";
     }
+    // Convert the data to JSON format.
     const data = {
         quizName: quizName,
         questionList: questionList,
         answersList: answersList,
         correctAnswersList: correctAnswersList
     };
-
+    // Fetch the data to the database
     const uploadQuiz = await fetchPostQuizData("/uploadQuiz",data);
-    console.log(uploadQuiz.quiz.id);
     if(uploadQuiz){
         alert("quiz is succesfully made");  
-
 
         //Clear questions and their answers after creating a question.
         clearQuizzes();
@@ -353,9 +396,9 @@ async function getQuestionAndAnswers(){
         // Search for all quizzes to append it.
         searchQuizzes(null);
 
+        // Force the user to the quiz index menu and add a button with the new created quiz.
         const start = document.getElementById("quiz_index");
         hideDivs(start);
-
         const newCreatedQuiz = createAllElement("button","newCreatedQuiz","newCreatedQuiz","Start your quiz: \"" + quizName + "\"");
         newCreatedQuiz.style.backgroundColor = "red";        
         newCreatedQuiz.addEventListener("click", () => {
@@ -383,7 +426,7 @@ function clearQuizzes(){
 }
 
 
-//---------------------------------------------------------------------------------------Search quizzes
+//---------------------------------------------------------------------------------------Search quizzes/Start Quiz Session
 
 
 const searchQuizInput = document.getElementById("search_quiz_text");
@@ -391,7 +434,12 @@ searchQuizInput.addEventListener("input", () => {
     searchQuizzes(searchQuizInput.value);
 });
 
-//Find all unique quizzes
+/**
+ * Searches quizzes based on the provided input and displays them in a table.
+ * @param {string} input - The input string to search for in quiz names.
+ * @returns {Promise<string|number>} - A promise that resolves with "noData" if there is no quiz data available,
+ * otherwise the number of rows in the search result table.
+ */
 async function searchQuizzes(input){
     const data = await fetchGetQuizData("/api/Getquizzes");
     if(!data){
@@ -503,6 +551,11 @@ async function startQuiz(){
 
 
 //---------------------------------------------------------------------------------------User input upload
+/**
+ * Checks user answers for a quiz session and sends the results to the server.
+ * @param {string} quizId - The ID of the quiz being answered.
+ * @param {string} sessionName - The name of the quiz session.
+ */
 async function checkAnswers(quizId,sessionName){
     const userId = document.getElementById("quizUsername").value;
     while(!userId){
@@ -541,12 +594,17 @@ async function checkAnswers(quizId,sessionName){
     window.socket.emit("quizPing");
 
 }
-
+// Send the data to all(including the session leader) to receive live updates.
 window.socket.on("quizPing", () => {
     teacherOverview();
 });
 
 //---------------------------------------------------------------------------------------Verify input
+/**
+ * Updates the visual feedback for user answers based on correctness.
+ * @param {NodeListOf<Element>} questionElement - The list of question elements.
+ * @param {boolean[][]} isCorrectList - The list of correctness for each answer.
+ */
 function userQuizResponse(questionElement,isCorrectList){
     questionElement.forEach((question,questionIndex) => {
         const answersValue = question.querySelectorAll("#quiz_output .answer_checkbox_class");
@@ -563,6 +621,10 @@ function userQuizResponse(questionElement,isCorrectList){
     totalScore(isCorrectList);
 }
 
+/**
+ * Calculates and displays the total score for the quiz.
+ * @param {boolean[][]} isCorrectList - The list of correctness for each answer.
+ */
 function totalScore(isCorrectList){
     const question = document.querySelectorAll("#quiz_output .q_container");
     let totalQuestionSum = 0;
@@ -591,6 +653,12 @@ function totalScore(isCorrectList){
 
 
 //---------------------------------------------------------------------------------------Start quiz session
+/**
+ * Generates HTML for displaying quiz session results.
+ * @param {string} sessionName - The name of the quiz session.
+ * @returns {Promise<string>} - A promise that resolves with "alreadyCreated" if a session is already opened,
+ * "notFound" if no session is found with the provided name, otherwise resolves with the HTML content.
+ */
 async function quizSessionResultHtml(sessionName){
     // check if session is opened
     const sessionNameJSON = {sessionName: sessionName};
@@ -619,13 +687,12 @@ async function quizSessionResultHtml(sessionName){
     reloadData.addEventListener("click", teacherOverview);
 
     const endSession = createAllElement("button","endSessionButton","endSessionButton","End Session");
-    endSession.addEventListener("click", endSessionFunction);
+    endSession.addEventListener("click", () =>{
+        endSessionFunction(sessionName);
+    });
 
     const guide = createAllElement("button","startGuide","startGuide","?");
-    guide.addEventListener("mouseenter", function() {
-        hoverGuide(quizDiv);
-    });
-    guide.addEventListener("mouseleave", function() {
+    guide.addEventListener("click", function() {
         hoverGuide(quizDiv);
     });
 
@@ -637,6 +704,10 @@ async function quizSessionResultHtml(sessionName){
     quizDiv.appendChild(endSession);
 }
 
+/**
+ * Displays a guide for quiz session interaction when hovering over a specified session div.
+ * @param {HTMLElement} sessiondiv - The HTML element representing the quiz session.
+ */
 function hoverGuide(sessiondiv){
     const checkDiv = document.getElementById("guideDiv");
     if(checkDiv){
@@ -649,11 +720,24 @@ function hoverGuide(sessiondiv){
     div.appendChild(text);
     sessiondiv.appendChild(div);
 }
-
-function endSessionFunction(){
+/**
+ * Ends the specified quiz session and updates the database.
+ * @param {string} sessionName - The name of the quiz session to end.
+ */
+function endSessionFunction(sessionName){
     const startDiv = document.getElementById("quiz_home_screen");
+
+    const JSON = {sessionName: sessionName};
+    const closeSession = fetchPostQuizData("/api/endSession",JSON);
+    if(!closeSession){
+        hideDivs(start);
+        errorMessage("Failed closing session",startDiv);
+        return;
+    }
+
     localStorage.removeItem("quizSessionId");
     document.getElementById("sessionCodeId").remove();
+    
     const start = document.getElementById("quiz_index");
     hideDivs(start);
     errorMessage("Your session has been successfully ended",startDiv);
@@ -661,6 +745,11 @@ function endSessionFunction(){
     sessionDiv.innerHTML = "";
 }
 
+/**
+ * Starts a quiz session for the specified quiz.
+ * @param {string} quizId - The ID of the quiz to start the session for.
+ * @returns {Promise<void>} - A promise with the session data.
+ */
 async function startQuizSession(quizId){
     let sessionName = await fetchGetQuizData("/api/GetQuizSessions");
     if (sessionName.lastQuizSession) {
@@ -687,6 +776,7 @@ async function startQuizSession(quizId){
 //     quizSessionResultHtml(sessionInput);
 // });
 
+// This function is updating the users quizdata. It fetch all the userAnswer data in the database and make a table. 
 async function teacherOverview(){
     const div = document.getElementById("quiz_output_results");
 
@@ -746,7 +836,7 @@ async function teacherOverview(){
 
         fetchResults.forEach(answerSum => {
             const sortedAnswerList = groupAnswersByUser(answerSum.answers);
-    
+            console.log(sortedAnswerList);
             let questionsCorrect = 0;
             let questionCounter = 0;
             Object.entries(sortedAnswerList).forEach(([name, { answers }]) => {
@@ -788,7 +878,11 @@ async function teacherOverview(){
     headerRow.appendChild(totalScoreRow);
     resultDiv.appendChild(table);
 } 
-
+/**
+ * Groups quiz answers by user.
+ * @param {object[]} data - The array of quiz answer data objects.
+ * @returns {object} - An object containing grouped answers by user ID.
+ */
 function groupAnswersByUser(data) {
     const groupedAnswers = {};
     

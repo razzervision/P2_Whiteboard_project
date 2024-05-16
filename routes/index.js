@@ -303,6 +303,7 @@ router.post("/api/checkIfSessionIsOpened", async (req, res) => {
 router.post("/api/endSession", async (req, res) => {
     try {
         const { sessionName } = req.body;
+        console.log(sessionName);
         const session = await Quiz.Session.findOne({
             where: {
                 sessionName: sessionName
@@ -311,12 +312,16 @@ router.post("/api/endSession", async (req, res) => {
 
         await session.update({ sessionOpen: false });
         
-        res.status(200).json({ session });
+        res.status(200).send(true);
     } catch (error) {
         console.error("Error fetching quiz", error);
         res.status(500).send("Error fetching quiz");
     }
 });
+
+
+
+
 // --------------------------------------------------------------------------------------------Pauses
 // API Endpoint to Start/Pause a Session
 router.post("/api/StartPauseSession", async (req, res) => {
