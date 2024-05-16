@@ -479,10 +479,13 @@ async function startQuiz(){
             answerLabel.setAttribute("for", "answer"+ i);
             questionDiv.appendChild(answerLabel);
 
+
             //Correct answer checkbox
             const answerCheckbox = createAllElement("input","checkbox"+i,"answer_checkbox_class",null);
             answerCheckbox.type="checkbox";
             questionDiv.appendChild(answerCheckbox);
+            const br = document.createElement("br");
+            questionDiv.appendChild(br);
         });
         jsonDisplayDiv.appendChild(questionDiv);
     });                         
