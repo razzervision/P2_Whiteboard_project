@@ -148,7 +148,7 @@ router.post("/api/startQuizSession", async (req, res) => {
         const session = await Quiz.Session.create({ 
             sessionName: JSON.sessionName,
             sessionOpen: true,
-            QuizNameId: JSON.quizId 
+            QuizNameId: JSON.quizId
         });
         res.status(200).json({ session });
     } catch (error) {

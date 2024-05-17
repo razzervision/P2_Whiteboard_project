@@ -6,7 +6,7 @@ const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const sequelize = require("./database/database");
 const app = express();
-sequelize.sync({ alter: true }); // This will alter the tables and recreate it
+sequelize.sync(); 
 
 
 // view engine setup

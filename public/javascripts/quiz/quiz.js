@@ -10,6 +10,42 @@ const maxAnswers = 5;
 //---------------------------------------------------------------------------------------Helping funktions
 
 /**
+ * Escapes special characters in a string to prevent HTML injection.
+ * @param {string} unsafeString - The string to be escaped.
+ * @returns {string} The escaped string.
+ */
+function escapeHtml(unsafeString) {
+    return unsafeString.replace(/[&<>"']/g, function(match) {
+        switch (match) {
+            case "&": return "&amp;";
+            case "<": return "&lt;";
+            case ">": return "&gt;";
+            case '"': return "&quot;";
+            case "'": return "&#039;";
+        }
+    });
+}
+
+/**
+ * Decodes HTML entities back to their original characters.
+ * @param {string} htmlString - The string with HTML entities to be decoded.
+ * @returns {string} The decoded string.
+ */
+function decodeHtml(htmlString) {
+    return htmlString.replace(/&amp;|&lt;|&gt;|&quot;|&#039;/g, function(match) {
+        switch (match) {
+            case '&amp;': return '&';
+            case '&lt;': return '<';
+            case '&gt;': return '>';
+            case '&quot;': return '"';
+            case '&#039;': return "'";
+        }
+    });
+}
+
+
+
+/**
  * Checks if an HTML element with the specified ID exists in the document.
  * @param {string} id - The ID of the element to check.
  * @returns {boolean} - True if an element with the specified ID exists, otherwise false.
@@ -193,7 +229,8 @@ async function IsQuizNameUnique(name){
 const creatQuizButton = document.getElementById("create_quiz_button");
 creatQuizButton.addEventListener("click", () => {
     const name = document.getElementById("create_quiz_text").value;
-    createQuizFunction(name);
+    const safeName = escapeHtml(name);
+    createQuizFunction(safeName);
 });
 
 // Access the createQuiz div if the name is unique and valid. 
@@ -207,7 +244,7 @@ async function createQuizFunction(name){
         return "dublicate";
     } 
     const quizNameLabel = document.getElementById("quiz_name");
-    quizNameLabel.textContent = name;
+    quizNameLabel.textContent = decodeHtml(name);
     const createQuiz = document.getElementById("creat_quiz_div");
     hideDivs(createQuiz);
 
@@ -327,7 +364,7 @@ uploadQuizButton.addEventListener("click", getQuestionAndAnswers);
 
 // This function append all the quiz data to the database.
 async function getQuestionAndAnswers(){
-    const quizName = document.getElementById("quiz_name").textContent;
+    const quizName = escapeHtml(document.getElementById("quiz_name").textContent);
     const questionList = [];
     const answersList = [];
     const correctAnswersList = [];
@@ -342,7 +379,8 @@ async function getQuestionAndAnswers(){
             quit = true;
             return;
         }
-        questionList.push(question);
+        const safeQuestion = escapeHtml(question);
+        questionList.push(safeQuestion);
 
         const answers = [];
         const correctAnswers = [];
@@ -356,7 +394,8 @@ async function getQuestionAndAnswers(){
                 emptyAnswers++;
                 return;
             }
-            answers.push(answerText);
+            const safeAnswerText = escapeHtml(answerText);
+            answers.push(safeAnswerText);
             const answerCheckbox = a.querySelector(".answer_checkbox_class").checked;
             correctAnswers.push(answerCheckbox);
         });
@@ -399,7 +438,7 @@ async function getQuestionAndAnswers(){
         // Force the user to the quiz index menu and add a button with the new created quiz.
         const start = document.getElementById("quiz_index");
         hideDivs(start);
-        const newCreatedQuiz = createAllElement("button","newCreatedQuiz","newCreatedQuiz","Start your quiz: \"" + quizName + "\"");
+        const newCreatedQuiz = createAllElement("button","newCreatedQuiz","newCreatedQuiz","Start your quiz: \"" + decodeHtml(quizName) + "\"");
         newCreatedQuiz.style.backgroundColor = "red";        
         newCreatedQuiz.addEventListener("click", () => {
             startQuizSession(uploadQuiz.quiz.id);
@@ -430,8 +469,8 @@ function clearQuizzes(){
 
 
 const searchQuizInput = document.getElementById("search_quiz_text");
-searchQuizInput.addEventListener("input", () => {
-    searchQuizzes(searchQuizInput.value);
+searchQuizInput.addEventListener("input", () => {    
+    searchQuizzes(escapeHtml(searchQuizInput.value));
 });
 
 /**
@@ -454,7 +493,7 @@ async function searchQuizzes(input){
             const row = document.createElement("tr");
 
             const quizName = document.createElement("td");
-            quizName.textContent = quiz.quizName;
+            quizName.textContent = decodeHtml(quiz.quizName);
             row.appendChild(quizName);
     
             const startQuizButton = createAllElement("button","startQuizButtonId","startQuizButtonClass","Start Quiz");
@@ -478,13 +517,12 @@ joinQuiz.addEventListener("click", startQuiz);
 
 //Start the quiz
 async function startQuiz(){
-    
-    const userName = document.getElementById("quizUsername").value;
+    const userName = escapeHtml(document.getElementById("quizUsername").value);
     if(!userName){
         errorMessage("No name inserted",joinQuiz);
         return;
     }
-    const sessionName = document.getElementById("join_quiz_text").value;
+    const sessionName = escapeHtml(document.getElementById("join_quiz_text").value);
     const sessionNameJSON = {sessionName: sessionName};
     const findSession = await fetchPostQuizData("/api/GetSpecificQuizSession",sessionNameJSON);
     
@@ -503,7 +541,7 @@ async function startQuiz(){
     const jsonDisplayDiv = document.getElementById("quiz_output");
     
 
-    const quizNameLabel = createAllElement("h1","quizNameLabel","quizNameLabelClass","name) " + data.quiz.quizName);
+    const quizNameLabel = createAllElement("h1","quizNameLabel","quizNameLabelClass","name) " + decodeHtml(data.quiz.quizName));
     jsonDisplayDiv.appendChild(quizNameLabel);
 
     const sessionNameLabel = createAllElement("h2","quizSessionLabel","quizSessionLabelClass","session)" + sessionName); 
@@ -516,13 +554,13 @@ async function startQuiz(){
         const questionDiv = createAllElement("div","q_container"+id,"q_container",null);
 
         // Questions
-        const questionField = createAllElement("h3","question_field" + id,"question_fieldClass",(id + 1) + ") " + question.questionText);
+        const questionField = createAllElement("h3","question_field" + id,"question_fieldClass",(id + 1) + ") " + decodeHtml(question.questionText));
         questionDiv.appendChild(questionField);
 
         question.Answers.forEach((answer,i) =>{
 
             //Label for answers
-            const answerLabel = createAllElement("label","answer"+ i + "_label","answerLabelClass",answer.answerText);
+            const answerLabel = createAllElement("label","answer"+ i + "_label","answerLabelClass", decodeHtml(answer.answerText));
 
             answerLabel.setAttribute("for", "answer"+ i);
             questionDiv.appendChild(answerLabel);
@@ -544,7 +582,7 @@ async function startQuiz(){
 
     const submitAnswersButton = document.querySelector("#submitId");
     submitAnswersButton.addEventListener("click", () => {
-        checkAnswers(quizId,sessionName);
+        checkAnswers(quizId,sessionName,userName);
     });
     return data;
 }
@@ -556,11 +594,7 @@ async function startQuiz(){
  * @param {string} quizId - The ID of the quiz being answered.
  * @param {string} sessionName - The name of the quiz session.
  */
-async function checkAnswers(quizId,sessionName){
-    const userId = document.getElementById("quizUsername").value;
-    while(!userId){
-        errorMessage("");
-    }
+async function checkAnswers(quizId,sessionName,userId){
     const quizIdJSON = {id: quizId};
     const data = await fetchPostQuizData("/api/GetSpecificQuiz",quizIdJSON);
     const userDataAnswerList = [];
@@ -751,6 +785,10 @@ function endSessionFunction(sessionName){
  * @returns {Promise<void>} - A promise with the session data.
  */
 async function startQuizSession(quizId){
+    if(!quizId){
+        console.log("No quiz assosiated");
+        return "noQuizId";
+    }
     let sessionName = await fetchGetQuizData("/api/GetQuizSessions");
     if (sessionName.lastQuizSession) {
         sessionName = (sessionName.lastQuizSession.id + 1) + "q" + quizId;
@@ -791,7 +829,6 @@ async function teacherOverview(){
     
     const sessionJSON = {session:session};
     const data = await fetchPostQuizData("/api/userResponsData",sessionJSON);
-    console.log(data);
     if(!data.quizData){
         errorMessage("No players have completed the quiz at this time.",div);
         return;
@@ -818,53 +855,44 @@ async function teacherOverview(){
         const question = questions[questionIndex];
         const tableRow = document.createElement("tr");
         const th = document.createElement("th");
-        th.textContent = question.questionText;
+        th.textContent = decodeHtml(question.questionText);
         tableRow.appendChild(th);
 
         const requestData = {
             session: data.quizData.id,
             questionId: question.id
         };
-        
-        // Store each fetch promise in an array
-        const fetchPromises = [];
-        const answerSum = fetchPostQuizData("/api/findQuestionScore", requestData);
-        fetchPromises.push(answerSum);
-    
-        // Wait for all fetch requests to finish
-        const fetchResults = await Promise.all(fetchPromises);
 
-        fetchResults.forEach(answerSum => {
-            const sortedAnswerList = groupAnswersByUser(answerSum.answers);
-            console.log(sortedAnswerList);
-            let questionsCorrect = 0;
-            let questionCounter = 0;
-            Object.entries(sortedAnswerList).forEach(([name, { answers }]) => {
-                if(!userNamesList.includes(name)){
-                    userNamesList.push(name);
-                }
-                let result = "Wrong";
-                let color = "red";
-                if (answers.every(answer => answer === true)) {
-                    result = "Correct";
-                    color = "green";
-                    questionsCorrect++;
-                }
-                questionCounter++;
-                const questionResult = name;
-                const td = document.createElement("td");
-                td.textContent = questionResult;
-                td.style.color = color;
-                tableRow.appendChild(td);
-            });  
-            const questionResultTD = document.createElement("td");
-            questionResultTD.textContent = questionsCorrect + "/" + questionCounter;
-            if (questionsCorrect === questionCounter) {
-                totalQuestionCorrect++;
-                questionResultTD.style.color = "green";
+        const allAnswerSum = await fetchPostQuizData("/api/findQuestionScore", requestData);
+        const sortedAnswerList = groupAnswersByUser(allAnswerSum.answers);
+        
+        let questionCorrect = 0;
+        let questionCounter = 0;
+        for (const name in sortedAnswerList) {
+            if(questionIndex === 0){
+                userNamesList.push(decodeHtml(name));
             }
-            tableRow.appendChild(questionResultTD);
-        });
+            let result = "Wrong";
+            let color = "red";
+            if (sortedAnswerList[name].answers.every(answer => answer === true)) {
+                result = "Correct";
+                color = "green";
+                questionCorrect++;
+            }
+            questionCounter++;
+            const questionResult = name;
+            const td = document.createElement("td");
+            td.textContent = decodeHtml(questionResult);
+            td.style.color = color;
+            tableRow.appendChild(td);            
+        }
+        const questionResultTD = document.createElement("td");
+        questionResultTD.textContent = questionCorrect + "/" + questionCounter;
+        if (questionCorrect === questionCounter) {
+            totalQuestionCorrect++;
+            questionResultTD.style.color = "green";
+        }
+        tableRow.appendChild(questionResultTD);
         table.appendChild(tableRow);
     }
     userNamesList.forEach(user =>{
@@ -898,7 +926,7 @@ function groupAnswersByUser(data) {
 }
 
 //---------------------------------------------------------------------------------------tests
-// quizUnitTests();
+quizUnitTests();
 async function quizUnitTests(){
     const pass = [];
     let passCounter = 0;    
