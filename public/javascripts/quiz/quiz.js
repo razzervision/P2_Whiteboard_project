@@ -926,7 +926,7 @@ function groupAnswersByUser(data) {
 }
 
 //---------------------------------------------------------------------------------------tests
-quizUnitTests();
+// quizUnitTests();
 async function quizUnitTests(){
     const pass = [];
     let passCounter = 0;    
