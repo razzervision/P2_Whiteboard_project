@@ -107,11 +107,11 @@
 }
 
 .xMatrice {
-    width: 5%;
+    width: 8%;
 }
 
 .yMatrice {
-    width: 5%;
+    width: 8%;
 }
 
 .matriceMenu{
@@ -125,7 +125,7 @@
 }
 
 .matriceInput{
-    width: 5%;
+    width: 8%;
 }
 
 /*
@@ -135,12 +135,9 @@
 
 */
 
-.matriceOperator{
-    display: none;
-    padding: 5%;
-}
+
 .resultInput {
-    width: 5%;
+    width: 8%;
     background-color: green;
 
 }
