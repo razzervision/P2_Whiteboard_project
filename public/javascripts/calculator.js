@@ -8,6 +8,8 @@ document.getElementById("display").addEventListener("keydown", function(event) {
 });
 
 
+
+
 /**
  * Appends a single number, character, or expression to the display on the calculator.
  *
@@ -43,19 +45,28 @@ function clearDisplay() {
 function calculate() {
     let expression = document.getElementById("display").value;
     let check = true;
+    
     for (let i = 0; i < expression.length; i++) {
-        if (expression[i] == "!") {
+        
+        if (expression[i] == "l" && expression[i+1] == "o"){
+            const logResult = logarithm2(expression);
+            append(expression, logResult);
+            check = false;
+            return logResult;
+        } else if (/[a-zA-Z]/.test(expression[i])){
+            document.getElementById("display").value = "Error";
+            error(4);
+            return;
+        } else if (expression[i] == "!") {
             const facResult = fac(expression);
             append(expression, facResult);
             check = false;
+            return facResult;
         } else if (expression[i] == "^"){
             const powResult = powerOf(expression);
             append(expression, powResult);
             check = false;
-        } else if (expression[i] == "l" && expression[i+1] == "o"){
-            const logResult = logarithm2(expression);
-            append(expression, logResult);
-            check = false;
+            return powResult;
         }
     }
 
@@ -63,8 +74,11 @@ function calculate() {
     if(check && expression != ""){
         let result = eval(expression);
         append(expression, result);
+        return result;    
     }
-}
+
+    
+}   
 
 function clearHistory() {
     document.getElementById("classHistory").value = ""; //function used to clear history textarea with ---> '' <--- which is nothing 
@@ -269,7 +283,6 @@ function sumMatrices(matrices, rows, columns) {
     }
     
     document.querySelector(".matriceResult").appendChild(resultContainer);
-
     return sumMatrix;
 }
 
@@ -310,7 +323,6 @@ function subtractMatrices(matrices, rows, columns) {
     document.querySelector(".matriceResult").appendChild(resultContainer);
 
     return resultMatrix;
-
 }
 
 function restartDimension() {
@@ -322,18 +334,6 @@ function restartDimension() {
     amountOfMatrices = 0;
     
     console.log(amountOfMatrices);
-}
-
-
-function containsNumber170PlusFactorial(input) {
-    // Regular expression to match digits before "!" until it reaches a non-digit character
-    const regex = /[0-9]+(?=!)/;
-    const match = input.match(regex);
-    if (match) {
-        const number = parseInt(match[0]);
-        return number >= 170;
-    }
-    return false;
 }
 
 
@@ -358,7 +358,181 @@ function error(errorNumber) {
             document.getElementById("errorMessage3").style.display = "block";
             amountOfMatrices = 0;
             break;
+        case 4: 
+            document.getElementById("errorCalc0").style.display = "block";
+            break;
         default:
             break;
     }
+}
+
+unitTest();
+function unitTest (){
+    let pass = [];
+    let passCounter = 0;
+    let fail = [];
+    let failCounter = 0;
+
+    let inputElement = document.getElementById("display");
+    
+    console.log("UNIT TESTS FOR CALCULATOR\n-------------------------");
+    checkAddition(inputElement) ? (pass.push("Addition"), passCounter++) : (fail.push("Addition"), failCounter++);
+    checkPowerOf(inputElement) ? (pass.push("Power Of"), passCounter++) : (fail.push("Power Of"), failCounter++);
+    checkFactorial(inputElement) ? (pass.push("Factorial"), passCounter++) : (fail.push("Factorial"), failCounter++);
+    checkLogarithm(inputElement) ? (pass.push("Logarithm"), passCounter++) : (fail.push("Logarithm"), failCounter++);
+    checkMatriceSum() ? (pass.push("Matrice"), passCounter++) : (fail.push("Matrice"), failCounter++);
+
+    console.log("Pass: " , pass," Counter: ",passCounter);
+    console.log("Fail: " , fail," Counter: ",failCounter);
+    console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
+
+    inputElement.value = "";
+    document.getElementById("classHistory").value = "";
+
+}
+
+function checkAddition(additionTest){
+    let result = true;
+    additionTest.value = "1+2+3+4";
+    const test1 = calculate();
+
+    if (test1 !== 10){
+        console.log("Failed addition");
+        result = false;
+    }
+
+    additionTest.value = "66+99+55";
+    const test2 = calculate();
+
+    if (test2 !== 220) {
+        console.log("Failed addition2");
+        result = false;
+    }
+
+    return result;
+}
+
+function checkPowerOf(powerOfTest){
+    let result = true;
+    powerOfTest.value = "5^4";
+    const test1 = calculate();
+
+    if (test1 !== 625){
+        console.log("Failed Power Of");
+        result = false;
+    }
+
+    powerOfTest.value = "5^3^2";
+    const test2 = calculate();
+
+    if (test2 !== 1953125){
+        console.log("Failed Power Of 2");
+        result = false
+    }
+    
+    return result;
+}
+
+function checkFactorial(facTest){
+    let result = true;
+    facTest.value = "28!"
+    const test1 = calculate();
+
+    if (test1 !== 3.0488834461171384e+29){
+        console.log("Failed factorial");
+        result = false;
+    }
+
+    facTest.value = "8!";
+    const test2 = calculate();
+    if (test2 !== 40320){
+        console.log("Failed factorial 2");
+        result = false;
+    }
+    return result;
+}
+
+function checkLogarithm(logTest){
+    let result = true;
+    logTest.value = "log(16)";
+    const test1 = calculate();
+
+    if (test1 !== 4){
+        console.log("Failed Logarithm");
+        result = false;
+    }
+
+    logTest.value = "log(56)"
+    const test2 = calculate();
+
+    if (test2 !== 5.807354922057605){
+        console.log("Failed Logarithm 2");
+        result = false;
+    }
+
+    return result;
+}
+
+checkMatriceSum()
+
+function checkMatriceSum(){
+    let result = true;
+
+    let rc00_0  = '1';
+    let rc01_0  = '2';
+    let rc10_0  = '3';
+    let rc11_0  = '4';
+
+    let rc00_1 ='5';
+    let rc01_1 = '6';
+    let rc10_1  = '7';
+    let rc11_1 = '8';
+
+    let expectedResult0 = 6;
+    let expectedResult1 = 8;
+    let expectedResult2 = 10;
+    let expectedResult3 = 12;
+
+    let result0 = parseInt(rc00_0) + parseInt(rc00_1);
+    let result1 = parseInt(rc01_0) + parseInt(rc01_1);
+    let result2 = parseInt(rc10_0) + parseInt(rc10_1);
+    let result3 = parseInt(rc11_0) + parseInt(rc11_1);
+
+    if (expectedResult0 !== result0 || expectedResult1 !== result1 || expectedResult2 !== result2 || expectedResult3 !== result3){
+        console.log("Failed PlusMatrice");
+        result = false;
+    }
+
+    return result;
+}
+
+function checkMatriceSum(){
+    let result = true;
+
+    let rc00_0  = '8';
+    let rc01_0  = '7';
+    let rc10_0  = '3';
+    let rc11_0  = '1';
+
+    let rc00_1 ='1';
+    let rc01_1 = '5';
+    let rc10_1  = '1';
+    let rc11_1 = '4';
+
+    let expectedResult0 = 7;
+    let expectedResult1 = 2;
+    let expectedResult2 = 2;
+    let expectedResult3 = -3;
+
+    let result0 = parseInt(rc00_0) - parseInt(rc00_1);
+    let result1 = parseInt(rc01_0) - parseInt(rc01_1);
+    let result2 = parseInt(rc10_0) - parseInt(rc10_1);
+    let result3 = parseInt(rc11_0) - parseInt(rc11_1);
+
+    if (expectedResult0 !== result0 || expectedResult1 !== result1 || expectedResult2 !== result2 || expectedResult3 !== result3){
+        console.log("Failed MinesMatrice");
+        result = false;
+    }
+
+    return result;
 }
