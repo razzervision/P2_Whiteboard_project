@@ -1093,7 +1093,7 @@ async function createQuestions(){
         }
         const randomIntAnswer = Math.floor(Math.random() * 10) + 1;
         let createdAnswerCounter = 0;
-        for(let j = 0; j < 10; j++){
+        for(let j = 0; j < randomIntAnswer; j++){
             const answerInput = questionDiv.querySelectorAll(".answer_text_class");
             const lastElement = answerInput[answerInput.length - 1];
             lastElement.value = "TEST";

@@ -219,34 +219,36 @@
       <textarea id="classHistory" class="classHistory" cols="40" rows="10"></textarea> <br>
       <button id="clearHistoryButton" class="clearHistoryButton" onclick="clearHistory()">CLEAR ALL HISTORY</button> 
     </div>
+    <div class="errorCalc">
+      <p id="errorCalc0" class="errorCalc0">You can not input letters.</p>
+    </div>
 
     
   </div>
   <!--- Matrice calculation--->
   <div class="matrices">
     <div class="matriceMenu">
-        <p class="matriceTxtStyle">Please enter the dimensions of the matrices: <br><br> Rows: </p>
-        <input type="text" id="xMatrice" class="xMatrice">
-        <p class="matriceTxtStyle">Columns:</p> 
-        <input type="text" id="yMatrice" class="yMatrice"> <br><br>
-        <button class="submitDimensions" onclick="createDimension()">Add Matrix</button>
-        <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
-        <button class="submit" onclick="calcMatrice()">Calculate Dimensions</button> 
+      <p class="matriceTxtStyle">Please enter the dimensions of the matrices: <br><br> Rows: </p>
+      <input type="text" id="xMatrice" class="xMatrice">
+      <p class="matriceTxtStyle">Columns:</p> 
+      <input type="text" id="yMatrice" class="yMatrice"> <br><br>
+      <button class="submitDimensions" onclick="createDimension()">Add Matrix</button>
+      <button class="RestartDimensions" onclick="restartDimension()">Restart Dimensions</button> <br>
+      <button class="submit" onclick="calcMatrice()">Calculate Dimensions</button> <br>
+      <p class="matriceTxtStyle">Choose your desired operator:</p> 
+      <select name="matriceOp" id="matriceOp" class="matriceOp">
+        <option value="plus">+</option>
+        <option value="minus">-</option>
+      </select>
     </div>
   <div class="matricesContainer", id="matricesContainer"></div>
-  <div class="matriceOperator" id="matriceOperator">
-    <select name="matriceOp" id="matriceOp" class="matriceOp">
-      <option value="plus">+</option>
-      <option value="minus">-</option>
-    </select>
-</div>
+  
 <div class="matriceResult", id="matriceResult"></div>
 <div class="errorMessageDiv">
   <p id="errorMessage0" class="errorMessage0">You can only do up to 10x10 matrices.</p>
-  <p id="errorMessage1" class="errorMessage1">You can only find factorial up to 170!, as the result will be too big of a number.</p>
   <p id="errorMessage2" class="errorMessage2">You can only calculate 2 matrices for now!</p>
   <p id="errorMessage3" class="errorMessage3">You have to put in the dimensions for the matrices!</p>
-  <button class="errorOK" id="errorOK" onclick ="agreeError()">OK!</button>
+  
 </div>
   
   
