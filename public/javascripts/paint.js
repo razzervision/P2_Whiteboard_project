@@ -52,7 +52,8 @@ currentCanvas.height = currentCanvas.clientHeight;
 //default canvas stuff
 const startBackground = "white";
 let drawColor = "black";
-const drawWithd = 50;
+let drawWidth;
+drawWidth = 50;
 //make background white
 currentContext.fillStyle = startBackground;
 currentContext.fillRect(0, 0, canvas0.width, canvas0.height);
@@ -74,8 +75,7 @@ let imgY = 0;
 const maxCanvas = 9;
 let canvasCounter = 1;
 
-let singleSave = null; //wwwwwwwwwwwwwwwait
-
+let singleSave = null;
 
 
 // window.primDropRows();
@@ -237,7 +237,7 @@ function removeMouseMove() {
 
 function draw() {
     currentContext.strokeStyle = drawColor;
-    currentContext.lineWidth = drawWithd;
+    currentContext.lineWidth = drawWidth;
     currentContext.lineCap = "round";
     currentContext.lineJoin = "round";
     currentContext.lineTo(mouse.x, mouse.y);
@@ -247,7 +247,7 @@ function draw() {
         x: mouse.x,
         y: mouse.y,
         color: drawColor,
-        width: drawWithd
+        width: drawWidth
     });
 }
 
