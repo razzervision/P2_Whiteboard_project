@@ -1,19 +1,16 @@
 const languageDropdown = document.getElementById("language");
-// const serverURL = document.location.origin;
-// const window.socket = io(serverURL, {autoConnect: false});
 
 async function loadLanguages() {
     try {
         const response = await fetch("/api/loadLanguages");
-        // if (!response.ok) {
-        //     throw new Error(HTTP error! status: ${response.status});
-        // }
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-        // Use the data to display your quiz
         return data;
     } catch (error) {
-        console.error("Error fetching quiz data:", error);
-        return null; // Return null or handle the error as needed
+        console.error("Error fetching languages", error);
+        return null;
     }
 }
 const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
