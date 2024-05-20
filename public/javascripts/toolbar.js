@@ -92,7 +92,6 @@ function dragStart(e) {
     }
 
 
-    
     // elemStyleColumn = divConverter(draggedElement).style.gridColumn;
     // elemStyleRow = divConverter(draggedElement).style.gridRow;
     // elemStyleArea = divConverter(draggedElement).style.gridArea;
@@ -165,9 +164,11 @@ function dragEnd(e) {
         runOrder = true;
     }
     saveDataSocket();
-    window.resizeCanvas();
     let cropping = window.innerHeight / 9;
     webPage.style.height = (window.innerHeight - cropping) + "px";
+    window.primDropRows = primaryDropzone.style.gridTemplateRows;
+    window.primDropColumns = primaryDropzone.style.gridTemplateColumns;
+    window.resizeCanvas();
 }
 
 
@@ -443,7 +444,9 @@ function minimizeProgram (target) {
     // }
 
 
-
+    window.primDropRows = primaryDropzone.style.gridTemplateRows;
+    window.primDropColumns = primaryDropzone.style.gridTemplateColumns;
+    window.resizeCanvas();
     saveDataSocket();
     removing = null;
 }

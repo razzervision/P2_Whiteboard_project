@@ -1,4 +1,6 @@
-
+body{
+  margin:0px;
+}
 /* Button */
 button {
   background-color: #007bff;
@@ -28,10 +30,9 @@ button:hover {
 }
 
 canvas {
-  width: 100%;
   left: 0%;
   border-bottom: 1px SOLID Black;
-  height: 77.5%;
+
 }
 
 .options {

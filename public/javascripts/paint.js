@@ -26,6 +26,14 @@ const navTotalHeight =nav.offsetHeight+ parseInt(window.getComputedStyle(nav).ma
 const otherHeight = (pdfButtonTotalHeight+toolBarTotalHeight+navTotalHeight + 30);
 //start display
 changeCanvasButton.style.backgroundColor = "blue";
+
+
+let leftmostValueWithoutPercentX=0;
+let leftmostValueWithoutPercentY=0;
+
+const gridgaps = 12;
+
+
 //global canvas array
 
 const globalCanvas = [canvas0];
@@ -35,14 +43,14 @@ console.log(globalCanvas);
 let currentCanvas = canvas0;
 let currentContext= currentCanvas.getContext("2d");
 let currentcanvasPosition = currentCanvas.getBoundingClientRect();
-
-const procent = (75 / document.documentElement.clientHeight) * 100;
-dropzone.style.height = (100 - procent) + "%";
+dropzone.style.height = "94%";
 dropzone.style.width = "100%";
 
+let dropzoneDim = dropzone.getBoundingClientRect();
 currentCanvas.style.display = "block";
 currentCanvas.style.width = "100%";
 currentCanvas.style.height = (document.documentElement.clientHeight - otherHeight + "px");
+
 const width = documentWidth;
 const height = documentHeight;
 
@@ -174,8 +182,8 @@ function addCanvas(){
 
 //functions
 function ChoseCanvasLocation(event) {
-    imgX = window.scrollX + event.clientX - currentcanvasPosition.left;
-    imgY = window.scrollY + event.clientY - currentcanvasPosition.top;
+    imgX = (window.scrollY + event.clientY) - (currentcanvasPosition.top + dropzoneDim.height*(leftmostValueWithoutPercentY/100));
+    imgY = (window.scrollX + event.clientX) - (currentcanvasPosition.left + dropzoneDim.width*(leftmostValueWithoutPercentX/100));
     console.log(imgX, " & ", imgY);
     currentCanvas.addEventListener("pointerdown", pointerDown);
 }
@@ -203,8 +211,10 @@ function undo() {
 function pointerDown(event){
     currentCanvas.removeEventListener("pointerdown", ChoseCanvasLocation);
     event.preventDefault();
-    mouse.x = window.scrollX + event.clientX - currentcanvasPosition.left;
-    mouse.y = window.scrollY + event.clientY - currentcanvasPosition.top;
+    mouse.y = (window.scrollY + event.clientY) - (currentcanvasPosition.top + dropzoneDim.height*(leftmostValueWithoutPercentY/100));
+    mouse.x = (window.scrollX + event.clientX) - (currentcanvasPosition.left + dropzoneDim.width*(leftmostValueWithoutPercentX/100));
+
+    console.log(mouse.x, mouse.y);
     dot();
     currentCanvas.addEventListener("pointermove", onMouseMove);
     currentCanvas.addEventListener("pointerup", bindeled);
@@ -219,12 +229,11 @@ function bindeled (){
 function dot() {
     currentContext.beginPath();
     currentContext.moveTo(mouse.x, mouse.y);
-    console.log(mouse.x, mouse.y);
     draw();
 }
 function onMouseMove(event) {
-    mouse.x = window.scrollX + event.clientX - currentcanvasPosition.left;
-    mouse.y = window.scrollY + event.clientY - currentcanvasPosition.top;
+    mouse.y = (window.scrollY + event.clientY) - (currentcanvasPosition.top + dropzoneDim.height*(leftmostValueWithoutPercentY/100));
+    mouse.x = (window.scrollX + event.clientX) - (currentcanvasPosition.left + dropzoneDim.width*(leftmostValueWithoutPercentX/100));
     draw();
 }
 function removeMouseMove() {
@@ -307,16 +316,16 @@ function extraReDraw(){
 }
 
 function rezize () {
-    const procent = (75 / document.documentElement.clientHeight) * 100;
-    console.log(procent);
-    // dropzone.style.height = (100 - procent) + "%";
-    // dropzone.style.width = "100%";
 
     currentCanvas.style.display = "block";
     currentCanvas.style.width = "100%";
-    currentCanvas.style.height = (document.documentElement.clientHeight - otherHeight+"px");
-    console.log(document.documentElement.clientHeight * (1-(75 / document.documentElement.clientHeight))+"px");
+    currentCanvas.style.height = "100%";
+    
+    dropzoneDim = dropzone.getBoundingClientRect();
 
+    /*(document.documentElement.clientHeight - otherHeight+"px");
+    console.log(document.documentElement.clientHeight * (1-(75 / document.documentElement.clientHeight))+"px");
+*/
     singleSave = currentContext.getImageData(0, 0, currentCanvas.width, currentCanvas.height);
 
     currentCanvas.width = currentCanvas.clientWidth;
@@ -324,7 +333,33 @@ function rezize () {
     
     redrawCanvas();
 
-    console.log(width, height);
+    if(window.primDropRows){
+        leftmostValueWithoutPercentY = window.primDropRows.split(' ')[0];
+        if(leftmostValueWithoutPercentY === "30%"){
+            leftmostValueWithoutPercentY = 30 + ((gridgaps / dropzoneDim.width) *50);
+        }
+    }else{
+        leftmostValueWithoutPercentY = 0;
+    }
+
+    if(window.primDropColumns){
+        leftmostValueWithoutPercentX = window.primDropColumns.split(' ')[0];
+        if(leftmostValueWithoutPercentX === "100%"){
+            leftmostValueWithoutPercentX = 0;
+        }
+        if(leftmostValueWithoutPercentX === "30%"){
+            leftmostValueWithoutPercentX = 30+((gridgaps / dropzoneDim.width) *50);
+        }
+    }else{
+        leftmostValueWithoutPercentX = 0;
+    }
+    
+
+    console.log("X",leftmostValueWithoutPercentX);
+    console.log("Y",leftmostValueWithoutPercentY);
+
+
+
     /*
     currentContext.fillStyle = startBackground;
     currentContext.fillRect(0, 0, currentCanvas.width, currentCanvas.height);
