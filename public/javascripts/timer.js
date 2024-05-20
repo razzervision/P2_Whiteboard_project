@@ -76,23 +76,23 @@ async function recursiveClicks(){
     mouseClicks = 0;
     leftPageTimeAverage = 0;
     keyStrokes = 0;
-    window.socket.emit("pause");
+    // window.socket.emit("pause");
     setTimeout(() => {
         recursiveClicks();
     }, 5 * 60 * 1000);
 
 }
 
-window.socket.on("pause", () => {
-    alert("Hold en pause");
-    reconPageCounter = 0;
-    mouseClicks = 0;
-    leftPageTimeAverage = 0;
-    keyStrokes = 0;
-    setTimeout(() => {
-        recursiveClicks();
-    }, 5 * 60 * 1000);
-});
+// window.socket.on("pause", () => {
+//     alert("Hold en pause");
+//     reconPageCounter = 0;
+//     mouseClicks = 0;
+//     leftPageTimeAverage = 0;
+//     keyStrokes = 0;
+//     setTimeout(() => {
+//         recursiveClicks();
+//     }, 5 * 60 * 1000);
+// });
 
 function timeAwayFromPage(){
     window.addEventListener("blur", () => {
