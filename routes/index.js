@@ -320,8 +320,6 @@ router.post("/api/endSession", async (req, res) => {
 });
 
 
-
-
 // --------------------------------------------------------------------------------------------Pauses
 // API Endpoint to Start/Pause a Session
 router.post("/api/StartPauseSession", async (req, res) => {
