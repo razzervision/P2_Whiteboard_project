@@ -19,7 +19,7 @@ router.get("/api/loadLanguages", (req, res) => {
         const data = fs.readFileSync(path.join(__dirname, "../database/languages.json"), "utf8");
         res.json(JSON.parse(data));
     } catch (error) {
-        console.error("Error fetching quiz data:", error);
+        console.error("Error fetching languages", error);
         res.status(500).send("Internal Server Error");
     }
 });
@@ -386,7 +386,7 @@ async function doPause(data){
     let averageTimeLeft = 0;
 
     const highestData = data.slice(0, 2).sort((a, b) => b.websiteActivity - a.websiteActivity); // Start with top 2
-
+  
     for (let i = 2; i < data.length; i++) { // Start from 3rd element
         const currentActivity = data[i].websiteActivity;
 
