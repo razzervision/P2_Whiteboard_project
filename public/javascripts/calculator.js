@@ -54,7 +54,7 @@ function calculate() {
             check = false;
             return logResult;
         } else if (/[a-zA-Z]/.test(expression[i])){
-            document.getElementById("display").value = "Error";
+            document.getElementById("display").value = "";
             error(4);
             return;
         } else if (expression[i] == "!") {
@@ -70,14 +70,11 @@ function calculate() {
         }
     }
 
-    
     if(check && expression != ""){
         let result = eval(expression);
         append(expression, result);
         return result;    
     }
-
-    
 }   
 
 function clearHistory() {
@@ -243,10 +240,13 @@ function calcMatrice() {
     let operator = document.querySelector(".matriceOp").value;
 
     if (operator === "plus") {
-        sumMatrices(matrices, rows, columns);
+        let sumResult = sumMatrices(matrices, rows, columns);
+        return sumResult;
     } else if (operator === "minus") {
-        subtractMatrices(matrices, rows, columns)
+        let subtractResult = subtractMatrices(matrices, rows, columns)
+        return subtractResult;
     } 
+    
 }
 
 /**
@@ -257,7 +257,6 @@ function calcMatrice() {
  * @param {number} columns - The number of columns in each matrix.
  * @returns {number[][]} The resulting matrix after summing all input matrices.
  */
-
 function sumMatrices(matrices, rows, columns) {
     let sumMatrix = [];
     let resultContainer = document.createElement("div");
@@ -321,19 +320,14 @@ function subtractMatrices(matrices, rows, columns) {
     }
     
     document.querySelector(".matriceResult").appendChild(resultContainer);
-
     return resultMatrix;
 }
 
 function restartDimension() {
-    document.querySelector(".matricesContainer").innerHTML ="";
-    let resetContainer = document.querySelector(".resultContainer");
-    if (resetContainer){
-    resetContainer.innerHTML = "";
-    }
-    amountOfMatrices = 0;
+    document.querySelector(".matricesContainer").innerHTML = "";
+    document.querySelector(".matriceResult").innerHTML = "";
     
-    console.log(amountOfMatrices);
+    amountOfMatrices = 0;
 }
 
 
@@ -366,7 +360,7 @@ function error(errorNumber) {
     }
 }
 
-unitTest();
+
 function unitTest (){
     let pass = [];
     let passCounter = 0;
@@ -380,8 +374,17 @@ function unitTest (){
     checkPowerOf(inputElement) ? (pass.push("Power Of"), passCounter++) : (fail.push("Power Of"), failCounter++);
     checkFactorial(inputElement) ? (pass.push("Factorial"), passCounter++) : (fail.push("Factorial"), failCounter++);
     checkLogarithm(inputElement) ? (pass.push("Logarithm"), passCounter++) : (fail.push("Logarithm"), failCounter++);
-    checkMatriceSum() ? (pass.push("Matrice"), passCounter++) : (fail.push("Matrice"), failCounter++);
+    
+    let columns = document.getElementById("yMatrice");
+    let rows = document.getElementById("xMatrice");
+    let operator = document.querySelector(".matriceOp");
+    
 
+    console.log("UNIT TESTS FOR MATRICES\n-------------------------");
+    checkMatriceSum(rows, columns, operator) ? (pass.push("MatriceSum"), passCounter++) : (fail.push("MatriceSum"), failCounter++);
+    checkMatriceSubtract(rows, columns, operator) ? (pass.push("MatriceSubtraction"), passCounter++) : (fail.push("MatriceSubtraction"), failCounter++);
+    
+    console.log("TOTAL\n-------------------------");
     console.log("Pass: " , pass," Counter: ",passCounter);
     console.log("Fail: " , fail," Counter: ",failCounter);
     console.log("Total:" , passCounter , "/" , (passCounter+failCounter) , "Passed");
@@ -473,66 +476,139 @@ function checkLogarithm(logTest){
     return result;
 }
 
-checkMatriceSum()
-
-function checkMatriceSum(){
+function checkMatriceSum(rows, columns, operator){
+    rows.value = 2;
+    columns.value = 2;
+    operator.value = "plus";
+   
     let result = true;
 
-    let rc00_0  = '1';
-    let rc01_0  = '2';
-    let rc10_0  = '3';
-    let rc11_0  = '4';
+    createDimension();
+    createDimension();
 
-    let rc00_1 ='5';
-    let rc01_1 = '6';
-    let rc10_1  = '7';
-    let rc11_1 = '8';
+    let matrices = [1, 3, 
+                    6, 2, 
+                    
+                    5, 7, 
+                    5, 3];
+    let realValues = []; 
+    let realIndex = 0;
 
-    let expectedResult0 = 6;
-    let expectedResult1 = 8;
-    let expectedResult2 = 10;
-    let expectedResult3 = 12;
+    for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < 2; j++) {
+            for (let x = 0; x < 2; x++) {
+                document.getElementById(`rc${j}${x}_${i}`).value = matrices[realIndex].toString();
+                realValues[realIndex] = document.getElementById(`rc${j}${x}_${i}`).value;
+                realIndex++;
+            }
+        }
+    }
 
-    let result0 = parseInt(rc00_0) + parseInt(rc00_1);
-    let result1 = parseInt(rc01_0) + parseInt(rc01_1);
-    let result2 = parseInt(rc10_0) + parseInt(rc10_1);
-    let result3 = parseInt(rc11_0) + parseInt(rc11_1);
-
-    if (expectedResult0 !== result0 || expectedResult1 !== result1 || expectedResult2 !== result2 || expectedResult3 !== result3){
-        console.log("Failed PlusMatrice");
+    const test1 = calcMatrice().toString();
+    const expectedResult = "6,10,11,5"; 
+    
+    if (test1 !== expectedResult){
+        console.log("Check matrice sum failed");
         result = false;
     }
 
+    matrices = [4, 6, 
+                7, 2,
+
+                5, 1, 
+                7, 8];
+    realValues = []; 
+    realIndex = 0;
+
+    for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < 2; j++) {
+            for (let x = 0; x < 2; x++) {
+                document.getElementById(`rc${j}${x}_${i}`).value = matrices[realIndex].toString();
+                realValues[realIndex] = document.getElementById(`rc${j}${x}_${i}`).value;
+                realIndex++;
+            }
+        }
+    }
+
+    const test2 = calcMatrice().toString();
+    const expectedResult1 = "9,7,14,10";
+
+    if (test2 !== expectedResult1){
+        console.log("Check matrice sum 2 failed");
+        result = false;
+    }
+
+    restartDimension();
+    rows.value = "";
+    columns.value = "";
     return result;
 }
 
-function checkMatriceSum(){
+function checkMatriceSubtract(rows, columns, operator){
+    rows.value = 2;
+    columns.value = 2;
+    operator.value = "minus";
+   
     let result = true;
 
-    let rc00_0  = '8';
-    let rc01_0  = '7';
-    let rc10_0  = '3';
-    let rc11_0  = '1';
+    createDimension();
+    createDimension();
 
-    let rc00_1 ='1';
-    let rc01_1 = '5';
-    let rc10_1  = '1';
-    let rc11_1 = '4';
+    let matrices = [11, 3, 
+                    6, 2,
 
-    let expectedResult0 = 7;
-    let expectedResult1 = 2;
-    let expectedResult2 = 2;
-    let expectedResult3 = -3;
+                    5, 7, 
+                    5, 3];
+    let realValues = []; 
+    let realIndex = 0;
 
-    let result0 = parseInt(rc00_0) - parseInt(rc00_1);
-    let result1 = parseInt(rc01_0) - parseInt(rc01_1);
-    let result2 = parseInt(rc10_0) - parseInt(rc10_1);
-    let result3 = parseInt(rc11_0) - parseInt(rc11_1);
+    for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < 2; j++) {
+            for (let x = 0; x < 2; x++) {
+                document.getElementById(`rc${j}${x}_${i}`).value = matrices[realIndex].toString();
+                realValues[realIndex] = document.getElementById(`rc${j}${x}_${i}`).value;
+                realIndex++;
+            }
+        }
+    }
 
-    if (expectedResult0 !== result0 || expectedResult1 !== result1 || expectedResult2 !== result2 || expectedResult3 !== result3){
-        console.log("Failed MinesMatrice");
+    const test1 = calcMatrice().toString();
+    const expectedResult = "6,-4,1,-1"; 
+    
+    if (test1 !== expectedResult){
+        console.log("Check matrice subtraction failed");
         result = false;
     }
 
+    matrices = [45, 56, 
+                72, 82, 
+                
+                50, 18, 
+                76, 84];
+    realValues = []; 
+    realIndex = 0;
+
+    for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < 2; j++) {
+            for (let x = 0; x < 2; x++) {
+                document.getElementById(`rc${j}${x}_${i}`).value = matrices[realIndex].toString();
+                realValues[realIndex] = document.getElementById(`rc${j}${x}_${i}`).value;
+                realIndex++;
+            }
+        }
+    }
+
+    const test2 = calcMatrice().toString();
+    const expectedResult1 = "-5,38,-4,-2";
+    
+    if (test2 !== expectedResult1){
+        console.log("Check matrice subtraction 2 failed");
+        result = false;
+    }
+
+    restartDimension();
+    rows.value = "";
+    columns.value = "";
+    operator.value ="plus";
     return result;
 }
