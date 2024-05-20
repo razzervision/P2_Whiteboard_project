@@ -182,8 +182,8 @@ function addCanvas(){
 
 //functions
 function ChoseCanvasLocation(event) {
-    imgX = (window.scrollY + event.clientY) - (currentcanvasPosition.top + dropzoneDim.height*(leftmostValueWithoutPercentY/100));
-    imgY = (window.scrollX + event.clientX) - (currentcanvasPosition.left + dropzoneDim.width*(leftmostValueWithoutPercentX/100));
+    imgX = (window.scrollX + event.clientX) - (currentcanvasPosition.left + dropzoneDim.width*(leftmostValueWithoutPercentX/100));
+    imgY = (window.scrollY + event.clientY) - (currentcanvasPosition.top + dropzoneDim.height*(leftmostValueWithoutPercentY/100));
     console.log(imgX, " & ", imgY);
     currentCanvas.addEventListener("pointerdown", pointerDown);
 }
