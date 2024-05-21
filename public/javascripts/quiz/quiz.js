@@ -286,6 +286,7 @@ function eventListenerHandler(event) {
     if(lastElementInCurrentDiv){
         id = lastElementInCurrentDiv.dataset.index;
     } 
+    //Increase the ID with one to make the ID unique.
     id++;
     //Ensure there is a limit of answers and the last . 
     if(id >= maxAnswers){
@@ -293,7 +294,6 @@ function eventListenerHandler(event) {
         errorMessage("You can max insert " + maxAnswers + " answers", lastElementInCurrentDiv);
         return "tooMany";
     }
-    //Increase the ID with one to make the ID unique.
 
     //Create all the elements needed for an extra answers
     const questionDiv = createAllElement("div","answer_container"+id,"answer_container",null);
