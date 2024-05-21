@@ -10,7 +10,7 @@ const paint = require("../database/database_paint.js");
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
-    res.render("index", { title: "Mikkel er cool" });
+    res.render("index", { title: "STEM TOOL" });
 });
 
 //------------------------------------------------------------------------------------- code editor
