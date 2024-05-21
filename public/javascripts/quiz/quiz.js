@@ -264,8 +264,13 @@ function eventListenerHandler(event) {
     createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent);
 }
 
-//This function create a new answer box to let the user dynamically add more answers.
-function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
+/**
+ * Creates a new answer box to let the user dynamically add more answers.
+ * @param {HTMLElement} elementThatTriggeredEvent - The element that triggered the event to create a new answer box.
+ * @param {HTMLElement} DivThatTriggeredEvent - The div element that contains the answer boxes.
+ * @returns {(HTMLElement|string)} - Returns the newly created answer box div element or "tooMany" if the maximum number of answers is reached.
+ */
+ function createNewAnswerBox(elementThatTriggeredEvent,DivThatTriggeredEvent){
     //Remove the EventListener because the new answer is created
     if(elementThatTriggeredEvent){
         elementThatTriggeredEvent.removeEventListener("input", eventListenerHandler);
