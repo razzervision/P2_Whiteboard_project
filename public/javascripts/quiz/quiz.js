@@ -360,7 +360,6 @@ function createNewQuestion(){
     createNewAnswerBox(null,questionDiv);
 
     return questionDiv;
-
 }
 
 // Public quiz button
