@@ -56,7 +56,7 @@ async function recursiveClicks(){
         websiteActivity:(mouseClicks + keyStrokes),
         averageTimeLeftWebsite: leftPageTimeAverage
     };
-    const fetchData = await fetchPostPauseData("/api/InsertPauseData",data);  
+    await fetchPostPauseData("/api/InsertPauseData",data);  
 
 
     const checkData = {session: session};
