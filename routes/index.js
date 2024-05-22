@@ -52,7 +52,6 @@ router.post("/resetAllQuizData", async (req, res) => {
 
 router.post("/uploadQuiz", async (req, res) => {
     try {
-        console.log(req.body);
         const { quizName, questionList, answersList, correctAnswersList } = req.body;
 
         // Create the quiz
@@ -64,17 +63,14 @@ router.post("/uploadQuiz", async (req, res) => {
                 questionText: question,
                 QuizNameId: createdQuiz.id
             });
-
-            // Create answers and associate them with the question
-            const answerPromises = answersList[i].map(async (answerText, answerIndex) => {
-                return Quiz.Answer.create({
-                    answerText: answerText,
-                    isCorrect: correctAnswersList[i][answerIndex],
+            const currentAnswerList = answersList[i];
+            for (let j = 0; j < currentAnswerList.length; j++){
+                Quiz.Answer.create({
+                    answerText: answersList[i][j],
+                    isCorrect: correctAnswersList[i][j],
                     QuestionId: createdQuestion.id
                 });
-            });
-
-            await Promise.all(answerPromises);
+            }
         }
 
         res.status(201).json({ quiz: createdQuiz });
