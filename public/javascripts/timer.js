@@ -1,5 +1,3 @@
-let leavePageCounter = 0;
-let reconPageCounter = 0;
 let mouseClicks = 0;
 let leavingTime; 
 let leftPageTime;
@@ -43,13 +41,12 @@ async function fetchPostPauseData(link,postData) {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error("Error fetching quiz data:", error);
+        console.error("Error fetching pause data:", error);
         return null; // Return null or handle the error as needed
     }
 }
 
 async function recursiveClicks(){
-    const counterResult = leavePageCounter === reconPageCounter ? leavePageCounter : (leavePageCounter - 1);
     const session = localStorage.getItem("sessionName");
     if(!session){
         return;
@@ -57,13 +54,10 @@ async function recursiveClicks(){
     const data = {
         session: session,
         websiteActivity:(mouseClicks + keyStrokes),
-        leftWebsite: counterResult,
         averageTimeLeftWebsite: leftPageTimeAverage
     };
-    const fetchData = await fetchPostPauseData("/api/InsertPauseData",data);
-    console.log(fetchData);   
+    await fetchPostPauseData("/api/InsertPauseData",data);  
 
-    leavePageCounter = leavePageCounter === reconPageCounter ? 0 : 1;
 
     const checkData = {session: session};
     const doPause = await fetchPostPauseData("/api/checkForPause",checkData);
@@ -72,44 +66,27 @@ async function recursiveClicks(){
         alert("Hold en pause");
     }
 
-    reconPageCounter = 0;
     mouseClicks = 0;
     leftPageTimeAverage = 0;
     keyStrokes = 0;
-    // window.socket.emit("pause");
     setTimeout(() => {
         recursiveClicks();
     }, 5 * 60 * 1000);
 
 }
 
-// window.socket.on("pause", () => {
-//     alert("Hold en pause");
-//     reconPageCounter = 0;
-//     mouseClicks = 0;
-//     leftPageTimeAverage = 0;
-//     keyStrokes = 0;
-//     setTimeout(() => {
-//         recursiveClicks();
-//     }, 5 * 60 * 1000);
-// });
 
 function timeAwayFromPage(){
     window.addEventListener("blur", () => {
-        leavePageCounter++;
         leavingTime = Date.now(); 
 
     });
     window.addEventListener("focus", () => {
-    
-        if (leavePageCounter === 0) {
-            return 0;
-        }
+        
         const currentTime = Date.now();
 
         leftPageTime = currentTime - leavingTime; 
         leftPageTimeAverage = calcAverageActivity(leftPageTime, leftPageTimeAverage);
-        reconPageCounter++;
     });
 }
 
