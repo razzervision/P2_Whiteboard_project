@@ -325,8 +325,7 @@ router.post("/api/endSession", async (req, res) => {
 router.post("/api/StartPauseSession", async (req, res) => {
     try {
         // Extract session information from the request body
-        const { session } = req.body; 
-        console.log(session, "jon"); // (Likely for debugging)
+        const { session } = req.body;
   
         // Create a new PauseSession record in the database
         // (Note: 'session' is hardcoded to "TEST" - this might need adjustment)
@@ -472,7 +471,6 @@ const { Op } = require("sequelize");
 router.post("/api/checkForPause", async (req, res) => {
     try {
         const { session } = req.body;
-        console.log(session);
         const fiveMinutes = 5 * 60 * 1000;
         const fiveMinutesAgo = new Date(Date.now() - fiveMinutes); 
 
