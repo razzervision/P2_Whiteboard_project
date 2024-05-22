@@ -217,7 +217,9 @@ searchQuizIndexButton.addEventListener("click", () => {
 async function IsQuizNameUnique(name){
     let result = false;
     const data = await fetchGetQuizData("/api/Getquizzes");
-    if(!data){return;}
+    if(!data){
+        return false;
+    }
     data.quizzes.forEach(q => {
         if(q.quizName === name){
             result = true;
@@ -250,7 +252,7 @@ async function createQuizFunction(name){
 
     return quizNameLabel;
 }
-    
+
 
 /**
  * Event listener handler function for dynamically adding answer boxes to questions.
@@ -282,8 +284,9 @@ function eventListenerHandler(event) {
     let id = -1;
     //If there already is answer options then get the latest id. and the last input is the ID id="answer_container4"
     if(lastElementInCurrentDiv){
-        id = lastElementInCurrentDiv.id[16];
+        id = lastElementInCurrentDiv.dataset.index;
     } 
+    //Increase the ID with one to make the ID unique.
     id++;
     //Ensure there is a limit of answers and the last . 
     if(id >= maxAnswers){
@@ -291,11 +294,10 @@ function eventListenerHandler(event) {
         errorMessage("You can max insert " + maxAnswers + " answers", lastElementInCurrentDiv);
         return "tooMany";
     }
-    //Increase the ID with one to make the ID unique.
 
     //Create all the elements needed for an extra answers
     const questionDiv = createAllElement("div","answer_container"+id,"answer_container",null);
-
+    questionDiv.dataset.index = id;
     //Label for answers
     const answerLabel = createAllElement("label","answer"+ id + "_label","answerLabel_class","Answer "+ (id+1) + ":");
     questionDiv.appendChild(answerLabel);
@@ -334,13 +336,14 @@ function createNewQuestion(){
     let questionNumber = -1;
     //Takes the last part of the ID. e.g "question_DIV1" where the 12 element is the last which is the ID.
     if (previousQuestionDiv.id.includes("question_DIV")){
-        questionNumber = parseInt(previousQuestionDiv.id[12]);
+        questionNumber = parseInt(previousQuestionDiv.dataset.index);
     }
     questionNumber++;
 
     // Create the main div for the question
     const questionDiv = createAllElement("div","question_DIV" + questionNumber,"question_DIV",null);
-    
+    questionDiv.dataset.index = questionNumber;
+
     // Create label for the question
     const questionLabel = createAllElement("label","label" + questionNumber,"questionLabelClass","Question " + (questionNumber+1) + ":");
 
