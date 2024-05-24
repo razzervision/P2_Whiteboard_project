@@ -63,8 +63,7 @@ router.post("/uploadQuiz", async (req, res) => {
                 questionText: question,
                 QuizNameId: createdQuiz.id
             });
-            const currentAnswerList = answersList[i];
-            for (let j = 0; j < currentAnswerList.length; j++){
+            for (let j = 0; j < answersList[i].length; j++){
                 Quiz.Answer.create({
                     answerText: answersList[i][j],
                     isCorrect: correctAnswersList[i][j],
