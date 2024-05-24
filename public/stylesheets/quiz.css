@@ -86,7 +86,7 @@ margin-bottom: 10px;
 }
 
 
-/* tyv stjålet fra CHATTEN */
+
 .quiz_container{
   background-image: linear-gradient(to bottom right, #ddd 0%, #eee 25%, rgb(192, 201, 199) 50%, #eee 75%, #ddd 100%);
   background-size: 200% 100%; /* Animate gradient movement */

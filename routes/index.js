@@ -269,7 +269,7 @@ router.post("/api/findQuestionScore", async (req, res) => {
                         QuestionId: questionId
                     },
                     required: true,
-                    include: [ //Overvej slet
+                    include: [
                     ]
                 }
             ]
@@ -326,7 +326,7 @@ router.post("/api/StartPauseSession", async (req, res) => {
     try {
         // Extract session information from the request body
         const { session } = req.body; 
-        console.log(session, "jon"); // (Likely for debugging)
+        console.log(session, "jon");
   
         // Create a new PauseSession record in the database
         // (Note: 'session' is hardcoded to "TEST" - this might need adjustment)

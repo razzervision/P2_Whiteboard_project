@@ -12,9 +12,6 @@ const canvas0 = document.getElementById("canvas0");
 //set width and height
 const documentWidth = document.documentElement.clientWidth;
 const documentHeight = document.documentElement.clientHeight;
-//socket
-// const serverurl = document.location.origin;
-// const window.socket = io(serverurl, { autoConnect: false });
 
 const pdfButton = document.getElementById("buttonPDF");
 const toolBar = document.getElementById("toolbar");
@@ -334,7 +331,7 @@ function rezize () {
     redrawCanvas();
 
     if(window.primDropRows){
-        leftmostValueWithoutPercentY = window.primDropRows.split(' ')[0];
+        leftmostValueWithoutPercentY = window.primDropRows.split(" ")[0];
         if(leftmostValueWithoutPercentY === "30%"){
             leftmostValueWithoutPercentY = 30 + ((gridgaps / dropzoneDim.width) *50);
         }
@@ -343,7 +340,7 @@ function rezize () {
     }
 
     if(window.primDropColumns){
-        leftmostValueWithoutPercentX = window.primDropColumns.split(' ')[0];
+        leftmostValueWithoutPercentX = window.primDropColumns.split(" ")[0];
         if(leftmostValueWithoutPercentX === "100%"){
             leftmostValueWithoutPercentX = 0;
         }
@@ -357,7 +354,6 @@ function rezize () {
 
     console.log("X",leftmostValueWithoutPercentX);
     console.log("Y",leftmostValueWithoutPercentY);
-
 
 
     /*
