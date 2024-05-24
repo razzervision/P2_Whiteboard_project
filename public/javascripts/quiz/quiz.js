@@ -861,9 +861,9 @@ async function teacherOverview(){
     for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {     
         const question = questions[questionIndex];
         const tableRow = document.createElement("tr");
-        const th = document.createElement("th");
-        th.textContent = decodeHtml(question.questionText);
-        tableRow.appendChild(th);
+        const tdque = document.createElement("td");
+        tdque.textContent = decodeHtml(question.questionText);
+        tableRow.appendChild(tdque);
 
         const requestData = {
             session: data.quizData.id,
