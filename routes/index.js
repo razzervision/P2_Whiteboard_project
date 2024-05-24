@@ -263,9 +263,7 @@ router.post("/api/findQuestionScore", async (req, res) => {
                     where: {
                         QuestionId: questionId
                     },
-                    required: true,
-                    include: [ //Overvej slet
-                    ]
+                    required: true
                 }
             ]
         });
