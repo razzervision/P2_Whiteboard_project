@@ -52,7 +52,6 @@ router.post("/resetAllQuizData", async (req, res) => {
 
 router.post("/uploadQuiz", async (req, res) => {
     try {
-        console.log(req.body);
         const { quizName, questionList, answersList, correctAnswersList } = req.body;
 
         // Create the quiz
@@ -64,17 +63,13 @@ router.post("/uploadQuiz", async (req, res) => {
                 questionText: question,
                 QuizNameId: createdQuiz.id
             });
-
-            // Create answers and associate them with the question
-            const answerPromises = answersList[i].map(async (answerText, answerIndex) => {
-                return Quiz.Answer.create({
-                    answerText: answerText,
-                    isCorrect: correctAnswersList[i][answerIndex],
+            for (let j = 0; j < answersList[i].length; j++){
+                Quiz.Answer.create({
+                    answerText: answersList[i][j],
+                    isCorrect: correctAnswersList[i][j],
                     QuestionId: createdQuestion.id
                 });
-            });
-
-            await Promise.all(answerPromises);
+            }
         }
 
         res.status(201).json({ quiz: createdQuiz });
@@ -268,9 +263,7 @@ router.post("/api/findQuestionScore", async (req, res) => {
                     where: {
                         QuestionId: questionId
                     },
-                    required: true,
-                    include: [
-                    ]
+                    required: true
                 }
             ]
         });
@@ -326,7 +319,7 @@ router.post("/api/StartPauseSession", async (req, res) => {
     try {
         // Extract session information from the request body
         const { session } = req.body; 
-        console.log(session, "jon");
+        console.log(session, "jon"); // (Likely for debugging)
   
         // Create a new PauseSession record in the database
         // (Note: 'session' is hardcoded to "TEST" - this might need adjustment)
@@ -372,12 +365,12 @@ router.post("/api/InsertPauseData", async (req, res) => {
         res.status(500).send("Error uploading pauseData");
     }
 });
-  
+
 // Function to Update PauseSession with Last Pause Time
 async function startPause(sessionData) {
     await Pauses.PauseSession.update(
-        { lastPause: new Date() }, // Set the lastPause timestamp
-        { where: { id: sessionData.id } } // Find the session by ID
+        { lastPause: new Date() }, 
+        { where: { id: sessionData.id } } 
     );
 }
 
@@ -385,16 +378,16 @@ async function doPause(data){
     let averageWebsiteActivity = 0;
     let averageTimeLeft = 0;
 
-    const highestData = data.slice(0, 2).sort((a, b) => b.websiteActivity - a.websiteActivity); // Start with top 2
+    const highestData = data.slice(0, 2).sort((a, b) => b.websiteActivity - a.websiteActivity); 
   
-    for (let i = 2; i < data.length; i++) { // Start from 3rd element
+    for (let i = 2; i < data.length; i++) { 
         const currentActivity = data[i].websiteActivity;
 
         if (currentActivity > highestData[0].websiteActivity) {
-            highestData[1] = highestData[0]; // Shift down if new top
+            highestData[1] = highestData[0];
             highestData[0] = data[i]; 
         } else if (currentActivity > highestData[1].websiteActivity) {
-            highestData[1] = data[i]; // Replace second if needed
+            highestData[1] = data[i]; 
         }
     }
 
@@ -408,63 +401,25 @@ async function doPause(data){
     
     const sessionStarted = data[0].createdAt;
     const twoHours = 2 * 60 * 60 * 1000;
-    const halfHour = 5 * 60 * 1000; // ret til 30 min
+    const halfHour = 30 * 60 * 1000; 
 
     data = data[0];
     const lastPause = data.PauseSession.lastPause;
-    const sessionCreated = data.PauseSession.createdAt;
     const timeElapsed = Date.now() - sessionStarted; // Time since session start
     const timeSinceLastPause = lastPause ? (Date.now() - lastPause) : 0;
-    console.log("------------------------------------------------------------------");
-    console.log("Time since last pause: ",timeSinceLastPause);
-    console.log("Time since session was created: ", sessionCreated);
-    console.log("Time elapsed since session was started: ", timeElapsed);
-    console.log("Last pause: ", lastPause);
 
     if (!lastPause || timeSinceLastPause >= halfHour || timeElapsed >= halfHour){
         if (((averageWebsiteActivity <= 50 || averageTimeLeft >= 45000 * 5)) || timeElapsed > twoHours){
             if (averageWebsiteActivity === 0){
-                console.log("webActivity = 0");
                 return false;
             }
-            console.log("Take a break");
             startPause(data.PauseSession);
             return true;
         }
     } else {
-        console.log("Du har lige holdt pause");
         return false;
     }
 
-    //     if (timeElapsed < halfHour) {
-    //         console.log("Session started less than 30 minutes ago");
-    //         return false;
-    //     }
-    
-    //     // Ignore pauses if too soon after the last pause
-    //     if (timeSinceLastPause < halfHour) {
-    //         console.log("hej");
-    //         return false;
-    //     }
-    //     // Ignore that the site is ignores
-
-    //     if (averageWebsiteActivity === 0){
-    //         return false;
-    //     }
-
-    //     // Force a pause after 2 hours
-    //     if(!lastPause && sessionCreated > (twoHours)){
-    //         startPause(data.PauseSession);
-    //         return true;
-    //     } 
-    //     // Check if low activity
-    //     if(averageWebsiteActivity <= 50 || averageTimeLeft >= 45000 * 5){
-    //         startPause(data.PauseSession);
-    //         return true;
-    //     }
-
-//     return false;
-// 
 }
 
 
@@ -472,7 +427,6 @@ const { Op } = require("sequelize");
 router.post("/api/checkForPause", async (req, res) => {
     try {
         const { session } = req.body;
-        console.log(session);
         const fiveMinutes = 5 * 60 * 1000;
         const fiveMinutesAgo = new Date(Date.now() - fiveMinutes); 
 

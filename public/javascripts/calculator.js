@@ -498,7 +498,6 @@ function checkMatriceSum(rows, columns, operator){
         for (let j = 0; j < 2; j++) {
             for (let x = 0; x < 2; x++) {
                 document.getElementById(`rc${j}${x}_${i}`).value = matrices[realIndex].toString();
-                realValues[realIndex] = document.getElementById(`rc${j}${x}_${i}`).value;
                 realIndex++;
             }
         }
@@ -524,7 +523,6 @@ function checkMatriceSum(rows, columns, operator){
         for (let j = 0; j < 2; j++) {
             for (let x = 0; x < 2; x++) {
                 document.getElementById(`rc${j}${x}_${i}`).value = matrices[realIndex].toString();
-                realValues[realIndex] = document.getElementById(`rc${j}${x}_${i}`).value;
                 realIndex++;
             }
         }
@@ -563,10 +561,9 @@ function checkMatriceSubtract(rows, columns, operator){
     let realIndex = 0;
 
     for (let i = 0; i < 2; i++) {
-        for (let j = 0; j < 2; j++) {
-            for (let x = 0; x < 2; x++) {
+        for (let j = 0; j < columns.value; j++) {
+            for (let x = 0; x < rows.value; x++) {
                 document.getElementById(`rc${j}${x}_${i}`).value = matrices[realIndex].toString();
-                realValues[realIndex] = document.getElementById(`rc${j}${x}_${i}`).value;
                 realIndex++;
             }
         }
@@ -589,10 +586,9 @@ function checkMatriceSubtract(rows, columns, operator){
     realIndex = 0;
 
     for (let i = 0; i < 2; i++) {
-        for (let j = 0; j < 2; j++) {
-            for (let x = 0; x < 2; x++) {
+        for (let j = 0; j < columns.value; j++) {
+            for (let x = 0; x < rows.value; x++) {
                 document.getElementById(`rc${j}${x}_${i}`).value = matrices[realIndex].toString();
-                realValues[realIndex] = document.getElementById(`rc${j}${x}_${i}`).value;
                 realIndex++;
             }
         }
