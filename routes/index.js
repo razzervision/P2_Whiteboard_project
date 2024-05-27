@@ -400,16 +400,16 @@ async function doPause(data){
     }
     
     const sessionStarted = data[0].createdAt;
-    const twoHours = 2 * 60 * 60 * 1000;
-    const halfHour = 30 * 60 * 1000; 
+    const ninetyMin = 90 * 60 * 1000;
+    const twentyFiveMin = 25 * 60 * 1000; 
 
     data = data[0];
     const lastPause = data.PauseSession.lastPause;
     const timeElapsed = Date.now() - sessionStarted; // Time since session start
     const timeSinceLastPause = lastPause ? (Date.now() - lastPause) : 0;
 
-    if (!lastPause || timeSinceLastPause >= halfHour || timeElapsed >= halfHour){
-        if (((averageWebsiteActivity <= 50 || averageTimeLeft >= 45000 * 5)) || timeElapsed > twoHours){
+    if (!lastPause || timeSinceLastPause >= twentyFiveMin || timeElapsed >= twentyFiveMin){
+        if (((averageWebsiteActivity <= 50 || averageTimeLeft >= 45000 * 5)) || timeElapsed > ninetyMin){
             if (averageWebsiteActivity === 0){
                 return false;
             }
