@@ -3,7 +3,7 @@
 ## Start local server:
 
 In the terninal insert **npm run devStart** // or **npm start devStart**
-hereafter you can get acces via localhost:3000
+hereafter you can get access via localhost:3000
 
 ## Install dependences
 
