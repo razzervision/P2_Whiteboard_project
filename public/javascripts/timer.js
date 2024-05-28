@@ -66,7 +66,7 @@ async function recursiveClicks(){
         doPauseFunction();
         Window.socket.emit("doPause");
     }
-    window.socket.no("doPause" , () => {
+    window.socket.on("doPause" , () => {
         doPauseFunction();
     }
 
