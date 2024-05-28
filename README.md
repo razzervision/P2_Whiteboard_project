@@ -2,29 +2,29 @@
 
 ## Start local server:
 
-I terminalen kør **npm run devStart** // eller **npm start devStart**
-kan tilgås på localhost:3000
+In the terninal insert **npm run devStart** // or **npm start devStart**
+hereafter you can get acces via localhost:3000
 
 ## Install dependences
 
-I terminalen kør **npm install**
+In the terminal run **npm install**
 
 ## Deployment
 
-Bliver sendt til cloud når i pusher til Github master branch.
-På hjemmesiden: https://online-writeboard-v2.azurewebsites.net/
+Will be sendt to cloud when you push to master branch.
+Webpage: https://online-writeboard-v2.azurewebsites.net/
 
 ## Anbefalinger
 
-Brug extension **EJS language support**
-For nemmere at se errors brug extension **error lens**
-Også en god ide at bruge extension **eslint**
+Use extentions **EJS language support**
+Extention to easy see errors **error lens**
+Another good extention **eslint**
 
 ## File structure
 
-**app.js:** Opsætning  
-**views:** Dynamiske hjemmesider slutter på .ejs  
-**public:** Statiske filer som .html, .js og .css  
-**routes:** Hvor http logik som get, post og delete er og hjemmeside routes som hjemmesidenavn/home og hjemmesidenavn/about/mads  
-**package.json:** Her kan man se vores project dependences og npm scripts for node.  
-**bin:** Opsætning af ting som hvilken port der bliver brugt og error handeling.  
+**app.js:** Setup  
+**views:** Dynamik webpages connect on .ejs  
+**public:** Statik files like .html, .js og .css  
+**routes:** Where http logic like get, post og delete is and the wepage's router like weppagename/home og weppagename/about/something  
+**package.json:** Here you can se our projects dependences and npm scripts for node.  
+**bin:** Setup of tings like which port is in use or error handeling.  
