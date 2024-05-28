@@ -149,6 +149,10 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("pause");
     });
 
+    socket.on("doPause", () => {
+        socket.broadcast.emit("doPause");
+    });
+
     socket.on("disconnect", () => {
         console.log("User disconnected");
     });

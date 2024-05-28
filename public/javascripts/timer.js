@@ -62,8 +62,12 @@ async function recursiveClicks(){
     const checkData = {session: session};
     const doPause = await fetchPostPauseData("/api/checkForPause",checkData);
     
-    if(doPause){
-        alert("Hold en pause");
+    if(!doPause){
+        doPauseFunction();
+        Window.socket.emit("doPause");
+    }
+    window.socket.no("doPause" , () => {
+        doPauseFunction();
     }
 
     mouseClicks = 0;
@@ -71,8 +75,11 @@ async function recursiveClicks(){
     keyStrokes = 0;
     setTimeout(() => {
         recursiveClicks();
-    }, 5 * 60 * 1000);
+    }, 1 * 60 * 1000);
 
+}
+funciton doPauseFunction(){
+    alert("Hold en pause");
 }
 
 
