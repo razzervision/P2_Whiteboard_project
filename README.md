@@ -14,7 +14,7 @@ In the terminal run **npm install**
 Will be sendt to cloud when you push to master branch.
 Webpage: https://online-writeboard-v2.azurewebsites.net/
 
-## Anbefalinger
+## Recomendations
 
 Use extentions **EJS language support**
 Extention to easy see errors **error lens**
