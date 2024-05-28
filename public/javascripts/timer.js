@@ -46,6 +46,7 @@ async function fetchPostPauseData(link,postData) {
     }
 }
 
+
 async function recursiveClicks(){
     const session = localStorage.getItem("sessionName");
     if(!session){
@@ -61,13 +62,10 @@ async function recursiveClicks(){
 
     const checkData = {session: session};
     const doPause = await fetchPostPauseData("/api/checkForPause",checkData);
-    
-    if(!doPause){
+    if(doPause){
         doPauseFunction();
-        Window.socket.emit("doPause");
-    }
-    window.socket.on("doPause" , () => {
-        doPauseFunction();
+        // Doesnt work
+        // window.socket.emit("doPause");
     }
 
     mouseClicks = 0;
@@ -75,13 +73,17 @@ async function recursiveClicks(){
     keyStrokes = 0;
     setTimeout(() => {
         recursiveClicks();
-    }, 1 * 60 * 1000);
+    }, 5 * 60 * 1000);
 
 }
-funciton doPauseFunction(){
+// Doesnt work
+// window.socket.on("doPause", () => {
+//     doPauseFunction();
+// });
+
+function doPauseFunction(){
     alert("Hold en pause");
 }
-
 
 function timeAwayFromPage(){
     window.addEventListener("blur", () => {
